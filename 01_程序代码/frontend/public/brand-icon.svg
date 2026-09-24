@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img"><title>证流</title><defs>
+<linearGradient id="wave" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#1681FF"/><stop offset=".55" stop-color="#58C8FF"/><stop offset="1" stop-color="#BAEDFF"/></linearGradient>
+<linearGradient id="glass" x1="0" x2=".9" y1="0" y2="1"><stop stop-color="#72DAFF"/><stop offset=".38" stop-color="#38A7FF"/><stop offset="1" stop-color="#2162F4"/></linearGradient>
+<linearGradient id="shine" x1="0" x2="1" y1="0" y2="1"><stop stop-color="white" stop-opacity=".62"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+</defs><circle cx="128" cy="128" r="104" fill="url(#glass)"/>
+<path d="M57 154 C66 110 91 58 137 60 C175 63 196 94 177 122 C162 144 134 124 118 141 C107 153 107 181 102 194 C77 193 68 173 76 151 C88 113 112 97 134 108 C151 116 161 100 147 88 C119 65 90 101 83 137Z" fill="white" fill-opacity=".95"/>
+<path d="M105 194 C125 154 170 160 185 127 C184 159 152 195 105 194Z" fill="#7AE1FF"/>
+<path d="M34 99 C50 34 147 1 201 65 C145 38 82 57 34 99Z" fill="url(#shine)"/></svg>

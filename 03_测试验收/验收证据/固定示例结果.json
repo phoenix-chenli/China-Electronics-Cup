@@ -1,0 +1,50 @@
+{
+  "suite": "smoke-v0.2",
+  "run_at": "2026-09-24T06:18:04.547679+00:00",
+  "passed": 5,
+  "total": 5,
+  "accuracy": 1.0,
+  "results": [
+    {
+      "id": "sql-01",
+      "passed": true,
+      "status": "completed",
+      "latency_ms": 3.74,
+      "run_id": "6d4130b7-98b8-4bee-9d9b-2a8ef4cb0326",
+      "evidence_count": 1
+    },
+    {
+      "id": "sql-02",
+      "passed": true,
+      "status": "completed",
+      "latency_ms": 1.81,
+      "run_id": "d1935151-89c7-427c-bddf-7894a33c4097",
+      "evidence_count": 1
+    },
+    {
+      "id": "cross-01",
+      "passed": true,
+      "status": "completed",
+      "latency_ms": 7.35,
+      "run_id": "1d14572d-f2f8-438c-9d7b-1bc4ad0f384d",
+      "evidence_count": 3
+    },
+    {
+      "id": "clarify-01",
+      "passed": true,
+      "status": "needs_clarification",
+      "latency_ms": 1.14,
+      "run_id": "3678a8c2-d105-4a70-8090-5ffaa9cb6534",
+      "evidence_count": 0
+    },
+    {
+      "id": "doc-01",
+      "passed": true,
+      "status": "completed",
+      "latency_ms": 3.18,
+      "run_id": "e7d26cc3-0b61-4e66-88d0-bf84a80e921a",
+      "evidence_count": 1
+    }
+  ],
+  "boundary": "本地确定性模式；固定示例仅用于回归，不代表全场景准确率。"
+}

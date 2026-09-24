@@ -1,0 +1,358 @@
+[
+  {
+    "name": "tinyglobby",
+    "version": "0.2.17",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/SuperchupuDev/tinyglobby.git"
+    },
+    "license_files": [
+      "tinyglobby@0.2.17/LICENSE"
+    ]
+  },
+  {
+    "name": "csstype",
+    "version": "3.2.3",
+    "license": "MIT",
+    "source": "https://github.com/frenic/csstype",
+    "license_files": [
+      "csstype@3.2.3/LICENSE"
+    ]
+  },
+  {
+    "name": "lightningcss-darwin-arm64",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/parcel-bundler/lightningcss.git"
+    },
+    "license_files": [
+      "lightningcss-darwin-arm64@1.33.0/LICENSE"
+    ]
+  },
+  {
+    "name": "detect-libc",
+    "version": "2.1.2",
+    "license": "Apache-2.0",
+    "source": {
+      "type": "git",
+      "url": "git://github.com/lovell/detect-libc.git"
+    },
+    "license_files": [
+      "detect-libc@2.1.2/LICENSE"
+    ]
+  },
+  {
+    "name": "nanoid",
+    "version": "3.3.19",
+    "license": "MIT",
+    "source": "ai/nanoid",
+    "license_files": [
+      "nanoid@3.3.19/LICENSE"
+    ]
+  },
+  {
+    "name": "rolldown",
+    "version": "1.2.9",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/rolldown/rolldown.git",
+      "directory": "packages/rolldown"
+    },
+    "license_files": [
+      "rolldown@1.2.9/LICENSE"
+    ]
+  },
+  {
+    "name": "tslib",
+    "version": "2.3.0",
+    "license": "0BSD",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/Microsoft/tslib.git"
+    },
+    "license_files": [
+      "tslib@2.3.0/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "picomatch",
+    "version": "4.0.7",
+    "license": "MIT",
+    "source": "micromatch/picomatch",
+    "license_files": [
+      "picomatch@4.0.7/LICENSE"
+    ]
+  },
+  {
+    "name": "typescript",
+    "version": "7.0.2",
+    "license": "Apache-2.0",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/microsoft/TypeScript.git"
+    },
+    "license_files": [
+      "typescript@7.0.2/LICENSE",
+      "typescript@7.0.2/NOTICE.txt"
+    ]
+  },
+  {
+    "name": "postcss",
+    "version": "8.5.28",
+    "license": "MIT",
+    "source": "postcss/postcss",
+    "license_files": [
+      "postcss@8.5.28/LICENSE"
+    ]
+  },
+  {
+    "name": "lucide-react",
+    "version": "1.47.0",
+    "license": "ISC",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/lucide-icons/lucide.git",
+      "directory": "packages/lucide-react"
+    },
+    "license_files": [
+      "lucide-react@1.47.0/LICENSE"
+    ]
+  },
+  {
+    "name": "scheduler",
+    "version": "0.28.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/react/react.git",
+      "directory": "packages/scheduler"
+    },
+    "license_files": [
+      "scheduler@0.28.0/LICENSE"
+    ]
+  },
+  {
+    "name": "fdir",
+    "version": "6.5.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/thecodrr/fdir.git"
+    },
+    "license_files": [
+      "fdir@6.5.0/LICENSE"
+    ]
+  },
+  {
+    "name": "react-dom",
+    "version": "19.3.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/react/react.git",
+      "directory": "packages/react-dom"
+    },
+    "license_files": [
+      "react-dom@19.3.0/LICENSE"
+    ]
+  },
+  {
+    "name": "picocolors",
+    "version": "1.1.1",
+    "license": "ISC",
+    "source": "alexeyraspopov/picocolors",
+    "license_files": [
+      "picocolors@1.1.1/LICENSE"
+    ]
+  },
+  {
+    "name": "vite",
+    "version": "8.3.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/vitejs/vite.git",
+      "directory": "packages/vite"
+    },
+    "license_files": [
+      "vite@8.3.0/LICENSE.md"
+    ]
+  },
+  {
+    "name": "zrender",
+    "version": "6.1.0",
+    "license": "BSD-3-Clause",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/ecomfe/zrender.git"
+    },
+    "license_files": [
+      "zrender@6.1.0/LICENSE"
+    ]
+  },
+  {
+    "name": "echarts",
+    "version": "6.1.0",
+    "license": "Apache-2.0",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/apache/echarts.git"
+    },
+    "license_files": [
+      "echarts@6.1.0/LICENSE",
+      "echarts@6.1.0/NOTICE"
+    ]
+  },
+  {
+    "name": "react",
+    "version": "19.3.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/react/react.git",
+      "directory": "packages/react"
+    },
+    "license_files": [
+      "react@19.3.0/LICENSE"
+    ]
+  },
+  {
+    "name": "fsevents",
+    "version": "2.3.3",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/fsevents/fsevents.git"
+    },
+    "license_files": [
+      "fsevents@2.3.3/LICENSE"
+    ]
+  },
+  {
+    "name": "lightningcss",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/parcel-bundler/lightningcss.git"
+    },
+    "license_files": [
+      "lightningcss@1.33.0/LICENSE"
+    ]
+  },
+  {
+    "name": "source-map-js",
+    "version": "1.2.1",
+    "license": "BSD-3-Clause",
+    "source": "7rulnik/source-map-js",
+    "license_files": [
+      "source-map-js@1.2.1/LICENSE"
+    ]
+  },
+  {
+    "name": "@oxc-project/types",
+    "version": "0.150.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/oxc-project/oxc.git",
+      "directory": "npm/oxc-types"
+    },
+    "license_files": [
+      "@oxc-project__types@0.150.0/LICENSE"
+    ]
+  },
+  {
+    "name": "@vitejs/plugin-react",
+    "version": "6.1.1",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/vitejs/vite-plugin-react.git",
+      "directory": "packages/plugin-react"
+    },
+    "license_files": [
+      "@vitejs__plugin-react@6.1.1/LICENSE"
+    ]
+  },
+  {
+    "name": "vscode-jsonrpc",
+    "version": "9.0.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/Microsoft/vscode-languageserver-node.git",
+      "directory": "jsonrpc"
+    },
+    "license_files": [
+      "vscode-jsonrpc@9.0.0/License.txt"
+    ]
+  },
+  {
+    "name": "@typescript/typescript-darwin-arm64",
+    "version": "7.0.2",
+    "license": "Apache-2.0",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/microsoft/TypeScript.git"
+    },
+    "license_files": [
+      "@typescript__typescript-darwin-arm64@7.0.2/LICENSE",
+      "@typescript__typescript-darwin-arm64@7.0.2/NOTICE.txt"
+    ]
+  },
+  {
+    "name": "@rolldown/binding-darwin-arm64",
+    "version": "1.2.9",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/rolldown/rolldown.git",
+      "directory": "packages/rolldown"
+    },
+    "license_files": []
+  },
+  {
+    "name": "@rolldown/pluginutils",
+    "version": "1.0.1",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "git+https://github.com/rolldown/plugins.git",
+      "directory": "packages/pluginutils"
+    },
+    "license_files": [
+      "@rolldown__pluginutils@1.0.1/LICENSE"
+    ]
+  },
+  {
+    "name": "@types/react-dom",
+    "version": "19.3.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "directory": "types/react-dom"
+    },
+    "license_files": [
+      "@types__react-dom@19.3.0/LICENSE"
+    ]
+  },
+  {
+    "name": "@types/react",
+    "version": "19.3.0",
+    "license": "MIT",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "directory": "types/react"
+    },
+    "license_files": [
+      "@types__react@19.3.0/LICENSE"
+    ]
+  }
+]

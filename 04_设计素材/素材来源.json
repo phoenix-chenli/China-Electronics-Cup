@@ -1,0 +1,152 @@
+[
+  {
+    "运行素材": "01_程序代码/frontend/public/background-home.webp",
+    "母版": "04_设计素材/角色母版/background-home.png",
+    "sha256": "1b8d0ac4667c4af4e3932430f00d549c06eab9545c97854c82679207c209e067",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/background-sidebar.webp",
+    "母版": "04_设计素材/角色母版/background-sidebar.png",
+    "sha256": "c411b3df82e40a75e9b24bbf4abffb69742008eb7e5d43da8e0e3b0a615cc866",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-01-data.webp",
+    "母版": "04_设计素材/角色母版/glass-01-data.png",
+    "sha256": "f550746f88e67a4aba46542fe6d75c8a1c96c89cffbacff4615f25ffee142ce5",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-02-documents.webp",
+    "母版": "04_设计素材/角色母版/glass-02-documents.png",
+    "sha256": "559c38408c9b39ff7b70276d0372db07dd670ffe9d44dae8e815229484f84e95",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-03-chat.webp",
+    "母版": "04_设计素材/角色母版/glass-03-chat.png",
+    "sha256": "7ba61d0781ebe400cd006c2d996a2dce6928e9ed71adf0bd30445eaecb87cb1a",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-04-projects.webp",
+    "母版": "04_设计素材/角色母版/glass-04-projects.png",
+    "sha256": "68841dcacc25de2548739d4fc7b19899f1b2c3ec08286525098775ed87f8c8f0",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-05-formula.webp",
+    "母版": "04_设计素材/角色母版/glass-05-formula.png",
+    "sha256": "f161928015e0a571535ea69df6bd3a6318675b22ab642dabbf643a7b6a9c8ac8",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-06-baseline.webp",
+    "母版": "04_设计素材/角色母版/glass-06-baseline.png",
+    "sha256": "20d4ddab01020acf4dc8bfb5b1a1656a76d05060b40c2fdf2df230fdf6a47d07",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/glass-07-scenario.webp",
+    "母版": "04_设计素材/角色母版/glass-07-scenario.png",
+    "sha256": "2d812d05b98f13f8d72d5170462c978244f1fbcb3207de920aa94c4ef2d3e626",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/handwriting.webp",
+    "母版": "04_设计素材/角色母版/handwriting.png",
+    "sha256": "7b10483c1a62bad3053f3b5e748e24cda868606b0c32aef3e83ffcf3bc3ca47d",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/hero-welcome.webp",
+    "母版": "04_设计素材/角色母版/hero-welcome.png",
+    "sha256": "9b255d941462d69a65f7fb377d0868db5344bf2d0409be201357e12df024d973",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-01-idle.webp",
+    "母版": "04_设计素材/角色母版/pet-01-idle.png",
+    "sha256": "e691548b21966f3277e66cdbbb818230b71188d1537f1e85e2468c5da4350ade",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-02-welcome.webp",
+    "母版": "04_设计素材/角色母版/pet-02-welcome.png",
+    "sha256": "a1fded6497c342327fb4719de5f465ac62117032ec6254ca6c6e572e0e11ad4e",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-03-listen.webp",
+    "母版": "04_设计素材/角色母版/pet-03-listen.png",
+    "sha256": "8f46dc3a222955f28aa2b765b9f5cec92b0b4fecab7bdb039f33ee449d679d76",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-04-thinking-v2.webp",
+    "母版": "04_设计素材/角色母版/pet-04-thinking-v2.png",
+    "sha256": "8cfa230923238823e23d5955bd9c0a67216fe7c5b0ca328ffc47ed4dd50f21ab",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-05-search.webp",
+    "母版": "04_设计素材/角色母版/pet-05-search.png",
+    "sha256": "2612ad0af4e6cd16035c5343e76f0be3a4c8128b4ac3609dbbc266e46a371133",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-06-reading-v2.webp",
+    "母版": "04_设计素材/角色母版/pet-06-reading-v2.png",
+    "sha256": "58fe5f6f468a15bc93b35c035b186c28782b44c2c4f4fe314af3f48199075d00",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-07-calculate.webp",
+    "母版": "04_设计素材/角色母版/pet-07-calculate.png",
+    "sha256": "929e72e58cf9da49ac20eb4930b7a3b06ade186b293eadb2f0efbe8db32f14fa",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-08-explain-left.webp",
+    "母版": "04_设计素材/角色母版/pet-08-explain-left.png",
+    "sha256": "e93d48c51fbcc661740fb88e74932ca8b081645d0698450c87bcd5348b4b5ba6",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-09-pointing-v2.webp",
+    "母版": "04_设计素材/角色母版/pet-09-pointing-v2.png",
+    "sha256": "6ab4fe80c42cbfe4c6380084a99701912747a9557990100da9631e32eaa5868f",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-10-success.webp",
+    "母版": "04_设计素材/角色母版/pet-10-success.png",
+    "sha256": "0fe929f26c182da6a5ee94603c08f76ce813a98ab86aef68a8bcede8eb4c953e",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-11-clarify.webp",
+    "母版": "04_设计素材/角色母版/pet-11-clarify.png",
+    "sha256": "731d2be83a2066a270b4b5f953153263d6bd791a61b9f92a83dd5a2dcada5826",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-12-error.webp",
+    "母版": "04_设计素材/角色母版/pet-12-error.png",
+    "sha256": "519c7d402b8cf994dc12ff2f5bb2e6055c8d96379d9c16c8f4a325ba87ad8d92",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-13-sleep.webp",
+    "母版": "04_设计素材/角色母版/pet-13-sleep.png",
+    "sha256": "62edb65ce911c66515b2289f5fcdcf5fae97d5373e8d8e7f11b0ee6428e31640",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/pet-14-drag.webp",
+    "母版": "04_设计素材/角色母版/pet-14-drag.png",
+    "sha256": "5e6557525a0d90ccf654436a9a26b1a69e6ffff47edc37094b09c65f9fee636e",
+    "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  }
+]

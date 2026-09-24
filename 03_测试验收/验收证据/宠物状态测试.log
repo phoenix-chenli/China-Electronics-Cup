@@ -1,0 +1,14 @@
+✔ 14 distinct real assets with state keys (0.650667ms)
+✔ real task phases map to specific poses (0.32975ms)
+✔ priority cancels fake success for errors and gaps, drag overrides (0.063958ms)
+✔ idle sleep listening and explicit poses have reachable behavior (0.055375ms)
+✔ drag position remains inside desktop and narrow viewports (0.0945ms)
+✔ IME candidate confirmation and Shift Enter never submit (0.047375ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.481458
