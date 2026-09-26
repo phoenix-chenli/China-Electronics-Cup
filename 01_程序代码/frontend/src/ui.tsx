@@ -1,10 +1,6 @@
 import {shouldSendKey} from './pet-state'
-import React, {useEffect, useRef, useState} from 'react'
-import * as echarts from 'echarts/core'
-import {BarChart,LineChart} from 'echarts/charts'
-import {GridComponent,TooltipComponent} from 'echarts/components'
-import {CanvasRenderer} from 'echarts/renderers'
-echarts.use([BarChart,LineChart,GridComponent,TooltipComponent,CanvasRenderer])
+import React, {lazy, Suspense, useEffect, useRef, useState} from 'react'
+import {createPortal} from 'react-dom'
 import {ArrowRight, ChevronLeft, ChevronRight, FileText, LoaderCircle, Search, Send, X} from 'lucide-react'
 export type Obj = Record<string, any>
 export type Page = 'home'|'analysis'|'evidence'|'data'|'scenario'|'records'|'settings'
@@ -34,16 +30,39 @@ export function Empty({title,children}:{title:string,children?:React.ReactNode})
 export function RichText({text}:{text:string}){return <>{text.split('**').map((v,i)=>i%2?<strong key={i}>{v}</strong>:v)}</>}
 export function Modal({title,close,children,wide=false,className=''}:{title:string,close:()=>void,children:React.ReactNode,wide?:boolean,className?:string}){
  const ref=useRef<HTMLDivElement>(null)
- useEffect(()=>{const prev=document.activeElement as HTMLElement; const root=ref.current; const oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden'; if(!root?.contains(document.activeElement)){(root?.querySelector<HTMLElement>('input:not([disabled]),textarea:not([disabled]),select:not([disabled])')||root?.querySelector<HTMLElement>('button:not([disabled]),[tabindex="0"]'))?.focus();} const key=(e:KeyboardEvent)=>{if(root!==Array.from(document.querySelectorAll('.modal[role="dialog"]')).slice(-1)[0])return;if(e.key==='Escape'){e.stopPropagation();close()}if(e.key==='Tab'){const els=Array.from(root?.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex="0"]')||[]).filter(el=>el.getClientRects().length>0);if(!els.length)return;if(e.shiftKey&&document.activeElement===els[0]){e.preventDefault();els[els.length-1]?.focus()}else if(!e.shiftKey&&document.activeElement===els[els.length-1]){e.preventDefault();els[0].focus()}}};document.addEventListener('keydown',key);return()=>{document.removeEventListener('keydown',key);document.body.style.overflow=oldOverflow;requestAnimationFrame(()=>{const active=document.activeElement as HTMLElement;const visible=(el:HTMLElement|null)=>!!el?.isConnected&&!!el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden';if(active!==document.body&&visible(active)&&!root?.contains(active))return;const target=visible(prev)?prev:document.querySelector<HTMLElement>('[aria-label="搜索工作区"]');if(target&&!document.querySelector('.modal[role="dialog"]'))target.focus()})}},[])
- return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}><div ref={ref} className={'modal '+className+' '+(wide?'wide':'')} role="dialog" aria-modal="true" aria-label={title}><div className="modal-title"><h2>{title}</h2><IconButton label="关闭窗口" onClick={close}><X size={18}/></IconButton></div>{children}</div></div>
+ useEffect(()=>{const prev=document.activeElement as HTMLElement; const root=ref.current; const oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden'; if(!root?.contains(document.activeElement)){const visible=(selector:string)=>Array.from(root?.querySelectorAll<HTMLElement>(selector)||[]).find(el=>el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden');(visible('input:not([disabled]),textarea:not([disabled]),select:not([disabled])')||visible('button:not([disabled]),[tabindex="0"]'))?.focus();} const key=(e:KeyboardEvent)=>{if(root!==Array.from(document.querySelectorAll('.modal[role="dialog"]')).slice(-1)[0])return;if(e.key==='Escape'){e.stopPropagation();close()}if(e.key==='Tab'){const els=Array.from(root?.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex="0"]')||[]).filter(el=>el.getClientRects().length>0);if(!els.length)return;if(e.shiftKey&&document.activeElement===els[0]){e.preventDefault();els[els.length-1]?.focus()}else if(!e.shiftKey&&document.activeElement===els[els.length-1]){e.preventDefault();els[0].focus()}}};document.addEventListener('keydown',key);return()=>{document.removeEventListener('keydown',key);document.body.style.overflow=oldOverflow;requestAnimationFrame(()=>{const active=document.activeElement as HTMLElement;const visible=(el:HTMLElement|null)=>!!el?.isConnected&&!!el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden';if(active!==document.body&&visible(active)&&!root?.contains(active))return;const target=visible(prev)?prev:document.querySelector<HTMLElement>('[aria-label="搜索工作区"]');if(target&&!document.querySelector('.modal[role="dialog"]'))target.focus()})}},[])
+ return createPortal(<div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}><div ref={ref} className={'modal '+className+' '+(wide?'wide':'')} role="dialog" aria-modal="true" aria-label={title}><div className="modal-title"><h2>{title}</h2><IconButton label="关闭窗口" onClick={close}><X size={18}/></IconButton></div>{children}</div></div>,document.body)
 }
 export function QueryInput({value,onChange,onSend,busy=false,placeholder='输入你的问题',large=false,label='输入问题',actions}:{value:string,onChange:(v:string)=>void,onSend:()=>void,busy?:boolean,placeholder?:string,large?:boolean,label?:string,actions?:React.ReactNode}){
- return <form className={'query-input '+(large?'large':'')} onSubmit={e=>{e.preventDefault();if(value.trim()&&!busy)onSend()}}><Search size={large?25:19}/><textarea aria-label={label} disabled={busy} value={value} onChange={e=>onChange(e.target.value)} rows={1} placeholder={placeholder} maxLength={2000} onKeyDown={e=>{if(shouldSendKey(e.key,e.shiftKey,e.nativeEvent.isComposing,e.keyCode)){e.preventDefault();if(value.trim()&&!busy)onSend()}}}/>{actions||<span className="query-local">本机分析</span>}<button className="send-button" type="submit" aria-label="发送问题" title="发送问题" disabled={!value.trim()||busy}>{busy?<LoaderCircle className="spin" size={20}/>:<Send size={21}/>}</button></form>
+ const input=useRef<HTMLTextAreaElement>(null)
+ const fitHeight=()=>{const el=input.current;if(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,150)+'px'}}
+ useEffect(fitHeight,[value])
+ useEffect(()=>{
+  const el=input.current;if(!el)return
+  let frame=0,lastWidth=el.getBoundingClientRect().width
+  const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(fitHeight)}
+  const resize=new ResizeObserver(()=>{const width=el.getBoundingClientRect().width;if(width!==lastWidth){lastWidth=width;schedule()}})
+  resize.observe(el)
+  const appearance=new MutationObserver(schedule)
+  appearance.observe(document.documentElement,{attributes:true,attributeFilter:['style','class','data-density']})
+  window.addEventListener('resize',schedule)
+  document.fonts?.addEventListener('loadingdone',schedule)
+  return()=>{cancelAnimationFrame(frame);resize.disconnect();appearance.disconnect();window.removeEventListener('resize',schedule);document.fonts?.removeEventListener('loadingdone',schedule)}
+ },[])
+ return <form className={'query-input focus-query '+(large?'large':'')} onSubmit={e=>{e.preventDefault();if(value.trim()&&!busy)onSend()}}><div className="query-field-row"><textarea ref={input} aria-label={label} disabled={busy} value={value} onChange={e=>onChange(e.target.value)} rows={1} placeholder={placeholder} maxLength={2000} onKeyDown={e=>{if(shouldSendKey(e.key,e.shiftKey,e.nativeEvent.isComposing,e.keyCode)){e.preventDefault();if(value.trim()&&!busy)onSend()}}}/><button className="send-button" type="submit" aria-label="发送问题" title="发送问题" disabled={!value.trim()||busy}>{busy?<LoaderCircle className="spin" size={20}/>:<Send size={19}/>}</button></div>{actions&&<div className="query-input-footer">{actions}</div>}</form>
 }
-export function Chart({labels,values,kind='bar',height=220,label='数据图表',unit='',secondary,selectedIndex=null,onSelect}:{labels:string[],values:(number|null)[],kind?:'bar'|'line',height?:number,label?:string,unit?:string,secondary?:number[],selectedIndex?:number|null,onSelect?:(index:number)=>void}){
- const ref=useRef<HTMLDivElement>(null),callback=useRef(onSelect);callback.current=onSelect
- useEffect(()=>{if(!ref.current)return;const el=ref.current;const chart=echarts.init(el,undefined,{renderer:'canvas'});const render=()=>{const dark=document.documentElement.dataset.theme==='dark';const color=dark?'#a8bddf':'#6983b3';chart.setOption({animationDuration:document.documentElement.dataset.motion==='off'||matchMedia('(prefers-reduced-motion: reduce)').matches?0:350,color:['#328bff','#a9d4ff'],textStyle:{fontFamily:'-apple-system, BlinkMacSystemFont, sans-serif'},tooltip:{trigger:'axis',confine:true,valueFormatter:(v:any)=>v==null?'无数据':num(v)+unit},grid:{top:28,left:56,right:20,bottom:40},xAxis:{type:'category',data:labels,axisTick:{show:false},axisLine:{lineStyle:{color:dark?'#334668':'#d9e7f9'}},axisLabel:{color,fontSize:12,interval:'auto',overflow:'truncate',width:90}},yAxis:{type:'value',splitNumber:3,axisLabel:{color,fontSize:12,formatter:(v:number)=>Math.abs(v)>=10000?num(v/10000)+'万':num(v)},splitLine:{lineStyle:{color:dark?'#2c3c57':'#eaf1fb'}}},series:[{name:label,data:values.map((value,i)=>({value,itemStyle:{color:selectedIndex===null||i===selectedIndex?'#328bff':'#b6d9ff'}})),type:kind,smooth:.32,symbolSize:6,barMaxWidth:45,itemStyle:{borderRadius:kind==='bar'?[5,5,0,0]:0},label:{show:kind==='bar'&&(el.clientWidth-76)/Math.max(1,labels.length)>Math.max(...values.map(v=>num(v||0).length))*7,position:'top',color:dark?'#d8e6ff':'#1b447d',fontSize:12,formatter:(p:any)=>p.value==null?'':num(p.value)},areaStyle:kind==='line'?{opacity:.09}:undefined},...(secondary?[{name:'对比值',type:kind,data:secondary,barMaxWidth:45}]:[])]},true)};render();chart.on('click',(event:any)=>{if(event.componentType==='series')callback.current?.(event.dataIndex)});const resize=new ResizeObserver(()=>{chart.resize();render()});resize.observe(el);const obs=new MutationObserver(render);obs.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-motion']});return()=>{resize.disconnect();obs.disconnect();chart.dispose()}},[JSON.stringify(labels),JSON.stringify(values),kind,unit,JSON.stringify(secondary),selectedIndex,label])
- return <div className="chart" ref={ref} style={{height}} role="img" aria-label={label+'：'+labels.map((v,i)=>v+' '+(values[i]==null?'无数据':num(values[i])+unit)).join('；')}/>
+
+export type ChartProps = {labels:string[],values:(number|null)[],kind?:'bar'|'line',height?:number,label?:string,unit?:string,secondary?:number[],selectedIndex?:number|null,onSelect?:(index:number)=>void}
+const LazyChart=lazy(()=>import('./chart'))
+export function Chart(props:ChartProps){
+ const frame=useRef<HTMLDivElement>(null),[ready,setReady]=useState(false)
+ useEffect(()=>{
+  if(!frame.current)return
+  if(!('IntersectionObserver' in window)){setReady(true);return}
+  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){setReady(true);observer.disconnect()}},{rootMargin:'80px'})
+  observer.observe(frame.current);return()=>observer.disconnect()
+ },[])
+ return <div ref={frame} style={{height:props.height??220,minWidth:0}}>{ready&&<Suspense fallback={<div className="chart-loading" role="status">正在加载图表…</div>}><LazyChart {...props}/></Suspense>}</div>
 }
 export function DataTable({rows=[],columns,limit=10,selectedIndex=null,onSelectRow}:{rows:Obj[],columns?:string[],limit?:number,selectedIndex?:number|null,onSelectRow?:(index:number)=>void}){
  const [page,setPage]=useState(0);const cols=columns||Object.keys(rows[0]||{});const pages=Math.ceil(rows.length/limit)

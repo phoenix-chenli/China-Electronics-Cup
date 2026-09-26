@@ -1,0 +1,589 @@
+{
+  "date": "2026-09-26",
+  "scope": "首页动效与精美化、冰蓝统一配色",
+  "record_status": "completed",
+  "browser": "Codex in-app browser on macOS",
+  "isolated_test_data": true,
+  "test_data_scope": {
+    "location": "新建项目外临时目录",
+    "dataset": "独立示例数据",
+    "personal_runtime_data_used": false,
+    "browser_csv_upload_tested_this_round": false,
+    "python_import_regression_rerun_this_round": false
+  },
+  "responsive": [
+    {
+      "width": 390,
+      "height": 844,
+      "documentWidth": 390,
+      "formWidth": 354,
+      "headerInside": true,
+      "pageHorizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "height": 1000,
+      "documentWidth": 768,
+      "formWidth": 696,
+      "headerInside": true,
+      "pageHorizontalOverflow": false
+    },
+    {
+      "width": 1024,
+      "height": 1000,
+      "documentWidth": 1024,
+      "formWidth": 952,
+      "headerInside": true,
+      "pageHorizontalOverflow": false
+    },
+    {
+      "width": 1280,
+      "height": 1000,
+      "documentWidth": 1280,
+      "formWidth": 988,
+      "headerInside": true,
+      "pageHorizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "documentWidth": 1440,
+      "formWidth": 1120,
+      "headerInside": true,
+      "pageHorizontalOverflow": false
+    },
+    {
+      "width": 1586,
+      "height": 1000,
+      "documentWidth": 1586,
+      "formWidth": 1120,
+      "headerInside": true,
+      "pageHorizontalOverflow": false
+    }
+  ],
+  "responsive_measurement_context": {
+    "motion_setting_during_geometry_measurement": "浏览器模拟系统 prefers-reduced-motion: reduce，用于稳定读取尺寸",
+    "note": "尺寸验证不等同于运行中动画帧率测试；减少动态效果的实时切换和恢复另有独立观察。",
+    "emulated_media_features_cleared_after_checks": true
+  },
+  "observations": [
+    {
+      "id": "real_query",
+      "status": "passed",
+      "detail": "新隔离示例库中实际查询返回净销售额 780000 元、3 笔订单、奖金 0 元及 3 个来源。",
+      "observed": {
+        "net_sales": 780000,
+        "order_count": 3,
+        "bonus": 0,
+        "evidence_count": 3
+      }
+    },
+    {
+      "id": "decorative_motion_pause_resume",
+      "status": "passed",
+      "detail": "运行时两次采样的雕塑 transform matrix 不同；暂停后场景为 is-static 且 animation 为 none。刷新后暂停状态保留，恢复后为 has-motion。",
+      "observed": {
+        "running_matrix_samples_differ": true,
+        "paused_class": "is-static",
+        "paused_animation": "none",
+        "pause_persists_after_reload": true,
+        "resumed_class": "has-motion"
+      }
+    },
+    {
+      "id": "motion_while_editing",
+      "status": "passed",
+      "detail": "输入框获得焦点后装饰动画的 animation-play-state 为 paused。",
+      "observed": {
+        "animation_play_state": "paused"
+      }
+    },
+    {
+      "id": "system_reduced_motion",
+      "status": "passed",
+      "detail": "通过浏览器 CDP Emulation.setEmulatedMedia 模拟系统减少动态效果，场景实时切为静态且暂停按钮禁用；已清空模拟 features，恢复系统状态。",
+      "observed": {
+        "emulation": "prefers-reduced-motion: reduce",
+        "scene_static": true,
+        "motion_toggle_disabled": true,
+        "emulated_features_cleared": true
+      }
+    },
+    {
+      "id": "input_resize",
+      "status": "passed",
+      "detail": "同一长草稿从手机切到桌面后自动缩回；超长输入保持 150 px 高度并允许内部滚动。",
+      "observed": {
+        "mobile": {
+          "viewport_width": 390,
+          "input_height": 86,
+          "scroll_height": 86
+        },
+        "desktop": {
+          "viewport_width": 1440,
+          "input_height": 48,
+          "scroll_height": 48
+        },
+        "long_input": {
+          "input_height": 150,
+          "scroll_height": 434
+        }
+      }
+    },
+    {
+      "id": "multiline_input",
+      "status": "passed",
+      "detail": "Shift+Enter 产生换行，没有提交问题。"
+    },
+    {
+      "id": "dark_large_font",
+      "status": "passed",
+      "detail": "深色主题、字号偏好 18 下，输入框随桌面和手机样式比例计算字号。",
+      "observed": {
+        "configured_font_px": 18,
+        "desktop_computed_input_font_px": 20.5714,
+        "mobile_computed_input_font_px": 19.2857
+      }
+    },
+    {
+      "id": "short_mobile_viewport",
+      "status": "passed",
+      "detail": "390×640 短屏下页面无整页横向溢出，输入区下边界仍位于首屏内。",
+      "observed": {
+        "viewport": {
+          "width": 390,
+          "height": 640
+        },
+        "documentWidth": 390,
+        "input_bottom": 511.59375
+      }
+    },
+    {
+      "id": "favorite_roundtrip",
+      "status": "passed",
+      "detail": "通过工具菜单固定情景推演成功；检查结束后取消，常用收藏恢复为 0。",
+      "observed": {
+        "pin_succeeded": true,
+        "final_pinned_count": 0
+      }
+    },
+    {
+      "id": "mobile_navigation",
+      "status": "passed",
+      "detail": "手机导航可打开与关闭；修正 portal 祖先选择器后，本轮浅冰蓝材质实际生效，弹窗完整位于手机视口内。",
+      "observed": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "background_color": "rgb(237, 242, 249)",
+        "modal_rect": {
+          "x": 25,
+          "y": 130.0078,
+          "width": 340,
+          "height": 583.9844
+        },
+        "inside_viewport": true
+      }
+    },
+    {
+      "id": "welcome_focus_restore",
+      "status": "passed",
+      "detail": "桌面点击进入与手机 Esc 退场均恢复重播按钮焦点；手机没有转移到 textarea，也未自动弹出输入键盘。",
+      "observed": {
+        "desktop_focus": "replay_button",
+        "mobile_focus": "replay_button",
+        "mobile_textarea_focused": false,
+        "mobile_keyboard_opened": false
+      }
+    },
+    {
+      "id": "scene_behind_welcome",
+      "status": "passed",
+      "detail": "欢迎界面显示时首页 presented=false，场景静态且暂停；离开欢迎界面后 presented=true。",
+      "observed": {
+        "welcome_open": {
+          "presented": false,
+          "scene_static": true,
+          "animation_play_state": "paused"
+        },
+        "welcome_closed": {
+          "presented": true
+        }
+      }
+    },
+    {
+      "id": "scene_offscreen_pause",
+      "status": "passed",
+      "detail": "390 像素宽度下向下滚动至场景移出视口后动画暂停，滚回顶部后恢复。",
+      "observed": {
+        "viewport_width": 390,
+        "offscreen_rect_bottom": -34,
+        "offscreen_play_state": "paused",
+        "returned_top_play_state": "running",
+        "documentWidth": 390
+      }
+    }
+  ],
+  "automated_checks": {
+    "typescript": "passed",
+    "production_build": "passed",
+    "build_assets_finalized": true,
+    "pet_state_and_ime": {
+      "runtime": "Node",
+      "passed": 6,
+      "failed": 0
+    },
+    "home_analysis_regression": {
+      "runtime": "Python",
+      "status": "not_rerun_this_round",
+      "previous_round_passed": 10,
+      "previous_round_failed": 0
+    },
+    "full_historical_suite_rerun": false
+  },
+  "browser_errors": [],
+  "browser_error_check_status": "passed",
+  "final_preferences": {
+    "theme": "light",
+    "fontSize": 14,
+    "motion": true,
+    "local_home_pause": false,
+    "pinned_tools_count": 0,
+    "emulated_media_features": [],
+    "system_media_override_cleared": true
+  },
+  "build_assets": [
+    {
+      "name": "chart-DJfa0fbl.js",
+      "role": "lazy_chart",
+      "bytes": 518361,
+      "decimal_kB": 518.36,
+      "gzip_bytes": 173562,
+      "sha256": "3b477eac904075a7e6ce1da3f83712ef9eb6a93759e711e31987f1650afbaa7d"
+    },
+    {
+      "name": "index-DQ2IfcKV.css",
+      "role": "styles",
+      "bytes": 325536,
+      "decimal_kB": 325.54,
+      "gzip_bytes": 58266,
+      "sha256": "5c0980d4a83b0d370bff25f7d062415ab6b6ae78a0a404fbfe228b28d897a416"
+    },
+    {
+      "name": "index-DymHRKoV.js",
+      "role": "main_entry",
+      "bytes": 457765,
+      "decimal_kB": 457.77,
+      "gzip_bytes": 137630,
+      "sha256": "8da3644fd35f97dd399871bca03df2e21410af72659f191f1df029f43e872a86"
+    }
+  ],
+  "build_asset_measurement": {
+    "status": "finalized",
+    "source": "最终 frontend/dist/assets 的实际文件",
+    "size_unit": "bytes；decimal_kB 为 bytes / 1000，按十进制四舍五入（ROUND_HALF_UP）保留两位小数",
+    "gzip_method": "Python gzip.compress，compresslevel=9，mtime=0；不等同于 Vite 默认 gzip 参数",
+    "index_html_references_verified": true
+  },
+  "screenshots_current": [
+    "home-1440.png",
+    "home-390.png",
+    "home-dark-390.png",
+    "analysis-1440.png",
+    "tools-1440.png",
+    "settings-1440.png",
+    "navigation-390.png",
+    "welcome-1440.png",
+    "welcome-390.png"
+  ],
+  "screenshot_metadata": [
+    {
+      "name": "home-1440.png",
+      "format": "JPEG",
+      "bytes": 75859,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7c271eb38b66ce5cb44895ec3b8117a43b1dcb9f41ebbe1a128ef6c8e9093096"
+    },
+    {
+      "name": "home-390.png",
+      "format": "JPEG",
+      "bytes": 34446,
+      "width": 390,
+      "height": 844,
+      "sha256": "a175485ca9ff38183ac2ac12e664346a520faad83921c4f20cab75ef41aba47a"
+    },
+    {
+      "name": "home-dark-390.png",
+      "format": "JPEG",
+      "bytes": 28503,
+      "width": 390,
+      "height": 640,
+      "sha256": "afbd07b0181730921af7dfb08192da79e9d82ae0c94ee9f82663f9755149f98d"
+    },
+    {
+      "name": "analysis-1440.png",
+      "format": "JPEG",
+      "bytes": 78374,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "630eda042bdea80a361e5e7c2f599c4a012f85b385dcaa99556bca9c2e644118"
+    },
+    {
+      "name": "tools-1440.png",
+      "format": "JPEG",
+      "bytes": 92774,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4de491f3c7caa32d178b1e8aed9caa57667cb25a2421fc20034852189900774f"
+    },
+    {
+      "name": "settings-1440.png",
+      "format": "JPEG",
+      "bytes": 96582,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e36afd76b62085d968c63df68df3485ac385d112341425b27edbd4b1cbc23efa"
+    },
+    {
+      "name": "navigation-390.png",
+      "format": "JPEG",
+      "bytes": 18598,
+      "width": 390,
+      "height": 844,
+      "sha256": "6df9e71431d1a22bca5b29e3aa8ed6f59def3b628a8d31efba1ba2e0fa52039a"
+    },
+    {
+      "name": "welcome-1440.png",
+      "format": "JPEG",
+      "bytes": 81770,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "83b580c95a53c53ac9363b788d970e7ea2cccd27a7a5b8ba610c17f99064b6e2"
+    },
+    {
+      "name": "welcome-390.png",
+      "format": "JPEG",
+      "bytes": 29746,
+      "width": 390,
+      "height": 844,
+      "sha256": "c7468c1a9c820b2bf945225521781e96817f28d3e91981f709149b45ed05eb98"
+    }
+  ],
+  "screenshot_note": "本轮最终重拍集合仅 screenshots_current 所列 9 张。实际编码、像素、字节及摘要均由文件读取；截图工具可能缩放图像，文件名不替代 responsive 中的 CSS viewport。home-dark-390.png 对应 390×640、深色与字号偏好 18。其他旧截图不作为本轮流程已重跑的证据。",
+  "performance_boundary": {
+    "cold_start_timing_benchmarked": false,
+    "first_screen_speed_improvement_claimed": false,
+    "animation_frame_rate_benchmarked": false,
+    "long_term_performance_benchmarked": false,
+    "lazy_chart_decimal_kB": 518.36,
+    "styles_decimal_kB": 325.54,
+    "main_entry_decimal_kB": 457.77,
+    "build_warning": "图表仍为大分块并按需加载；未以资源体积或观察到的动画变化宣称首屏速度或帧率提升。"
+  },
+  "previous_verified_flow": {
+    "date": "2026-09-26",
+    "scope": "前轮完整界面重设计：分析、条件、来源、保存、情景及导航等流程",
+    "rerun_this_round": false,
+    "note": "以下为前轮已验证记录，不计入本轮首页动效与配色检查；同日不同轮次的结果按 scope 区分。",
+    "automated_checks": {
+      "typescript": "passed",
+      "production_build": "passed",
+      "home_analysis_regression": {
+        "runtime": "Python",
+        "passed": 10,
+        "failed": 0
+      },
+      "pet_state_and_ime": {
+        "runtime": "Node",
+        "passed": 6,
+        "failed": 0
+      },
+      "full_historical_suite_rerun": false
+    },
+    "observations": [
+      {
+        "id": "real_query",
+        "status": "passed",
+        "detail": "实际示例查询返回净销售额 780000 元、3 笔订单、奖金 0 元和 3 个来源。",
+        "observed": {
+          "net_sales": 780000,
+          "order_count": 3,
+          "bonus": 0,
+          "evidence_count": 3
+        }
+      },
+      {
+        "id": "conditions_cancel",
+        "status": "passed",
+        "detail": "修改条件后取消，再次打开时恢复华东原条件，未残留取消的草稿。"
+      },
+      {
+        "id": "conditions_apply_undo",
+        "status": "passed",
+        "detail": "应用华北条件得到 330000 元并提示 2/3 条结论有来源；撤销后恢复 780000 元。",
+        "observed": {
+          "changed_net_sales": 330000,
+          "coverage_supported": 2,
+          "coverage_total": 3,
+          "undo_net_sales": 780000
+        }
+      },
+      {
+        "id": "lazy_chart",
+        "status": "passed",
+        "detail": "折叠时不加载图表，展开后展示真实 3 行结果与 1 个图表画布。",
+        "observed": {
+          "values": [
+            780000,
+            720000,
+            240000
+          ],
+          "row_count": 3,
+          "expanded_canvas_count": 1
+        }
+      },
+      {
+        "id": "evidence_location",
+        "status": "passed",
+        "detail": "从来源 2 的计算口径进入原文，实际定位到对应内容。"
+      },
+      {
+        "id": "save_restore",
+        "status": "passed",
+        "detail": "保存“2024年华东经营分析”，从历史记录重新打开后恢复 780000 元结果。",
+        "observed": {
+          "restored_net_sales": 780000
+        }
+      },
+      {
+        "id": "favorites",
+        "status": "passed",
+        "detail": "固定情景推演后刷新，收藏仍保留；检查完成后已取消固定。"
+      },
+      {
+        "id": "menu_keyboard",
+        "status": "passed",
+        "detail": "菜单内按 Tab 关闭菜单并恢复正常焦点顺序。"
+      },
+      {
+        "id": "multiline_input",
+        "status": "passed",
+        "detail": "Shift+Enter 产生换行，不提交问题。"
+      },
+      {
+        "id": "appearance",
+        "status": "passed",
+        "detail": "深色主题下字号设为 18 px，输入框实际计算字号为 18 px；关闭动态反馈时开场呈静态状态。",
+        "observed": {
+          "configured_font_px": 18,
+          "computed_input_font_px": 18,
+          "static_welcome": true
+        }
+      },
+      {
+        "id": "welcome",
+        "status": "passed",
+        "detail": "桌面进入触发 720 ms 过渡；手机按 Esc 可退出开场并恢复工作区。",
+        "observed": {
+          "configured_transition_ms": 720
+        }
+      },
+      {
+        "id": "navigation",
+        "status": "passed",
+        "detail": "手机导航可打开关闭，桌面导航可折叠展开。"
+      },
+      {
+        "id": "command_search",
+        "status": "passed",
+        "detail": "Cmd+K 打开搜索，Esc 关闭。"
+      },
+      {
+        "id": "scenario",
+        "status": "passed",
+        "detail": "增长率调整为 10% 后得到净销售额 858000 元与奖金 1450 元。",
+        "observed": {
+          "growth_percent": 10,
+          "net_sales": 858000,
+          "bonus": 1450
+        }
+      }
+    ],
+    "mobile_analysis": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "reading_area": {
+        "top": 129,
+        "bottom": 698.40625
+      },
+      "composer": {
+        "top": 698.40625,
+        "bottom": 844
+      },
+      "reading_composer_overlap": false
+    },
+    "mobile_condition_modal": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "backdrop_parent": "body",
+      "backdrop_rect": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      }
+    },
+    "delivery_service": {
+      "official_local_service_restored": true,
+      "health_endpoint": "/api/health",
+      "health_status": "ok",
+      "owned_instance_and_workspace_match_service_record": true,
+      "html_assets": [
+        "index-BCiREZ1w.js",
+        "index-DF80Q_5p.css"
+      ],
+      "temporary_test_data_merged_into_runtime": false
+    }
+  },
+  "data_note": "本轮全部业务操作使用新建的项目外临时示例库，未使用个人运行数据。前轮 broader checks 仅作为历史证据保留在 previous_verified_flow，不声明本轮重跑 Python 10 项或所有来源、保存、条件和情景流程。",
+  "windows_runtime_tested": false,
+  "external_services_tested": false,
+  "remaining_boundaries": [
+    "Windows 未实机运行",
+    "外部模型、OCR、联网检索及外部数据库未实际验证",
+    "本轮未重跑 Python 10 项业务回归及全部历史用例",
+    "首屏耗时、真实设备帧率与长期性能未做独立基准测试"
+  ],
+  "pending_finalization": [],
+  "browser_error_log_scope": "应用 dev.logs 的 error 日志为空；工具自身 Statsig 外网错误不属于应用错误日志。",
+  "adopted_art": {
+    "path": "01_程序代码/frontend/public/prism-knot.webp",
+    "bytes": 212546,
+    "sha256": "79efb424bca8724a1177824d4197dbb81a2148a0583d8e4a2808d49e786755da",
+    "origin": "原创 ImageGen 生成素材；本轮复用于动态首页场景",
+    "public_dist_identical": true
+  },
+  "delivery_service": {
+    "restoration_status": "verified",
+    "official_local_service_restored": true,
+    "health_endpoint": "/api/health",
+    "health_status": "ok",
+    "health_ok": true,
+    "local_only": true,
+    "owned_instance_and_workspace_match_service_record": true,
+    "html_assets": [
+      "index-DymHRKoV.js",
+      "index-DQ2IfcKV.css"
+    ],
+    "original_workspace_runtime_restored": true,
+    "temporary_test_data_merged_into_runtime": false,
+    "note": "正式本地服务与服务实例记录精确匹配，使用原工作区运行数据；本轮外部临时测试库未混入。"
+  }
+}

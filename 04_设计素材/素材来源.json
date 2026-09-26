@@ -148,5 +148,38 @@
     "母版": "04_设计素材/角色母版/pet-14-drag.png",
     "sha256": "5e6557525a0d90ccf654436a9a26b1a69e6ffff47edc37094b09c65f9fee636e",
     "来源记录": "沿用既有工程最后采用的图像母版；角色由图像生成工具制作，具体生成模型版本未确认。"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/welcome-stream.webp",
+    "母版": "内置图像生成工具输出，采用版统一维护在 public",
+    "sha256": "14a47071a8f42fe6ab0f8906a5b96535ab5fb0e09be7ea62f377d2c05695c9cf",
+    "来源记录": "2026-09-25 根据原创文字描述生成；未提供参考图片；仅转换为 WebP，底层模型版本未确认。",
+    "尺寸": [
+      1672,
+      941
+    ],
+    "字节": 85966,
+    "生成提示": "Premium abstract background for EvidenceFlow: deep midnight navy charcoal, refractive glass ribbon with brushed liquid-silver spine and pale icy-blue edges, sculptural detail at upper right and lower left, dark uncluttered center, no text, logo, UI, particles, grids or stars.",
+    "使用位置": "2026-09-25 开场采用；2026-09-26 起新首页与开场不再引用，文件保留",
+    "状态": "保留的上一轮素材"
+  },
+  {
+    "运行素材": "01_程序代码/frontend/public/prism-knot.webp",
+    "母版": "内置 ImageGen 输出的 PNG；正式采用版统一维护在 public",
+    "sha256": "79efb424bca8724a1177824d4197dbb81a2148a0583d8e4a2808d49e786755da",
+    "来源记录": "2026-09-26 使用内置 ImageGen 根据文字描述原创生成；PNG 转为 WebP，保留 alpha；具体底层模型名称与版本未确认。",
+    "尺寸": [
+      1254,
+      1254
+    ],
+    "字节": 212546,
+    "像素模式": "RGBA",
+    "alpha范围": [
+      0,
+      255
+    ],
+    "艺术简述": "透明背景的光学玻璃结雕塑，银色金属边缘与蓝色、琥珀色折射；配合深墨暖白界面和编辑式文字，无文字、按钮或业务数据。",
+    "使用位置": "welcome.tsx 首次进入及重播开场；home.tsx 工作台主视觉",
+    "状态": "2026-09-26 当前采用"
   }
 ]

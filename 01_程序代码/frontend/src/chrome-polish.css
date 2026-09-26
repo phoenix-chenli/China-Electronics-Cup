@@ -1,0 +1,223 @@
+/* A single silver-blue material family for navigation, content and overlays. */
+:root {
+  --bg: #f3f6fb;
+  --panel: #fff;
+  --panel-solid: #fff;
+  --soft: #edf2f9;
+  --text: #203049;
+  --ink: #203049;
+  --muted: #66778d;
+  --line: #dde5ef;
+  --blue: #476ee8;
+  --blue-soft: #e7edff;
+  --green: #557caa;
+  --shadow: 0 8px 30px #2c4b7108;
+  --chrome-nav: #edf2f9;
+  --chrome-nav-glass: #edf2f9eb;
+  --chrome-header-glass: #f5f8fdeb;
+  --chrome-hover: #e5edf8;
+  --chrome-active: #e2eaff;
+  --chrome-active-line: #cddbf9;
+  --chrome-on-accent: #fff;
+  --chrome-accent-hover: #365cd3;
+  --chrome-accent-pressed: #2d50c1;
+  --chrome-hairline: #ffffffd9;
+  --chrome-overlay: #263c5847;
+  --chrome-focus: #476ee840;
+  color-scheme: light;
+}
+:root[data-theme=dark] {
+  --bg: #172234;
+  --panel: #1e2c42;
+  --panel-solid: #1e2c42;
+  --soft: #25354d;
+  --text: #e4ecf7;
+  --ink: #e4ecf7;
+  --muted: #9aacbf;
+  --line: #334761;
+  --blue: #9ab5ff;
+  --blue-soft: #2b3d61;
+  --green: #9fbce0;
+  --shadow: 0 8px 30px #0a14221c;
+  --chrome-nav: #1b2a40;
+  --chrome-nav-glass: #1b2a40ed;
+  --chrome-header-glass: #1a283deb;
+  --chrome-hover: #293c57;
+  --chrome-active: #2b4165;
+  --chrome-active-line: #3b557e;
+  --chrome-on-accent: #102449;
+  --chrome-accent-hover: #b2c7ff;
+  --chrome-accent-pressed: #8ca6ef;
+  --chrome-hairline: #b7d2ff0b;
+  --chrome-overlay: #09152780;
+  --chrome-focus: #9ab5ff50;
+  color-scheme: dark;
+}
+body {background: var(--bg); color: var(--text)}
+::selection {background: color-mix(in srgb,var(--blue) 22%,transparent); color: var(--text)}
+
+/* The sidebar is a quiet frosted panel, with the same hue as the canvas. */
+:root .atelier-shell .workspace-navigation,
+:root[data-theme=dark] .atelier-shell .workspace-navigation {
+  background: var(--chrome-nav-glass);
+  background-image: none;
+  color: var(--text);
+  border-right: 1px solid var(--line);
+  box-shadow: inset -1px 0 var(--chrome-hairline);
+  -webkit-backdrop-filter: blur(22px) saturate(1.1);
+  backdrop-filter: blur(22px) saturate(1.1);
+}
+.atelier-shell .workspace-navigation .ef-brand strong {color: var(--text); font-weight: 650}
+.atelier-shell .workspace-navigation .ef-brand small {color: var(--muted)}
+.atelier-shell .ef-brand .brand-period {color: var(--blue)}
+.atelier-shell .workspace-navigation .ef-brand:hover .brand-symbol {transform: translateY(-1px)}
+.atelier-shell .workspace-navigation .ef-brand .brand-symbol {transition: transform .22s var(--ease-out); filter: none}
+.atelier-shell .workspace-navigation .new-question {
+  color: var(--blue);
+  background: var(--panel-solid);
+  border: 1px solid color-mix(in srgb,var(--blue) 17%,var(--line));
+  min-height: 45px;
+  box-shadow: 0 3px 9px #2c4b7105,inset 0 1px var(--chrome-hairline);
+}
+.atelier-shell .workspace-navigation .new-question:hover {color: var(--blue); background: var(--blue-soft); border-color: var(--chrome-active-line); transform: translateY(-1px); box-shadow: 0 5px 13px #2c4b7109}
+.atelier-shell .workspace-navigation .new-question:active {transform: translateY(0) scale(.985); box-shadow: none}
+.atelier-shell .workspace-navigation .nav-item,
+.navigation-dialog .nav-item {color: var(--muted); min-height: 45px; border: 1px solid transparent; font-weight: 450; border-radius: 12px}
+.atelier-shell .workspace-navigation .nav-item:hover,
+.navigation-dialog .nav-item:hover {color: var(--text); background: var(--chrome-hover); border-color: transparent}
+.atelier-shell .workspace-navigation .nav-item.active,
+.navigation-dialog .nav-item.active {color: var(--blue); background: var(--chrome-active); border-color: var(--chrome-active-line); font-weight: 600; box-shadow: inset 0 1px var(--chrome-hairline),0 2px 5px #2c4b7103}
+.atelier-shell .workspace-navigation .nav-item.active:hover,
+.navigation-dialog .nav-item.active:hover {background: color-mix(in srgb,var(--chrome-active) 86%,var(--blue) 14%); border-color: color-mix(in srgb,var(--chrome-active-line) 80%,var(--blue) 20%)}
+.atelier-shell .workspace-navigation .nav-item:active,
+.navigation-dialog .nav-item:active {transform: scale(.985)}
+.atelier-shell .workspace-navigation .nav-item>svg,
+.navigation-dialog .nav-item>svg {stroke-width: 1.7; flex-shrink: 0}
+.atelier-shell .workspace-navigation .nav-active-dot,
+.navigation-dialog .nav-active-dot {background: var(--blue); width: 5px; height: 5px; min-width: 5px; border-radius: 50%; box-shadow: 0 0 0 3px color-mix(in srgb,var(--blue) 8%,transparent)}
+.atelier-shell .workspace-navigation .nav-section-label {color: var(--muted); opacity: .9}
+.atelier-shell .workspace-navigation .nav-recents>button {color: var(--muted); border: 1px solid transparent; min-height: 44px; border-radius: 10px}
+.atelier-shell .workspace-navigation .nav-recents>button>span {font-size: 12px}
+.atelier-shell .workspace-navigation .nav-recents small {color: var(--muted); opacity: .8; font-size: 10px!important}
+.atelier-shell .workspace-navigation .nav-recents>button:hover {color: var(--text); background: var(--chrome-hover)}
+.atelier-shell .workspace-navigation .nav-recents>button.selected {color: var(--blue); background: color-mix(in srgb,var(--chrome-active) 66%,transparent); border-color: color-mix(in srgb,var(--chrome-active-line) 70%,transparent)}
+.atelier-shell .workspace-navigation .nav-recents>button:active {transform: scale(.985)}
+.atelier-shell .workspace-navigation .nav-recents>p {color: var(--muted); opacity: .85}
+.atelier-shell .workspace-navigation .local-status {color: var(--muted); border-top: 1px solid var(--line); min-height: 44px}
+.atelier-shell .workspace-navigation .local-status:hover {color: var(--blue)}
+.atelier-shell .status-dot.online {background: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb,var(--green) 9%,transparent)}
+.atelier-shell.navigation-collapsed .workspace-navigation .nav-item.active .nav-active-dot {display: block; position: absolute; right: 7px; top: 7px; width: 4px; height: 4px; min-width: 4px; box-shadow: none; margin: 0}
+.atelier-shell.navigation-collapsed .workspace-navigation .new-question {box-shadow: inset 0 1px var(--chrome-hairline)}
+.atelier-shell .workspace-navigation .nav-utilities .nav-item.active::after,
+.navigation-dialog .nav-utilities .nav-item.active::after {content: ''; width: 5px; height: 5px; flex: 0 0 5px; margin-left: auto; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px color-mix(in srgb,var(--blue) 8%,transparent)}
+.atelier-shell.navigation-collapsed .workspace-navigation .nav-utilities .nav-item.active::after {position: absolute; right: 7px; top: 7px; width: 4px; height: 4px; margin: 0; box-shadow: none}
+
+/* Toolbar materials and states stay light, with no dark horizontal strip. */
+:root .atelier-shell .workspace-header,
+:root[data-theme=dark] .atelier-shell .workspace-header {background: var(--chrome-header-glass); border-bottom: 1px solid var(--line); box-shadow: inset 0 -1px var(--chrome-hairline); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px)}
+.atelier-shell .workspace-main {background: var(--bg)}
+.atelier-shell .workspace-header .workspace-project {color: var(--text); border-radius: 9px; min-height: 40px; font-size: 13px; font-weight: 550; padding-block: 8px; transition: color .18s ease,background .18s ease}
+.atelier-shell .workspace-header .workspace-project:hover {color: var(--blue); background: var(--chrome-hover)}
+.atelier-shell .workspace-header .workspace-project>svg {color: var(--muted)}
+.atelier-shell .workspace-location {color: var(--muted); font-size: 12px}
+.atelier-shell .workspace-location>span {color: color-mix(in srgb,var(--muted) 45%,transparent)}
+:root .atelier-shell .global-search,
+:root[data-theme=dark] .atelier-shell .global-search {color: var(--muted); background: color-mix(in srgb,var(--panel-solid) 88%,transparent); border-color: var(--line); box-shadow: inset 0 1px var(--chrome-hairline),0 2px 7px #2c4b7103; border-radius: 11px; font-size: 12px; min-height: 40px}
+:root .atelier-shell .global-search:hover,
+:root[data-theme=dark] .atelier-shell .global-search:hover {background: var(--panel-solid); border-color: var(--chrome-active-line); color: var(--text); box-shadow: 0 0 0 3px color-mix(in srgb,var(--blue) 4%,transparent)}
+.atelier-shell .global-search kbd {background: var(--soft); border-color: var(--line); color: var(--muted)}
+.atelier-shell .workspace-header .icon-button,
+.atelier-shell .workspace-header .action-menu-trigger.icon-only {color: var(--muted); border-radius: 11px; background: transparent; border-color: transparent; min-height: 40px}
+.atelier-shell .workspace-header .icon-button:hover,
+.atelier-shell .workspace-header .action-menu-trigger.icon-only:hover,
+.atelier-shell .workspace-header .action-menu-trigger[aria-expanded=true] {background: var(--chrome-hover); color: var(--blue); border-color: transparent}
+.atelier-shell .workspace-header .header-companion {color: var(--muted); border-radius: 11px; min-height: 40px; font-size: 12px; transition: background .2s ease,color .2s ease}
+.atelier-shell .workspace-header .header-companion:hover {background: var(--chrome-hover); color: var(--text)}
+.atelier-shell .workspace-header .header-companion:active {transform: scale(.97)}
+.atelier-shell .workspace-header .mobile-brand .ef-brand {min-height: 40px}
+.atelier-shell .workspace-header .mobile-brand .ef-brand strong {color: var(--text)}
+
+/* Shared surfaces pick up the same cool-white finish, including portaled menus. */
+.button.primary,.send-button {background: var(--blue); border-color: transparent; color: var(--chrome-on-accent); box-shadow: 0 3px 10px color-mix(in srgb,var(--blue) 14%,transparent)}
+.button.primary:hover:not(:disabled),.send-button:hover:not(:disabled) {background: var(--chrome-accent-hover); color: var(--chrome-on-accent); box-shadow: 0 5px 15px color-mix(in srgb,var(--blue) 20%,transparent)}
+.button.primary:active:not(:disabled),.send-button:active:not(:disabled) {background: var(--chrome-accent-pressed); box-shadow: none}
+.button:not(.primary):hover:not(:disabled),.icon-button:hover:not(:disabled) {border-color: var(--line); background: var(--soft); color: var(--text)}
+.query-input.focus-query {background: var(--panel-solid); border-color: var(--line); box-shadow: 0 3px 10px #2c4b7104,0 16px 35px #2c4b7105}
+.query-input.focus-query:focus-within {border-color: color-mix(in srgb,var(--blue) 60%,var(--line)); box-shadow: 0 0 0 3px color-mix(in srgb,var(--blue) 7%,transparent),0 12px 30px #2c4b7107}
+.query-input.focus-query .send-button:disabled {background: var(--soft); color: color-mix(in srgb,var(--muted) 65%,var(--panel-solid)); box-shadow: none}
+.tool-shelf .button:hover:not(:disabled),.tool-shelf .pinned-tool:hover:not(:disabled) {color: var(--blue); background: var(--blue-soft)}
+.action-menu-popover {background: color-mix(in srgb,var(--panel-solid) 95%,transparent); border-color: var(--line); box-shadow: 0 20px 60px #27415f20,0 3px 10px #27415f08; -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px)}
+.action-menu-row>button:hover:not(:disabled) {background: var(--soft); color: var(--text)}
+.action-menu-row .pin-control.is-pinned {color: var(--blue); background: var(--blue-soft)}
+.modal-backdrop {background: var(--chrome-overlay); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px)}
+.modal {background: var(--panel-solid); border-color: var(--line); box-shadow: 0 30px 90px #162d4d30,inset 0 1px var(--chrome-hairline)}
+.modal-title {border-color: var(--line)}
+.search-field,.form-field input,.form-field select,.form-field textarea {background: var(--soft); border-color: var(--line); color: var(--text)}
+input:focus-visible,select:focus-visible,textarea:focus-visible {outline-color: var(--blue)}
+button:focus-visible,a:focus-visible,summary:focus-visible {outline: 2px solid var(--blue); outline-offset: 3px}
+.atelier-shell .workspace-navigation button:focus-visible,
+.atelier-shell .workspace-header button:focus-visible,
+.navigation-dialog button:focus-visible {outline: 2px solid var(--blue); outline-offset: 3px; box-shadow: 0 0 0 5px var(--chrome-focus)}
+.action-menu-row>button:focus-visible {outline-offset: -2px; background: var(--blue-soft)}
+:root .atelier-shell .prefs-tabs>button.active,
+:root[data-theme=dark] .atelier-shell .prefs-tabs>button.active {background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 0 0 1px var(--chrome-active-line)}
+.toggle.on,.switch.on {background: var(--blue); box-shadow: none}
+.pref-range {accent-color: var(--blue)}
+:root .pref-card>h3>svg,:root[data-theme=dark] .pref-card>h3>svg {color: var(--green)}
+:root .font-setting-preview,:root .source-setting-preview,:root .density-sample,
+:root[data-theme=dark] .font-setting-preview,:root[data-theme=dark] .source-setting-preview,:root[data-theme=dark] .density-sample {background: var(--soft); color: var(--muted); border-color: var(--line)}
+:root .source-setting-preview>.badge,:root[data-theme=dark] .source-setting-preview>.badge {background: var(--panel-solid); color: var(--blue)}
+.atelier-shell .source-mark {background: var(--blue-soft); color: var(--blue)}
+:root .companion-minimal .companion-chat,
+:root[data-theme=dark] .companion-minimal .companion-chat {background: var(--panel-solid); border-color: var(--line); box-shadow: 0 20px 70px #203b6025}
+:root .companion-chat header,:root[data-theme=dark] .companion-chat header {background: var(--soft); color: var(--text); border-color: var(--line)}
+:root .companion-minimal .companion-scene,:root[data-theme=dark] .companion-minimal .companion-scene {background: var(--bg)}
+:root .companion-scene>div,:root[data-theme=dark] .companion-scene>div {background: var(--panel-solid); color: var(--text)}
+:root .companion-scene span,:root[data-theme=dark] .companion-scene span {color: var(--muted)}
+:root .companion-quick button,:root[data-theme=dark] .companion-quick button {background: var(--blue-soft); border-color: var(--chrome-active-line); color: var(--blue)}
+.companion-composer {border-color: var(--line)}
+.companion-composer:focus-within {outline-color: var(--blue)}
+
+/* The analytical reading surface has local variables; keep them in this family too. */
+.focus-analysis.analysis-art,.analysis-source-drawer,.analysis-condition-dialog,.analysis-process-dialog,
+:root[data-theme=dark] .focus-analysis.analysis-art,:root[data-theme=dark] .analysis-source-drawer,:root[data-theme=dark] .analysis-condition-dialog,:root[data-theme=dark] .analysis-process-dialog {
+  --analysis-paper: var(--panel-solid);
+  --analysis-wash: var(--bg);
+  --analysis-ink: var(--text);
+  --analysis-muted: var(--muted);
+  --analysis-line: var(--line);
+  --analysis-blue: var(--blue);
+  --analysis-green: var(--green);
+  --analysis-soft-blue: var(--blue-soft);
+  --analysis-soft-green: var(--soft);
+}
+
+/* Mobile navigation uses exactly the same materials and readable label sizes. */
+.navigation-dialog {background: var(--chrome-nav); color: var(--text); border-color: var(--line)}
+.navigation-dialog .modal-title h2 {color: var(--text)}
+.navigation-dialog>.button.primary {background: var(--panel-solid); color: var(--blue); border: 1px solid var(--chrome-active-line); box-shadow: inset 0 1px var(--chrome-hairline); min-height: 45px}
+.navigation-dialog>.button.primary:hover {background: var(--blue-soft)}
+.navigation-dialog .nav-section-label {color: var(--muted)}
+.navigation-dialog .nav-recents>button {color: var(--muted); border: 1px solid transparent; min-height: 44px}
+.navigation-dialog .nav-recents>button:hover {color: var(--text); background: var(--chrome-hover)}
+.navigation-dialog .nav-recents>button.selected {color: var(--blue); background: var(--chrome-active); border-color: var(--chrome-active-line)}
+.navigation-dialog .nav-recents small {color: var(--muted)}
+.navigation-dialog .local-status {color: var(--muted); border-top: 1px solid var(--line); padding-top: 13px; min-height: 44px}
+.navigation-dialog .nav-utilities .nav-item.active {color: var(--blue)}
+@media (max-width:760px) {
+  :root .atelier-shell .workspace-header .global-search,
+  :root[data-theme=dark] .atelier-shell .workspace-header .global-search {background: transparent; border-color: transparent; box-shadow: none; min-height: 44px}
+  :root .atelier-shell .workspace-header .global-search:hover,
+  :root[data-theme=dark] .atelier-shell .workspace-header .global-search:hover {background: var(--chrome-hover); color: var(--blue)}
+  .atelier-shell .workspace-header .icon-button,.atelier-shell .workspace-header .action-menu-trigger.icon-only,
+  .atelier-shell .workspace-header .header-companion,.atelier-shell .workspace-header .workspace-project {min-height: 44px}
+  .atelier-shell .workspace-header .workspace-project {font-size: 13px}
+}
+@media (prefers-reduced-motion:reduce) {
+  .atelier-shell .workspace-navigation .ef-brand .brand-symbol {transition: none; transform: none!important}
+}
+:root[data-motion=off] .atelier-shell .workspace-navigation .ef-brand .brand-symbol {transform: none!important}
+@supports not (backdrop-filter:blur(1px)) {
+  :root .atelier-shell .workspace-navigation,:root[data-theme=dark] .atelier-shell .workspace-navigation {background: var(--chrome-nav)}
+  :root .atelier-shell .workspace-header,:root[data-theme=dark] .atelier-shell .workspace-header {background: var(--bg)}
+}

@@ -1,0 +1,14 @@
+{
+  "archive_name": "证流_赛题八_Windows队友交接版.rar",
+  "bytes": 123898710,
+  "sha256": "7d974093f5d5e5413e21175c0f9e9868b4e0d9e7e1ada7f7fe39227f00c0c695",
+  "rar_integrity": "passed",
+  "extracted_files": 318,
+  "sha256_comparison": "all match",
+  "max_directory_depth": 4,
+  "windows_runtime_tested": false,
+  "personal_runtime_data_included": false,
+  "mac_environment_included": false,
+  "node_modules_included": false,
+  "top_folder": "证流_赛题八"
+}
