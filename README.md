@@ -1,13 +1,10 @@
 # EvidenceFlow 证流 · 动态首页与冰蓝 UI 新版
 
-**版本：2026.09.26 UI｜分支：`ui/2026-09-26-iceblue-motion`｜发布标签：`ui-2026-09-26`**
+**版本：2026.09.26 UI｜主分支：`main`｜发布标签：`ui-2026-09-26`**
 
-本分支是最新的界面与交互版本。原 `main` 保留旧版，未覆盖、未强推。
+当前 `main` 为最新的界面与交互版本，包含动态首页、统一冰蓝银灰配色、收藏工具与输入体验优化。
 
-| 版本 | 内容 | 入口 |
-|---|---|---|
-| **新版 · 2026-09-26** | 动态首页、统一冰蓝银灰配色、收藏工具与输入体验精修 | [下载独立 Release](https://github.com/phoenix-chenli/China-Electronics-Cup/releases/tag/ui-2026-09-26) |
-| 旧版 · 2026-09-24 | 仓库最初提交，供对照与回退 | [查看旧版固定快照](https://github.com/phoenix-chenli/China-Electronics-Cup/tree/882c87926fd3de8cd4fc94609a706df418119fd9) |
+[下载最新版](https://github.com/phoenix-chenli/China-Electronics-Cup/releases/tag/ui-2026-09-26) · [查看源码](https://github.com/phoenix-chenli/China-Electronics-Cup/tree/main)
 
 ![新版首页](03_测试验收/验收证据/home-1440.png)
 
