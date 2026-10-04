@@ -4,6 +4,7 @@ import {ResultData, ConditionChanges, SourcePanel} from './analysis-tools'
 import {ThreadHistory} from './conversations'
 import {ActionMenu, MenuAction, ToolShelf} from './controls'
 import {Obj, Empty, examples, Mascot, Modal, num, QueryInput, RichText, Spinner, formatValue as formatMetric} from './ui'
+import {AgentSummary,AgentTrace} from './agent'
 
 export function Conditions({result, recompute, busy}: Obj) {
   const [open, setOpen] = useState(false), [draft, setDraft] = useState<Obj>({}), [focus, setFocus] = useState('')
@@ -33,7 +34,7 @@ function QuestionHeading({text = ''}: {text?: string}) {
   return <div className="analysis-question"><span className="analysis-eyebrow">你的问题</span><h1>{long && !expanded ? text.slice(0, 140) + '…' : text}</h1>{long && <button className="text-link question-toggle" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? '收起问题' : '展开完整问题'}<ChevronDown size={13}/></button>}</div>
 }
 
-export function AnalysisPage({result, question, setQuestion, run, busy, stage, recompute, undo, onUndo, onSave, onCopy, onEvidence, navigate, choose, session, projectName, loading, selectedMessageId, onSelectMessage, onRetry, onCancel, task, onRename, onShare, tools}: Obj) {
+export function AnalysisPage({result, question, setQuestion, run, busy, stage, recompute, undo, onUndo, onSave, onCopy, onEvidence, navigate, choose, session, projectName, loading, selectedMessageId, onSelectMessage, onRetry, onCancel, task, onRename, onShare, tools,onAgentSettings}: Obj) {
   const [sourceId, setSourceId] = useState<string | null>(null), [showProcess, setShowProcess] = useState(false), [sourceOpen, setSourceOpen] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false), [dataOpen, setDataOpen] = useState(false)
   const focus = useRef<HTMLDivElement>(null), scroller = useRef<HTMLDivElement>(null), conclusion = useRef<HTMLElement>(null), data = useRef<HTMLDetailsElement>(null), restored = useRef(false), previous = useRef(selectedMessageId)
@@ -60,18 +61,21 @@ export function AnalysisPage({result, question, setQuestion, run, busy, stage, r
   const pastCount = assistantMessages.filter((m: Obj) => m.id !== (busy ? null : selectedMessageId) && !['queued', 'running', 'cancelling'].includes(m.status)).length
   const round = assistantMessages.findIndex((m: Obj) => m.id === selectedMessageId) + 1
   const evidence = result?.evidence || [], gaps = result?.claims?.some((c: Obj) => c.status === 'needs_evidence')
+  const latestTask=session?.tasks?.at(-1),failedTask=!busy&&['failed','cancelled'].includes(latestTask?.status)?latestTask:null
   const more: MenuAction[] = [...(can('copy') ? [{id:'copy-sources', label:'复制答案与来源', icon:Copy, onSelect:() => onCopy(true)}, {id:'copy', label:'仅复制答案', icon:Copy, onSelect:() => onCopy(false)}] : []), ...(result && !busy ? [{id:'share', label:'分享结果', icon:Share2, onSelect:onShare}] : []), ...(result?.events?.length && !busy ? [{id:'process', label:'查询过程', icon:History, onSelect:() => setShowProcess(true)}] : []), ...(session ? [{id:'rename', label:'重命名会话', icon:FileText, onSelect:onRename}] : [])]
   return <div className="analysis-layout focus-analysis analysis-art page-enter rail-closed"><section className="conversation panel"><header className="conversation-head"><div className="session-heading"><span className="analysis-session-icon"><Layers3 size={18}/></span><div><small>{projectName || '工作区'}<span>/</span>分析</small><h2>{session?.title || '新问题'}</h2></div></div><div className="inline-actions">{can('save') && <button className="button small" aria-label="保存" onClick={onSave}><Save size={15}/><span>保存</span></button>}<button aria-label={'来源' + (evidence.length ? ' ' + evidence.length : '')} className={'button source-trigger ' + (sourceOpen ? 'active' : '')} disabled={!result || busy} onClick={() => setSourceOpen(true)}><FileCheck2 size={16}/><span>来源</span>{evidence.length > 0 && <small>{evidence.length}</small>}</button>{more.length > 0 && <ActionMenu label="会话更多操作" iconOnly items={more}/>}</div></header>
     <div className="conversation-content" ref={scroller} onScroll={e => {if (!restored.current) return; try {sessionStorage.setItem(scrollKey, String(e.currentTarget.scrollTop))} catch {}}}>
       {loading ? <Spinner text="正在打开会话"/> : <div className="analysis-reading">
         {pastCount > 0 && <details className="analysis-history" open={historyOpen} onToggle={e => setHistoryOpen(e.currentTarget.open)}><summary><History size={14}/><span>此前的对话</span><small>{pastCount} 轮</small><ChevronDown size={14}/></summary><ThreadHistory session={session} selectedId={busy ? null : selectedMessageId} onSelect={selectMessage} onRetry={onRetry} busy={busy}/></details>}
         <div className="analysis-reading-start" ref={focus}>
+          {failedTask&&<section className="agent-failure" aria-label="上次查询状态"><p>{failedTask.status==='cancelled'?'上次查询已取消。':failedTask.error||'上次查询失败，请查看执行记录。'}{result&&' 下方保留的是此前查询的结果。'}</p><button className="text-link" onClick={onAgentSettings||(()=>navigate('settings'))}>检查主问答设置</button>{(failedTask.events?.length>0||failedTask.agent?.plan?.length>0)&&<details className="agent-live-toggle"><summary>查看失败或取消的执行过程</summary><AgentSummary agent={failedTask.agent}/><AgentTrace agent={failedTask.agent} events={failedTask.events||[]}/></details>}</section>}
           {!result && !busy ? <div className="analysis-starter"><div className="analysis-starter-mark"><img src="/brand-icon.svg" alt=""/></div><span className="analysis-eyebrow">新的探索，从一个问题开始</span><h1>让数据说清楚。</h1><p>问数据、读文档，让每一个结论都能找到来处。</p><div className="starter-options">{examples.slice(0, 3).map((x, i) => <button key={x} onClick={() => run(x)}><span>0{i + 1}</span>{x}<ArrowRight size={16}/></button>)}</div></div> : <>
             <div className="analysis-context-line"><span>{isDocument ? '文档解读' : '数据分析'}{round > 0 && !busy ? ' · 第 ' + round + ' 轮' : ''}</span>{!busy && selectedMessageId !== results.at(-1)?.id && results.length > 0 && <button className="text-link" onClick={() => selectMessage(results.at(-1).id)}>回到最新结果<ArrowRight size={13}/></button>}</div>
             <QuestionHeading text={busy ? session?.messages?.filter((m: Obj) => m.role === 'user').at(-1)?.text : result?.question || question}/>
-            {busy && <div className="task-feedback" role="status"><div className="analysis-task-orbit" aria-hidden="true"><span/><span/><span/></div><div><span className="analysis-eyebrow">正在处理</span><Spinner text={stage || '正在提交问题'}/><p>结果与来源将在这里呈现。</p></div>{task && <button className="button small" disabled={task.status === 'cancelling'} onClick={onCancel}>{task.status === 'cancelling' ? '正在取消' : '取消查询'}</button>}</div>}
+            {busy && <><div className="task-feedback" role="status"><div className="analysis-task-orbit" aria-hidden="true"><span/><span/><span/></div><div><span className="analysis-eyebrow">正在处理</span><Spinner text={stage || task?.progress || '正在提交问题'}/><p>结果与来源将在这里呈现。</p></div>{task && <button className="button small" disabled={task.status === 'cancelling'} onClick={onCancel}>{task.status === 'cancelling' ? '正在取消' : '取消查询'}</button>}</div><div className="agent-live"><AgentSummary agent={task?.agent}/>{(task?.events?.length>0||task?.agent?.plan?.length>0)&&<details className="agent-live-toggle" open><summary>计划与执行状态</summary><AgentTrace agent={task?.agent} events={task?.events||[]} compact/></details>}</div></>}
             {result && !busy && <div key={result.run_id} className="answer-reveal">
               {result.status === 'needs_clarification' ? <Clarify result={result} choose={choose} busy={busy}/> : <div className={'answer-status ' + (gaps ? 'analysis-status-gap' : '')}>{gaps ? <AlertCircle size={15}/> : <CheckCircle2 size={15}/>}<span>{gaps ? '部分结论仍需补充来源' : '分析已完成'}</span><small>{isDocument ? '文档原文' : '本轮查询'}{result.latency_ms != null ? ' · ' + num(result.latency_ms) + ' ms' : ''}</small></div>}
+              <AgentSummary agent={result.agent} onProcess={()=>setShowProcess(true)}/>
               {isDocument ? documentScope && <div className="document-scope-note"><FileText size={15}/><span>当前文档 · 第 {documentScope.page} 页 · 版本 {documentScope.sha256?.slice(0, 10)}{documentScope.text_range ? ' · 已选片段' : ''}</span></div> : <Conditions result={result} recompute={recompute} busy={busy}/>}
               {undo && <ConditionChanges before={undo} after={result} onUndo={onUndo}/>}
               {result.status === 'completed' && <>
@@ -99,5 +103,5 @@ export function AnalysisPage({result, question, setQuestion, run, busy, stage, r
 }
 
 export function Process({result}: Obj) {
-  return <><div className="process-list">{result?.events?.map((e: Obj) => <details key={e.step_id}><summary><CheckCircle2 size={17}/><strong>{e.label}</strong><span>{num(e.duration_ms)} ms</span></summary><p>{e.summary}</p><code>{e.tool}</code>{Object.keys(e.outputs || {}).length > 0 && <pre>{JSON.stringify(e.outputs, null, 2)}</pre>}</details>)}</div>{!result?.events?.length && <Empty title="暂无执行记录"/>}</>
+  return <><AgentSummary agent={result?.agent}/><AgentTrace agent={result?.agent} events={result?.events||[]}/>{!result?.events?.length&&!result?.agent?.plan?.length&&!result?.agent?.review&&<Empty title="暂无执行记录"/>}</>
 }

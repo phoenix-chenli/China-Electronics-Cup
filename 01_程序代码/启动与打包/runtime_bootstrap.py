@@ -11,6 +11,12 @@ def activate():
     actual=hashlib.sha256(bundle.read_bytes()).hexdigest()
     if expected!=actual: raise RuntimeError('内置依赖压缩包校验失败，请重新完整解压交接包')
     base=Path(os.environ.get('LOCALAPPDATA',str(Path.home()/'AppData/Local')))/'EvidenceFlow'/'runtime'
+    # Wheel licence paths may exceed Win32's legacy 260-character limit when
+    # the user cache itself has a long path. Extended absolute paths work even
+    # on Windows installations where long-path policy has not been enabled.
+    absolute=str(base.resolve())
+    if not absolute.startswith('\\\\?\\'):
+        base=Path('\\\\?\\UNC\\'+absolute[2:] if absolute.startswith('\\\\') else '\\\\?\\'+absolute)
     cache=base/actual[:20]
     marker=cache/'.complete'
     if not marker.is_file() or marker.read_text(encoding='ascii')!=actual:

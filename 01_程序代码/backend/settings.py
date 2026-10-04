@@ -98,7 +98,7 @@ def help_answer(req: HelpRequest):
     elif any(x in q for x in ['临时','隐私','本机','外发']):
         text='普通分析保存在本机 SQLite，文件保存在本机目录。临时问答只使用内存，不写入历史；关闭或刷新会退出。外部调用由“仅本机处理”开关控制；临时问答始终只在本机查询。';action='settings'
     elif any(x in q for x in ['模型','联网','能做什么']):
-        text='当前使用本地确定性查询，可查询销售示例、检索原文和计算有来源的奖金。模型补充和联网检索需在连接设置中测试并启用；调用前可预览发送内容。OCR 仍未启用。';action='settings'
+        text='主问答可在模型连接页选择自动、本地或指定模型。已测试并启用的文本模型可规划只读业务查询、文档检索、计算和来源核验；模型补充与联网检索仍可单独预览调用。OCR 仍未启用，临时问答只在本机处理。';action='settings'
     elif any(x in q for x in ['主题','深色','字号','字体','密度','动画','配置','设置']):
         p=req.preferences
         text='当前主题：'+{'light':'浅色','dark':'深色','system':'跟随系统'}.get(p.get('theme'),'浅色')+'；字号：'+str(p.get('fontSize',14))+'px。修改外观立即生效。关闭动画仍可提问；系统减少动态效果优先。';action='settings'

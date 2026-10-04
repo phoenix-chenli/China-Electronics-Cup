@@ -19,22 +19,24 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from . import store as s
-from . import engine, conversations, scenarios, settings, connections, extensions, sharing
+from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent
 from . import documents as document_engine
 from .seed import seed_business, write_seed_docs
 
-app=FastAPI(title="证流",version="0.3.0")
+app=FastAPI(title="证流",version="0.4.0")
 app.include_router(conversations.router)
 app.include_router(scenarios.router)
 app.include_router(settings.router)
 app.include_router(connections.router)
 app.include_router(extensions.router)
 app.include_router(sharing.router)
+app.include_router(agent.router)
 def init_app():
     s.init(); seed_business(); write_seed_docs()
     scenarios.initialize()
     settings.initialize()
     connections.initialize()
+    agent.initialize()
     for p in sorted(s.DOCS.iterdir()):
         if p.is_file(): s.index_document(p)
 @app.on_event("startup")
@@ -57,7 +59,11 @@ async def invalid_fields(request,exc):
     return JSONResponse({'detail':'字段格式不正确：'+fields},status_code=422)
 
 @app.exception_handler(ValueError)
-async def invalid(request, exc): return JSONResponse({"detail":str(exc)},status_code=400)
+async def invalid(request, exc):
+    detail={"detail":str(exc)}
+    if isinstance(exc,agent.AgentFailure):
+        detail.update(run_id=exc.result['run_id'],events=exc.result['events'],agent=exc.result['agent'])
+    return JSONResponse(detail,status_code=400)
 
 class DocumentContext(BaseModel):
     document_id: str=Field(min_length=1,max_length=100)
@@ -113,11 +119,11 @@ class RenameRequest(BaseModel):
 
 def run(req, cancelled=None, progress=None):
     if req.workspace_id!="sales-demo": raise ValueError("工作区不存在，未继承其他工作区条件")
-    return engine.execute(req.question,req.previous_context,req.confirmed,cancelled=cancelled,progress=progress,document_context=req.document_context.model_dump(exclude_none=True) if req.document_context else None)
+    return agent.execute(req.question,req.previous_context,req.confirmed,cancelled=cancelled,progress=progress,document_context=req.document_context.model_dump(exclude_none=True) if req.document_context else None)
 
 @app.get("/api/health")
 def health():
-    return {"ok":True,"service":"evidenceflow","version":"0.3.0","mode":"local-deterministic","platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
+    return {"ok":True,"service":"evidenceflow","version":"0.4.0","mode":"configurable-agent","agent_mode":agent.saved_config()['mode'],"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
 
 @app.get("/api/summary")
 def summary():
@@ -248,7 +254,7 @@ def recompute(req: RecomputeRequest):
     old=s.get_run(req.run_id) if req.run_id else None
     spec={**(old["query_spec"] if old else {}),**req.overrides}
     # Recomputing the same question must retain ALL confirmed conditions.
-    result=engine.execute(old["question"] if old else req.question,{},spec)
+    result=agent.execute(old["question"] if old else req.question,{},spec)
     result["parent_run_id"]=req.run_id
     result["changes"]=[{"key":k,"before":old["query_spec"].get(k) if old else None,"after":v} for k,v in req.overrides.items()]
     s.snapshot_run(result)

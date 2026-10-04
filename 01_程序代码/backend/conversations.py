@@ -10,9 +10,10 @@ import sqlite3
 import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from . import store as s, engine
+from . import store as s, engine, agent
 
 router = APIRouter(prefix="/api")
 ACTIVE = ("queued", "running", "cancelling")
@@ -20,6 +21,31 @@ ACTIVE = ("queued", "running", "cancelling")
 
 def encode(value): return json.dumps(value, ensure_ascii=False)
 def uid(): return str(uuid.uuid4())
+
+
+def terminalize_trace(c, tid, status, stamp, error=None, interrupted=False):
+    """Keep the persisted execution snapshot consistent with a terminal task."""
+    trace = c.execute("SELECT body FROM ef_task_traces WHERE task_id=?", (tid,)).fetchone()
+    if not trace or status == "completed": return
+    body = json.loads(trace[0])
+    detail = "查询已取消" if status == "cancelled" else error or "查询未完成"
+    for event in body.get("events", []):
+        if event.get("status") == "running":
+            event.update(status="cancelled" if status == "cancelled" else "failed", summary=detail)
+            if interrupted:
+                # Recovery time is known; the process's actual finish time and
+                # execution duration before a crash are not.
+                event.update(finished_at=None, duration_ms=None, recovered_at=stamp)
+            else:
+                event["finished_at"] = stamp
+                if event.get("started_at"):
+                    event["duration_ms"] = round((datetime.fromisoformat(stamp) - datetime.fromisoformat(event["started_at"])).total_seconds() * 1000, 2)
+    if body.get("agent"):
+        body["agent"]["review"] = {"status": status, "detail": detail}
+        for item in body["agent"].get("plan", []):
+            if item.get("status") in {"pending", "running"}:
+                item["status"] = "cancelled" if status == "cancelled" else "failed" if item["status"] == "running" else "skipped"
+    c.execute("UPDATE ef_task_traces SET body=? WHERE task_id=?", (encode(body), tid))
 
 
 def initialize():
@@ -36,6 +62,7 @@ def initialize():
                 finally: dst.close()
     with s.conn() as c:
         c.executescript("""
+        CREATE TABLE IF NOT EXISTS ef_task_traces(task_id TEXT PRIMARY KEY,body TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS ef_projects(
           id TEXT PRIMARY KEY,name TEXT NOT NULL,workspace_id TEXT NOT NULL,
           created_at TEXT NOT NULL,updated_at TEXT NOT NULL);
@@ -56,11 +83,15 @@ def initialize():
         CREATE UNIQUE INDEX IF NOT EXISTS ef_one_active_task ON ef_tasks(session_id)
           WHERE status IN ('queued','running','cancelling');
         """)
+        c.execute("BEGIN IMMEDIATE")
         stamp = s.now()
         c.execute("INSERT OR IGNORE INTO ef_projects VALUES (?,?,?,?,?)",
                   ("default", "销售分析", "sales-demo", stamp, stamp))
         # Interrupted work cannot be reported as completed or silently replayed.
         error = "服务重启，查询已中断。可以重试。"
+        interrupted = c.execute("SELECT id FROM ef_tasks WHERE status IN ('queued','running','cancelling')").fetchall()
+        for row in interrupted:
+            terminalize_trace(c, row["id"], "failed", stamp, error, interrupted=True)
         c.execute("UPDATE ef_messages SET status='failed',text=? WHERE role='assistant' AND task_id IN (SELECT id FROM ef_tasks WHERE status IN ('queued','running','cancelling'))", (error,))
         c.execute("UPDATE ef_tasks SET status='failed',stage='查询中断',error=?,updated_at=? WHERE status IN ('queued','running','cancelling')", (error, stamp))
 
@@ -181,13 +212,16 @@ def task_row(row):
     d = dict(row)
     d.pop("request_json", None)
     d["result"] = json.loads(d.pop("result_json") or "null")
+    with s.conn() as c:
+        trace=c.execute("SELECT body FROM ef_task_traces WHERE task_id=?",(d['id'],)).fetchone()
+    d.update(json.loads(trace[0]) if trace else {"events":[],"agent":None})
     return d
 
 
 class TaskManager:
     def __init__(self, workers=4, executor=None):
         self.pool = ThreadPoolExecutor(max_workers=workers)
-        self.executor = executor or engine.execute
+        self.executor = executor or agent.execute
         self.stops = {}
         self.lock = threading.Lock()
 
@@ -240,7 +274,13 @@ class TaskManager:
                 if not c.execute("UPDATE ef_tasks SET status='running',stage='开始查询',updated_at=? WHERE id=? AND status='queued'", (s.now(), tid)).rowcount: return
                 c.execute("UPDATE ef_messages SET status='running' WHERE task_id=? AND role='assistant'", (tid,))
             def progress(label):
-                with s.conn() as c: c.execute("UPDATE ef_tasks SET stage=?,updated_at=? WHERE id=? AND status='running'", (label, s.now(), tid))
+                trace=label if isinstance(label,dict) else None
+                stage=trace.get('stage','正在查询') if trace else label
+                with s.conn() as c:
+                    c.execute('BEGIN IMMEDIATE')
+                    changed=c.execute("UPDATE ef_tasks SET stage=?,updated_at=? WHERE id=? AND status='running'", (stage, s.now(), tid)).rowcount
+                    if changed and trace:
+                        c.execute('INSERT OR REPLACE INTO ef_task_traces VALUES (?,?)',(tid,encode({k:trace[k] for k in ('events','agent') if k in trace})))
             with s.query_cancellation(stop):
                 extra = {"document_context":req["document_context"]} if req.get("document_context") else {}
                 result = self.executor(req["question"], req.get("previous_context"), req.get("confirmed"), cancelled=stop, progress=progress, persist=False, **extra)
@@ -265,6 +305,7 @@ class TaskManager:
             if not task or task["status"] not in ACTIVE: return
             if task["status"] == "cancelling": status = "cancelled"
             if status != "completed": result = None
+            terminalize_trace(c, tid, status, stamp, error)
             text = ((result.get("answer") or result.get("clarification", {}).get("title") or result.get("headline", "")) if result else "查询已取消" if status == "cancelled" else error or "查询未完成")
             c.execute("UPDATE ef_tasks SET status=?,stage=?,error=?,result_json=?,updated_at=? WHERE id=?", (status, {"completed": "查询完成", "cancelled": "已取消", "failed": "查询失败"}[status], error if status == "failed" else None, encode(result) if result else None, stamp, tid))
             c.execute("UPDATE ef_messages SET status=?,text=?,result_json=? WHERE task_id=? AND role='assistant'", (status, text, encode(result) if result else None, tid))

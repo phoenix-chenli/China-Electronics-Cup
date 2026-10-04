@@ -200,6 +200,87 @@ class ConversationsTest(unittest.TestCase):
         with s.conn() as c: self.assertEqual(c.execute("SELECT COUNT(*) FROM saved_analyses").fetchone()[0], before)
         self.assertTrue((s.DATA / "backups/before-conversations.db").exists())
 
+    def test_restart_terminalizes_model_traces_and_preserves_completed_work(self):
+        interrupted = []
+        started = "2024-01-01T00:00:00.000+00:00"
+        completed_event = {"step_id": "finished", "status": "completed", "duration_ms": 12.5,
+                           "started_at": started, "finished_at": "2024-01-01T00:00:00.013+00:00"}
+        for state in conv.ACTIVE:
+            sid, tid, stamp = self.new_session(), str(uuid.uuid4()), s.now()
+            request = {"session_id": sid, "question": "2024 年华东净销售额", "request_id": "restart-" + state}
+            trace = {"events": [completed_event,
+                                {"step_id": "rejected", "status": "failed", "summary": "此前步骤失败", "duration_ms": 3},
+                                {"step_id": "in-flight", "status": "running", "started_at": started, "duration_ms": 0}],
+                     "agent": {"mode": "model", "model": "isolated-fixture", "calls": 2, "usage": {"total_tokens": 18},
+                               "review": {"status": "pending", "detail": "尚未核验"},
+                               "plan": [{"id": "done", "status": "completed"}, {"id": "rejected", "status": "failed"},
+                                        {"id": "current", "status": "running"}, {"id": "next", "status": "pending"}]}}
+            with s.conn() as c:
+                c.execute("INSERT INTO ef_tasks VALUES (?,?,?,?,?,?,NULL,NULL,NULL,?,?)",
+                          (tid, sid, request["request_id"], conv.encode(request), state, "测试中的模型调用", stamp, stamp))
+                c.execute("INSERT INTO ef_messages(id,session_id,role,text,status,task_id,created_at) VALUES (?,?,'assistant','',?,?,?)",
+                          (str(uuid.uuid4()), sid, state, tid, stamp))
+                c.execute("INSERT INTO ef_task_traces VALUES (?,?)", (tid, conv.encode(trace)))
+            interrupted.append((sid, tid))
+        complete_sid, complete_tid, stamp = self.new_session(), str(uuid.uuid4()), s.now()
+        completed_trace = conv.encode({"events": [completed_event], "agent": {"mode": "model", "review": {"status": "passed"}}})
+        with s.conn() as c:
+            c.execute("INSERT INTO ef_tasks VALUES (?,?,?,?,?,?,NULL,NULL,NULL,?,?)",
+                      (complete_tid, complete_sid, "completed-control", "{}", "completed", "查询完成", stamp, stamp))
+            c.execute("INSERT INTO ef_task_traces VALUES (?,?)", (complete_tid, completed_trace))
+        conv.initialize()
+        for sid, tid in interrupted:
+            with self.subTest(task_id=tid):
+                task = self.client.get("/api/tasks/" + tid).json()
+                self.assertEqual(task["status"], "failed")
+                self.assertIn("服务重启", task["error"])
+                self.assertIsNone(task["result"])
+                self.assertEqual(task["events"][0], completed_event)
+                self.assertEqual(task["events"][1]["summary"], "此前步骤失败")
+                event = task["events"][2]
+                self.assertEqual(event["status"], "failed")
+                self.assertIn("服务重启", event["summary"])
+                self.assertIsNone(event["finished_at"])
+                self.assertIsNone(event["duration_ms"])
+                self.assertEqual(event["recovered_at"], task["updated_at"])
+                self.assertEqual([p["status"] for p in task["agent"]["plan"]], ["completed", "failed", "failed", "skipped"])
+                self.assertEqual(task["agent"]["review"]["status"], "failed")
+                self.assertEqual(task["agent"]["calls"], 2)
+                self.assertEqual(task["agent"]["usage"], {"total_tokens": 18})
+                detail = self.detail(sid)
+                self.assertEqual(detail["tasks"][0], task)
+                self.assertEqual(detail["messages"][0]["status"], "failed")
+                self.assertIsNone(detail["messages"][0]["result"])
+        with s.conn() as c:
+            self.assertEqual(c.execute("SELECT body FROM ef_task_traces WHERE task_id=?", (complete_tid,)).fetchone()[0], completed_trace)
+            recovered_trace = c.execute("SELECT body FROM ef_task_traces WHERE task_id=?", (interrupted[0][1],)).fetchone()[0]
+        conv.initialize()
+        with s.conn() as c:
+            self.assertEqual(c.execute("SELECT body FROM ef_task_traces WHERE task_id=?", (interrupted[0][1],)).fetchone()[0], recovered_trace)
+        retry = conv.manager.retry(interrupted[0][1], "restart-retry")
+        self.assertEqual(self.wait(conv.manager, retry["id"])["status"], "completed")
+        self.assertEqual(conv.manager.get(interrupted[0][1])["status"], "failed")
+
+    def test_failed_task_finishes_running_trace_and_skips_unexecuted_plan(self):
+        def fails_after_progress(*args, **kwargs):
+            kwargs["progress"]({"stage": "模型调用中", "events": [{"step_id": "call", "status": "running", "started_at": s.now()}],
+                                "agent": {"mode": "model", "plan": [{"status": "running"}, {"status": "pending"}]}})
+            raise OSError("隔离夹具：模型连接中断")
+        manager = conv.TaskManager(workers=1, executor=fails_after_progress)
+        try:
+            queued = manager.submit({"session_id": self.new_session(), "question": "2024 年华东净销售额"})
+            task = self.wait(manager, queued["id"])
+            self.assertEqual(task["status"], "failed")
+            self.assertEqual(task["events"][0]["status"], "failed")
+            self.assertIn("模型连接中断", task["events"][0]["summary"])
+            self.assertIsNotNone(task["events"][0]["finished_at"])
+            self.assertGreaterEqual(task["events"][0]["duration_ms"], 0)
+            self.assertNotIn("recovered_at", task["events"][0])
+            self.assertEqual([p["status"] for p in task["agent"]["plan"]], ["failed", "skipped"])
+            self.assertEqual(task["agent"]["review"]["status"], "failed")
+        finally:
+            manager.pool.shutdown(wait=True)
+
     def test_import_saved_snapshot_and_rename(self):
         r = self.query(self.new_session(), "2024 年华东销售冠军是谁？")
         saved = self.client.post('/api/saved', json={"name": "旧保存分析", "run_id": r["result"]["run_id"]}).json()

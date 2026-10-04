@@ -2,6 +2,7 @@
 from __future__ import annotations
 import base64, hashlib, io, json, os, re, secrets, sqlite3, threading, time, uuid
 from contextlib import contextmanager
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit, quote
@@ -13,6 +14,8 @@ from . import store as s
 
 router=APIRouter(prefix='/api/connections')
 lock=threading.RLock()
+_model_pool=ThreadPoolExecutor(max_workers=4,thread_name_prefix='evidenceflow-model')
+_model_slots=threading.BoundedSemaphore(4)
 KINDS={'sqlite','postgresql','mysql','text','vision','brave','wikipedia'}
 DB_KINDS={'sqlite','postgresql','mysql'}
 
@@ -146,8 +149,29 @@ def history(cid:str):
     get(cid)
     with s.conn() as c:return [json.loads(r[0]) for r in c.execute('SELECT body FROM ef_connection_events WHERE connection_id=? ORDER BY rowid DESC LIMIT 30',(cid,))]
 
-def request_json(d,url,body=None,headers=None):
+def request_json(d,url,body=None,headers=None,cancelled=None):
     gate(d)
+    if cancelled is not None:
+        # Bound in-flight transports even when a provider stalls. The query can
+        # cancel promptly; an already-sent HTTP call ends at its own deadline.
+        wait_until=time.monotonic()+d.get('timeout',20)
+        while not _model_slots.acquire(timeout=.1):
+            if cancelled.is_set():raise InterruptedError('查询已取消')
+            if time.monotonic()>wait_until:raise ValueError('模型请求繁忙，请稍后重试')
+        if cancelled.is_set():
+            _model_slots.release();raise InterruptedError('查询已取消')
+        future=_model_pool.submit(request_json,d,url,body,headers)
+        future.add_done_callback(lambda _: _model_slots.release())
+        while True:
+            if cancelled.is_set():
+                future.cancel();raise InterruptedError('查询已取消')
+            try:
+                value=future.result(timeout=.1)
+                if cancelled.is_set():raise InterruptedError('查询已取消')
+                return value
+            except FutureTimeout:
+                if time.monotonic()>wait_until:
+                    future.cancel();raise ValueError('模型请求超过总时限')
     deadline=time.monotonic()+d.get('timeout',20)
     try:
         with httpx.Client(timeout=httpx.Timeout(d.get('timeout',20),connect=5),follow_redirects=False,trust_env=False) as client:
@@ -164,9 +188,9 @@ def request_json(d,url,body=None,headers=None):
     except httpx.RequestError:raise ValueError('无法连接服务，请检查地址、网络和证书') from None
     except (json.JSONDecodeError,UnicodeDecodeError):raise ValueError('服务返回的内容不是有效 JSON') from None
 
-def chat(d,messages):
+def chat(d,messages,max_tokens=1200,cancelled=None):
     headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
-    r=request_json(d,d['endpoint']+'/chat/completions',{'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':1200},headers)
+    r=request_json(d,d['endpoint']+'/chat/completions',{'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens},headers,cancelled=cancelled)
     try:text=r['choices'][0]['message']['content']
     except (KeyError,IndexError,TypeError):raise ValueError('服务未返回文本回答') from None
     if not isinstance(text,str) or not text.strip():raise ValueError('服务返回空回答')
