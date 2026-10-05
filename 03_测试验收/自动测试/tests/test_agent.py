@@ -317,6 +317,44 @@ class AgentTests(unittest.TestCase):
         self.assertIn("有效来源", failed[1]["summary"])
         self.assertEqual(result["formulas"], [])
 
+    def test_current_rule_formula_keeps_simulation_boundary_with_zero_sales_change(self):
+        self.ready()
+        def calculate(payload):
+            formula = tool_results(payload)[-1]['result']['formulas'][0]
+            self.assertTrue(formula['simulation'])
+            self.assertEqual(formula['scenario_pct'], 0)
+            sales = formula['parameters'][0]
+            return {'action': 'tool', 'tool': 'formula.calculate', 'arguments': {
+                'expression': 'sales', 'parameters': [sales]}}
+        self.script(query_action('2024年华东奖金套用当前规则', confirmed={'rule_mode':'current','scenario_pct':0}), calculate, select_fact)
+        response = self.query('2024年华东奖金套用当前规则')
+        self.assertEqual(response.status_code, 200, response.text)
+        result = response.json()
+        self.assertEqual(result['claims'][0]['status'], 'simulation')
+        self.assertTrue(result['formulas'][-1]['simulation'])
+        self.assertTrue(result['formulas'][-1]['parameters'][0]['assumption'])
+        self.assertIn('假设', result['answer'])
+
+    def test_same_value_calculations_restore_only_the_referenced_formula(self):
+        self.ready()
+        def calculate(payload):
+            fact = tool_results(payload)[-1]['result']['facts'][0]
+            return {'action':'tool','tool':'formula.calculate','arguments':{
+                'expression':'sales / sales','parameters':[{'name':'sales','value':str(fact['value']),
+                    'unit':fact['unit'],'evidence_ids':fact['evidence_ids']}]}}
+        def select_first_calculation(payload):
+            fact = tool_results(payload)[1]['result']['facts'][0]
+            return {'action':'answer','claims':[{'fact_id':fact['id']}]}
+        self.script(query_action(), calculate, query_action(), calculate, select_first_calculation)
+        response = self.query()
+        self.assertEqual(response.status_code, 200, response.text)
+        result = response.json()
+        self.assertEqual(result['claims'][0]['value'], '1')
+        formulas = [f for f in result['formulas'] if f.get('origin')=='model_calculation']
+        self.assertEqual(len(formulas), 1)
+        self.assertEqual(formulas[0]['fact_id'], result['claims'][0]['fact_id'])
+        self.assertEqual(formulas[0]['query_id'], 'query-1')
+
     def test_provider_failure_is_visible_with_failed_trace_and_no_fallback(self):
         self.ready()
         ModelFixture.mode = "http_error"

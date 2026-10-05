@@ -69,6 +69,8 @@ def main():
               'node_modules_included':False,'top_folder':'证流_赛题八'}
         output.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(archive,output)
+        # Keep the workspace index tied to this verified archive, not an older release.
+        shutil.copy2(stage/MANIFEST,ROOT/MANIFEST)
         (ROOT/REPORT).write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
         print(json.dumps(data,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

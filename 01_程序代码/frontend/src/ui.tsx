@@ -1,4 +1,5 @@
 import {shouldSendKey} from './pet-state'
+import {rawTableValue,savedAnalysisName} from './result-presentation'
 import React, {lazy, Suspense, useEffect, useRef, useState} from 'react'
 import {createPortal} from 'react-dom'
 import {ArrowRight, ChevronLeft, ChevronRight, FileText, LoaderCircle, Search, Send, X} from 'lucide-react'
@@ -64,14 +65,14 @@ export function Chart(props:ChartProps){
  },[])
  return <div ref={frame} style={{height:props.height??220,minWidth:0}}>{ready&&<Suspense fallback={<div className="chart-loading" role="status">正在加载图表…</div>}><LazyChart {...props}/></Suspense>}</div>
 }
-export function DataTable({rows=[],columns,limit=10,selectedIndex=null,onSelectRow}:{rows:Obj[],columns?:string[],limit?:number,selectedIndex?:number|null,onSelectRow?:(index:number)=>void}){
+export function DataTable({rows=[],columns,limit=10,selectedIndex=null,onSelectRow,raw=false}:{rows:Obj[],columns?:string[],limit?:number,selectedIndex?:number|null,onSelectRow?:(index:number)=>void,raw?:boolean}){
  const [page,setPage]=useState(0);const cols=columns||Object.keys(rows[0]||{});const pages=Math.ceil(rows.length/limit)
  useEffect(()=>setPage(0),[rows]);useEffect(()=>{if(selectedIndex!==null)setPage(Math.floor(selectedIndex/limit))},[selectedIndex,limit])
  if(!rows.length)return <Empty title="没有符合条件的数据"/>
- return <div className="data-table"><div className="table-scroll" tabIndex={0} aria-label="结果数据表"><table><thead><tr>{cols.map(c=><th key={c}>{fieldNames[c]||c}</th>)}</tr></thead><tbody>{rows.slice(page*limit,(page+1)*limit).map((row,i)=>{const index=page*limit+i;return <tr key={index} className={selectedIndex===index?'selected-row':''}>{cols.map((c,ci)=><td key={c}>{onSelectRow&&ci===0?<button className="row-select" aria-pressed={selectedIndex===index} aria-label={'选中 '+String(row.product_name||row.region||row[c])} onClick={()=>onSelectRow(index)}>{typeof row[c]==='number'?num(row[c]):String(row[c]??'—')}</button>:typeof row[c]==='number'?num(row[c]):String(row[c]??'—')}</td>)}</tr>})}</tbody></table></div>{pages>1&&<div className="pagination"><span>{rows.length} 行 · 第 {page+1}/{pages} 页</span><IconButton label="上一页" disabled={!page} onClick={()=>setPage(page-1)}><ChevronLeft size={16}/></IconButton><IconButton label="下一页" disabled={page===pages-1} onClick={()=>setPage(page+1)}><ChevronRight size={16}/></IconButton></div>}</div>
+ return <div className="data-table"><div className="table-scroll" tabIndex={0} aria-label="结果数据表"><table><thead><tr>{cols.map(c=><th key={c}>{raw?c:fieldNames[c]||c}</th>)}</tr></thead><tbody>{rows.slice(page*limit,(page+1)*limit).map((row,i)=>{const index=page*limit+i;return <tr key={index} className={selectedIndex===index?'selected-row':''}>{cols.map((c,ci)=>{const text=raw?rawTableValue(row[c]):typeof row[c]==='number'?num(row[c]):String(row[c]??'—');return <td key={c}>{onSelectRow&&ci===0?<button className="row-select" aria-pressed={selectedIndex===index} aria-label={'选中 '+(raw?text:String(row.product_name||row.region||row[c]))} onClick={()=>onSelectRow(index)}>{text}</button>:text}</td>})}</tr>})}</tbody></table></div>{pages>1&&<div className="pagination"><span>{rows.length} 行 · 第 {page+1}/{pages} 页</span><IconButton label="上一页" disabled={!page} onClick={()=>setPage(page-1)}><ChevronLeft size={16}/></IconButton><IconButton label="下一页" disabled={page===pages-1} onClick={()=>setPage(page+1)}><ChevronRight size={16}/></IconButton></div>}</div>
 }
 export function TextLink({children,onClick}:{children:React.ReactNode,onClick:()=>void}){return <button className="text-link" onClick={onClick}>{children}<ArrowRight size={14}/></button>}
 export function SaveDialog({result,onSave,close}:{result:Obj,onSave:(s:string)=>Promise<void>,close:()=>void}){
- const [name,setName]=useState(result.query_spec?.year+' 年'+(result.query_spec?.region||'')+'经营分析');const [busy,setBusy]=useState(false);const [err,setErr]=useState('')
+ const [name,setName]=useState(()=>savedAnalysisName(result));const [busy,setBusy]=useState(false);const [err,setErr]=useState('')
  return <Modal title="保存分析" close={close}><form onSubmit={async e=>{e.preventDefault();setBusy(true);try{await onSave(name.trim());close()}catch(e){setErr(String(e))}finally{setBusy(false)}}}><label className="form-field">名称<input value={name} onChange={e=>setName(e.target.value)} maxLength={120} required/></label><p className="muted">查询条件、结果与来源版本将一并保存。</p>{err&&<p className="error-text">{err}</p>}<div className="modal-actions"><button type="button" className="button" onClick={close}>取消</button><button className="button primary" disabled={busy||!name.trim()}>{busy?'保存中':'保存'}</button></div></form></Modal>
 }

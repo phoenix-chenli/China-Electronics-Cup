@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import hashlib
 import os
 import platform
 import mimetypes
@@ -19,11 +20,11 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from . import store as s
-from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent
+from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
 from . import documents as document_engine
 from .seed import seed_business, write_seed_docs
 
-app=FastAPI(title="证流",version="0.4.0")
+app=FastAPI(title="证流",version="0.5.0")
 app.include_router(conversations.router)
 app.include_router(scenarios.router)
 app.include_router(settings.router)
@@ -119,11 +120,14 @@ class RenameRequest(BaseModel):
 
 def run(req, cancelled=None, progress=None):
     if req.workspace_id!="sales-demo": raise ValueError("工作区不存在，未继承其他工作区条件")
-    return agent.execute(req.question,req.previous_context,req.confirmed,cancelled=cancelled,progress=progress,document_context=req.document_context.model_dump(exclude_none=True) if req.document_context else None)
+    document_context=req.document_context.model_dump(exclude_none=True) if req.document_context else None
+    context=agent.query_context(req.previous_context,document_context)
+    return agent.execute(req.question,req.previous_context,req.confirmed,cancelled=cancelled,progress=progress,document_context=document_context,database_context=context)
 
 @app.get("/api/health")
 def health():
-    return {"ok":True,"service":"evidenceflow","version":"0.4.0","mode":"configurable-agent","agent_mode":agent.saved_config()['mode'],"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
+    cfg=agent.saved_config()
+    return {"ok":True,"service":"evidenceflow","version":"0.5.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
 
 @app.get("/api/summary")
 def summary():
@@ -253,8 +257,10 @@ def query(req: QueryRequest): return run(req)
 def recompute(req: RecomputeRequest):
     old=s.get_run(req.run_id) if req.run_id else None
     spec={**(old["query_spec"] if old else {}),**req.overrides}
+    if conversations.is_database_analysis(spec) or (old and conversations.is_database_analysis(old)):
+        raise ValueError("数据库问数请使用自然语言追问修改范围或刷新结果，不能套用销售条件重算")
     # Recomputing the same question must retain ALL confirmed conditions.
-    result=agent.execute(old["question"] if old else req.question,{},spec)
+    result=agent.execute(old["question"] if old else req.question,{},spec,database_context={'query_scope':'sales','database_connection_id':None})
     result["parent_run_id"]=req.run_id
     result["changes"]=[{"key":k,"before":old["query_spec"].get(k) if old else None,"after":v} for k,v in req.overrides.items()]
     s.snapshot_run(result)
@@ -269,10 +275,14 @@ def cancel_task(tid: str): return conversations.manager.cancel(tid)
 
 @app.get("/api/saved")
 def saved(deleted: bool=False):
-    version=s.data_version()
     with s.conn() as c:
         rows=c.execute("SELECT * FROM saved_analyses WHERE deleted_at IS "+("NOT NULL" if deleted else "NULL")+" ORDER BY updated_at DESC").fetchall()
-    return [{k:v for k,v in dict(r).items() if k!="result_json"}|{"result":json.loads(r["result_json"]),"stale":r["snapshot_version"]!=version} for r in rows]
+    items=[];cache={}
+    for row in rows:
+        result=json.loads(row['result_json'])
+        state=conversations.analysis_snapshot_state(result,cache)
+        items.append({k:v for k,v in dict(row).items() if k!='result_json'}|{'result':result,**state})
+    return items
 @app.post("/api/saved")
 def save(req: SaveRequest):
     name=req.name.strip()
@@ -308,7 +318,7 @@ async def import_file(file: UploadFile=File(...)):
         d=s.index_document(dest,name)
         return {"ok":d["status"]!="failed","kind":"document","document":d,"message":"解析失败，原文件已保留，可查看原因后重试" if d["status"]=="failed" else "文档已导入"}
     import pandas as pd
-    frames={}
+    frames={};source_tables=[]
     try:
         if suffix==".csv":
             frames[Path(name).stem]=pd.read_csv(dest)
@@ -316,11 +326,14 @@ async def import_file(file: UploadFile=File(...)):
         else:
             c=sqlite3.connect(s.readonly_uri(dest),uri=True)
             try:
-                for row in c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").fetchall():
+                c.execute('PRAGMA query_only=ON');c.execute('PRAGMA trusted_schema=OFF')
+                source_names=c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").fetchall()
+                for row in source_names:
+                    source_tables.append(database_query._sqlite_metadata(c,{'schema':'main','name':row[0]},{}))
                     frames[row[0]]=pd.read_sql_query("SELECT * FROM "+s.quoted(row[0]),c)
             finally: c.close()
         if not frames: raise ValueError("文件中没有数据表")
-        prepared=[]
+        prepared=[];mapping={};column_mapping={}
         for original,df in frames.items():
             if len(df)>200000: raise ValueError("单表超过 20 万行")
             if not len(df.columns): raise ValueError("数据表没有字段")
@@ -336,17 +349,29 @@ async def import_file(file: UploadFile=File(...)):
                 return value if isinstance(value,(str,int,float,bytes)) else str(value)
             values=[tuple(scalar(value) for value in row) for row in df.itertuples(index=False,name=None)]
             prepared.append((table,columns,types,values))
+            original_key='main.'+str(original)
+            mapping[original_key]=table
+            column_mapping[original_key]={str(old):new for old,new in zip(df.columns,columns)}
+            if suffix not in {'.sqlite','.db'}:
+                source_tables.append({'schema':'main','name':str(original),'qualified_name':original_key,
+                                      'columns':[{'name':str(old),'type':kind} for old,kind in zip(df.columns,types)],
+                                      'primary_key':[],'unique_keys':[],'foreign_keys':[]})
+        snapshot={'tables':source_tables,'source':{'connection_id':None,'revision':None,
+                  'fingerprint':hashlib.sha256(json.dumps(source_tables,ensure_ascii=False,sort_keys=True).encode()).hexdigest()}}
+        metadata=connections.import_metadata(snapshot,mapping,column_mapping)
         # All sheets and the catalog participate in one transaction; no partial
         # import is exposed if a later sheet is invalid or a write fails.
         c=sqlite3.connect(s.BUSINESS_DB,timeout=8)
         try:
             c.execute("ATTACH DATABASE ? AS catalog",(str(s.APP_DB),))
             c.execute("BEGIN IMMEDIATE")
+            c.execute('CREATE TABLE IF NOT EXISTS catalog.ef_database_import_metadata(name TEXT PRIMARY KEY,body TEXT NOT NULL)')
             for table,columns,types,values in prepared:
                 fields=", ".join(s.quoted(col)+" "+kind for col,kind in zip(columns,types))
                 c.execute("CREATE TABLE "+s.quoted(table)+" ("+fields+")")
                 c.executemany("INSERT INTO "+s.quoted(table)+" VALUES ("+",".join("?" for _ in columns)+")",values)
                 c.execute("INSERT INTO catalog.table_catalog VALUES (?,?,?,0)",(table,name,s.now()))
+                c.execute('INSERT INTO catalog.ef_database_import_metadata VALUES (?,?)',(table,json.dumps(metadata[table],ensure_ascii=False)))
             c.commit()
         except Exception:
             c.rollback(); raise

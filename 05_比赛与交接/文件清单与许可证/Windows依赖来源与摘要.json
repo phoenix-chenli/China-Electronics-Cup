@@ -409,6 +409,20 @@
       }
     },
     {
+      "name": "sqlglot",
+      "version": "30.21.0",
+      "filename": "sqlglot-30.21.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/7e/93/acaa0862f841051e490326c1fc8c61d618d2df26f9e7aed26c331419ab15/sqlglot-30.21.0-py3-none-any.whl",
+      "sha256": "816d1a4815b7562b3976efcc0b561c928a743f976efd0fb8ad6db7a5b96c069e",
+      "license": "MIT",
+      "project_urls": {
+        "Documentation": "https://sqlglot.com/sqlglot.html",
+        "Homepage": "https://sqlglot.com/",
+        "Issues": "https://github.com/tobymao/sqlglot/issues",
+        "Repository": "https://github.com/tobymao/sqlglot"
+      }
+    },
+    {
       "name": "starlette",
       "version": "1.6.0",
       "filename": "starlette-1.6.0-py3-none-any.whl",
@@ -483,5 +497,9 @@
     }
   ],
   "windows_runtime_tested": false,
-  "method": "Official Python ZIP MD5 and PyPI SHA256 verified; extraction only, no Windows execution."
+  "method": "Official Python ZIP MD5 and PyPI SHA256 verified; extraction only, no Windows execution.",
+  "sqlglot_addition": {
+    "date": "2026-10-05",
+    "method": "PyPI SHA256 verified; existing ZIP entries unchanged; pure Python wheel and MIT license included"
+  }
 }

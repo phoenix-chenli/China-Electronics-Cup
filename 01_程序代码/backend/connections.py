@@ -281,6 +281,40 @@ def ready(cid,kind=None):
     if kind and d['kind'] not in kind:raise ValueError('连接类型与操作不匹配')
     if not d.get('enabled') or not d.get('last_test') or not d['last_test']['ok']:raise ValueError('请先测试并启用连接')
     return d
+
+
+def import_metadata(snapshot, mapping, column_mapping=None):
+    """Retain source keys without inventing local constraints or parent tables."""
+    source=snapshot['source'];by_name={t['qualified_name']:t for t in snapshot['tables']}
+    column_mapping=column_mapping or {}
+    def columns(key, values):
+        aliases=column_mapping.get(key,{})
+        return [aliases.get(value,value) for value in values]
+    result={}
+    for original,local in mapping.items():
+        table=by_name[original]
+        body={'original_table':{'schema':table['schema'],'name':table['name']},
+              'origin':{'connection_id':source.get('connection_id'),'connection_revision':source.get('revision'),
+                        'fingerprint':source['fingerprint'],'fingerprint_scope':'schema_snapshot'},
+              'primary_key':columns(original,table.get('primary_key',[])),
+              'unique_keys':[{'name':key.get('name','source-unique'),'columns':columns(original,key['columns'])}
+                             for key in table.get('unique_keys',[])],
+              'foreign_keys':[],'unresolved_foreign_keys':[]}
+        for foreign in table.get('foreign_keys',[]):
+            parent=foreign.get('referenced_schema',table['schema'])+'.'+foreign['referenced_table']
+            targets=foreign.get('referenced_columns') or []
+            if (not targets or any(value is None for value in targets)) and parent in by_name:
+                targets=by_name[parent].get('primary_key',[])
+            relation={'id':foreign.get('id','source-fk'),'columns':columns(original,foreign['columns']),
+                      'referenced_schema':'main','referenced_table':mapping.get(parent,foreign['referenced_table']),
+                      'referenced_columns':columns(parent,targets)}
+            if parent in mapping and targets and all(targets):body['foreign_keys'].append(relation)
+            else:
+                relation['referenced_schema']=foreign.get('referenced_schema',table['schema'])
+                body['unresolved_foreign_keys'].append(relation)
+        result[local]=body
+    return result
+
 @router.post('/{cid}/test')
 def test(cid:str):
     d=get(cid,True);start=time.monotonic();ok=False;detail=''
@@ -329,9 +363,15 @@ def preview(cid:str,req:Table):
     return {**data,'table':req.model_dump(),'preview_limit':20,'read_only':True,'time':s.now()}
 @router.post('/{cid}/import')
 def import_tables(cid:str,req:Tables):
+    from . import database_query
     d=ready(cid,DB_KINDS);prepared=[];start=time.monotonic();stamp=s.now()
     if len({(t.schema_name,t.name) for t in req.tables})!=len(req.tables):raise ValueError('不能重复导入同一张表')
+    selected=[t.schema_name+'.'+t.name for t in req.tables]
+    snapshot=database_query.inspect(cid,selected)
+    if snapshot['source']['revision']!=d['revision']:raise ValueError('数据库连接已改变，请重新选择导入来源')
+    mapping={}
     with database(d) as c:
+        if d['kind']=='sqlite':c.execute('BEGIN')
         allowed=table_list(d,c)
         for t in req.tables:
             if {'schema':t.schema_name,'name':t.name} not in allowed:raise ValueError('选中的表已不存在')
@@ -341,10 +381,19 @@ def import_tables(cid:str,req:Tables):
             if len(encode(data).encode())>20*1024*1024:raise ValueError('单表超过 20 MB，请缩小范围')
             name='import_'+(re.sub(r'\W+','_',t.name)[:40] or 'table')+'_'+uuid.uuid4().hex[:8]
             provenance={'connection_id':cid,'connection_name':d['name'],'kind':d['kind'],'schema':t.schema_name,'source_table':t.name,'imported_at':stamp,'row_count':len(data['rows']),'sha256':hashlib.sha256(encode(data).encode()).hexdigest(),'read_only_source':True}
+            mapping[t.schema_name+'.'+t.name]=name
             prepared.append((name,data,provenance))
+    current=database_query.inspect(cid,selected)
+    if current['source']['revision']!=d['revision'] or current['source']['fingerprint']!=snapshot['source']['fingerprint']:
+        raise ValueError('导入期间数据库连接或结构已改变；未提交快照，请重试')
+    metadata=import_metadata(snapshot,mapping)
     c=sqlite3.connect(s.BUSINESS_DB,timeout=8)
     try:
         c.execute('ATTACH DATABASE ? AS catalog',(str(s.APP_DB),));c.execute('BEGIN IMMEDIATE')
+        latest=c.execute('SELECT body FROM catalog.ef_connections WHERE id=?',(cid,)).fetchone()
+        if not latest or json.loads(latest[0])['revision']!=d['revision']:
+            raise ValueError('导入期间数据库连接已改变；未提交快照，请重试')
+        c.execute('CREATE TABLE IF NOT EXISTS catalog.ef_database_import_metadata(name TEXT PRIMARY KEY,body TEXT NOT NULL)')
         for name,data,provenance in prepared:
             columns=data['columns'];types=[]
             for key in columns:
@@ -354,8 +403,11 @@ def import_tables(cid:str,req:Tables):
             c.executemany('INSERT INTO '+s.quoted(name)+' VALUES ('+','.join('?' for _ in columns)+')',[tuple(r[k] for k in columns) for r in data['rows']])
             c.execute('INSERT INTO catalog.table_catalog VALUES (?,?,?,0)',(name,d['name']+' / '+provenance['source_table'],stamp))
             c.execute('INSERT INTO catalog.ef_import_provenance VALUES (?,?)',(name,encode(provenance)))
+            c.execute('INSERT INTO catalog.ef_database_import_metadata VALUES (?,?)',(name,encode(metadata[name])))
         c.commit()
+    except sqlite3.Error:
+        c.rollback();raise ValueError('本地导入提交失败；数据表、目录与关系元数据均已回滚，请重试') from None
     except Exception:c.rollback();raise
     finally:c.close()
     event(d,'import',True,f'导入 {len(prepared)} 张表的本地快照',time.monotonic()-start)
-    return {'tables':[n for n,_,_ in prepared],'provenance':[p for _,_,p in prepared],'message':'已导入本地快照；原表未修改。自定义表可预览，问数仍使用销售示例口径。'}
+    return {'tables':[n for n,_,_ in prepared],'provenance':[p for _,_,p in prepared],'message':'已导入本地快照并保留主键、唯一键及同批表关系；可在主问答设置选择本机工作库进行模型驱动的数据库问数。'}

@@ -23,6 +23,46 @@ def encode(value): return json.dumps(value, ensure_ascii=False)
 def uid(): return str(uuid.uuid4())
 
 
+def is_database_analysis(result):
+    spec=result.get('query_spec',result)
+    return spec.get('metric')=='database' or spec.get('query_scope')=='database' or bool(result.get('database_query'))
+
+
+def analysis_snapshot_state(result, cache=None):
+    """Compare a generic snapshot only with its own source, never sales data.
+
+    A matching schema or connection revision cannot prove live row freshness.
+    """
+    cache={} if cache is None else cache
+    if not is_database_analysis(result):
+        if 'sales_version' not in cache:cache['sales_version']=s.data_version()
+        return {'stale':result.get('data_version')!=cache['sales_version'],'stale_scope':'sales_data_version'}
+    from . import connections, database_query
+    spec=result.get('query_spec',{})
+    query=result.get('database_query',{})
+    source=query.get('source') or spec.get('database_source') or {}
+    cid=source.get('connection_id',spec.get('database_connection_id'))
+    scope='connection_revision' if cid else 'schema_snapshot'
+    boundary='仅比较数据库连接配置版本；远端数据行可能变化，请自然语言追问重新查询。' if cid else '仅比较本机数据库结构；数据行可能变化，请自然语言追问重新查询。'
+    try:
+        if cid:
+            key=('connection',cid)
+            if key not in cache:cache[key]=connections.ready(cid,connections.DB_KINDS)['revision']
+            expected=source.get('revision')
+            stale=None if expected is None else cache[key]!=expected
+        else:
+            names=query.get('inspected_tables')
+            expected=source.get('fingerprint')
+            if not names or not expected:
+                return {'stale':None,'stale_scope':scope,'stale_boundary':'快照未保留完整结构检查范围，无法判断当前结构是否一致；请自然语言追问重新查询。'}
+            key=('schema',tuple(names))
+            if key not in cache:cache[key]=database_query.inspect(table_names=names)['source']['fingerprint']
+            stale=cache[key]!=expected
+        return {'stale':stale,'stale_scope':scope,'stale_boundary':boundary}
+    except (ValueError,HTTPException,OSError):
+        return {'stale':True,'stale_scope':scope,'stale_boundary':'原数据库来源当前不可用或结构已改变；快照保留，不能据此推断当前数据。'}
+
+
 def terminalize_trace(c, tid, status, stamp, error=None, interrupted=False):
     """Keep the persisted execution snapshot consistent with a terminal task."""
     trace = c.execute("SELECT body FROM ef_task_traces WHERE task_id=?", (tid,)).fetchone()
@@ -168,6 +208,10 @@ def session(sid: str):
         detail["messages"] = messages
         detail["tasks"] = [task_row(r) for r in c.execute("SELECT * FROM ef_tasks WHERE session_id=? ORDER BY created_at", (sid,))]
     detail["data_version"] = s.data_version()
+    selected=next((m['result'] for m in messages if m['id']==detail.get('selected_message_id') and m.get('result')),None)
+    if selected:
+        state=analysis_snapshot_state(selected)
+        detail.update(result_stale=state['stale'],stale_scope=state.get('stale_scope'),stale_boundary=state.get('stale_boundary'))
     return detail
 
 
@@ -245,6 +289,7 @@ class TaskManager:
                 parent = result_message(c, sid, parent_id) if parent_id else None
                 if req.get("mode") == "recompute":
                     if not parent: raise ValueError("请先选择要修改的结果")
+                    if is_database_analysis(parent):raise ValueError('数据库问数请使用自然语言追问修改范围或刷新结果，不能套用销售条件重算')
                     changed = req.get("confirmed", {})
                     req["preserved_origins"] = {k:v for k,v in parent["query_spec"].get("origins", {}).items() if k not in changed}
                     req["question"] = parent["question"]
@@ -255,6 +300,11 @@ class TaskManager:
                 req["workspace_id"] = c.execute("SELECT workspace_id FROM ef_projects WHERE id=?", (conversation["project_id"],)).fetchone()[0]
             if req.get("workspace_id", "sales-demo") != "sales-demo": raise ValueError("工作区不存在")
             if c.execute("SELECT COUNT(*) FROM ef_tasks WHERE status IN ('queued','running','cancelling')").fetchone()[0] >= 12: raise HTTPException(429, "查询队列已满，请稍后重试")
+            # Only a server-owned retry may retain a previously frozen source.
+            # Client-provided database_context never selects an unapproved source.
+            if not attempt_of or not req.get('database_context'):
+                req['database_context']=({'query_scope':'sales','database_connection_id':None} if req.get('mode')=='recompute' else
+                                         agent.query_context(req.get('previous_context'),req.get('document_context')))
             c.execute("INSERT INTO ef_tasks VALUES (?,?,?,?,?,?,NULL,NULL,?,?,?)", (tid, sid, reqid, encode(req), "queued", "等待查询", attempt_of, stamp, stamp))
             if sid:
                 text = req.get("display_question") or req["question"]
@@ -283,6 +333,8 @@ class TaskManager:
                         c.execute('INSERT OR REPLACE INTO ef_task_traces VALUES (?,?)',(tid,encode({k:trace[k] for k in ('events','agent') if k in trace})))
             with s.query_cancellation(stop):
                 extra = {"document_context":req["document_context"]} if req.get("document_context") else {}
+                if self.executor is agent.execute or req.get('database_context',{}).get('query_scope')=='database':
+                    extra['database_context']=req['database_context']
                 result = self.executor(req["question"], req.get("previous_context"), req.get("confirmed"), cancelled=stop, progress=progress, persist=False, **extra)
             if req.get("parent_run_id"): result["parent_run_id"] = req["parent_run_id"]
             if req.get("preserved_origins"):

@@ -1,9 +1,9 @@
 {
-  "archive_name": "证流_智能体主流程_20261004.rar",
-  "bytes": 124010019,
-  "sha256": "f758e10cb62f0ab49e3b254f712fd964b847ed5779c4aee9f4b818a968522c70",
+  "archive_name": "EvidenceFlow-2026-10-05-nl2sql.rar",
+  "bytes": 124902688,
+  "sha256": "e3d66181966d9214860043b0579a9b94506bfc562096a9c5ec172c195b623765",
   "rar_integrity": "passed",
-  "extracted_files": 325,
+  "extracted_files": 338,
   "sha256_comparison": "all match",
   "max_directory_depth": 4,
   "windows_runtime_tested": false,

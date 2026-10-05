@@ -1,0 +1,245 @@
+test_auto_one_ready_model_runs_plan_tools_review_and_records_usage (tests.test_agent.AgentTests.test_auto_one_ready_model_runs_plan_tools_review_and_records_usage) ... ok
+test_auto_without_model_runs_local_and_local_mode_overrides_ready_model (tests.test_agent.AgentTests.test_auto_without_model_runs_local_and_local_mode_overrides_ready_model) ... ok
+test_business_clarification_reaches_user_without_model_fabricating_year (tests.test_agent.AgentTests.test_business_clarification_reaches_user_without_model_fabricating_year) ... ok
+test_cancel_interrupts_inflight_model_before_any_tool_runs (tests.test_agent.AgentTests.test_cancel_interrupts_inflight_model_before_any_tool_runs) ... ok
+test_canonical_document_fact_does_not_bypass_original_location_check (tests.test_agent.AgentTests.test_canonical_document_fact_does_not_bypass_original_location_check) ... ok
+test_canonical_evidence_gap_is_preserved_without_verified_coverage (tests.test_agent.AgentTests.test_canonical_evidence_gap_is_preserved_without_verified_coverage) ... ok
+test_current_rule_formula_keeps_simulation_boundary_with_zero_sales_change (tests.test_agent.AgentTests.test_current_rule_formula_keeps_simulation_boundary_with_zero_sales_change) ... ok
+test_document_tool_returns_locatable_exact_excerpt (tests.test_agent.AgentTests.test_document_tool_returns_locatable_exact_excerpt) ... ok
+test_false_number_with_real_fact_id_is_rejected_then_can_be_repaired (tests.test_agent.AgentTests.test_false_number_with_real_fact_id_is_rejected_then_can_be_repaired) ... ok
+test_formula_rejects_unsourced_or_falsified_parameters_and_coefficients (tests.test_agent.AgentTests.test_formula_rejects_unsourced_or_falsified_parameters_and_coefficients) ... ok
+test_formula_uses_sourced_values_and_preserves_decimal_result (tests.test_agent.AgentTests.test_formula_uses_sourced_values_and_preserves_decimal_result) ... ok
+test_invalid_planner_json_is_not_treated_as_an_answer (tests.test_agent.AgentTests.test_invalid_planner_json_is_not_treated_as_an_answer) ... ok
+test_invented_fact_and_repeated_invalid_answer_fail_without_local_fallback (tests.test_agent.AgentTests.test_invented_fact_and_repeated_invalid_answer_fail_without_local_fallback) ... ok
+test_model_call_budget_and_total_deadline_are_enforced (tests.test_agent.AgentTests.test_model_call_budget_and_total_deadline_are_enforced) ... ok
+test_model_cannot_change_explicit_time_region_or_user_confirmed_scope (tests.test_agent.AgentTests.test_model_cannot_change_explicit_time_region_or_user_confirmed_scope) ... ok
+test_model_invented_year_still_requires_user_clarification (tests.test_agent.AgentTests.test_model_invented_year_still_requires_user_clarification) ... ok
+test_provider_failure_is_visible_with_failed_trace_and_no_fallback (tests.test_agent.AgentTests.test_provider_failure_is_visible_with_failed_trace_and_no_fallback) ... ok
+test_same_value_calculations_restore_only_the_referenced_formula (tests.test_agent.AgentTests.test_same_value_calculations_restore_only_the_referenced_formula) ... ok
+test_schema_tool_sends_metadata_without_samples_paths_or_arbitrary_sql (tests.test_agent.AgentTests.test_schema_tool_sends_metadata_without_samples_paths_or_arbitrary_sql) ... ok
+test_selected_model_becoming_unavailable_never_silently_runs_local (tests.test_agent.AgentTests.test_selected_model_becoming_unavailable_never_silently_runs_local) ... ok
+test_task_route_inherits_server_context_and_persists_failed_events (tests.test_agent.AgentTests.test_task_route_inherits_server_context_and_persists_failed_events) ... ok
+test_tool_budget_stops_repeated_calls (tests.test_agent.AgentTests.test_tool_budget_stops_repeated_calls) ... ok
+test_unknown_tool_and_direct_sql_cannot_mutate_business_data (tests.test_agent.AgentTests.test_unknown_tool_and_direct_sql_cannot_mutate_business_data) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 63.245s
+
+OK
+test_bad_probe_does_not_grant_capability (tests.test_connections.ConnectionsTests.test_bad_probe_does_not_grant_capability) ... ok
+test_brave_adapter_extracts_source_and_drops_unsafe_links (tests.test_connections.ConnectionsTests.test_brave_adapter_extracts_source_and_drops_unsafe_links) ... ok
+test_config_change_invalidates_prepared_request (tests.test_connections.ConnectionsTests.test_config_change_invalidates_prepared_request) ... ok
+test_context_opt_in_and_original_result_unchanged (tests.test_connections.ConnectionsTests.test_context_opt_in_and_original_result_unchanged) ... ok
+test_credentials_not_reused_for_changed_destination (tests.test_connections.ConnectionsTests.test_credentials_not_reused_for_changed_destination) ... ok
+test_database_transport_rejects_write (tests.test_connections.ConnectionsTests.test_database_transport_rejects_write) ... ok
+test_deleted_connection_keeps_import_and_history (tests.test_connections.ConnectionsTests.test_deleted_connection_keeps_import_and_history) ... ok
+test_enable_requires_real_test (tests.test_connections.ConnectionsTests.test_enable_requires_real_test) ... ok
+test_expired_preview_not_sent (tests.test_connections.ConnectionsTests.test_expired_preview_not_sent) ... ok
+test_import_atomic_when_later_table_invalid (tests.test_connections.ConnectionsTests.test_import_atomic_when_later_table_invalid) ... ok
+test_invalid_body_does_not_echo_secret (tests.test_connections.ConnectionsTests.test_invalid_body_does_not_echo_secret) ... ok
+test_invalid_vision_version_is_never_sent (tests.test_connections.ConnectionsTests.test_invalid_vision_version_is_never_sent) ... ok
+test_no_execute_without_acceptance (tests.test_connections.ConnectionsTests.test_no_execute_without_acceptance) ... ok
+test_offline_share_hashes_citations_no_originals_default (tests.test_connections.ConnectionsTests.test_offline_share_hashes_citations_no_originals_default) ... ok
+test_outbound_preview_is_exact_and_idempotent (tests.test_connections.ConnectionsTests.test_outbound_preview_is_exact_and_idempotent) ... ok
+test_preview_injection_unknown_table_rejected (tests.test_connections.ConnectionsTests.test_preview_injection_unknown_table_rejected) ... ok
+test_privacy_reenabled_blocks_prepared_remote (tests.test_connections.ConnectionsTests.test_privacy_reenabled_blocks_prepared_remote) ... ok
+test_provider_failure_stored_and_not_auto_retried (tests.test_connections.ConnectionsTests.test_provider_failure_stored_and_not_auto_retried) ... ok
+test_redirect_not_followed (tests.test_connections.ConnectionsTests.test_redirect_not_followed) ... ok
+test_remote_gate_no_request_when_local_only (tests.test_connections.ConnectionsTests.test_remote_gate_no_request_when_local_only) ... ok
+test_restart_stops_pending_requests_without_resubmission (tests.test_connections.ConnectionsTests.test_restart_stops_pending_requests_without_resubmission) ... ok
+test_scenario_share_preserves_formula_and_parameters (tests.test_connections.ConnectionsTests.test_scenario_share_preserves_formula_and_parameters) ... ok
+test_search_protocol_and_inert_urls (tests.test_connections.ConnectionsTests.test_search_protocol_and_inert_urls) ... ok
+test_secret_encrypted_redacted_and_permissions (tests.test_connections.ConnectionsTests.test_secret_encrypted_redacted_and_permissions) ... ok
+test_share_only_selected_versioned_original (tests.test_connections.ConnectionsTests.test_share_only_selected_versioned_original) ... ok
+test_sqlite_test_preview_import_readonly_and_provenance (tests.test_connections.ConnectionsTests.test_sqlite_test_preview_import_readonly_and_provenance) ... ok
+test_test_failure_disables_previous_success (tests.test_connections.ConnectionsTests.test_test_failure_disables_previous_success) ... ok
+test_text_probe_and_token_limit (tests.test_connections.ConnectionsTests.test_text_probe_and_token_limit) ... ok
+test_unsafe_endpoint_rejected (tests.test_connections.ConnectionsTests.test_unsafe_endpoint_rejected) ... ok
+test_update_revision_retains_and_clears_secret (tests.test_connections.ConnectionsTests.test_update_revision_retains_and_clears_secret) ... ok
+test_vision_previews_actual_pinned_page (tests.test_connections.ConnectionsTests.test_vision_previews_actual_pinned_page) ... ok
+test_vision_separate_image_probe (tests.test_connections.ConnectionsTests.test_vision_separate_image_probe) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 17.766s
+
+OK
+test_failed_task_finishes_running_trace_and_skips_unexecuted_plan (tests.test_conversations.ConversationsTest.test_failed_task_finishes_running_trace_and_skips_unexecuted_plan) ... ok
+test_failure_retry_keeps_failure (tests.test_conversations.ConversationsTest.test_failure_retry_keeps_failure) ... ok
+test_five_turns_selection_undo_recompute (tests.test_conversations.ConversationsTest.test_five_turns_selection_undo_recompute) ... ok
+test_fully_stated_new_scope_drops_old_product (tests.test_conversations.ConversationsTest.test_fully_stated_new_scope_drops_old_product) ... ok
+test_idempotency_and_no_parallel_turns (tests.test_conversations.ConversationsTest.test_idempotency_and_no_parallel_turns) ... ok
+test_import_saved_snapshot_and_rename (tests.test_conversations.ConversationsTest.test_import_saved_snapshot_and_rename) ... ok
+test_interrupt_actual_sql (tests.test_conversations.ConversationsTest.test_interrupt_actual_sql) ... ok
+test_multi_turn_refresh_and_context_isolation (tests.test_conversations.ConversationsTest.test_multi_turn_refresh_and_context_isolation) ... ok
+test_restart_recovers_orphan_and_migration_keeps_legacy (tests.test_conversations.ConversationsTest.test_restart_recovers_orphan_and_migration_keeps_legacy) ... ok
+test_restart_terminalizes_model_traces_and_preserves_completed_work (tests.test_conversations.ConversationsTest.test_restart_terminalizes_model_traces_and_preserves_completed_work) ... ok
+test_running_cancel_wins_late_result_and_queued_cancel (tests.test_conversations.ConversationsTest.test_running_cancel_wins_late_result_and_queued_cancel) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 4.377s
+
+OK
+test_answer_restores_the_query_snapshot_it_actually_cites (tests.test_database_agent.DatabaseAgentTests.test_answer_restores_the_query_snapshot_it_actually_cites) ... ok
+test_cte_preaggregation_avoids_fanout (tests.test_database_agent.DatabaseAgentTests.test_cte_preaggregation_avoids_fanout) ... ok
+test_database_requires_model_and_cannot_fall_back_to_sales_tool (tests.test_database_agent.DatabaseAgentTests.test_database_requires_model_and_cannot_fall_back_to_sales_tool) ... ok
+test_empty_result_is_real_fact_without_invented_statistic (tests.test_database_agent.DatabaseAgentTests.test_empty_result_is_real_fact_without_invented_statistic) ... ok
+test_followup_keeps_original_source_after_configuration_switch (tests.test_database_agent.DatabaseAgentTests.test_followup_keeps_original_source_after_configuration_switch) ... ok
+test_followup_refuses_a_reconfigured_connection_id (tests.test_database_agent.DatabaseAgentTests.test_followup_refuses_a_reconfigured_connection_id) ... ok
+test_invalid_field_correction_retains_failed_call_and_duration (tests.test_database_agent.DatabaseAgentTests.test_invalid_field_correction_retains_failed_call_and_duration) ... ok
+test_mixed_query_claims_rejected (tests.test_database_agent.DatabaseAgentTests.test_mixed_query_claims_rejected) ... ok
+test_nested_aggregate_and_parameter_binding (tests.test_database_agent.DatabaseAgentTests.test_nested_aggregate_and_parameter_binding) ... ok
+test_persisted_followup_uses_server_owned_database_source (tests.test_database_agent.DatabaseAgentTests.test_persisted_followup_uses_server_owned_database_source) ... ok
+test_queued_query_source_is_frozen_before_configuration_changes (tests.test_database_agent.DatabaseAgentTests.test_queued_query_source_is_frozen_before_configuration_changes) ... ok
+test_three_attempts_stop_writes_without_fourth_model_repair (tests.test_database_agent.DatabaseAgentTests.test_three_attempts_stop_writes_without_fourth_model_repair) ... ok
+test_unknown_schema_three_table_join_and_original_values (tests.test_database_agent.DatabaseAgentTests.test_unknown_schema_three_table_join_and_original_values) ... ok
+test_unrelated_join_is_rejected_and_ambiguity_is_clarified (tests.test_database_agent.DatabaseAgentTests.test_unrelated_join_is_rejected_and_ambiguity_is_clarified) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 53.907s
+
+OK
+test_connection_batch_maps_only_imported_parents (tests.test_database_import.DatabaseImportTests.test_connection_batch_maps_only_imported_parents) ... ok
+test_database_recompute_rejected_for_sync_and_session_paths (tests.test_database_import.DatabaseImportTests.test_database_recompute_rejected_for_sync_and_session_paths) ... ok
+test_generic_saved_snapshots_compare_their_own_schema_or_connection (tests.test_database_import.DatabaseImportTests.test_generic_saved_snapshots_compare_their_own_schema_or_connection) ... ok
+test_health_reports_version_and_query_scope (tests.test_database_import.DatabaseImportTests.test_health_reports_version_and_query_scope) ... ok
+test_metadata_failure_rolls_back_business_table_and_catalog (tests.test_database_import.DatabaseImportTests.test_metadata_failure_rolls_back_business_table_and_catalog) ... ok
+test_queue_keeps_source_after_config_changes_and_ignores_client_context (tests.test_database_import.DatabaseImportTests.test_queue_keeps_source_after_config_changes_and_ignores_client_context) ... ok
+test_single_query_passes_server_frozen_source (tests.test_database_import.DatabaseImportTests.test_single_query_passes_server_frozen_source) ... ok
+test_unimported_parent_is_unresolved_and_never_joins_other_snapshot (tests.test_database_import.DatabaseImportTests.test_unimported_parent_is_unresolved_and_never_joins_other_snapshot) ... ok
+test_uploaded_sqlite_preserves_unique_and_composite_foreign_keys (tests.test_database_import.DatabaseImportTests.test_uploaded_sqlite_preserves_unique_and_composite_foreign_keys) ... ok
+test_uploaded_trimmed_columns_remain_bound_to_keys (tests.test_database_import.DatabaseImportTests.test_uploaded_trimmed_columns_remain_bound_to_keys) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 4.189s
+
+OK
+test_cancelled_external_read_returns_no_result_and_worker_closes_source (tests.test_database_query.DatabaseQueryTests.test_cancelled_external_read_returns_no_result_and_worker_closes_source) ... ok
+test_disabled_or_untested_external_connection_is_rejected (tests.test_database_query.DatabaseQueryTests.test_disabled_or_untested_external_connection_is_rejected) ... ok
+test_expected_revision_and_schema_fingerprint_reject_stale_source (tests.test_database_query.DatabaseQueryTests.test_expected_revision_and_schema_fingerprint_reject_stale_source) ... ok
+test_foreign_keys_and_candidates_require_unique_target_and_value_coverage (tests.test_database_query.DatabaseQueryTests.test_foreign_keys_and_candidates_require_unique_target_and_value_coverage) ... ok
+test_generic_join_aggregate_and_nested_query_execute_real_fixture (tests.test_database_query.DatabaseQueryTests.test_generic_join_aggregate_and_nested_query_execute_real_fixture) ... ok
+test_import_metadata_is_not_trusted_without_current_data_verification (tests.test_database_query.DatabaseQueryTests.test_import_metadata_is_not_trusted_without_current_data_verification) ... ok
+test_local_source_has_real_fields_keys_and_no_samples_credentials_or_paths (tests.test_database_query.DatabaseQueryTests.test_local_source_has_real_fields_keys_and_no_samples_credentials_or_paths) ... ok
+test_more_than_fifty_tables_requires_selection_without_silent_catalog_loss (tests.test_database_query.DatabaseQueryTests.test_more_than_fifty_tables_requires_selection_without_silent_catalog_loss) ... ok
+test_native_sqlite_execution_cancellation_closes_without_returning_rows (tests.test_database_query.DatabaseQueryTests.test_native_sqlite_execution_cancellation_closes_without_returning_rows) ... ok
+test_postgresql_and_mysql_protocol_apply_readonly_timeouts_and_driver_parameters (tests.test_database_query.DatabaseQueryTests.test_postgresql_and_mysql_protocol_apply_readonly_timeouts_and_driver_parameters) ... ok
+test_presignaled_cancel_and_total_budget_stop_before_a_query_result (tests.test_database_query.DatabaseQueryTests.test_presignaled_cancel_and_total_budget_stop_before_a_query_result) ... ok
+test_result_limit_empty_columns_and_evidence_snapshot_are_truthful (tests.test_database_query.DatabaseQueryTests.test_result_limit_empty_columns_and_evidence_snapshot_are_truthful) ... ok
+test_sqlite_cell_allocation_is_bounded_before_result_serialization (tests.test_database_query.DatabaseQueryTests.test_sqlite_cell_allocation_is_bounded_before_result_serialization) ... ok
+test_sqlite_readonly_authorizer_remains_when_ast_policy_is_bypassed (tests.test_database_query.DatabaseQueryTests.test_sqlite_readonly_authorizer_remains_when_ast_policy_is_bypassed) ... ok
+test_writes_functions_system_tables_and_bad_parameters_cannot_escape (tests.test_database_query.DatabaseQueryTests.test_writes_functions_system_tables_and_bad_parameters_cannot_escape) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 2.820s
+
+OK
+test_ambiguous_quote_requires_explicit_occurrence (tests.test_document_reader.DocumentReaderTest.test_ambiguous_quote_requires_explicit_occurrence) ... ok
+test_broken_original_is_retained_but_not_reported_readable (tests.test_document_reader.DocumentReaderTest.test_broken_original_is_retained_but_not_reported_readable) ... EOF marker not found
+ok
+test_claim_checks_are_scoped_and_formula_recomputed (tests.test_document_reader.DocumentReaderTest.test_claim_checks_are_scoped_and_formula_recomputed) ... ok
+test_comparable_units_and_conflicts_are_explicit (tests.test_document_reader.DocumentReaderTest.test_comparable_units_and_conflicts_are_explicit) ... ok
+test_followup_preserves_document_scope_but_new_sales_query_leaves_it (tests.test_document_reader.DocumentReaderTest.test_followup_preserves_document_scope_but_new_sales_query_leaves_it) ... ok
+test_foreign_version_and_parse_are_rejected (tests.test_document_reader.DocumentReaderTest.test_foreign_version_and_parse_are_rejected) ... ok
+test_historical_file_and_parse_stay_pinned (tests.test_document_reader.DocumentReaderTest.test_historical_file_and_parse_stay_pinned) ... ok
+test_local_reparse_keeps_previous_parse_and_other_pages (tests.test_document_reader.DocumentReaderTest.test_local_reparse_keeps_previous_parse_and_other_pages) ... ok
+test_page_search_counts_occurrences_not_files (tests.test_document_reader.DocumentReaderTest.test_page_search_counts_occurrences_not_files) ... ok
+test_pdf_rotation_geometry_matches_independent_search (tests.test_document_reader.DocumentReaderTest.test_pdf_rotation_geometry_matches_independent_search) ... ok
+test_render_aspect_ratio_and_page_validation (tests.test_document_reader.DocumentReaderTest.test_render_aspect_ratio_and_page_validation) ... ok
+test_scan_is_not_text_or_vision_verified (tests.test_document_reader.DocumentReaderTest.test_scan_is_not_text_or_vision_verified) ... ok
+test_scoped_question_stays_in_page_and_version (tests.test_document_reader.DocumentReaderTest.test_scoped_question_stays_in_page_and_version) ... ok
+test_tampered_original_cannot_be_reported_located (tests.test_document_reader.DocumentReaderTest.test_tampered_original_cannot_be_reported_located) ... ok
+test_unicode_and_real_heading_offsets (tests.test_document_reader.DocumentReaderTest.test_unicode_and_real_heading_offsets) ... ok
+test_wrong_range_does_not_fall_back (tests.test_document_reader.DocumentReaderTest.test_wrong_range_does_not_fall_back) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 4.718s
+
+OK
+test_broken_document_retains_original (tests.test_home_analysis.HomeAnalysisTest.test_broken_document_retains_original) ... invalid pdf header: b'not a'
+EOF marker not found
+ok
+test_comparison_checks_both_periods_and_rejects_same_year (tests.test_home_analysis.HomeAnalysisTest.test_comparison_checks_both_periods_and_rejects_same_year) ... ok
+test_dashboard_is_project_scoped_and_excludes_checks (tests.test_home_analysis.HomeAnalysisTest.test_dashboard_is_project_scoped_and_excludes_checks) ... ok
+test_failed_sheet_cannot_leave_partial_import (tests.test_home_analysis.HomeAnalysisTest.test_failed_sheet_cannot_leave_partial_import) ... ok
+test_gross_ranking_keeps_bonus_on_net (tests.test_home_analysis.HomeAnalysisTest.test_gross_ranking_keeps_bonus_on_net) ... ok
+test_gross_total_label_and_missing_period (tests.test_home_analysis.HomeAnalysisTest.test_gross_total_label_and_missing_period) ... ok
+test_personnel_not_invented (tests.test_home_analysis.HomeAnalysisTest.test_personnel_not_invented) ... ok
+test_real_csv_import_preview_archive (tests.test_home_analysis.HomeAnalysisTest.test_real_csv_import_preview_archive) ... ok
+test_recompute_undo_and_bound_evidence (tests.test_home_analysis.HomeAnalysisTest.test_recompute_undo_and_bound_evidence) ... ok
+test_restore_history_does_not_execute_again (tests.test_home_analysis.HomeAnalysisTest.test_restore_history_does_not_execute_again) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 5.605s
+
+OK
+test_contributions_telescope_and_cross_threshold (tests.test_scenarios.ScenarioTests.test_contributions_telescope_and_cross_threshold) ... ok
+test_current_rule_preserves_baseline_sales_and_evidence (tests.test_scenarios.ScenarioTests.test_current_rule_preserves_baseline_sales_and_evidence) ... ok
+test_export_contains_recomputable_snapshot_and_source_versions (tests.test_scenarios.ScenarioTests.test_export_contains_recomputable_snapshot_and_source_versions) ... ok
+test_formula_matches_independent_sql_and_decimal (tests.test_scenarios.ScenarioTests.test_formula_matches_independent_sql_and_decimal) ... ok
+test_project_and_session_isolation (tests.test_scenarios.ScenarioTests.test_project_and_session_isolation) ... ok
+test_refresh_creates_new_baseline_without_changing_saved_plan (tests.test_scenarios.ScenarioTests.test_refresh_creates_new_baseline_without_changing_saved_plan) ... ok
+test_rounding_at_cent_boundary (tests.test_scenarios.ScenarioTests.test_rounding_at_cent_boundary) ... ok
+test_same_name_creates_distinct_plans_and_rename_validates (tests.test_scenarios.ScenarioTests.test_same_name_creates_distinct_plans_and_rename_validates) ... ok
+test_snapshot_save_restore_and_versions_are_server_owned (tests.test_scenarios.ScenarioTests.test_snapshot_save_restore_and_versions_are_server_owned) ... ok
+test_soft_delete_and_restore (tests.test_scenarios.ScenarioTests.test_soft_delete_and_restore) ... ok
+test_source_mismatch_cannot_be_used_as_baseline (tests.test_scenarios.ScenarioTests.test_source_mismatch_cannot_be_used_as_baseline) ... ok
+test_stale_does_not_mutate_frozen_calculation (tests.test_scenarios.ScenarioTests.test_stale_does_not_mutate_frozen_calculation) ... ok
+test_unit_finite_limits_and_precision (tests.test_scenarios.ScenarioTests.test_unit_finite_limits_and_precision) ... ok
+test_zero_baseline_has_no_relative_percent (tests.test_scenarios.ScenarioTests.test_zero_baseline_has_no_relative_percent) ... ok
+test_zero_growth_is_not_defaulted_to_five (tests.test_scenarios.ScenarioTests.test_zero_growth_is_not_defaulted_to_five) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 5.701s
+
+OK
+test_close_wins_against_late_temporary_result (tests.test_settings.SettingsTests.test_close_wins_against_late_temporary_result) ... ok
+test_conflict_across_names_aliases_and_reserved_terms (tests.test_settings.SettingsTests.test_conflict_across_names_aliases_and_reserved_terms) ... ok
+test_definition_aliases_versions_and_old_snapshot (tests.test_settings.SettingsTests.test_definition_aliases_versions_and_old_snapshot) ... ok
+test_expired_temporary_session_is_not_recoverable (tests.test_settings.SettingsTests.test_expired_temporary_session_is_not_recoverable) ... ok
+test_help_context_must_belong_to_project_session (tests.test_settings.SettingsTests.test_help_context_must_belong_to_project_session) ... ok
+test_help_settings_describes_actual_supplied_preference (tests.test_settings.SettingsTests.test_help_settings_describes_actual_supplied_preference) ... ok
+test_help_tone_does_not_change_evidence (tests.test_settings.SettingsTests.test_help_tone_does_not_change_evidence) ... ok
+test_help_unknown_routes_to_query_not_invented_answer (tests.test_settings.SettingsTests.test_help_unknown_routes_to_query_not_invented_answer) ... ok
+test_local_policy_defaults_and_explicit_change (tests.test_settings.SettingsTests.test_local_policy_defaults_and_explicit_change) ... ok
+test_recover_definition_does_not_overwrite_conflict (tests.test_settings.SettingsTests.test_recover_definition_does_not_overwrite_conflict) ... ok
+test_restore_preferences_endpoint_never_clears_history (tests.test_settings.SettingsTests.test_restore_preferences_endpoint_never_clears_history) ... ok
+test_scenario_help_uses_server_calculation_and_rejects_wrong_project (tests.test_settings.SettingsTests.test_scenario_help_uses_server_calculation_and_rejects_wrong_project) ... ok
+test_temporary_cannot_upload_or_inject_persistent_context (tests.test_settings.SettingsTests.test_temporary_cannot_upload_or_inject_persistent_context) ... ok
+test_temporary_clarification_and_independent_sql (tests.test_settings.SettingsTests.test_temporary_clarification_and_independent_sql) ... ok
+test_temporary_context_isolated_and_opt_out (tests.test_settings.SettingsTests.test_temporary_context_isolated_and_opt_out) ... ok
+test_temporary_no_durable_rows_or_files (tests.test_settings.SettingsTests.test_temporary_no_durable_rows_or_files) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.885s
+
+OK
+test_binding_conversion_preserves_literal_percent_and_comment_content (tests.test_sql_guard.SQLGuardTests.test_binding_conversion_preserves_literal_percent_and_comment_content) ... ok
+test_composite_keys_cannot_be_split_or_bypassed (tests.test_sql_guard.SQLGuardTests.test_composite_keys_cannot_be_split_or_bypassed) ... ok
+test_composite_relationship_requires_all_columns (tests.test_sql_guard.SQLGuardTests.test_composite_relationship_requires_all_columns) ... ok
+test_correlated_scope_and_trusted_relationship (tests.test_sql_guard.SQLGuardTests.test_correlated_scope_and_trusted_relationship) ... ok
+test_cte_and_derived_key_lineage (tests.test_sql_guard.SQLGuardTests.test_cte_and_derived_key_lineage) ... ok
+test_custom_operators_and_type_conversions_are_execution_entries (tests.test_sql_guard.SQLGuardTests.test_custom_operators_and_type_conversions_are_execution_entries) ... ok
+test_dialect_schema_and_quoted_names (tests.test_sql_guard.SQLGuardTests.test_dialect_schema_and_quoted_names) ... ok
+test_external_functions_files_and_sql_controls_fail_closed (tests.test_sql_guard.SQLGuardTests.test_external_functions_files_and_sql_controls_fail_closed) ... ok
+test_fields_aliases_ctes_and_unknown_sources (tests.test_sql_guard.SQLGuardTests.test_fields_aliases_ctes_and_unknown_sources) ... ok
+test_functions_and_recursion_are_restricted (tests.test_sql_guard.SQLGuardTests.test_functions_and_recursion_are_restricted) ... ok
+test_join_requires_real_relationship (tests.test_sql_guard.SQLGuardTests.test_join_requires_real_relationship) ... ok
+test_limits_offsets_literals_and_complexity (tests.test_sql_guard.SQLGuardTests.test_limits_offsets_literals_and_complexity) ... ok
+test_malformed_sql_and_duplicate_outputs_fail_closed (tests.test_sql_guard.SQLGuardTests.test_malformed_sql_and_duplicate_outputs_fail_closed) ... ok
+test_no_cartesian_or_weakened_join (tests.test_sql_guard.SQLGuardTests.test_no_cartesian_or_weakened_join) ... ok
+test_no_write_ddl_system_or_multiple_statements (tests.test_sql_guard.SQLGuardTests.test_no_write_ddl_system_or_multiple_statements) ... ok
+test_percent_bindings_are_lexical_and_literals_remain_literals (tests.test_sql_guard.SQLGuardTests.test_percent_bindings_are_lexical_and_literals_remain_literals) ... ok
+test_scope_shadowing_and_ancestor_correlation (tests.test_sql_guard.SQLGuardTests.test_scope_shadowing_and_ancestor_correlation) ... ok
+test_select_aggregate_and_bound_parameters_execute_on_sqlite (tests.test_sql_guard.SQLGuardTests.test_select_aggregate_and_bound_parameters_execute_on_sqlite) ... ok
+test_subquery_and_scalar_key_escape_attempts (tests.test_sql_guard.SQLGuardTests.test_subquery_and_scalar_key_escape_attempts) ... ok
+test_subquery_arithmetic_cannot_hide_an_unverified_key_path (tests.test_sql_guard.SQLGuardTests.test_subquery_arithmetic_cannot_hide_an_unverified_key_path) ... ok
+test_subquery_keys_and_aggregate_comparison (tests.test_sql_guard.SQLGuardTests.test_subquery_keys_and_aggregate_comparison) ... ok
+test_union_top_and_fetch_cannot_remove_row_cap (tests.test_sql_guard.SQLGuardTests.test_union_top_and_fetch_cannot_remove_row_cap) ... ok
+test_unverified_or_model_relationships_are_not_accepted (tests.test_sql_guard.SQLGuardTests.test_unverified_or_model_relationships_are_not_accepted) ... ok
+test_using_join_and_left_join (tests.test_sql_guard.SQLGuardTests.test_using_join_and_left_join) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.165s
+
+OK
+未通过的模块：无
