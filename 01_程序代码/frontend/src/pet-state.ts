@@ -5,6 +5,9 @@ export const petStates=[
  ['error','未完成','12-error'],['sleep','休眠','13-sleep'],['drag','移动','14-drag']
 ] as const
 export type PetState=typeof petStates[number][0]
+export function answerNeedsContext(result?:Record<string,any>|null):boolean{
+ return !!result&&(result.status==='needs_clarification'||['refused','partial','needs_clarification'].includes(result.answer_status)||result.claims?.some((claim:Record<string,any>)=>claim.kind==='gap'||claim.status==='needs_evidence')||!!result.rag&&!result.claims?.length)
+}
 export function petAsset(state:PetState){const item=petStates.find(s=>s[0]===state)!;return '/pet-'+item[2]+'.webp'}
 export function taskPose(stage:string):PetState{
  if(/计算/.test(stage))return 'calculate'

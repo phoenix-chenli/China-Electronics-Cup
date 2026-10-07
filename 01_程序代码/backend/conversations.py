@@ -34,6 +34,15 @@ def analysis_snapshot_state(result, cache=None):
     A matching schema or connection revision cannot prove live row freshness.
     """
     cache={} if cache is None else cache
+    frozen=result.get('query_spec',{}).get('rag_scope')
+    if frozen and not is_database_analysis(result):
+        try:
+            from . import rag_index
+            sources=rag_index.validate_scope(frozen)
+            stale=len(sources)!=len(frozen['documents']) or any(s.doc_get(x['document_id'])['sha256']!=x['sha256'] for x in sources)
+            return {'stale':stale,'stale_scope':'document_versions','stale_boundary':'保留固定原文版本；重新提问才检索新版本。'}
+        except (ValueError,HTTPException,OSError):
+            return {'stale':True,'stale_scope':'document_versions','stale_boundary':'固定原文当前不可用；历史回答仍保留。'}
     if not is_database_analysis(result):
         if 'sales_version' not in cache:cache['sales_version']=s.data_version()
         return {'stale':result.get('data_version')!=cache['sales_version'],'stale_scope':'sales_data_version'}
@@ -278,6 +287,21 @@ class TaskManager:
         req = dict(req)
         sid, tid, stamp = req.get("session_id"), uid(), s.now()
         reqid = req.get("request_id") or uid()
+        # Parsing and index publication use their own controlled transactions.
+        # Freeze outside the task writer transaction to avoid nested write locks.
+        with s.conn() as c:
+            if sid:
+                require_session(c,sid)
+                existing=c.execute('SELECT * FROM ef_tasks WHERE session_id=? AND request_id=?',(sid,reqid)).fetchone()
+                if existing:return task_row(existing)
+                parent_id=req.get('parent_message_id')
+                parent=result_message(c,sid,parent_id) if parent_id else None
+                prepared_previous=parent['query_spec'] if parent and req.get('inherit_context',True) else {}
+            else:
+                prepared_previous={k:v for k,v in req.get('previous_context',{}).items() if k!='rag_scope'}
+        if not attempt_of or not req.get('database_context'):
+            req['database_context']=({'query_scope':'sales','database_connection_id':None} if req.get('mode')=='recompute' else
+                agent.query_context(prepared_previous,req.get('document_context'),req.get('rag_scope')))
         with s.conn() as c:
             c.execute("BEGIN IMMEDIATE")
             if sid:
@@ -289,7 +313,7 @@ class TaskManager:
                 parent = result_message(c, sid, parent_id) if parent_id else None
                 if req.get("mode") == "recompute":
                     if not parent: raise ValueError("请先选择要修改的结果")
-                    if is_database_analysis(parent):raise ValueError('数据库问数请使用自然语言追问修改范围或刷新结果，不能套用销售条件重算')
+                    if is_database_analysis(parent) or parent['query_spec'].get('rag_scope') or parent['query_spec'].get('metric')=='document':raise ValueError('数据库及知识库问答请使用自然语言追问，不能套用销售条件重算')
                     changed = req.get("confirmed", {})
                     req["preserved_origins"] = {k:v for k,v in parent["query_spec"].get("origins", {}).items() if k not in changed}
                     req["question"] = parent["question"]
@@ -297,14 +321,11 @@ class TaskManager:
                     req["parent_run_id"] = parent["run_id"]
                 # Never accept client-provided context for persisted sessions.
                 req["previous_context"] = parent["query_spec"] if parent and req.get("inherit_context", True) else {}
+                if req['previous_context']!=prepared_previous: raise HTTPException(409,'继承结果已改变，请重新提交')
                 req["workspace_id"] = c.execute("SELECT workspace_id FROM ef_projects WHERE id=?", (conversation["project_id"],)).fetchone()[0]
             if req.get("workspace_id", "sales-demo") != "sales-demo": raise ValueError("工作区不存在")
             if c.execute("SELECT COUNT(*) FROM ef_tasks WHERE status IN ('queued','running','cancelling')").fetchone()[0] >= 12: raise HTTPException(429, "查询队列已满，请稍后重试")
-            # Only a server-owned retry may retain a previously frozen source.
-            # Client-provided database_context never selects an unapproved source.
-            if not attempt_of or not req.get('database_context'):
-                req['database_context']=({'query_scope':'sales','database_connection_id':None} if req.get('mode')=='recompute' else
-                                         agent.query_context(req.get('previous_context'),req.get('document_context')))
+            if not sid: req['previous_context']=prepared_previous
             c.execute("INSERT INTO ef_tasks VALUES (?,?,?,?,?,?,NULL,NULL,?,?,?)", (tid, sid, reqid, encode(req), "queued", "等待查询", attempt_of, stamp, stamp))
             if sid:
                 text = req.get("display_question") or req["question"]
@@ -333,7 +354,7 @@ class TaskManager:
                         c.execute('INSERT OR REPLACE INTO ef_task_traces VALUES (?,?)',(tid,encode({k:trace[k] for k in ('events','agent') if k in trace})))
             with s.query_cancellation(stop):
                 extra = {"document_context":req["document_context"]} if req.get("document_context") else {}
-                if self.executor is agent.execute or req.get('database_context',{}).get('query_scope')=='database':
+                if self.executor is agent.execute or req.get('database_context',{}).get('query_scope') in {'database','hybrid'}:
                     extra['database_context']=req['database_context']
                 result = self.executor(req["question"], req.get("previous_context"), req.get("confirmed"), cancelled=stop, progress=progress, persist=False, **extra)
             if req.get("parent_run_id"): result["parent_run_id"] = req["parent_run_id"]

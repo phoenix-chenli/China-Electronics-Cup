@@ -10,6 +10,6 @@ export function rawTableValue(value:unknown):string{
 }
 
 export function savedAnalysisName(result:Record<string,any>):string{
- if(isDatabaseResult(result))return String(result.question||result.database_query?.source?.name||'数据库查询').slice(0,120)
+ if(isDatabaseResult(result)||result.rag||['knowledge','hybrid'].includes(result.query_spec?.query_scope))return String(result.question||result.database_query?.source?.name||'数据库查询').slice(0,120)
  return (result.query_spec?.year??'')+' 年'+(result.query_spec?.region||'')+'经营分析'
 }

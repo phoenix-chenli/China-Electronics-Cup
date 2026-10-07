@@ -1,0 +1,59 @@
+{
+  "python": "3.13.6 (tags/v3.13.6:4e66535, Aug  6 2025, 14:36:00) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "onnxruntime": "1.23.2",
+  "tokenizers": "0.22.2",
+  "samples": "public synthetic Chinese clauses; not user documents",
+  "providers": {
+    "embedding": {
+      "role": "embedding",
+      "ready": true,
+      "local": true,
+      "revision": 1,
+      "dimension": 512,
+      "max_tokens": 512,
+      "fingerprint": "e2f287abb37bb13499d6ea6534a2166a9a9412b897ac20c78bd2bfeb45be93d2",
+      "provider_id": "bge-small-zh-v1.5",
+      "model": "BAAI/bge-small-zh-v1.5",
+      "mode": "local",
+      "precision": "q8",
+      "onnx_source": "Xenova/bge-small-zh-v1.5",
+      "model_revision": "75c43b069aac4d136ba6bc1122f995fedcfd2781",
+      "reason": "",
+      "error": null
+    },
+    "rerank": {
+      "role": "rerank",
+      "ready": true,
+      "local": true,
+      "revision": 1,
+      "dimension": null,
+      "max_tokens": 512,
+      "fingerprint": "7ef14a179b552cf7b5b2e23e3ab1911d545e29df121e2b6e6fed71901ea1846a",
+      "provider_id": "bge-reranker-base",
+      "model": "BAAI/bge-reranker-base",
+      "mode": "local",
+      "precision": "q8",
+      "onnx_source": "Xenova/bge-reranker-base",
+      "model_revision": "280bcc27a84e0b898c251e06fddb25171bd9b101",
+      "reason": "",
+      "error": null
+    }
+  },
+  "embedding_cold_ms": 311,
+  "query_warm_ms": 97,
+  "cosine_scores": [
+    0.6280971442312037,
+    0.3428603461651611,
+    0.19713004107544382
+  ],
+  "rerank_cold_ms": 1206,
+  "rerank_logits": [
+    6.605279445648193,
+    -10.178778648376465,
+    -10.180044174194336
+  ],
+  "rerank_warm_ms": 145,
+  "long_input_rejected": "原文或问题超过本地模型 token 上限；请使用有界分窗，未静默截断",
+  "cancel_before_call": true
+}

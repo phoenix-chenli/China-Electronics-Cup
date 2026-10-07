@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-06",
+  "pack": {
+    "name": "RAG模型包.zip",
+    "bytes": 320859826,
+    "sha256": "ba7b7ed2cf92e64466fb5327dec8423956dea1cf7aac883d3214dae71aa9d575"
+  },
+  "models": {
+    "bge-small-zh-v1.5": {
+      "role": "embedding",
+      "model": "BAAI/bge-small-zh-v1.5",
+      "source": "Xenova/bge-small-zh-v1.5",
+      "revision": "75c43b069aac4d136ba6bc1122f995fedcfd2781",
+      "dimension": 512,
+      "max_tokens": 512,
+      "files": {
+        "model.onnx": [
+          "15b717c382bcb518ba457b93ea6850ede7f4f1cd8937454aa06972366cd19bcc",
+          24010842,
+          "onnx/model_quantized.onnx"
+        ],
+        "tokenizer.json": [
+          "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+          439125,
+          "tokenizer.json"
+        ],
+        "config.json": [
+          "d4193ead3a810fd694fa8a31d7fc72fbaebc0668b603e398734bf2f6538ff42f",
+          716,
+          "config.json"
+        ],
+        "MODEL_CARD.md": [
+          "cb22054df1a98f7ee9d5b281d023e67c27cc316e1733baf03fc994d95c3048ab",
+          1057,
+          "README.md"
+        ],
+        "LICENSE.txt": [
+          "587a673933425dbc36ec61268d3b954051b2d3ef3c9b322ede357976055ffdd5",
+          1065,
+          "license"
+        ]
+      }
+    },
+    "bge-reranker-base": {
+      "role": "rerank",
+      "model": "BAAI/bge-reranker-base",
+      "source": "Xenova/bge-reranker-base",
+      "revision": "280bcc27a84e0b898c251e06fddb25171bd9b101",
+      "dimension": null,
+      "max_tokens": 512,
+      "files": {
+        "model.onnx": [
+          "dd98f3e67837d23210a6b7550c08cced4f61845b940ac45be3565840a10f3244",
+          279301077,
+          "onnx/model_quantized.onnx"
+        ],
+        "tokenizer.json": [
+          "48564c5c7d3fa64d85d95e65414a542385f88b0f128fd8d4163fd7a57f2be05c",
+          17098079,
+          "tokenizer.json"
+        ],
+        "config.json": [
+          "b6575b9d5be20d6747417c8e20c5a0db1636356e0b6d422d7244c628423c4d4c",
+          782,
+          "config.json"
+        ],
+        "MODEL_CARD.md": [
+          "2ccb3f72b5eb6205316c0b9dde944d6f944ec4a87b85706ce07ef9d9d02b4690",
+          1135,
+          "README.md"
+        ],
+        "LICENSE.txt": [
+          "587a673933425dbc36ec61268d3b954051b2d3ef3c9b322ede357976055ffdd5",
+          1065,
+          "license"
+        ]
+      }
+    }
+  },
+  "license": "MIT",
+  "precision": "q8",
+  "boundary": "BAAI weights converted and quantized by Xenova; not claimed equivalent to original full precision weights. Installation is explicit; no user documents or credentials included."
+}

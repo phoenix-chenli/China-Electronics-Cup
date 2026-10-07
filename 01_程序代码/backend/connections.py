@@ -1,6 +1,6 @@
 """Explicit, bounded transports. Secrets never leave the server configuration API."""
 from __future__ import annotations
-import base64, hashlib, io, json, os, re, secrets, sqlite3, threading, time, uuid
+import base64, hashlib, io, json, math, os, re, secrets, sqlite3, threading, time, uuid
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from pathlib import Path
@@ -16,7 +16,7 @@ router=APIRouter(prefix='/api/connections')
 lock=threading.RLock()
 _model_pool=ThreadPoolExecutor(max_workers=4,thread_name_prefix='evidenceflow-model')
 _model_slots=threading.BoundedSemaphore(4)
-KINDS={'sqlite','postgresql','mysql','text','vision','brave','wikipedia'}
+KINDS={'sqlite','postgresql','mysql','text','vision','embedding','rerank','brave','wikipedia'}
 DB_KINDS={'sqlite','postgresql','mysql'}
 
 def initialize():
@@ -35,7 +35,7 @@ def initialize():
 
 def encode(v):return json.dumps(v,ensure_ascii=False,default=str)
 def local_host(host):return host in {'localhost','127.0.0.1','::1'}
-def is_local(config):return config['kind']=='sqlite' or (config['kind'] in DB_KINDS and local_host(config.get('host'))) or (config['kind'] in {'text','vision'} and local_host(urlsplit(config.get('endpoint','')).hostname))
+def is_local(config):return config['kind']=='sqlite' or (config['kind'] in DB_KINDS and local_host(config.get('host'))) or (config['kind'] in {'text','vision','embedding','rerank'} and local_host(urlsplit(config.get('endpoint','')).hostname))
 def local_only():
     with s.conn() as c:
         row=c.execute("SELECT body FROM ef_settings WHERE key='privacy'").fetchone()
@@ -62,12 +62,12 @@ def listing():
 
 def capabilities():
     configs=listing();policy=local_only()
-    return {k:any(d['kind']==k and d.get('enabled') and (d.get('last_test') or {}).get('ok') and (not policy or is_local(d)) for d in configs) for k in ['text','vision','brave','wikipedia']}
+    return {k:any(d['kind']==k and d.get('enabled') and (d.get('last_test') or {}).get('ok') and (not policy or is_local(d)) for d in configs) for k in ['text','vision','embedding','rerank','brave','wikipedia']}
 
 class Strict(BaseModel):model_config=ConfigDict(extra='forbid')
 class Config(Strict):
     name:str=Field(min_length=1,max_length=80)
-    kind:Literal['sqlite','postgresql','mysql','text','vision','brave','wikipedia']
+    kind:Literal['sqlite','postgresql','mysql','text','vision','embedding','rerank','brave','wikipedia']
     endpoint:str=Field(default='',max_length=500)
     model:str=Field(default='',max_length=150)
     path:str=Field(default='',max_length=2000)
@@ -84,7 +84,7 @@ def validate(d):
     d['name']=d['name'].strip()
     if not d['name']:raise ValueError('请填写连接名称')
     kind=d['kind']
-    if kind in {'text','vision'}:
+    if kind in {'text','vision','embedding','rerank'}:
         d['endpoint']=d['endpoint'].rstrip('/');u=urlsplit(d['endpoint'])
         if not u.hostname or u.username or u.password or u.query or u.fragment:raise ValueError('地址不能含凭据、查询参数或片段')
         if u.scheme!='https' and not(u.scheme=='http' and local_host(u.hostname)):raise ValueError('远程模型必须使用 HTTPS；HTTP 仅允许本机')
@@ -96,7 +96,7 @@ def validate(d):
     if kind in {'mysql','postgresql'}:
         if not re.fullmatch(r'[A-Za-z0-9.:-]+',d['host']) or not d['database'] or not d['username']:raise ValueError('请填写主机、数据库和只读账户')
     # Remove unrelated fields, preventing stray credentials in unused inputs.
-    allowed={'name','kind','enabled','timeout'}|({'endpoint','model'} if kind in {'text','vision'} else {'path'} if kind=='sqlite' else {'host','port','database','username'} if kind in DB_KINDS else set())
+    allowed={'name','kind','enabled','timeout'}|({'endpoint','model'} if kind in {'text','vision','embedding','rerank'} else {'path'} if kind=='sqlite' else {'host','port','database','username'} if kind in DB_KINDS else set())
     return {k:v for k,v in d.items() if k in allowed}
 
 @router.get('')
@@ -151,6 +151,9 @@ def history(cid:str):
 
 def request_json(d,url,body=None,headers=None,cancelled=None):
     gate(d)
+    if d.get('_required_kind'):
+        current=ready(d['id'],{d['_required_kind']})
+        if current['revision']!=d['revision']:raise ValueError('连接已改变，请重新准备请求')
     if cancelled is not None:
         # Bound in-flight transports even when a provider stalls. The query can
         # cancel promptly; an already-sent HTTP call ends at its own deadline.
@@ -195,6 +198,51 @@ def chat(d,messages,max_tokens=1200,cancelled=None):
     except (KeyError,IndexError,TypeError):raise ValueError('服务未返回文本回答') from None
     if not isinstance(text,str) or not text.strip():raise ValueError('服务返回空回答')
     return {'text':text[:30000],'model':str(r.get('model',d['model']))[:150],'usage':{k:v for k,v in (r.get('usage') or {}).items() if k in {'prompt_tokens','completion_tokens','total_tokens'} and isinstance(v,int)}}
+
+def _bounded_texts(texts, maximum=32):
+    if not isinstance(texts,list) or not 1<=len(texts)<=maximum:raise ValueError('文本批次大小超出限制')
+    if any(not isinstance(t,str) or not t.strip() or len(t)>12000 for t in texts):raise ValueError('文本为空或超过单条限制')
+    if sum(len(t.encode('utf-8')) for t in texts)>128000:raise ValueError('文本批次超过发送量限制')
+
+def _usage(raw):
+    u=raw.get('usage') or {}
+    return {k:v for k,v in u.items() if k in {'prompt_tokens','total_tokens'} and isinstance(v,int) and not isinstance(v,bool) and v>=0} if isinstance(u,dict) else {}
+
+def embedding(d,texts,cancelled=None,expected_dimension=None):
+    """OpenAI embeddings transport. Validated real responses; never synthesize vectors."""
+    _bounded_texts(texts)
+    headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
+    raw=request_json(d,d['endpoint']+'/embeddings',{'model':d['model'],'input':texts,'encoding_format':'float'},headers,cancelled)
+    rows=raw.get('data') if isinstance(raw,dict) else None
+    if not isinstance(rows,list) or len(rows)!=len(texts):raise ValueError('嵌入服务返回数量与输入不一致')
+    vectors=[None]*len(texts);dimension=None
+    for row in rows:
+        index=row.get('index') if isinstance(row,dict) else None
+        if not isinstance(index,int) or isinstance(index,bool) or not 0<=index<len(texts) or vectors[index] is not None:raise ValueError('嵌入服务返回索引缺失或重复')
+        vector=row.get('embedding')
+        if not isinstance(vector,list) or not 8<=len(vector)<=4096:raise ValueError('嵌入向量维度无效')
+        if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) for v in vector):raise ValueError('嵌入向量包含无效数值')
+        norm=math.hypot(*vector)
+        if not math.isfinite(norm) or norm<=1e-12:raise ValueError('嵌入服务返回零向量或无效范数')
+        if dimension is None:dimension=len(vector)
+        if len(vector)!=dimension or (expected_dimension and len(vector)!=expected_dimension):raise ValueError('嵌入向量维度已改变，请重建索引')
+        vectors[index]=[float(v)/norm for v in vector]
+    return {'vectors':vectors,'dimension':dimension,'model':str(raw.get('model',d['model']))[:150],'usage':_usage(raw)}
+
+def rerank(d,query,passages,cancelled=None):
+    """Common /rerank contract: results[index,relevance_score], in input order."""
+    _bounded_texts(passages,64);_bounded_texts([query],1)
+    headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
+    raw=request_json(d,d['endpoint']+'/rerank',{'model':d['model'],'query':query,'documents':passages,'top_n':len(passages),'return_documents':False},headers,cancelled)
+    rows=raw.get('results') if isinstance(raw,dict) else None
+    if not isinstance(rows,list) or len(rows)!=len(passages):raise ValueError('重排服务返回数量与候选不一致')
+    scores=[None]*len(passages)
+    for row in rows:
+        index=row.get('index') if isinstance(row,dict) else None;score=row.get('relevance_score') if isinstance(row,dict) else None
+        if not isinstance(index,int) or isinstance(index,bool) or not 0<=index<len(scores) or scores[index] is not None:raise ValueError('重排服务返回索引缺失或重复')
+        if isinstance(score,bool) or not isinstance(score,(float,int)) or not math.isfinite(score):raise ValueError('重排服务返回无效分数')
+        scores[index]=float(score)
+    return {'scores':scores,'model':str(raw.get('model',d['model']))[:150],'usage':_usage(raw)}
 
 def vision_probe():
     from PIL import Image,ImageDraw
@@ -317,7 +365,7 @@ def import_metadata(snapshot, mapping, column_mapping=None):
 
 @router.post('/{cid}/test')
 def test(cid:str):
-    d=get(cid,True);start=time.monotonic();ok=False;detail=''
+    d=get(cid,True);start=time.monotonic();ok=False;detail='';probe={}
     try:
         gate(d)
         if d['kind'] in DB_KINDS:
@@ -333,6 +381,16 @@ def test(cid:str):
             result=chat(d,[{'role':'user','content':[{'type':'text','text':'Read the three squares left to right. Return only their English color names RED, BLUE or GREEN, comma separated.'},{'type':'image_url','image_url':{'url':'data:image/png;base64,'+base64.b64encode(png).decode()}}]}])
             if result['text'].replace(' ','').strip().upper()!=expected:raise ValueError('视觉探针未通过：颜色顺序与测试图不符')
             detail='图像实际调用通过；颜色探针正确，不代表 OCR 或页面核验已通过'
+        elif d['kind']=='embedding':
+            result=embedding(d,['测试用语：汽车售后保修条款','测试用语：车辆维修保修规定','测试用语：番茄炒蛋烹饪方法'])
+            if len({tuple(v) for v in result['vectors']})!=3:raise ValueError('嵌入探针未通过：不同输入返回相同向量')
+            probe={'dimension':result['dimension'],'provider_model':result['model']}
+            detail=f"嵌入实际调用通过；{result['dimension']} 维、数量及有限数值验证，不代表中文检索质量"
+        elif d['kind']=='rerank':
+            result=rerank(d,'测试问题：车辆保修期限是多久？',['测试条款：车辆保修期限为三年。','测试文本：番茄炒蛋需要鸡蛋和番茄。'])
+            if result['scores'][0]<=result['scores'][1]:raise ValueError('重排探针未通过：相关条款未排在无关文本之前')
+            probe={'provider_model':result['model']}
+            detail='重排实际调用通过；候选索引、有限分数与测试顺序验证，不代表业务准确率'
         else:
             found=search(d,'SQLite')
             if not found:raise ValueError('检索探针没有返回可打开的来源')
@@ -344,7 +402,7 @@ def test(cid:str):
     with lock:
         latest=get(cid)
         if latest['revision']!=d['revision']:raise HTTPException(409,'测试期间配置已改变，结果不用于新配置，请重新测试')
-        latest.pop('has_secret',None);latest['last_test']={k:ev[k] for k in ['ok','detail','duration_ms','time']}
+        latest.pop('has_secret',None);latest['last_test']={**{k:ev[k] for k in ['ok','detail','duration_ms','time']},**probe}
         if not ok:latest['enabled']=False
         with s.conn() as c:c.execute('UPDATE ef_connections SET body=? WHERE id=?',(encode(latest),cid))
     return get(cid)

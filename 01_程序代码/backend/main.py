@@ -5,6 +5,7 @@ import os
 import platform
 import mimetypes
 import re
+import shutil
 import sqlite3
 import threading
 import time
@@ -12,7 +13,7 @@ import uuid
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import FastAPI, File, HTTPException, UploadFile, Request
 from fastapi.exceptions import RequestValidationError
@@ -22,9 +23,10 @@ from pydantic import BaseModel, Field
 from . import store as s
 from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
 from . import documents as document_engine
+from . import rag_index, rag_providers
 from .seed import seed_business, write_seed_docs
 
-app=FastAPI(title="证流",version="0.5.0")
+app=FastAPI(title="证流",version="0.6.0")
 app.include_router(conversations.router)
 app.include_router(scenarios.router)
 app.include_router(settings.router)
@@ -32,12 +34,19 @@ app.include_router(connections.router)
 app.include_router(extensions.router)
 app.include_router(sharing.router)
 app.include_router(agent.router)
+app.include_router(rag_providers.router)
 def init_app():
     s.init(); seed_business(); write_seed_docs()
+    seed_docs=s.PROJECT_ROOT/'02_数据资料'/'示例数据'/'docs'
+    for source in sorted(seed_docs.glob('*')):
+        if source.is_file() and not source.is_symlink() and source.suffix in {'.md','.txt','.pdf','.png'}:
+            target=s.DOCS/source.name
+            if not target.exists(): shutil.copy2(source,target)
     scenarios.initialize()
     settings.initialize()
     connections.initialize()
     agent.initialize()
+    rag_providers.initialize()
     for p in sorted(s.DOCS.iterdir()):
         if p.is_file(): s.index_document(p)
 @app.on_event("startup")
@@ -73,6 +82,9 @@ class DocumentContext(BaseModel):
     page: int=Field(default=1,ge=1)
     text_range: dict[str,Any] | None=None
     quote: str=Field(default='',max_length=100000)
+class RagScope(connections.Strict):
+    scope_type: Literal['document','corpus']
+    document_ids: list[str] | None=Field(default=None,max_length=500)
 class QueryRequest(BaseModel):
     question: str=Field(min_length=1,max_length=2000)
     previous_context: dict[str,Any]=Field(default_factory=dict)
@@ -85,6 +97,7 @@ class QueryRequest(BaseModel):
     mode: str="query"
     display_question: str | None=Field(default=None,max_length=2000)
     document_context: DocumentContext | None=None
+    rag_scope: RagScope | None=None
 class RecomputeRequest(BaseModel):
     run_id: str | None=None
     question: str=""
@@ -121,13 +134,14 @@ class RenameRequest(BaseModel):
 def run(req, cancelled=None, progress=None):
     if req.workspace_id!="sales-demo": raise ValueError("工作区不存在，未继承其他工作区条件")
     document_context=req.document_context.model_dump(exclude_none=True) if req.document_context else None
-    context=agent.query_context(req.previous_context,document_context)
-    return agent.execute(req.question,req.previous_context,req.confirmed,cancelled=cancelled,progress=progress,document_context=document_context,database_context=context)
+    previous={k:v for k,v in req.previous_context.items() if k!='rag_scope'}
+    context=agent.query_context(previous,document_context,req.rag_scope.model_dump(exclude_none=True) if req.rag_scope else None)
+    return agent.execute(req.question,previous,req.confirmed,cancelled=cancelled,progress=progress,document_context=document_context,database_context=context)
 
 @app.get("/api/health")
 def health():
     cfg=agent.saved_config()
-    return {"ok":True,"service":"evidenceflow","version":"0.5.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
+    return {"ok":True,"service":"evidenceflow","version":"0.6.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
 
 @app.get("/api/summary")
 def summary():
@@ -184,6 +198,53 @@ def archived_tables():
 
 @app.get("/api/documents")
 def documents(archived: bool=False): return s.doc_list(archived)
+
+_rag_previews={}
+_rag_preview_lock=threading.Lock()
+class RagReindex(connections.Strict):
+    document_ids: list[str] | None=Field(default=None,max_length=500)
+    remote_opt_in: bool=False
+    preview_id: str | None=Field(default=None,max_length=100)
+
+@app.get('/api/rag/status')
+def rag_status():
+    return {**rag_index.status(),'providers':rag_providers.capabilities()}
+
+@app.post('/api/rag/reindex/preview')
+def rag_preview(req: RagReindex):
+    preview=rag_index.index_preview(req.document_ids)
+    provider=rag_providers.describe('embedding')
+    endpoint=None
+    if provider.get('mode')=='connection' and provider.get('provider_id'):
+        endpoint=connections.ready(provider['provider_id'],{'embedding'}).get('endpoint')
+    pid=uuid.uuid4().hex
+    with _rag_preview_lock:
+        now=time.monotonic()
+        for key in list(_rag_previews):
+            if now-_rag_previews[key]['created']>600: _rag_previews.pop(key)
+        if len(_rag_previews)>=100: _rag_previews.pop(next(iter(_rag_previews)))
+        _rag_previews[pid]={'created':now,'preview':preview,'fingerprint':provider.get('fingerprint')}
+    return {**preview,'preview_id':pid,'endpoint':endpoint,'model':provider.get('model'),
+            'connection_revision':provider.get('connection_revision',provider.get('revision')),'provider_fingerprint':provider.get('fingerprint')}
+
+@app.post('/api/rag/reindex')
+def rag_reindex(req: RagReindex):
+    provider=rag_providers.describe('embedding')
+    remote=not provider.get('local',True)
+    kwargs={}
+    ids=req.document_ids
+    if remote:
+        if not req.remote_opt_in or not req.preview_id: raise ValueError('外部索引需要先预览将发送的文档并确认')
+        with _rag_preview_lock: saved=_rag_previews.pop(req.preview_id,None)
+        if not saved or time.monotonic()-saved['created']>600: raise ValueError('索引预览已过期，请重新预览')
+        preview=saved['preview']
+        if saved['fingerprint']!=provider.get('fingerprint'): raise ValueError('索引连接已改变，请重新预览')
+        if ids is not None and set(ids)!=set(preview['document_ids']): raise ValueError('索引文档范围与预览不一致')
+        ids=preview['document_ids']
+        current=rag_index.index_preview(ids)
+        if current['documents']!=preview['documents']: raise ValueError('文档或切片已改变，请重新预览')
+        kwargs={'expected_preview':preview,'expected_provider':saved['fingerprint']}
+    return rag_index.submit_index(ids,remote_index_opt_in=bool(remote and req.remote_opt_in),**kwargs)
 @app.get("/api/documents/search")
 def search_documents(q: str=""):
     if not q.strip(): return {"items":[]}
@@ -229,10 +290,14 @@ def archive_doc(did: str):
 def restore_doc(did: str):
     d=s.doc_get(did)
     with s.conn() as c: c.execute("UPDATE documents SET status='pending',quality_json='{}' WHERE id=?",(did,))
-    return s.index_document(Path(d["path"]),d["name"])
+    value=s.index_document(Path(d["path"]),d["name"])
+    rag_index.submit_index([did])
+    return value
 @app.post("/api/documents/{did}/reparse")
 def reparse_doc(did: str, req: PageRequest):
-    return document_engine.reparse(did,req.page,req.version,req.parse_id)
+    value=document_engine.reparse(did,req.page,req.version,req.parse_id)
+    rag_index.submit_index([did])
+    return value
 @app.get("/api/documents/{did}/reparses")
 def reparses(did: str):
     with s.conn() as c: return [json.loads(r[0]) for r in c.execute("SELECT body FROM reparses WHERE document_id=? ORDER BY created_at DESC",(did,))]
@@ -257,7 +322,7 @@ def query(req: QueryRequest): return run(req)
 def recompute(req: RecomputeRequest):
     old=s.get_run(req.run_id) if req.run_id else None
     spec={**(old["query_spec"] if old else {}),**req.overrides}
-    if conversations.is_database_analysis(spec) or (old and conversations.is_database_analysis(old)):
+    if conversations.is_database_analysis(spec) or spec.get('rag_scope') or spec.get('metric')=='document' or (old and conversations.is_database_analysis(old)):
         raise ValueError("数据库问数请使用自然语言追问修改范围或刷新结果，不能套用销售条件重算")
     # Recomputing the same question must retain ALL confirmed conditions.
     result=agent.execute(old["question"] if old else req.question,{},spec,database_context={'query_scope':'sales','database_connection_id':None})
@@ -316,6 +381,7 @@ async def import_file(file: UploadFile=File(...)):
     dest=s.UPLOADS/(uuid.uuid4().hex[:10]+"_"+name); dest.write_bytes(content)
     if suffix in {".md",".txt",".pdf",".png",".jpg",".jpeg"}:
         d=s.index_document(dest,name)
+        rag_index.submit_index([d['id']])
         return {"ok":d["status"]!="failed","kind":"document","document":d,"message":"解析失败，原文件已保留，可查看原因后重试" if d["status"]=="failed" else "文档已导入"}
     import pandas as pd
     frames={};source_tables=[]

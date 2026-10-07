@@ -2,7 +2,7 @@ import React,{useEffect,useRef,useState} from 'react'
 import {createPortal} from 'react-dom'
 import {ArrowRight,GripHorizontal,MessageCircle,Minus,RotateCcw,Send,X} from 'lucide-react'
 import {api,Obj,IconButton} from './ui'
-import {petAsset,petStates,PetState,resolvePetState,fitPet,shouldSendKey} from './pet-state'
+import {petAsset,petStates,PetState,resolvePetState,fitPet,shouldSendKey,answerNeedsContext} from './pet-state'
 
 type Message={id:string,role:'user'|'assistant',text:string,evidence?:Obj[],action?:string}
 const parse=(key:string,fallback:any)=>{try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch{return fallback}}
@@ -18,7 +18,7 @@ export default function Pet({compact=false,preferences:p,page,projectId,sessionI
  const taskWorking=['queued','running','cancelling'].includes(task?.status)
  const working=asking||taskWorking||activity?.status==='running'
  const activeStage=taskWorking?task.stage:activity?.status==='running'?activity.stage:asking?'正在处理':undefined
- const gap=mainResult?.status==='needs_clarification'||mainResult?.claims?.some((c:Obj)=>c.kind==='gap'||c.status==='needs_evidence')
+ const gap=answerNeedsContext(task?.result||mainResult)
  const pose=resolvePetState({dragging:dragging||keyboardDrag,working,stage:activeStage,error:localError||activity?.status==='failed'||task?.status==='failed',clarify:!working&&gap,manual:manual||(!listening&&!sleeping&&(embedded||(page==='evidence'&&activity?.status==='completed'))?'read':undefined),listening,sleeping})
  const motion=p.motion&&!reduced&&!background
  const append=(m:Omit<Message,'id'>)=>setMessages(old=>[...old,{...m,id:crypto.randomUUID()}].slice(-40))

@@ -188,4 +188,4 @@ class DatabaseImportTests(unittest.TestCase):
 
     def test_health_reports_version_and_query_scope(self):
         health=self.client.get('/api/health').json()
-        self.assertEqual(health['version'],'0.5.0');self.assertEqual(health['query_scope'],'sales')
+        self.assertEqual(health['version'],'0.6.0');self.assertEqual(health['query_scope'],'sales')

@@ -106,7 +106,7 @@ export function useConversations() {
     const detail = await api(`/api/sessions/${sid}`, {selected_message_id: mid}, 'PATCH')
     if (active.current.sessionId === sid) {++revision.current; accept(detail)}
   }
-  const submit = async (text: string, confirmed: Obj = {}, follow = false, mode = 'query', fresh = false, documentContext: Obj | null = null) => {
+  const submit = async (text: string, confirmed: Obj = {}, follow = false, mode = 'query', fresh = false, documentContext: Obj | null = null, ragScope: Obj | null = null) => {
     // The guard covers session creation too, so a double click cannot create two sessions.
     const guard = fresh ? active.current.projectId : active.current.sessionId || active.current.projectId
     if (sending.current.has(guard)) return
@@ -119,7 +119,7 @@ export function useConversations() {
         sid = (await create()).id
         if (active.current.projectId !== pid || active.current.sessionId !== sid) return
       }
-      const body = {question: text, confirmed, session_id: sid, request_id: crypto.randomUUID(), document_context: documentContext,
+      const body = {question: text, confirmed, session_id: sid, request_id: crypto.randomUUID(), document_context: documentContext,rag_scope:ragScope,
         parent_message_id: follow || mode === 'recompute' ? resultMessage?.id : null,
         inherit_context: follow, mode,
         display_question: mode === 'recompute' ? conditionChange(confirmed) : text}

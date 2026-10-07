@@ -1,9 +1,9 @@
 {
-  "archive_name": "EvidenceFlow-2026-10-05-nl2sql.rar",
-  "bytes": 124902688,
-  "sha256": "e3d66181966d9214860043b0579a9b94506bfc562096a9c5ec172c195b623765",
+  "archive_name": "EvidenceFlow-2026-10-06-rag.rar",
+  "bytes": 418860296,
+  "sha256": "d7f868bacbdb0f81cfcc8b215f956fa571d98bb2b645984f4887d64b31fb4556",
   "rar_integrity": "passed",
-  "extracted_files": 338,
+  "extracted_files": 380,
   "sha256_comparison": "all match",
   "max_directory_depth": 4,
   "windows_runtime_tested": false,

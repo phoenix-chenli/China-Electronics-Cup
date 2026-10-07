@@ -13,6 +13,7 @@ def include(relative):
     parts=relative.parts
     if any(n in parts for n in ['node_modules','__pycache__','.venv','.private','.DS_Store','.git']):return False
     if relative.as_posix()==REPORT or relative.as_posix()==MANIFEST:return False
+    if relative.name.startswith('第三方依赖.zip.') and relative.name[-3:].isdigit():return False
     if relative.as_posix().startswith('02_数据资料/运行数据/'):
         return relative.as_posix()=='02_数据资料/运行数据/说明.md'
     if relative.suffix in {'.pyc','.tmp'} or relative.name.endswith(('.db-wal','.db-shm')):return False
@@ -49,8 +50,10 @@ def main():
             if p.is_file() and p.suffix in {'.md','.json','.log','.txt','.jsonl'}:
                 try:text=p.read_text(encoding='utf-8')
                 except UnicodeError:continue
-                if str(Path.home()) in text:
-                    text=text.replace(str(Path.home()),'[原Mac用户目录]')
+                homes={str(Path.home()),Path.home().as_posix(),json.dumps(str(Path.home()),ensure_ascii=False)[1:-1]}
+                if any(home in text for home in homes):
+                    for home in sorted(homes,key=len,reverse=True):
+                        text=text.replace(home,'[原作者用户目录]')
                     p.write_text(text,encoding='utf-8')
         manifest={p.relative_to(stage).as_posix():sha(p) for p in sorted(stage.rglob('*')) if p.is_file()}
         (stage/MANIFEST).write_text(''.join(value+'  '+name+'\n' for name,value in manifest.items()),encoding='utf-8')

@@ -17,7 +17,7 @@ from typing import Literal
 
 from fastapi import APIRouter, HTTPException
 from pydantic import Field
-from . import connections as c, documents, engine, store as s, database_query
+from . import connections as c, documents, engine, store as s, database_query, rag_grounding
 
 router = APIRouter(prefix="/api/agent")
 MAX_STEPS = 8
@@ -28,7 +28,8 @@ MAX_SQL_ATTEMPTS = 3
 TOOLS = {
     "schema.inspect": "查看销售工作区表、字段和关联元数据；不返回整库数据",
     "business.query": "只读查询现有销售指标、排名、同比、目标或有来源的奖金；不支持任意新表 SQL",
-    "document.search": "检索文档原文，返回版本、位置和来源编号；不执行 OCR",
+    "document.search": "在固定范围混合检索原文并重排，返回完整片段和引用位置；不执行 OCR",
+    "evidence.assess": "检查问题所需事实是否被本轮文档和工具证据充分支持",
     "formula.calculate": "使用已查得且有来源的数值参数执行安全 Decimal 公式",
     "evidence.verify": "检查本轮已有来源、原文位置和数值参数绑定",
     "database.schema": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
@@ -49,10 +50,14 @@ database.query参数sql、params位置参数列表（SQL用?占位）、explanat
 business.query参数question（完整业务问题）、confirmed（可选已知条件）；仅支持销售示例口径。
 document.search参数query，可选focus字符串数组、year。依据查得实体再搜索，不能自行猜冠军。
 formula.calculate参数expression、parameters:[{name,value,unit,evidence_ids}]；每个数值必须来自本轮工具的数值事实或公式参数。
+文档参数额外给support_span_id、source_quote（原文精确数值及单位，如"5%"）；服务端检查后才允许百分比或元/万元转换，不猜单位。
 evidence.verify参数evidence_ids（可选）；这是确定性来源检查，不能证明任意改写语义。
 完成时返回{action:"answer",claims:[{fact_id:"工具返回的事实id"},{evidence_id:"来源id",quote:"该来源的精确连续原文"}]}。
+文档综合结论可用{kind:"synthesis",text:"可单独核对的结论",support_span_ids:["实际返回的原文位置id"]}；每条都要有直接支持，不自造引用。
+knowledge范围只使用文档；hybrid范围结合当前指定数据库与文档规则。数据库数值及计算只用fact_id，不在综合文字中自行计算。
+文档工具返回充分性检查；缺事实时按missing_requirements最多补一次检索，保留原问题对象、日期与条件；仍不足返回空claims，不能凭常识补齐。
 需要用户明确口径或关联路径时返回{action:"clarify",question:"具体需要确认的问题"}，不要自行猜测。
-只选与问题相关的事实与短摘录，保持单位、实体、时间、模拟边界。不能用自由改写替代事实。
+只选与问题相关的事实、摘录或有直接原文支持的综合结论，保持单位、实体、时间、模拟边界。不能用自由改写替代数值事实。
 最终数据结论只选择同一次查询的facts；需要跨表统计时用JOIN/CTE/子查询在一条SQL内完成，不混合不同查询的范围。
 没有证据时claims为空；不要捏造。business.query要求澄清时系统会直接向用户询问。
 工具失败时根据错误修正失败步骤，不必重复成功步骤。最后的来源和数值核验由系统执行。
@@ -63,12 +68,14 @@ class Configuration(c.Strict):
     mode: Literal["auto", "local", "model"] = "auto"
     connection_id: str | None = Field(default=None, max_length=100)
     max_steps: Literal[8] = 8
-    query_scope: Literal["sales", "database"] = "sales"
+    query_scope: Literal["sales", "database", "knowledge", "hybrid"] = "sales"
     database_connection_id: str | None = Field(default=None, max_length=100)
 
 
 def initialize():
     database_query.initialize()
+    from . import rag_index
+    rag_index.initialize()
     with s.conn() as db:
         db.execute("CREATE TABLE IF NOT EXISTS ef_task_traces(task_id TEXT PRIMARY KEY,body TEXT NOT NULL)")
 
@@ -119,9 +126,9 @@ def config():
 
 @router.put("/config")
 def configure(req: Configuration):
-    if req.query_scope == 'database' and req.mode == 'local':
+    if req.query_scope in {'database', 'hybrid'} and req.mode == 'local':
         raise ValueError('通用数据库问数需要模型驱动，请启用并选择文本模型')
-    if req.database_connection_id and req.query_scope == 'database':
+    if req.database_connection_id and req.query_scope in {'database', 'hybrid'}:
         c.ready(req.database_connection_id, c.DB_KINDS)
     if req.connection_id:
         d = c.get(req.connection_id)
@@ -136,23 +143,34 @@ def configure(req: Configuration):
     return config()
 
 
-def query_context(previous=None, document_context=None):
+def query_context(previous=None, document_context=None, requested_scope=None):
     """Freeze a selected source for a queued query; persisted follow-ups keep it."""
-    if document_context:
-        return {'query_scope': 'sales', 'database_connection_id': None}
     cfg = saved_config()
     previous = previous or {}
-    scope = previous.get('query_scope') if previous.get('metric') == 'database' else cfg.get('query_scope', 'sales')
-    cid = previous.get('database_connection_id') if previous.get('metric') == 'database' else cfg.get('database_connection_id')
+    document_context = document_context or (previous.get('document_context') if previous.get('metric') == 'document' and not requested_scope else None)
+    inherited = previous.get('metric') in {'database', 'document'} and not requested_scope and not document_context
+    scope = previous.get('query_scope', cfg.get('query_scope', 'sales')) if inherited else cfg.get('query_scope', 'sales')
+    if document_context:
+        scope = 'knowledge'
+    elif requested_scope:
+        scope = 'hybrid' if scope == 'hybrid' else 'knowledge'
+    cid = previous.get('database_connection_id') if inherited else cfg.get('database_connection_id')
     revision = None
-    if scope == 'database' and cid:
+    if scope in {'database', 'hybrid'} and cid:
         revision = c.ready(cid, c.DB_KINDS)['revision']
         if previous.get('metric') == 'database':
             prior_revision = previous.get('database_connection_revision', previous.get('database_source', {}).get('revision'))
             if prior_revision is not None and prior_revision != revision:
                 raise ValueError('原问数数据库连接配置已变化，请新建问答并重新确认数据源')
-    return {'query_scope': scope, 'database_connection_id': cid if scope == 'database' else None,
-            'database_connection_revision': revision}
+    context = {'query_scope': scope, 'database_connection_id': cid if scope in {'database', 'hybrid'} else None,
+               'database_connection_revision': revision}
+    if scope in {'knowledge', 'hybrid'}:
+        from . import rag_index
+        context['rag_scope'] = rag_index.freeze_scope(document_context=document_context,
+            requested_scope=requested_scope, previous_scope=previous.get('rag_scope') if inherited else None)
+        if document_context:
+            context['document_context'] = copy.deepcopy(document_context)
+    return context
 
 
 def select_connection():
@@ -207,7 +225,8 @@ def _base(question, previous, confirmed, generic=False):
 class Run:
     def __init__(self, question, previous, confirmed, connection, cancelled, progress, document_context, database_context=None):
         self.database_context = database_context or query_context(previous, document_context)
-        self.database_mode = self.database_context.get('query_scope') == 'database'
+        self.database_mode = self.database_context.get('query_scope') in {'database', 'hybrid'}
+        self.rag_enabled = self.database_context.get('query_scope') in {'knowledge', 'hybrid'}
         self.result = _base(question, previous, confirmed, generic=self.database_mode)
         self.previous, self.confirmed = previous or {}, confirmed or {}
         initial=self.result['query_spec']
@@ -217,16 +236,28 @@ class Run:
         if initial['metric']=='growth_rate' and not initial.get('compare_year'):
             self.fixed_conditions['compare_year']=None
         self.connection, self.cancelled, self.progress = connection, cancelled, progress
-        self.document_context = document_context
+        self.document_context = document_context or self.database_context.get('document_context')
+        self.rag_scope = self.database_context.get('rag_scope')
+        self.spans, self.delivered_spans, self.latest_spans = {}, set(), []
+        self.requirements, self.assessment, self.search_rounds = [], None, 0
         self.database_snapshot = None
         self.sql_attempts = 0
         self.query_snapshots = {}
         self.calculations = {}
         if self.database_mode:
             self.fixed_conditions = {}
-            self.result['query_spec'] = {'metric': 'database', 'query_scope': 'database',
+            self.result['query_spec'] = {'metric': 'database', 'query_scope': self.database_context['query_scope'],
                 'database_connection_id': self.database_context.get('database_connection_id'),
                 'database_connection_revision': self.database_context.get('database_connection_revision')}
+        elif self.rag_enabled:
+            self.fixed_conditions = {}
+            self.result['query_spec'] = {'metric': 'document', 'query_scope': 'knowledge'}
+        if self.document_context:
+            self.result['query_spec']['document_context'] = copy.deepcopy(self.document_context)
+        if self.rag_scope:
+            self.result['query_spec']['rag_scope'] = copy.deepcopy(self.rag_scope)
+        if self.rag_enabled:
+            self.result['rag'] = {'scope': copy.deepcopy(self.rag_scope), 'requirements': [], 'retrieval': [], 'assessment': None}
         self.start = time.monotonic()
         self.tool_count = self.calls = 0
         self.facts, self.evidence, self.parameters = {}, {}, []
@@ -240,7 +271,8 @@ class Run:
                           "confirmed_conditions": _limited_context(confirmed),
                           "query_scope": self.database_context.get('query_scope', 'sales'),
                           "database_source": {'connection_id': self.database_context.get('database_connection_id'), 'local_workspace': not self.database_context.get('database_connection_id')},
-                          "document_scope": {k: v for k, v in (document_context or {}).items() if k in {"document_id", "sha256", "page"}}})}]
+                          "document_scope": {k: v for k, v in (self.document_context or {}).items() if k in {"document_id", "sha256", "page"}},
+                          "rag_scope": {k: v for k, v in (self.rag_scope or {}).items() if k in {'scope_type', 'documents'}}})}]
 
     def guard(self):
         if self.cancelled.is_set():
@@ -285,7 +317,7 @@ class Run:
     def trace_output(value):
         """Keep real, bounded tool returns available for local inspection."""
         output = {k: copy.deepcopy(value[k]) for k in
-                  ("status", "checks", "tool", "action", "model", "usage", "count", "boundary", "query_spec", "sql", "params", "source", "validation", "row_limit", "truncated") if k in value}
+                  ("status", "checks", "tool", "action", "model", "usage", "count", "boundary", "query_spec", "sql", "params", "source", "validation", "row_limit", "truncated", "retrieval", "assessment", "coverage", "missing_requirements", "conflicts") if k in value}
         for key, limit in (("facts", 12), ("formulas", 8), ("rows", 5), ("tables", 10)):
             if key in value:
                 output[key] = copy.deepcopy(value[key][:limit])
@@ -304,7 +336,7 @@ class Run:
             d = c.ready(self.connection["id"], {"text"})
             if d["revision"] != self.connection["revision"]:
                 raise ValueError("主模型连接已改变，请重新查询")
-            d = dict(d, timeout=min(d["timeout"], max(1, int(MAX_SECONDS - (time.monotonic() - self.start)))))
+            d = dict(d, timeout=min(d["timeout"], max(.01, MAX_SECONDS - (time.monotonic() - self.start))))
             response = c.chat(d, self.messages, max_tokens=1800, cancelled=self.cancelled)
             self.result["agent"]["model"] = response["model"]
             usage = self.result["agent"]["usage"]
@@ -329,6 +361,83 @@ class Run:
         # Store only the validated protocol in context, not provider metadata.
         self.messages.append({"role": "assistant", "content": c.encode({k: v for k, v in body.items() if k not in {"model", "usage"}})})
         return body
+
+    def judge(self, tool, label, system, payload):
+        self.guard()
+        if self.calls >= MAX_MODEL_CALLS:
+            raise ValueError('模型调用次数达到上限，未跳过证据检查')
+        self.calls += 1
+        self.result['agent']['calls'] = self.calls
+        def call():
+            d = c.ready(self.connection['id'], {'text'})
+            if d['revision'] != self.connection['revision']:
+                raise ValueError('主模型连接已改变，请重新查询')
+            d = dict(d, timeout=min(d['timeout'], max(.01, MAX_SECONDS - (time.monotonic() - self.start))))
+            response = c.chat(d, [{'role': 'system', 'content': system},
+                {'role': 'user', 'content': c.encode(payload)}], max_tokens=3000, cancelled=self.cancelled)
+            self.result['agent']['model'] = response['model']
+            usage = self.result['agent']['usage']
+            for key, value in response.get('usage', {}).items():
+                usage[key] = usage.get(key, 0) + value
+            return {**rag_grounding.object_response(response['text']), 'model': response['model'],
+                    'usage': response.get('usage', {})}
+        return self.step(tool, label, call, {'call': self.calls, 'input_characters': len(c.encode(payload))})
+
+    def ensure_requirements(self):
+        if not self.requirements:
+            self.requirements = rag_grounding.requirements(self.result['question'], self.judge)
+        self.result.setdefault('rag', {'scope': copy.deepcopy(self.rag_scope), 'retrieval': []})['requirements'] = copy.deepcopy(self.requirements)
+
+    def evidence_packet(self):
+        preferred = [sid for x in (self.assessment or {}).get('coverage', []) if x['status'] == 'supported'
+                     for sid in x.get('support_span_ids', [])]
+        chosen = list(dict.fromkeys(preferred + self.latest_spans))[:8]
+        spans = {sid: self.spans[sid] for sid in chosen if sid in self.delivered_spans}
+        return rag_grounding.packet(spans, self.facts.values())
+
+    def assess_evidence(self):
+        self.ensure_requirements()
+        self.assessment = rag_grounding.assess(self.result['question'], self.requirements,
+                                              self.evidence_packet(), self.judge)
+        self.result['rag']['assessment'] = copy.deepcopy(self.assessment)
+        return self.assessment
+
+    def retrieve_documents(self, query):
+        from . import rag_index, rag_retrieval
+        if self.search_rounds >= 2:
+            raise ValueError('本轮文档检索已达两轮上限，未扩大范围或追加重试')
+        if self.rag_scope is None:
+            self.rag_scope = rag_index.freeze_scope(document_context=self.document_context)
+            self.result['query_spec']['rag_scope'] = copy.deepcopy(self.rag_scope)
+        if self.rag_enabled:
+            self.ensure_requirements()
+        self.search_rounds += 1
+        parent = next((e['step_id'] for e in reversed(self.result['events']) if e['tool'] == 'document.search'), None)
+        tracked={}
+        def trace(stage):
+            key=stage['stage']
+            event=tracked.get(key)
+            if event is None:
+                event={'step_id':'retrieval-'+str(len(self.result['events'])+1),'parent_step_id':parent,
+                       'tool':'document.'+key,'label':key,'summary':''}
+                tracked[key]=event
+                self.result['events'].append(event)
+            event.update(stage)
+            event['summary']=stage.get('error') or ('返回'+str(stage['count'])+'项' if 'count' in stage else stage['status'])
+            self.emit('文档检索：'+key)
+        value = rag_retrieval.search(query, self.rag_scope, cancelled=self.cancelled,trace=trace,deadline=self.start+MAX_SECONDS)
+        sources = value.get('evidence', [])
+        self.evidence.update({e['id']: e for e in sources})
+        public = self.public_evidence(sources)
+        self.latest_spans = [sid for e in public for sid in e.get('support_span_ids', [])]
+        self.result.setdefault('rag', {'scope': copy.deepcopy(self.rag_scope), 'retrieval': []})['retrieval'].append(copy.deepcopy(value.get('retrieval', {})))
+        assessment = self.assess_evidence() if self.rag_enabled else None
+        retrieval=value.get('retrieval',{})
+        summary={k:copy.deepcopy(retrieval[k]) for k in ('candidate_count','reranked','errors','lexical_generation','rrf_k','duration_ms','boundary') if k in retrieval}
+        summary['channel_counts']={k:len(rows) for k,rows in retrieval.get('channels',{}).items()}
+        return {'evidence': public, 'count': len(public), 'status': value['status'],
+                'retrieval': summary, 'assessment': assessment,
+                'boundary': '完整固定原文；检索分数不是答案置信度。未执行OCR。'}
 
     def add_fact(self, fact, prefix):
         fact = copy.deepcopy(fact)
@@ -422,7 +531,7 @@ class Run:
             value = self.step(name, {"schema.inspect": "查看数据结构", "business.query": "执行只读业务查询",
                               "document.search": "检索相关文档", "formula.calculate": "执行有来源的计算",
                               "evidence.verify": "核对已返回来源", "database.schema": "读取问数数据库结构",
-                              "database.query": "校验并执行只读SQL"}[name], lambda: self.dispatch(name, args),
+                              "database.query": "校验并执行只读SQL", "evidence.assess": "核对证据充分性"}[name], lambda: self.dispatch(name, args),
                               {k: v for k, v in args.items() if k in {"question", "query", "confirmed", "focus", "year", "expression", "parameters", "evidence_ids", "table_names", "sql", "params", "explanation"}})
             if planned:
                 planned["status"] = "completed"
@@ -449,7 +558,7 @@ class Run:
                       "business_query_supported": t["name"] in s.BASE_TABLES} for t in s.tables() if not names or t["name"] in names]
             return {"tables": items[:30], "boundary": "业务问数工具仍使用销售示例口径；导入表仅提供结构。"}
         if name == "business.query":
-            if self.database_mode:
+            if self.database_mode or self.database_context.get('query_scope') == 'knowledge':
                 raise ValueError('本轮使用数据库问数范围，不可切换到销售示例数据')
             if set(args) - {"question", "confirmed"}:
                 raise ValueError("业务查询工具不接受 SQL、代码或其他参数")
@@ -491,13 +600,14 @@ class Run:
                 raise ValueError("检索实体参数不正确")
             if year is not None and (type(year) is not int or not 2000 <= year <= 2100):
                 raise ValueError("检索年份不正确")
-            if self.document_context:
-                sources = documents.scoped_blocks(self.document_context, query)
-            else:
-                sources = [engine.doc_evidence(b, self.result["run_id"]) for b in engine.candidate_blocks(query, focus, year)]
-            self.evidence.update({e["id"]: e for e in sources})
-            return {"evidence": self.public_evidence(sources), "count": len(sources),
-                    "boundary": "精确原文检索；图像、OCR 和自由因果推断未执行。"}
+            return self.retrieve_documents(query+' '+(' '.join(focus) if focus else '')+(' '+str(year) if year else ''))
+        if name == 'evidence.assess':
+            if args:
+                raise ValueError('充分性检查使用本轮冻结问题和证据，不接受替代问题')
+            if self.rag_scope is None:
+                raise ValueError('请先检索本轮文档证据')
+            self.rag_enabled = True
+            return self.assess_evidence()
         if name == "formula.calculate":
             return self.calculate(args)
         if set(args) - {"evidence_ids"}:
@@ -519,10 +629,22 @@ class Run:
         return {"status": "passed" if checks and all(x["status"] == "passed" for x in checks) else "needs_review", "checks": checks,
                 "boundary": "仅核对本轮来源定位与返回快照，不代替语义人工评估。"}
 
-    @staticmethod
-    def public_evidence(sources):
-        return [{"id": e["id"], "type": e["type"], "source": e["source"], "snippet": e.get("snippet", "")[:2000],
-                 "page": e.get("locator", {}).get("page"), "version": e.get("locator", {}).get("sha256")} for e in sources[:8]]
+    def public_evidence(self, sources):
+        out = []
+        for e in sources[:8]:
+            item = {"id": e['id'], 'type': e['type'], 'source': e['source'],
+                    'snippet': e.get('snippet', '') if e['type'] == 'document' and e.get('support_span_ids') else e.get('snippet', '')[:2000],
+                    'page': e.get('locator', {}).get('page'), 'version': e.get('locator', {}).get('sha256')}
+            if e['type'] == 'document' and e.get('support_span_ids'):
+                span = rag_grounding.bind_source(e)
+                self.spans[span['id']] = span
+                self.delivered_spans.add(span['id'])
+                item.update(snippet=span['text'], support_span_ids=[span['id']],
+                            quality=e.get('quality'), retrieval=e.get('retrieval'))
+            out.append(item)
+        if len(c.encode(out)) > MAX_CONTEXT_CHARS:
+            raise ValueError('完整文档证据超过预算，未机械截断适用条件')
+        return out
 
     def calculate(self, args):
         if set(args) - {"expression", "parameters"}:
@@ -541,6 +663,8 @@ class Run:
             ids = p.get("evidence_ids")
             if not isinstance(ids, list) or not ids or not all(isinstance(e, str) and e in self.evidence for e in ids):
                 raise ValueError("公式参数没有本轮有效来源")
+            if p.get('support_span_id'):
+                candidates.append(rag_grounding.document_parameter(p, self.spans, self.delivered_spans))
             try:
                 number = Decimal(str(p["value"]))
                 if not number.is_finite() or abs(number) > Decimal("1e18"):
@@ -554,7 +678,8 @@ class Run:
             if match.get('query_id'):
                 query_ids.add(match['query_id'])
             checked.append({"name": p["name"], "label": p["name"], "value": str(number), "unit": p.get("unit"), "evidence_ids": ids,
-                            'assumption': bool(match.get('assumption'))})
+                            'assumption': bool(match.get('assumption')),
+                            **{k: match[k] for k in ('support_span_id', 'source_quote') if k in match}})
         if len(query_ids) > 1:
             raise ValueError('公式不能混合不同查询范围的参数，请在同一次查询中取数')
         engine.check_parameters(checked)
@@ -581,10 +706,21 @@ class Run:
         raw = body.get("claims")
         if not isinstance(raw, list) or len(raw) > 12:
             raise ValueError("答案必须包含最多 12 条有来源的结论")
+        if any(isinstance(x, dict) and x.get('kind') == 'synthesis' for x in raw):
+            self.rag_enabled = True
+        if self.rag_enabled and self.rag_scope:
+            from . import rag_index
+            allowed = {x['document_id'] for x in rag_index.validate_scope(self.rag_scope)}
+            if any(self.spans[x]['locator']['document_id'] not in allowed for x in self.delivered_spans):
+                self.refuse('本轮来源已归档或使用范围已撤销，请重新选择资料。')
+                return {'status': 'refused', 'checks': [{'name': '来源使用范围', 'status': 'revoked'}]}
         claims = []
         for item in raw:
             if not isinstance(item, dict):
                 raise ValueError("答案结论格式不正确")
+            if item.get('kind') == 'synthesis':
+                claims.append(rag_grounding.synthesis(item, self.spans, self.delivered_spans))
+                continue
             fact = self.facts.get(item.get("fact_id"))
             if item.get("fact_id") and not fact:
                 raise ValueError("答案引用了本轮不存在的事实")
@@ -633,8 +769,39 @@ class Run:
             referenced_formulas = [copy.deepcopy(self.calculations[c['fact_id']]) for c in claims
                                    if c.get('fact_id') in self.calculations]
             self.result['formulas'] = copy.deepcopy(selected.get('formulas', [])) + referenced_formulas
+        if self.rag_enabled:
+            if not claims:
+                self.refuse('现有证据不足，未生成确定结论。')
+                return {'status': 'refused', 'missing_requirements': self.result.get('missing_requirements', [])}
+            try:
+                self.ensure_requirements()
+                assessment = self.assess_evidence()
+                check = rag_grounding.review(self.result['question'], self.requirements, claims,
+                                              self.spans, self.facts, self.judge)
+                # A later self-review cannot silently waive a pre-generation gap.
+                if assessment['status'] != 'sufficient' and check['answer_status'] == 'supported':
+                    check.update(claims=[], answer_status='refused',
+                                 missing_requirements=assessment['missing_requirements'])
+                self.result['rag']['verification'] = copy.deepcopy(check)
+                self.result.update(answer_status=check['answer_status'],
+                    missing_requirements=check['missing_requirements'], conflicts=check['conflicts'])
+                claims = check['claims']
+                for claim in claims:
+                    claim['semantic_check']['model'] = self.result['agent']['model']
+                if not claims:
+                    self.refuse('现有引用未完整支持问题，未发布确定结论。', check['missing_requirements'], check['conflicts'])
+                    return {'status': 'refused', 'checks': check['checks'], 'missing_requirements': check['missing_requirements']}
+            except InterruptedError:
+                raise
+            except ValueError as exc:
+                self.refuse('证据核验未完成：' + str(exc))
+                return {'status': 'refused', 'checks': [{'name': '综合证据检查', 'status': 'unavailable'}]}
+        else:
+            self.result['answer_status'] = 'supported' if claims else 'refused'
         self.result["claims"] = claims
         self.result["answer"] = "\n\n".join(f["text"] for f in claims) or "本轮没有取得足够依据，未生成业务结论。"
+        if self.result.get('answer_status') == 'partial':
+            self.result['answer'] += '\n\n未完整回答：' + '；'.join(self.result.get('missing_requirements', []))
         self.result["headline"] = claims[0]["text"] if claims else "缺少可核验依据"
         supported=sum(f.get('status') in {'verified','supported','simulation'} and bool(f.get('evidence_ids')) for f in claims)
         passed=bool(claims) and supported==len(claims)
@@ -642,12 +809,25 @@ class Run:
             "detail": "结论与本轮确定性事实或精确原文一致；不等于通用语义准确率。" if passed else "有结论缺少依据，已保留缺口提示。" if claims else "没有可引用事实，已明确拒答。"}
         return {"status": self.result["agent"]["review"]["status"], "checks": [{"name": "事实及原文绑定", "status": "passed" if passed else "needs_evidence"}]}
 
+    def refuse(self, reason, missing=None, conflicts=None):
+        missing = missing if missing is not None else (self.assessment or {}).get('missing_requirements', [])
+        self.result.update(claims=[], answer_status='refused', refusal_reason=reason,
+            answer=reason + ('\n缺少：' + '；'.join(missing) if missing else ''), headline='证据不足或核验未完成',
+            missing_requirements=missing, conflicts=conflicts or (self.assessment or {}).get('conflicts', []))
+        self.result['agent']['review'] = {'status': 'needs_evidence', 'detail': reason}
+
     def finish(self):
         for item in self.result["agent"]["plan"]:
             if item["status"] == "pending":
                 item["status"] = "skipped"
         self.result["evidence"] = list(self.evidence.values())
-        self.result["conditions"] = [] if self.database_mode else engine.conditions(self.result["query_spec"])
+        self.result["conditions"] = [] if self.database_mode or self.rag_enabled else engine.conditions(self.result["query_spec"])
+        if self.rag_scope:
+            self.result['query_spec']['rag_scope'] = copy.deepcopy(self.rag_scope)
+        if self.document_context:
+            self.result['query_spec']['document_context'] = copy.deepcopy(self.document_context)
+        if self.result['status'] == 'needs_clarification':
+            self.result['answer_status'] = 'needs_clarification'
         if self.result.get('database_query'):
             self.result['database_query']['attempts'] = self.sql_attempts
         total = len(self.result["claims"])
@@ -658,7 +838,7 @@ class Run:
         self.result["actions"] = [{"id": "save", "label": "保存", "enabled": bool(total), "reason": None},
                                   {"id": "copy", "label": "复制", "enabled": bool(total), "reason": None},
                                   {"id": "table", "label": "结果表", "enabled": bool(self.result["columns"]), "reason": None},
-                                  {"id": "recompute", "label": "修改条件", "enabled": not self.database_mode, "reason": "数据库问数请用自然语言追问" if self.database_mode else None}]
+                                  {"id": "recompute", "label": "修改条件", "enabled": not self.database_mode and not self.rag_enabled, "reason": "请用自然语言追问" if self.database_mode or self.rag_enabled else None}]
         self.emit("等待补充条件" if self.result["status"] == "needs_clarification" else "本轮核验完成")
         return self.result
 
@@ -682,7 +862,7 @@ class Run:
                     if repairs >= 1:
                         raise
                     repairs += 1
-                    self.messages.append({"role": "user", "content": c.encode({"answer_rejected": str(exc), "instruction": "只选择真实 fact_id 或精确原文，修正答案一次。"})})
+                    self.messages.append({"role": "user", "content": c.encode({"answer_rejected": str(exc), "instruction": "只引用实际返回的fact_id、精确原文或support_span_ids，修正答案一次；不能发明数字或位置。"})})
                     continue
             try:
                 value = self.tool(body.get("tool"), body.get("arguments", {}))
@@ -703,17 +883,52 @@ class Run:
                 raise ValueError("本轮上下文达到上限，请缩小问题范围")
 
 
+def local_retrieval(question, context, stop, progress=None):
+    from . import rag_retrieval
+    started=time.monotonic()
+    value=_base(question,{}, {},generic=False)
+    value['query_spec']={'metric':'document','query_scope':'knowledge','rag_scope':copy.deepcopy(context['rag_scope'])}
+    if context.get('document_context'):value['query_spec']['document_context']=copy.deepcopy(context['document_context'])
+    tracked={}
+    def trace(stage):
+        event=tracked.get(stage['stage'])
+        if event is None:
+            event={'step_id':'retrieval-'+str(len(value['events'])+1),'tool':'document.'+stage['stage'],'label':stage['stage'],'summary':''}
+            tracked[stage['stage']]=event
+            value['events'].append(event)
+        event.update(stage)
+        event['summary']=stage.get('error') or stage['status']
+        if progress:progress({'stage':'检索原文','events':copy.deepcopy(value['events']),'agent':None})
+    retrieved=rag_retrieval.search(question,context['rag_scope'],cancelled=stop,trace=trace,deadline=started+MAX_SECONDS)
+    for source in retrieved['evidence']:rag_grounding.bind_source(source)
+    reason='未连接主问答模型，本轮仅提供检索原文，未生成综合结论。' if retrieved['evidence'] else '固定范围内没有找到足够证据，本轮未生成综合结论。'
+    value.update(evidence=retrieved['evidence'],claims=[],answer=reason,headline='检索原文',answer_status='refused',refusal_reason=reason,
+                 missing_requirements=['需要可用主问答模型完成证据充分性及逐条支持核验'],conflicts=[],conditions=[],
+                 rag={'scope':copy.deepcopy(context['rag_scope']),'requirements':[],'assessment':None,'retrieval':[retrieved['retrieval']],
+                      'verification':{'status':'not_run','reason':'未连接主问答模型'}},
+                 agent={'mode':'local','plan':[],'calls':0,'usage':{},'review':{'status':'local','detail':reason}},
+                 coverage={'supported':0,'total':0,'percent':None,'meaning':'没有生成结论'},latency_ms=round((time.monotonic()-started)*1000,2))
+    value['actions']=[{'id':'recompute','label':'修改条件','enabled':False,'reason':'请用自然语言追问'}]
+    return value
+
+
 def execute(question, previous=None, overrides=None, cancelled=None, progress=None, persist=True, document_context=None, database_context=None):
     stop = cancelled or Event()
     if stop.is_set():
         raise InterruptedError("查询已取消")
     context = database_context or query_context(previous, document_context)
+    document_context=document_context or context.get('document_context')
     connection = select_connection()
     if connection is None:
-        if context.get('query_scope') == 'database':
+        if context.get('query_scope') in {'database','hybrid'}:
             raise ValueError('通用数据库问数需要可用文本模型，请在主问答方式中测试、启用并选择模型')
-        value = engine.execute(question, previous, overrides, cancelled=stop, progress=progress,
-                               persist=False, document_context=document_context)
+        if context.get('query_scope')=='knowledge' and not document_context:
+            value=local_retrieval(question,context,stop,progress)
+        else:
+            value = engine.execute(question, previous, overrides, cancelled=stop, progress=progress,
+                                   persist=False, document_context=document_context)
+            if context.get('rag_scope'):
+                value['query_spec'].update(rag_scope=copy.deepcopy(context['rag_scope']),query_scope='knowledge')
         value["agent"] = {"mode": "local", "plan": [], "calls": 0, "usage": {},
                           "review": {"status": "local", "detail": "本轮使用本地确定性工具，未调用模型。"}}
         if persist:
