@@ -1,5 +1,5 @@
 .rag-outcome,.rag-index-panel{border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0;background:var(--panel-solid)}
-.rag-outcome.is-caution{border-color:color-mix(in srgb,var(--line) 45%,#bd923d)}
+.rag-outcome.is-caution{border-color:color-mix(in srgb,var(--line) 45%,var(--warning))}
 .rag-outcome-heading,.rag-related,.rag-index-actions,.rag-index-status{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .rag-outcome p,.rag-outcome li{line-height:1.65;overflow-wrap:anywhere}.rag-outcome h4{margin:14px 0 6px}.rag-outcome ul{padding-left:22px}.rag-related{align-items:flex-start;flex-direction:column;margin-top:10px}
 .rag-semantic-review{display:grid;gap:5px;margin:10px 0;color:var(--muted);font-size:12px}.rag-semantic-review p{margin:0}

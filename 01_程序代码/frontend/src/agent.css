@@ -55,8 +55,8 @@
 .agent-event>summary {display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .agent-event>summary>strong {flex:1;min-width:0;overflow-wrap:anywhere}
 .agent-event>summary>svg {flex-shrink:0;color:var(--muted)}
-.agent-event.status-failed>summary>svg,.agent-event.status-failed .agent-event-status {color:var(--danger,#bd3845)}
-.agent-event.status-completed>summary>svg {color:var(--green,#26866d)}
+.agent-event.status-failed>summary>svg,.agent-event.status-failed .agent-event-status {color:var(--danger,var(--danger))}
+.agent-event.status-completed>summary>svg {color:var(--green,var(--accent))}
 .agent-event-status,.agent-event-duration {font-size:11px;color:var(--muted);white-space:nowrap}
 .agent-event pre,.agent-usage pre {white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font-size:12px;line-height:1.7}
 .agent-event-tool,.agent-event-time {font-size:11px;color:var(--muted);overflow-wrap:anywhere}

@@ -1,4 +1,5 @@
 import {shouldSendKey} from './pet-state'
+import {PetBlob} from './pet-blob'
 import {rawTableValue,savedAnalysisName} from './result-presentation'
 import React, {lazy, Suspense, useEffect, useRef, useState} from 'react'
 import {createPortal} from 'react-dom'
@@ -22,8 +23,8 @@ export const money=(v:any)=>'¥'+num(v)
 export const formatValue=(v:any,unit?:string)=>unit==='CNY'?money(v):unit==='ratio'?num(Number(v)*100)+'%':num(v)+(unit?' '+unit:'')
 export const timeLabel=(v:string)=>new Date(v).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})
 export const fieldNames:Obj={product_id:'产品编号',product_name:'产品',net_sales:'净销售额（元）',gross_sales:'销售额（元）',order_count:'订单数',customer_count:'客户数',region:'区域',year:'年份',amount:'金额',current_net_sales:'本期净销售额（元）',compare_net_sales:'对比期净销售额（元）',growth_rate:'增长率',order_id:'订单编号',order_date:'日期',sales_amount:'销售额',returned_amount:'退货金额',customer_name:'客户',count:'数量',current_value:'本期',previous_value:'对比期',quantity:'数量',currency:'币种'}
-const mascotAssets = {wave:'hero-welcome', work:'pet-04-thinking-v2', reading:'pet-06-reading-v2', pointing:'pet-09-pointing-v2', success:'pet-10-success'}
-export function Mascot({pose='wave',className='',...props}: {pose?:keyof typeof mascotAssets,className?:string}&React.ImgHTMLAttributes<HTMLImageElement>){return <img className={'mascot '+className} src={'/'+mascotAssets[pose]+'.webp'} alt="证流助手" draggable={false} {...props}/>}
+const mascotPoses = {wave:'welcome', work:'think', reading:'read', pointing:'explain_right', success:'success'} as const
+export function Mascot({pose='wave',className='',...props}: {pose?:keyof typeof mascotPoses,className?:string}&Record<string,any>){return <PetBlob pose={mascotPoses[pose]} size={96} label="小察"/>}
 export function useMedia(query:string){const [matches,setMatches]=useState(()=>matchMedia(query).matches);useEffect(()=>{const mq=matchMedia(query);const update=()=>setMatches(mq.matches);update();mq.addEventListener('change',update);return()=>mq.removeEventListener('change',update)},[query]);return matches}
 export function IconButton({label,children,...props}: {label:string}&React.ButtonHTMLAttributes<HTMLButtonElement>){return <button type="button" className="icon-button" aria-label={label} title={label} {...props}>{children}</button>}
 export function Spinner({text='正在查询'}:{text?:string}){return <div className="loading" role="status"><LoaderCircle className="spin" size={20}/>{text}</div>}
