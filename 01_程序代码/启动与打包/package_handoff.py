@@ -5,7 +5,7 @@ from pathlib import Path
 import ast,hashlib,json,os,shutil,subprocess,sys,tempfile
 ROOT=Path(__file__).resolve().parents[2]
 FOLDERS=['01_程序代码','02_数据资料','03_测试验收','04_设计素材','05_比赛与交接','06_运行环境']
-FILES=['启动证流_Windows.bat','停止证流_Windows.bat','启动证流_Mac.command','停止证流_Mac.command','使用说明.md','README.md','AGENTS.md','.gitignore']
+FILES=['启动证流_Windows.bat','停止证流_Windows.bat','启动证流_Mac.command','停止证流_Mac.command','使用说明.md','README.md','提升需求.md','AGENTS.md','.gitignore']
 REPORT='05_比赛与交接/文件清单与许可证/交接包校验.json'
 MANIFEST='05_比赛与交接/文件清单与许可证/文件摘要.sha256'
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -68,7 +68,9 @@ def main():
         data={'archive_name':output.name,'bytes':archive.stat().st_size,'sha256':sha(archive),
               'rar_integrity':'passed','extracted_files':len(manifest)+1,'sha256_comparison':'all match',
               'max_directory_depth':max(len(p.relative_to(stage).parts) for p in stage.rglob('*') if p.is_dir()),
-              'windows_runtime_tested':False,'personal_runtime_data_included':False,'mac_environment_included':False,
+              'windows_runtime_tested':False,
+              'windows_runtime_tested_scope':'Startup of this freshly extracted archive has not been executed; current-machine OCR/RAG tests are recorded separately.',
+              'personal_runtime_data_included':False,'mac_environment_included':False,
               'node_modules_included':False,'top_folder':'证流_赛题八'}
         output.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(archive,output)

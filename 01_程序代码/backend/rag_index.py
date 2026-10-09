@@ -20,7 +20,7 @@ from pathlib import Path
 
 from . import documents, store as s
 
-CHUNKER_VERSION = "source-spans-v1"
+CHUNKER_VERSION = "source-spans-v2-confirmed"
 CHUNK_TOKENS = 384
 OVERLAP_TOKENS = 48
 LOCK = threading.RLock()
@@ -203,6 +203,41 @@ def _page_title(data, page, start):
     return " / ".join(titles)
 
 
+def _confirmed_ranges(page):
+    """Keep continuous source offsets; uncertain observations never bridge chunks."""
+    text=page["text"]
+    excluded=sorted((max(0,b.get("start",0)), min(len(text),b.get("end",0)))
+                    for b in page.get("blocks",[]) if b.get("status","confirmed")!="confirmed")
+    cursor=0
+    for start,end in excluded:
+        if start>cursor:yield cursor,start
+        cursor=max(cursor,end)
+    if cursor<len(text):yield cursor,len(text)
+
+
+def _extraction_quality(page,start,end):
+    blocks=[b for b in page.get("blocks",[]) if b.get("end",0)>start and b.get("start",0)<end]
+    provenance=page.get("provenance",{})
+    methods=sorted({b.get("source_method") or provenance.get("method") or page.get("method","native_text") for b in blocks})
+    precisions=sorted({b.get("location_precision") or provenance.get("location_precision") or page.get("location_precision","character") for b in blocks})
+    quality={"confirmed":all(b.get("status","confirmed")=="confirmed" for b in blocks),
+             "human_reviewed":False,"source_methods":methods,"location_precisions":precisions,
+             "derived_view":any(b.get("derived_view",False) for b in blocks)}
+    for field in ("media_id","source_part","table_id","cell_ids","chart_id","point_id"):
+        values=[]
+        for block in blocks:
+            value=block.get(field)
+            if value is not None:
+                for item in value if isinstance(value,list) else [value]:
+                    if item not in values:values.append(item)
+        if values:quality[field]=values
+    confidence=[b["confidence"] for b in blocks if isinstance(b.get("confidence"),(float,int))]
+    if confidence:quality["min_ocr_confidence"]=min(confidence)
+    for key in ("model","fingerprint","input_image_sha256","semantic_accuracy"):
+        if provenance.get(key) is not None:quality[key]=provenance[key]
+    return quality
+
+
 def _build_document(document_id, cancelled=None):
     _guard(cancelled)
     doc = s.doc_get(document_id)
@@ -219,7 +254,8 @@ def _build_document(document_id, cancelled=None):
         body = json.loads(existing["body"])
         with s.conn() as db:
             current = db.execute("SELECT sha256,status FROM documents WHERE id=?", (document_id,)).fetchone()
-            if not current or current["sha256"] != doc["sha256"] or current["status"] == "archived":
+            active=documents.active_parse(db,document_id,doc["sha256"])
+            if not current or current["sha256"] != doc["sha256"] or current["status"] not in {"ready","needs_review"} or not active or active["id"]!=data["parse_id"]:
                 raise ValueError("文档在准备索引期间已变化，未激活旧索引")
             db.execute("UPDATE ef_rag_generations SET active=0 WHERE document_id=?", (document_id,))
             db.execute("UPDATE ef_rag_generations SET active=1 WHERE id=?", (generation_id,))
@@ -230,7 +266,8 @@ def _build_document(document_id, cancelled=None):
         if not page["text_available"]:
             missing.append({"page": page["number"], "reason": "待文字识别" if page.get("ocr_required") else "没有文字"})
             continue
-        spans = list(_split(page["text"], count, budget))
+        spans = [(offset+start,offset+end,hard) for offset,limit in _confirmed_ranges(page)
+                 for start,end,hard in _split(page["text"][offset:limit],count,budget)]
         for start, end, hard_split in spans:
             text = page["text"][start:end]
             source_span = {"page": page["number"], "start": start, "end": end,
@@ -252,6 +289,7 @@ def _build_document(document_id, cancelled=None):
             quality = {"text_extracted": True, "ocr_required": page.get("ocr_required", False),
                        "vision_verified": page.get("vision_verified", False), "hard_split": hard_split,
                        "counting": counting, "count": count(text), "structure": data.get("structure", "按页")}
+            quality.update(_extraction_quality(page,start,end))
             chunks.append({"id": cid, "generation_id": generation_id, **identity,
                            "page": page["number"], "start": start, "end": end, "text": text,
                            "title_path": title, "content_type": ctype, "quality": quality,
@@ -267,7 +305,8 @@ def _build_document(document_id, cancelled=None):
         # Check provenance once again after parsing. Ordinary replacement cannot
         # publish the parsed old version as the new current source.
         current = db.execute("SELECT sha256,status FROM documents WHERE id=?", (document_id,)).fetchone()
-        if not current or current["sha256"] != doc["sha256"] or current["status"] == "archived":
+        active=documents.active_parse(db,document_id,doc["sha256"])
+        if not current or current["sha256"] != doc["sha256"] or current["status"] not in {"ready","needs_review"} or not active or active["id"]!=data["parse_id"]:
             raise ValueError("文档在建索引期间已变化，未发布旧索引")
         db.execute("UPDATE ef_rag_generations SET active=0 WHERE document_id=?", (document_id,))
         db.execute("INSERT INTO ef_rag_generations VALUES (?,?,?,?,?,?,?,?)", (generation_id, document_id, doc["sha256"], data["parse_id"], 1, body["status"], _json(body), s.now()))
@@ -279,7 +318,7 @@ def _build_document(document_id, cancelled=None):
 def _active_generations():
     with s.conn() as db:
         rows = db.execute("SELECT g.* FROM ef_rag_generations g JOIN documents d ON d.id=g.document_id WHERE g.active=1 AND g.sha256=d.sha256 AND d.status IN ('ready','needs_review') ORDER BY g.document_id").fetchall()
-    return [json.loads(r["body"]) for r in rows]
+    return [json.loads(r["body"]) for r in rows if documents.current_parse_id(r["document_id"],r["sha256"])==r["parse_id"]]
 
 
 def _publish_lexical(cancelled=None):
@@ -365,7 +404,7 @@ def _check_index_snapshot(provider, document_ids, expected_preview, expected_pro
             row = db.execute("SELECT sha256,status FROM documents WHERE id=?", (source["id"],)).fetchone()
             if not row or row["status"] not in {"ready", "needs_review"} or row["sha256"] != source["sha256"]:
                 raise ValueError("文档版本或可用状态已变化，请重新预览索引范围")
-            parse = db.execute("SELECT id FROM ef_document_parses WHERE document_id=? AND sha256=? AND parser=? ORDER BY created_at DESC,id DESC LIMIT 1", (source["id"], source["sha256"], documents.PARSER)).fetchone()
+            parse = documents.active_parse(db,source["id"],source["sha256"])
             generation = db.execute("SELECT id FROM ef_rag_generations WHERE document_id=? AND active=1", (source["id"],)).fetchone()
             if not parse or parse["id"] != source["parse_id"] or not generation or generation["id"] != source["generation_id"]:
                 raise ValueError("文档解析或切片代次已变化，请重新预览索引范围")
@@ -430,11 +469,10 @@ def _index_vectors(document_ids, remote_index_opt_in, cancelled, job, data_path,
         _check_index_snapshot(provider, document_ids, expected_preview, expected_provider, cancelled)
         with s.conn() as db:
             for generation in generations:
-                if expected_preview is not None:
-                    current = db.execute("SELECT sha256,status FROM documents WHERE id=?", (generation["document_id"],)).fetchone()
-                    parse = db.execute("SELECT id FROM ef_document_parses WHERE document_id=? AND sha256=? AND parser=? ORDER BY created_at DESC,id DESC LIMIT 1", (generation["document_id"], generation["sha256"], documents.PARSER)).fetchone()
-                    if not current or current["sha256"] != generation["sha256"] or current["status"] not in {"ready", "needs_review"} or not parse or parse["id"] != generation["parse_id"]:
-                        raise ValueError("发布索引前文档已变化，未标记完成")
+                current = db.execute("SELECT sha256,status FROM documents WHERE id=?", (generation["document_id"],)).fetchone()
+                parse = documents.active_parse(db,generation["document_id"],generation["sha256"])
+                if not current or current["sha256"] != generation["sha256"] or current["status"] not in {"ready", "needs_review"} or not parse or parse["id"] != generation["parse_id"]:
+                    raise ValueError("发布索引前文档已变化，未标记完成")
                 generation.update(status="ready" if not generation["missing_pages"] else "degraded", vector_status="ready", embedding=provider, error=None)
                 db.execute("UPDATE ef_rag_generations SET status=?,body=? WHERE id=?", (generation["status"], _json(generation), generation["generation_id"]))
         job.update(status="completed", error=None)
@@ -498,7 +536,7 @@ def status():
     for doc in s.doc_list():
         g = generations.get(doc["id"], {})
         latest = next((j for j in jobs if j["status"] in {"pending", "indexing"} and (j["document_ids"] is None or doc["id"] in j["document_ids"])), None)
-        stale = g.get("sha256") != doc["sha256"]
+        stale = g.get("sha256") != doc["sha256"] or g.get("parse_id") != documents.current_parse_id(doc["id"],doc["sha256"])
         state = latest["status"] if latest else "pending" if stale else g.get("status", "pending")
         indexes.append({"document_id": doc["id"], "name": doc["name"], "sha256": doc["sha256"],
                         "parse_id": g.get("parse_id"), "generation_id": g.get("generation_id"),
@@ -652,7 +690,8 @@ def chunks_for_scope(scope, *, cancelled=None, deadline=None):
             start, end = selection["start"], selection["end"]
             candidates = [(start, end, False)]
         else:
-            candidates = list(_split(page["text"], len, CHUNK_TOKENS))
+            candidates = [(offset+start,offset+end,hard) for offset,limit in _confirmed_ranges(page)
+                          for start,end,hard in _split(page["text"][offset:limit],len,CHUNK_TOKENS)]
         out = []
         for start, end, hard_split in candidates:
             _guard(cancelled, deadline)
@@ -661,7 +700,7 @@ def chunks_for_scope(scope, *, cancelled=None, deadline=None):
             cid = _hash([source, span])
             out.append({"id": cid, **source, "generation_id": "scope-"+scope["scope_id"], "page": scope["page"], "start": start, "end": end, "text": text,
                         "title_path": _page_title(data, page, start), "content_type": "text", "spans": [span],
-                        "source": data["document"]["name"], "quality": {"counting": "conservative_unicode_characters", "hard_split": hard_split, "ocr_required": page.get("ocr_required", False)}})
+                        "source": data["document"]["name"], "quality": {"counting": "conservative_unicode_characters", "hard_split": hard_split, "ocr_required": page.get("ocr_required", False),**_extraction_quality(page,start,end)}})
         return out
     out = []
     with reader() as db:

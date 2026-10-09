@@ -7,6 +7,7 @@
 03_测试验收/临时运行/
 *.rar
 06_运行环境/RAG模型包.zip
+06_运行环境/OCR模型包.zip
 06_运行环境/Windows_x64/第三方依赖.zip
 
 # Do not commit machine-local credentials or generated runtime data.

@@ -53,18 +53,18 @@ def wheel_record(path, source_build=None):
     if release:
         if release['digests']['sha256'] != actual: raise ValueError('PyPI wheel SHA256 differs: ' + path.name)
         body.update(url=release['url'], distribution='official_pypi_wheel')
-    elif name == 'jieba' and source_build:
+    elif normalize(name) in {'jieba','antlr4-python3-runtime'} and source_build:
         body.update(distribution='locally_built_wheel_from_verified_pypi_sdist', url=None, source_build=source_build)
     else: raise ValueError('Wheel is not an official release and has no verified source build: ' + path.name)
     return body
 
-def build_jieba(wheels, cache):
-    # Jieba 0.42.1 has no official wheel. Verify its source archive before building.
-    metadata = json.loads(fetch('https://pypi.org/pypi/jieba/0.42.1/json'))
+def build_source(name, version, wheels, cache):
+    # These two locked pure-Python releases have no official wheel.
+    metadata = json.loads(fetch(f'https://pypi.org/pypi/{name}/{version}/json'))
     release = next(x for x in metadata['urls'] if x['packagetype'] == 'sdist')
     source = cache/release['filename']
     if not source.exists(): source.write_bytes(fetch(release['url']))
-    if sha(source.read_bytes()) != release['digests']['sha256']: raise ValueError('Jieba official source SHA256 differs')
+    if sha(source.read_bytes()) != release['digests']['sha256']: raise ValueError('Official source SHA256 differs: '+name)
     args = [sys.executable, '-m', 'pip', 'wheel', '--no-deps', str(source), '--wheel-dir', str(wheels)]
     subprocess.run(args, check=True)
     return {'filename': release['filename'], 'url': release['url'], 'sha256': release['digests']['sha256'],
@@ -75,15 +75,16 @@ def main():
     CACHE.mkdir(parents=True, exist_ok=True); wheels = CACHE/'wheels'; wheels.mkdir(exist_ok=True)
     locks = [line.strip() for line in LOCK.read_text(encoding='utf-8').splitlines() if line.strip() and not line.startswith('#')]
     binary_lock = CACHE/'binary-requirements.txt'
-    binary_lock.write_text('\n'.join(x for x in locks if normalize(x.split('==')[0]) != 'jieba')+'\n', encoding='utf-8')
+    source_names={'jieba','antlr4-python3-runtime'}
+    binary_lock.write_text('\n'.join(x for x in locks if normalize(x.split('==')[0]) not in source_names)+'\n', encoding='utf-8')
     subprocess.run([sys.executable, '-m', 'pip', 'download', '--only-binary=:all:', '--platform', 'win_amd64',
                     '--python-version', '313', '--implementation', 'cp', '--abi', 'cp313', '--abi', 'abi3', '--abi', 'none',
                     '-r', str(binary_lock), '-d', str(wheels)], check=True)
-    source_build = build_jieba(wheels, CACHE) if any(normalize(x.split('==')[0]) == 'jieba' for x in locks) else None
+    source_builds={normalize(x.split('==')[0]):build_source(*x.split('=='),wheels,CACHE) for x in locks if normalize(x.split('==')[0]) in source_names}
     wanted = {normalize(x.split('==')[0]): x.split('==')[1] for x in locks}
     paths = [p for p in sorted(wheels.glob('*.whl')) if wanted.get(normalize(p.name.split('-')[0])) == p.name.split('-')[1]]
     if len(paths) != len(locks): raise ValueError('Missing or ambiguous locked wheels')
-    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool: records = list(pool.map(lambda p: wheel_record(p, source_build), paths))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool: records = list(pool.map(lambda p: wheel_record(p, source_builds.get(normalize(p.name.split('-')[0]))), paths))
     archive = CACHE/'python.zip'
     if not archive.exists(): archive.write_bytes(fetch(PYTHON_URL))
     blob = archive.read_bytes()
@@ -96,7 +97,7 @@ def main():
     report = {'python': {'version': VERSION, 'platform': 'win_amd64', 'url': PYTHON_URL, 'sha256': sha(blob),
                          'license': '06_运行环境/Windows_x64/LICENSE.txt'},
               'wheels': records, 'windows_runtime_tested': False, 'sealed_dependencies': sealed,
-              'method': 'Official Python ZIP and binary wheels SHA256 verified; Jieba built from SHA256-verified official source; every wheel RECORD verified.'}
+              'method': 'Official Python ZIP and binary wheels SHA256 verified; Jieba and ANTLR built from SHA256-verified official pure Python sources; every wheel RECORD verified.'}
     LICENSES.mkdir(parents=True, exist_ok=True)
     (LICENSES/'Windows依赖来源与摘要.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps({'python': VERSION, 'verified_distributions': len(records), **sealed}))

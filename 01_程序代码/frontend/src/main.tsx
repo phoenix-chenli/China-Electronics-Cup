@@ -71,7 +71,7 @@ function App(){
  const onEvidence=(e:Obj)=>{if(e){setReaderState(old=>({...old,target:e,page:e.locator?.page||1,focus:null,view:'reader'}));setSelected(e);navigate('evidence')}}
  const askDocument=async(text:string,scope:Obj)=>{if(!text.trim()||running||c.loading)return;navigate('analysis');return safe(()=>c.submit(text.trim(),{},false,'query',false,scope.rag_scope?null:scope,scope.rag_scope||null))}
  const openCatalog=(tab:string,table?:string)=>{setDataTarget({tab,table});navigate('data')}
- const openDoc=(d:Obj)=>onEvidence({id:d.id,type:'document',source:d.name,locator:{document_id:d.id,page:1,sha256:d.sha256,source_url:'/api/documents/'+d.id+'/original?version='+d.sha256}})
+ const openDoc=(d:Obj)=>onEvidence({id:d.id,type:'document',source:d.name,locator:{document_id:d.id,page:1,sha256:d.sha256,...(d.parse_id?{parse_id:d.parse_id}:{}),source_url:'/api/documents/'+d.id+'/original?version='+d.sha256}})
  const copy=async(sources:boolean)=>{if(!result)return;try{await navigator.clipboard.writeText(result.answer+(sources?'\n\n'+result.evidence.map((e:Obj,i:number)=>`[${i+1}] ${e.source}${e.locator.page?' · 第 '+e.locator.page+' 页':''}\n${e.locator.source_url?location.origin+e.locator.source_url:e.locator.sql||''}`).join('\n'):''));notify('已复制'+(sources?'答案与来源':'答案'))}catch{notify('复制未成功，请手动选择文字','error')}}
  const pet=(text?:string)=>{setPreferences((old:Obj)=>({...old,pet:true}));if(page==='settings'&&!['appearance','assistant'].includes(settingsTab))setSettingsTab('assistant');setPetRequest({id:Date.now(),text})}
  const newAnalysis=()=>{navigate('home');editQuestion('');requestAnimationFrame(()=>document.querySelector<HTMLTextAreaElement>('.query-input textarea')?.focus())}

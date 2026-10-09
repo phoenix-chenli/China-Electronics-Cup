@@ -195,13 +195,15 @@ def _evidence(chunk, ranking):
     locator = {"document_id": chunk["document_id"], "sha256": chunk["sha256"], "parse_id": chunk["parse_id"],
                "page": chunk["page"], "title_path": chunk["title_path"],
                "text_range": {"start": chunk["start"], "end": chunk["end"], "text_sha256": hashlib.sha256(chunk["text"].encode()).hexdigest()}}
+    media=chunk.get("quality",{}).get("media_id",[])
+    if len(media)==1:locator["media_id"]=media[0]
     located = documents.resolve(locator, chunk["text"])
     if located["status"] != "located":
         raise ValueError("检索切片无法回到固定原件范围")
     eid, sid = "rag-"+chunk["id"], "span-"+chunk["id"]
     return {"id": eid, "type": "document", "source": chunk["source"], "snippet": chunk["text"],
             "status": "text_supported", "locator": located["locator"], "location_status": "located",
-            "quality": chunk["quality"], "support_span_ids": [sid],
+            "quality": {**chunk["quality"],**located.get("quality",{})}, "support_span_ids": [sid],
             "support_spans": [{"id": sid, "evidence_id": eid, "text": chunk["text"], "locator": located["locator"], "quality": chunk["quality"]}],
             "retrieval": {"chunk_id": chunk["id"], "generation_id": chunk["generation_id"], **ranking}}
 

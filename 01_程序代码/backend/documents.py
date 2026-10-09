@@ -2,11 +2,7 @@
 
 PDF coordinates use the displayed (rotated) page, normalized to [0, 1].
 Text ranges use Unicode code points in the stored page text, never DOM offsets.
-Markdown and DOCX heading levels come from what the file itself declares
-(heading syntax or Word outline levels), not from font size or position.
-Local OCR supplies text only when a verified model pack is installed; its boxes
-are line-level and results stay marked for review. No visual verification or
-semantic confidence is used.
+Derived recognition is immutable and explicitly identified separately from native text.
 """
 from __future__ import annotations
 
@@ -21,7 +17,8 @@ from pathlib import Path
 from decimal import Decimal
 from . import store as s
 
-PARSER = "source-layout-v1"
+LEGACY_PARSER = "source-layout-v1"
+PARSER = "source-layout-v2"
 LOCK = threading.RLock()
 
 
@@ -41,6 +38,9 @@ def initialize(c):
         body TEXT, created_at TEXT, reason TEXT, page INTEGER);
       CREATE INDEX IF NOT EXISTS ef_document_parse_lookup
         ON ef_document_parses(document_id,sha256,created_at);
+      CREATE TABLE IF NOT EXISTS ef_document_active_parses(
+        document_id TEXT, sha256 TEXT, parse_id TEXT NOT NULL,
+        PRIMARY KEY(document_id,sha256));
     """)
     for doc in c.execute("SELECT * FROM documents").fetchall(): register(c, doc)
     # Recover provenance of legacy saved sources without accepting arbitrary hashes.
@@ -51,6 +51,21 @@ def initialize(c):
             doc = c.execute("SELECT * FROM documents WHERE id=?", (did,)).fetchone()
             if doc and re.fullmatch(r"[a-f0-9]{64}", sha) and (s.VERSIONS/(sha+"."+doc["format"])).is_file():
                 register(c, {**dict(doc), "sha256":sha, "name":evidence.get("source", doc["name"])})
+
+
+def active_parse(c, did, sha):
+    """One authoritative current parse; historical IDs remain independently readable."""
+    pointer=c.execute("SELECT parse_id FROM ef_document_active_parses WHERE document_id=? AND sha256=?",(did,sha)).fetchone()
+    if pointer:
+        row=c.execute("SELECT * FROM ef_document_parses WHERE id=? AND document_id=? AND sha256=?",(pointer[0],did,sha)).fetchone()
+        if not row: raise ValueError("当前解析指针已损坏，未切换其他解析")
+        return row
+    return c.execute("SELECT * FROM ef_document_parses WHERE document_id=? AND sha256=? AND parser IN (?,?) ORDER BY created_at DESC,id DESC LIMIT 1",(did,sha,PARSER,LEGACY_PARSER)).fetchone()
+
+
+def current_parse_id(did, sha):
+    with s.conn() as c: row=active_parse(c,did,sha)
+    return row["id"] if row else None
 
 
 def version(did, sha=None):
@@ -77,18 +92,15 @@ def _box(rect, page):
     return [round(max(0,min(1,x)),7) for x in (r.x0/w,r.y0/h,r.x1/w,r.y1/h)]
 
 
-def _ocr_page(png_bytes, width, height):
-    """Recognize one page image. Returns (text, blocks, info) or None when unavailable."""
-    from . import ocr
-    recognized=ocr.recognize_page(png_bytes)
-    if not recognized: return None
-    return recognized["text"],recognized["blocks"],recognized["info"]
-
-
 def parse_page(path, page_number):
     """Read only the requested page. PDF render and extraction share rotation."""
     fmt = path.suffix.lower().lstrip(".")
-    text=""; blocks=[]; images=[]; headings=[]; width,height=595,842; ocr_info=None
+    if fmt=='docx':
+        from .document_native import parse_docx
+        pages=parse_docx(path)['pages']
+        if not 1<=page_number<=len(pages):raise ValueError('逻辑节超出范围')
+        return pages[page_number-1]
+    text=""; blocks=[]; images=[]; headings=[]; width,height=595,842
     if fmt == "pdf":
         import pymupdf
         with pymupdf.open(path) as doc:
@@ -110,21 +122,11 @@ def parse_page(path, page_number):
                 text+="\n"
             images=[{"box":_box(i["bbox"],p)} for i in p.get_image_info()]
             rotation=p.rotation
-            if not text.strip():
-                # A page with no extractable text may be a scan. Recognition only
-                # runs with a verified pack; otherwise the page keeps its honest
-                # "needs recognition" state.
-                scale=min(2,2000/max(width,height))
-                pixmap=p.get_pixmap(matrix=pymupdf.Matrix(scale,scale),alpha=False)
-                recognized=_ocr_page(pixmap.tobytes("png"),width,height)
-                if recognized: text,blocks,ocr_info=recognized
     elif fmt in {"png","jpg","jpeg","webp"}:
         from PIL import Image
         if page_number!=1: raise ValueError("页码超出范围")
         with Image.open(path) as im: width,height=im.size
         rotation=0; images=[{"box":[0,0,1,1]}]
-        recognized=_ocr_page(path.read_bytes(),width,height)
-        if recognized: text,blocks,ocr_info=recognized
     elif fmt in {"md","txt"}:
         if page_number!=1: raise ValueError("页码超出范围")
         text=path.read_text(encoding="utf-8-sig"); offset=0; titles=[]; rotation=0
@@ -139,26 +141,18 @@ def parse_page(path, page_number):
                                "kind":"heading" if heading else "table_row" if fmt=="md" and content.strip().startswith("|") else "text",
                                "level":len(heading[1]) if heading else 0,"title_path":" / ".join(titles),"box":None,"chars":[]})
             offset+=len(line)
-    elif fmt=="docx":
-        from . import docx_reader
-        if page_number!=1: raise ValueError("页码超出范围")
-        # Word stores no fixed page layout, so one logical page keeps paragraph
-        # and table order without inventing page breaks.
-        body=docx_reader.page(path)
-        text=body["text"]; blocks=body["blocks"]; headings=body["headings"]; rotation=0
     else: raise ValueError("此格式暂不支持原文定位")
-    blank=not bool(text.strip())
-    # Only claim recognition is needed where that is actually true. A DOCX with
-    # no embedded image is simply a document without text, and a page that was
-    # recognized no longer needs anything.
-    needs_ocr=blank and fmt not in {"md","txt"} and not ocr_info
-    if needs_ocr and fmt=="docx":
-        from . import docx_reader
-        needs_ocr=docx_reader.has_media(path)
-    return {"number":page_number,"width":width,"height":height,"rotation":rotation,"text":text,"blocks":blocks,"images":images,"headings":headings,"text_available":not blank,"ocr_required":needs_ocr,"ocr":ocr_info,"vision_verified":False}
+    result={"number":page_number,"width":width,"height":height,"rotation":rotation,"text":text,"blocks":blocks,"images":images,"headings":headings,"text_available":bool(text.strip()),"ocr_required":not bool(text.strip()) and fmt not in {"md","txt"},"vision_verified":False,"method":"native_text","location_precision":"character" if fmt=="pdf" and text.strip() else "text_range","tables":[],"charts":[],"issues":[]}
+    if fmt=="pdf":
+        from .document_native import enhance_pdf_page
+        result=enhance_pdf_page(path,page_number,result)
+    return result
 
 
 def _parse_file(path):
+    if path.suffix.lower()==".docx":
+        from .document_native import parse_docx
+        return parse_docx(path)
     if path.suffix.lower()==".pdf":
         import pymupdf
         with pymupdf.open(path) as doc:
@@ -166,21 +160,29 @@ def _parse_file(path):
             toc=[{"level":x[0],"title":x[1],"page":x[2]} for x in doc.get_toc() if 1<=x[2]<=count]
     else: count=1; toc=[]
     pages=[parse_page(path,n) for n in range(1,count+1)]
-    return {"pages":pages,"outline":toc or [h for p in pages for h in p["headings"]],"structure":"原文件书签" if toc else "Markdown 标题" if path.suffix.lower()==".md" else "Word 标题与表格" if path.suffix.lower()==".docx" else "按页","parser":PARSER}
+    from .document_native import link_continuations
+    link_continuations(pages)
+    return {"pages":pages,"outline":toc or [h for p in pages for h in p["headings"]],"structure":"原文件书签" if toc else "Markdown 标题" if path.suffix.lower()==".md" else "按页","parser":PARSER}
+
+
+def save_parse(c, did, sha, body, reason, page=None, *, activate=True):
+    pid=uuid.uuid4().hex
+    c.execute("INSERT INTO ef_document_parses VALUES (?,?,?,?,?,?,?,?)", (pid,did,sha,body.get("parser",PARSER),json.dumps(body,ensure_ascii=False),s.now(),reason,page))
+    if activate:
+        c.execute("INSERT OR REPLACE INTO ef_document_active_parses VALUES (?,?,?)",(did,sha,pid))
+    return {**body,"parse_id":pid}
 
 
 def _save_parse(did, sha, body, reason, page=None):
-    pid=uuid.uuid4().hex
     with s.conn() as c:
-        c.execute("INSERT INTO ef_document_parses VALUES (?,?,?,?,?,?,?,?)", (pid,did,sha,PARSER,json.dumps(body,ensure_ascii=False),s.now(),reason,page))
-    return {**body,"parse_id":pid}
+        return save_parse(c,did,sha,body,reason,page)
 
 
 def layout(did, sha=None, parse_id=None):
     d,path=version(did,sha)
     with LOCK:
         with s.conn() as c:
-            row=c.execute("SELECT * FROM ef_document_parses WHERE document_id=? AND sha256=?"+(" AND id=?" if parse_id else " AND parser=?")+" ORDER BY created_at DESC,id DESC LIMIT 1",(did,d["sha256"],parse_id or PARSER)).fetchone()
+            row=c.execute("SELECT * FROM ef_document_parses WHERE document_id=? AND sha256=? AND id=?",(did,d["sha256"],parse_id)).fetchone() if parse_id else active_parse(c,did,d["sha256"])
         if parse_id and not row: raise ValueError("解析版本不属于当前文档")
         try: body={**json.loads(row["body"]),"parse_id":row["id"]} if row else _save_parse(did,d["sha256"],_parse_file(path),"读取原件")
         except Exception as exc: raise ValueError("原文件无法解析，可能已损坏、加密或格式不受支持。原文件已保留。") from exc
@@ -191,18 +193,32 @@ def view(did, sha=None, parse_id=None):
     data=layout(did,sha,parse_id)
     with s.conn() as c:
         versions=[dict(r) for r in c.execute("SELECT sha256,created_at FROM ef_document_versions WHERE document_id=? ORDER BY created_at DESC",(did,))]
-    return {"document":data["document"],"parse_id":data["parse_id"],"parser":PARSER,"page_count":len(data["pages"]),"outline":data["outline"],"structure":data["structure"],"versions":versions,"text_pages":sum(p["text_available"] for p in data["pages"])}
+        active=active_parse(c,did,data["document"]["sha256"])
+        parses=[dict(r) for r in c.execute("SELECT id AS parse_id,created_at,reason,parser FROM ef_document_parses WHERE document_id=? AND sha256=? ORDER BY created_at DESC,id DESC",(did,data["document"]["sha256"]))]
+    active_id=active["id"] if active else None
+    for item in parses: item["is_active"]=item["parse_id"]==active_id
+    sections=[{"page":p["number"],"image_count":len(p.get("images",[]))} for p in data["pages"] if p.get("images")]
+    return {"document":data["document"],"parse_id":data["parse_id"],"parser":data.get("parser",PARSER),"page_count":len(data["pages"]),"outline":data["outline"],"structure":data["structure"],"versions":versions,"text_pages":sum(p["text_available"] for p in data["pages"]),"page_unit":"logical_section" if data["document"]["format"]=="docx" else "page","parses":parses,"active_parse_id":active_id,"is_active_parse":data["parse_id"]==active_id,"image_count":sum(x["image_count"] for x in sections),"embedded_image_sections":sections if data["document"]["format"]=="docx" else []}
 
 
 def get_page(did, number, sha=None, parse_id=None):
     data=layout(did,sha,parse_id)
     if not 1<=number<=len(data["pages"]): raise ValueError("页码超出范围")
-    return {**data["pages"][number-1],"parse_id":data["parse_id"],"sha256":data["document"]["sha256"]}
+    page=copy.deepcopy(data["pages"][number-1])
+    if data["document"]["format"]=="docx":
+        for media in page.get("images",[]):
+            if media.get("id"): media["preview_url"]=f"/api/documents/{did}/media/{media['id']}?version={data['document']['sha256']}"
+    return {**page,"parse_id":data["parse_id"],"sha256":data["document"]["sha256"]}
 
 
 def rects_for(page, start, end):
     # Merge adjacent glyphs on a line, keeping distinct rows and vertical text.
-    boxes=[ch["box"] for b in page["blocks"] for ch in b["chars"] if ch["end"]>start and ch["start"]<end]
+    boxes=[]
+    for b in page["blocks"]:
+        if b["end"]<=start or b["start"]>=end: continue
+        chars=b.get("chars",[])
+        if chars: boxes.extend(ch["box"] for ch in chars if ch["end"]>start and ch["start"]<end)
+        elif b.get("box"): boxes.append(b["box"])
     merged=[]
     for box in boxes:
         if merged and abs(merged[-1][1]-box[1])<.002 and abs(merged[-1][3]-box[3])<.002 and -.002<=box[0]-merged[-1][2]<.015:
@@ -237,13 +253,29 @@ def resolve(locator, quote=""):
             if (not expected or hashlib.sha256(actual.encode()).hexdigest()==expected) and (not quote or "".join(actual.split())=="".join(quote.split())): found=[(start,end)]
         # A broken pinned range must never silently select a different occurrence.
     else: found=_matches(p["text"],quote)
+    found=[(start,end) for start,end in found if not any(b.get("status","confirmed")!="confirmed" and b["end"]>start and b["start"]<end for b in p["blocks"])]
     loc={**locator,"sha256":sha,"parse_id":data["parse_id"],"page":n,"source_url":data["document"]["source_url"]}
     status="located" if len(found)==1 else "ambiguous" if found else "unlocated"
+    relevant=[];methods=set()
     if status=="located":
         start,end=found[0]; actual=p["text"][start:end]
-        loc.update(text_range={"start":start,"end":end,"text_sha256":hashlib.sha256(actual.encode()).hexdigest()},rects=rects_for(p,start,end),location_precision="text_range")
+        relevant=[b for b in p["blocks"] if b["end"]>start and b["start"]<end]
+        refs=[{k:b[k] for k in ("id","source_ref","source","method","source_method","source_part","kind","object_id","table_id","cell_ids","chart_id","point_id","media_id","observation_id") if k in b} for b in relevant]
+        precisions={b.get("location_precision",p.get("location_precision",p.get("provenance",{}).get("location_precision","text_range"))) for b in relevant}
+        methods={b.get("source_method",b.get("method",p.get("provenance",{}).get("method",p.get("method","native_text")))) for b in relevant}
+        loc.update(text_range={"start":start,"end":end,"text_sha256":hashlib.sha256(actual.encode()).hexdigest()},rects=rects_for(p,start,end),location_precision=next(iter(precisions)) if len(precisions)==1 else "mixed",extraction_method=next(iter(methods)) if len(methods)==1 else "mixed",source_refs=refs)
+        loc["derived_view"]=any(b.get("table_id") or b.get("chart_id") or b.get("source_method") in {"ocr","visual_observed"} for b in relevant)
+        media_ids={b.get("media_id") for b in relevant}
+        if len(media_ids)==1 and next(iter(media_ids)):
+            loc.update(media_id=next(iter(media_ids)),coordinate_space="media")
+        elif any(media_ids):
+            loc["media_regions"]=[{"media_id":mid,"rects":[b["box"] for b in relevant if b.get("media_id")==mid and b.get("box")]} for mid in media_ids if mid]
+            loc["rects"]=[];loc["coordinate_space"]="mixed"
     else: loc.update(rects=[],location_precision="page");loc.pop("text_range",None)
-    return {"status":status,"matches":len(found),"locator":loc,"is_current":data["document"]["is_current"],"text_available":p["text_available"],"quote":p["text"][found[0][0]:found[0][1]] if status=="located" else quote,"method":"原件文字定位；未调用 OCR 或视觉模型"}
+    method=p.get("provenance",{}).get("method",p.get("method","native_text"))
+    scores=[b["confidence"] for b in relevant if isinstance(b.get("confidence"),(int,float)) and not isinstance(b.get("confidence"),bool) and 0<=b["confidence"]<=1]
+    quality={"confirmed":status=="located","human_reviewed":False,"derived_view":bool(loc.get("derived_view")),"source_methods":sorted(methods),"location_precision":loc["location_precision"],"min_ocr_confidence":min(scores) if scores else None,"semantic_accuracy":"not_proven"}
+    return {"status":status,"matches":len(found),"locator":loc,"is_current":data["document"]["is_current"],"text_available":p["text_available"],"quote":p["text"][found[0][0]:found[0][1]] if status=="located" else quote,"method":"固定解析文字定位："+method,"recognition_derived":method not in {"native_text","docx_native","pdf_native","native"},"visual_verified":False,"quality":quality}
 
 
 def search(did, query, sha=None, parse_id=None):
@@ -269,21 +301,38 @@ def render(did, number, sha=None):
         return p.get_pixmap(matrix=pymupdf.Matrix(scale,scale),alpha=False).tobytes("png")
 
 
+def render_image(did, number, sha=None):
+    d,path=version(did,sha)
+    if d["format"]=="pdf": return render(did,number,d["sha256"])
+    if d["format"] not in {"png","jpg","jpeg","webp"} or number!=1:
+        raise ValueError("正式图像识别支持 PDF 页或图片原件")
+    from PIL import Image
+    import io
+    with Image.open(path) as image:
+        if image.width*image.height>40_000_000: raise ValueError("图片超过 4000 万像素，请缩小后导入")
+        image=image.convert("RGB");image.thumbnail((2400,2400));buf=io.BytesIO();image.save(buf,format="PNG")
+        return buf.getvalue()
+
+
 def reparse(did, number, sha=None, parse_id=None):
     before=layout(did,sha,parse_id);d,path=version(did,before["document"]["sha256"])
     if d["archived"]: raise ValueError("请先恢复文档")
     if not 1<=number<=len(before["pages"]): raise ValueError("页码超出范围")
-    from . import ocr
-    if d["format"] in {"png","jpg","jpeg","webp"} and not ocr.capabilities().get("ready"):
-        raise ValueError("未连接文字识别，未执行重读")
-    t=time.perf_counter(); fresh=parse_page(path,number)
-    if not fresh["text_available"]:
-        raise ValueError("识别未得到文字，未更改引用" if ocr.capabilities().get("ready")
-                         else "当前页没有可提取文字，未连接 OCR；未更改引用")
+    if d["format"] in {"png","jpg","jpeg","webp"}: raise ValueError("未连接文字识别，未执行重读")
+    t=time.perf_counter(); fresh=_parse_file(path)["pages"][number-1] if d["format"]=="docx" else parse_page(path,number)
+    if not fresh["text_available"]: raise ValueError("当前页没有可提取文字，未连接 OCR；未更改引用")
     body={k:copy.deepcopy(before[k]) for k in ("pages","outline","structure","parser")};old=body["pages"][number-1];body["pages"][number-1]=fresh
-    if d["format"] in {"md","docx"}: body["outline"]=fresh["headings"]
-    after=_save_parse(did,d["sha256"],body,"用户重读指定页面",number)
-    record={"id":str(uuid.uuid4()),"page":number,"sha256":d["sha256"],"before_parse_id":before["parse_id"],"after_parse_id":after["parse_id"],"before":old["text"],"after":fresh["text"],"changed":old["text"]!=fresh["text"],"method":("本机模型识别扫描页；结果待复核" if fresh.get("ocr") else "本机原始文字提取；未调用 OCR 或视觉模型"),"ocr":fresh.get("ocr"),"created_at":s.now(),"duration_ms":round((time.perf_counter()-t)*1000,2)}
+    body["parser"]=PARSER
+    if d["format"]=="md": body["outline"]=fresh["headings"]
+    with s.conn() as c:
+        current=c.execute("SELECT status FROM documents WHERE id=?",(did,)).fetchone()
+        active=active_parse(c,did,d["sha256"])
+        if not current or current["status"]=="archived" or not active or active["id"]!=before["parse_id"]: raise ValueError("文档已归档或基础解析已改变，请重新读取")
+        after=save_parse(c,did,d["sha256"],body,"用户重读指定页面",number)
+        if d["is_current"]:
+            quality=s.quality_for_parse(body)
+            c.execute("UPDATE documents SET quality_json=?,status=?,updated_at=? WHERE id=? AND sha256=? AND status!='archived'",(json.dumps(quality,ensure_ascii=False),"needs_review" if quality["quality_flags"] else "ready",s.now(),did,d["sha256"]))
+    record={"id":str(uuid.uuid4()),"page":number,"sha256":d["sha256"],"before_parse_id":before["parse_id"],"after_parse_id":after["parse_id"],"before":old["text"],"after":fresh["text"],"changed":old["text"]!=fresh["text"],"method":"本机原始文字提取；未调用 OCR 或视觉模型","created_at":s.now(),"duration_ms":round((time.perf_counter()-t)*1000,2)}
     with s.conn() as c:c.execute("INSERT INTO reparses VALUES (?,?,?,?,?)",(record["id"],did,number,record["created_at"],json.dumps(record,ensure_ascii=False)))
     return record
 

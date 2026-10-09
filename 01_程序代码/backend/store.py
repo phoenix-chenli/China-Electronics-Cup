@@ -109,126 +109,78 @@ def blocks(did, page=None):
         rows=c.execute(sql+" ORDER BY page,id", p).fetchall()
     return [{**dict(r), "bbox":json.loads(r["bbox_json"]), "quality":json.loads(r["quality_json"])} for r in rows]
 
-def _recognize_page_bytes(png_bytes):
-    from . import ocr
-    return ocr.recognize_page(png_bytes)
+def quality_for_parse(body, errors=()):
+    pages=body.get("pages",[])
+    missing=[p["number"] for p in pages if p.get("ocr_required")]
+    issues=[issue for p in pages for issue in p.get("issues",[])]
+    pending=sum(1 for p in pages for key in ("tables","charts") for obj in p.get(key,[]) if obj.get("status") in {"pending","needs_review"})
+    pending_media=sum(1 for p in pages for img in p.get("images",[]) if img.get("status") in {"pending","needs_review"})
+    pending_lines=sum(len(p.get('recognition_pending',[])) for p in pages)
+    flags=[]
+    if errors: flags.append("解析失败")
+    if missing: flags.append("需要文字识别")
+    if issues or pending or pending_media or pending_lines: flags.append("结构或识别待复核")
+    return {"parser_version":3,"parser":body.get("parser"),"block_count":sum(len(p.get("blocks",[])) for p in pages),
+            "visual_blocks":sum(len(p.get("images",[])) for p in pages),"quality_flags":flags,"errors":list(errors),
+            "structure":body.get("structure","按页"),"missing_pages":missing,"issues":issues,"pending_structures":pending,"pending_media":pending_media,
+            "confirmed":not bool(missing or issues or pending or pending_media or pending_lines or errors),"pending_text_lines":pending_lines,"human_reviewed":False,
+            "confirmed_blocks":sum(1 for p in pages for b in p.get("blocks",[]) if b.get("status","confirmed")=="confirmed"),
+            "methods":sorted({p.get("provenance",{}).get("method",p.get("method","native_text")) for p in pages}|{b["source_method"] for p in pages for b in p.get("blocks",[]) if b.get("source_method")}),"location_precision":"mixed"}
 
 
-def _recognize_pdf(path, number):
-    """Render one PDF page and recognize it. None keeps the honest empty state."""
-    from . import ocr
-    if not ocr.capabilities().get("ready"): return None
-    import pymupdf
-    with pymupdf.open(path) as doc:
-        if not 1<=number<=len(doc): return None
-        page=doc[number-1]
-        scale=min(2,2000/max(page.rect.width,page.rect.height))
-        pixmap=page.get_pixmap(matrix=pymupdf.Matrix(scale,scale),alpha=False)
-        return ocr.recognize_page(pixmap.tobytes("png"))
+def extract(path, body=None):
+    from . import documents
+    body=body or documents._parse_file(Path(path))
+    out=[]
+    for p in body["pages"]:
+        for b in p.get("blocks",[]):
+            out.append({"page":p["number"],"text":b["text"],"title_path":b.get("title_path",""),
+                        "content_type":b.get("kind","text"),"bbox":b.get("box"),
+                        "quality":{"text_extracted":bool(b["text"].strip()),"ocr_required":p.get("ocr_required",False),
+                                   "location_precision":b.get("location_precision",p.get("location_precision","text_range")),"method":b.get("source_method",p.get("provenance",{}).get("method",p.get("method","native_text")))}})
+        if not p.get("blocks"):
+            out.append({"page":p["number"],"text":"","title_path":"","content_type":"image" if p.get("images") else "text", "bbox":None,
+                        "quality":{"text_extracted":False,"ocr_required":p.get("ocr_required",False),"vision_verified":False,"location_precision":"page"}})
+    return out
 
-
-def _ocr_blocks(recognized, page):
-    """Turn recognized lines into catalog blocks that keep their page position."""
-    info=recognized["info"]
-    quality={"text_extracted":True,"ocr_required":False,"vision_verified":False,
-             "location_precision":"text_range","box_precision":info.get("box_precision"),
-             "ocr":info}
-    return [{"page":page,"text":piece["text"],"title_path":"","content_type":"text",
-             "bbox":piece["box"],"quality":dict(quality)} for piece in recognized["blocks"]]
-
-
-def extract(path):
-    suffix=path.suffix.lower(); out=[]
-    def block(text, page, title="", kind="text", quality=None):
-        return {"page":page,"text":text,"title_path":title,"content_type":kind,"bbox":None,"quality":quality or {"text_extracted":bool(text.strip()),"location_precision":"page"}}
-    if suffix==".pdf":
-        from pypdf import PdfReader
-        reader=PdfReader(path)
-        for i,page in enumerate(reader.pages,1):
-            text=page.extract_text() or ""
-            recognized=_recognize_pdf(path,i) if not text.strip() else None
-            if recognized:
-                out.extend(_ocr_blocks(recognized,i))
-            else:
-                out.append(block(text,i,quality={"text_extracted":bool(text.strip()),"location_precision":"page","rotation_degrees":int(page.get("/Rotate",0)),"ocr_required":not bool(text.strip())}))
-    elif suffix in {".png",".jpg",".jpeg",".webp"}:
-        from PIL import Image, ImageStat, ImageFilter
-        with Image.open(path) as im:
-            im.verify()
-        with Image.open(path) as im:
-            w,h=im.size
-            gray=im.convert("L").resize((min(w,512),min(h,512)))
-            edge_variance=ImageStat.Stat(gray.filter(ImageFilter.FIND_EDGES)).var[0]
-        recognized=_recognize_page_bytes(path.read_bytes())
-        if recognized:
-            out.extend(_ocr_blocks(recognized,1))
-        else:
-            out.append(block("",1,kind="image",quality={"text_extracted":False,"ocr_required":True,"vision_verified":False,"width":w,"height":h,"edge_variance":round(edge_variance,2),"location_precision":"page"}))
-    elif suffix==".docx":
-        from . import docx_reader
-        data=docx_reader.page(path)
-        for piece in data["blocks"]:
-            kind=piece["kind"] if piece["kind"] in {"heading","table_row"} else "text"
-            out.append(block(piece["text"],1,piece["title_path"],kind,
-                             {"text_extracted":bool(piece["text"].strip()),"location_precision":"text_range"}))
-        if not data["text"].strip():
-            # An empty body is only "needs recognition" when an image is really
-            # embedded; otherwise it is simply a document without text.
-            media=docx_reader.has_media(path)
-            out=[block("",1,kind="image" if media else "text",
-                       quality={"text_extracted":False,"ocr_required":media,"vision_verified":False,"location_precision":"page"})]
-    else:
-        text=path.read_text(encoding="utf-8-sig")
-        titles=[]; buf=[]
-        def flush():
-            if buf and "\n".join(buf).strip(): out.append(block("\n".join(buf).strip(),1," / ".join(titles)))
-            buf.clear()
-        for line in text.splitlines():
-            match=re.match(r"^(#{1,6})\s+(.+)",line)
-            if match:
-                flush(); level=len(match[1]); titles=titles[:level-1]+[match[2]]
-            else: buf.append(line)
-        flush()
-        if not out: out=[block("",1)]
-    return out or [block("",1)]
 
 def index_document(path, name=None):
     path=Path(path).resolve()
     if not path.is_relative_to(DATA): raise ValueError("只能索引本项目的数据")
-    relative = path.relative_to(DATA).as_posix()
-    sha=digest(path); did=hashlib.sha256(relative.encode()).hexdigest()[:20]
+    relative=path.relative_to(DATA).as_posix();sha=digest(path)
+    did=hashlib.sha256(relative.encode()).hexdigest()[:20]
+    from . import documents
     with conn() as c:
-        # Migrate old absolute-path IDs without duplicate catalog entries.
         old=c.execute("SELECT * FROM documents WHERE path IN (?,?)",(str(path),relative)).fetchone()
-        from . import documents
-        if old: documents.register(c,old)
         if old:
-            did=old["id"]
+            documents.register(c,old);did=old["id"]
             if old["status"]=="archived": return docrow(old)
-            if old["sha256"]==sha and json.loads(old["quality_json"] or "{}").get("parser_version")==2: return docrow(old)
-        try:
-            pieces=extract(path); errors=[]
-        except Exception as exc:
-            pieces=[]; errors=[str(exc)[:300]]
-        flags=[]
-        if errors: flags.append("解析失败")
-        if any(x["quality"].get("ocr_required") for x in pieces): flags.append("需要文字识别")
-        if any(x["quality"].get("rotation_degrees",0) for x in pieces): flags.append("页面带有旋转")
-        if any((x["quality"].get("ocr") or {}).get("low_confidence",0) for x in pieces): flags.append("识别结果待复核")
-        recognized=any(x["quality"].get("ocr") for x in pieces)
-        precision="text_range" if path.suffix.lower() in {".md",".txt",".docx"} or recognized else "page"
-        quality={"parser_version":2,"block_count":len(pieces),"visual_blocks":sum(x["content_type"]=="image" for x in pieces),"quality_flags":flags,"errors":errors,"location_precision":precision,"structure":"Markdown 标题" if path.suffix.lower()==".md" else "Word 标题与表格" if path.suffix.lower()==".docx" else "按页；目录层级未恢复"}
-        if recognized:
-            quality["ocr"]=next(x["quality"]["ocr"] for x in pieces if x["quality"].get("ocr"))
-        version_file=VERSIONS/(sha+path.suffix.lower())
-        if not version_file.exists(): version_file.write_bytes(path.read_bytes())
-        stamp=now(); status="failed" if errors else "needs_review" if flags else "ready"
-        c.execute("INSERT OR REPLACE INTO documents VALUES (?,?,?,?,?,?,?,?,?,?)",(did,name or (old["name"] if old else path.name),relative,sha,path.suffix.lower().lstrip("."),max([x["page"] for x in pieces] or [1]),status,json.dumps(quality,ensure_ascii=False),old["created_at"] if old else stamp,stamp))
+            if old["sha256"]==sha and json.loads(old["quality_json"] or "{}").get("parser_version")==3: return docrow(old)
+    # Parsing is deliberately outside catalog transactions and does not run OCR/network calls.
+    body=None
+    try:
+        body=documents._parse_file(path);pieces=extract(path,body);errors=[]
+    except Exception as exc:
+        pieces=[];errors=[str(exc)[:300]]
+    if digest(path)!=sha: raise ValueError("原文件在解析期间已改变，请重新导入")
+    quality=quality_for_parse(body or {},errors)
+    version_file=VERSIONS/(sha+path.suffix.lower())
+    if not version_file.exists(): version_file.write_bytes(path.read_bytes())
+    if digest(version_file)!=sha: raise ValueError("原件版本摘要不一致，未发布解析")
+    stamp=now();status="failed" if errors else "needs_review" if quality["quality_flags"] else "ready"
+    with conn() as c:
+        current=c.execute("SELECT * FROM documents WHERE path IN (?,?)",(str(path),relative)).fetchone()
+        if current and current["status"]=="archived": return docrow(current)
+        if current and current["sha256"]==sha and json.loads(current["quality_json"] or "{}").get("parser_version")==3: return docrow(current)
+        if current and old and current["sha256"]!=old["sha256"]: raise ValueError("文档已被另一导入更新，请重试")
+        c.execute("INSERT OR REPLACE INTO documents VALUES (?,?,?,?,?,?,?,?,?,?)",(did,name or (old["name"] if old else path.name),relative,sha,path.suffix.lower().lstrip("."),len(body["pages"]) if body else 1,status,json.dumps(quality,ensure_ascii=False),old["created_at"] if old else stamp,stamp))
         documents.register(c,c.execute("SELECT * FROM documents WHERE id=?",(did,)).fetchone())
         c.execute("DELETE FROM blocks WHERE document_id=?",(did,))
         for i,b in enumerate(pieces):
             c.execute("INSERT INTO blocks VALUES (?,?,?,?,?,?,?,?,?)",(did+"-"+str(i),did,b["page"],b["title_path"],b["content_type"],b["text"],json.dumps(b["bbox"]),json.dumps(b["quality"],ensure_ascii=False),stamp))
+        if body: documents.save_parse(c,did,sha,body,"原生格式解析")
     return docrow(doc_get(did))
+
 
 def data_version():
     h=hashlib.sha256(digest(BUSINESS_DB).encode())

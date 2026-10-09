@@ -139,6 +139,49 @@ class DocumentReaderTest(unittest.TestCase):
         self.assertEqual(self.get(d,'/pages/1/image').status_code,400)
         self.assertEqual(self.get(d,'/original').status_code,200)
 
+    def import_bytes(self,blob,name):
+        boundary='ef-'+uuid.uuid4().hex
+        body=(f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{name}"\r\nContent-Type: application/octet-stream\r\n\r\n').encode()+blob+f'\r\n--{boundary}--\r\n'.encode()
+        request=urllib.request.Request(self.client.url+'/api/import',data=body,method='POST',headers={'Content-Type':'multipart/form-data; boundary='+boundary})
+        with urllib.request.urlopen(request,timeout=8) as response: return json.loads(response.read())
+
+    def test_docx_import_tasks_and_old_package_locator_survive_restore(self):
+        from backend import document_native as native
+        blob=io.BytesIO()
+        with zipfile.ZipFile(blob,'w') as archive:
+            archive.writestr('word/document.xml','<w:document xmlns:w="'+native.NS['w']+'"><w:body>'
+                '<w:p><w:pPr><w:outlineLvl w:val="0"/></w:pPr><w:r><w:t>第一节</w:t></w:r></w:p>'
+                '<w:p><w:r><w:t>收入：100万元。</w:t></w:r></w:p>'
+                '<w:p><w:pPr><w:outlineLvl w:val="0"/></w:pPr><w:r><w:t>第二节</w:t></w:r></w:p>'
+                '<w:p><w:r><w:t>成本：80万元。</w:t></w:r></w:p></w:body></w:document>')
+        imported=self.import_bytes(blob.getvalue(),'logical-sections.docx');doc=imported['document']
+        self.assertTrue(imported['ok']);self.assertEqual('docx',doc['format'])
+        before=self.get(doc,'/view').json();self.assertEqual('logical_section',before['page_unit']);self.assertEqual(2,before['page_count'])
+        bound=self.bind(doc,'成本：80万元。',page=2).json();self.assertEqual('located',bound['status'])
+        self.assertEqual('package_structure',bound['locator']['location_precision']);self.assertEqual([],bound['locator']['rects'])
+        self.assertTrue(bound['locator']['source_refs'][0]['source_part'].startswith('word/document.xml/'))
+        task=self.client.post('/api/document-processing/tasks',json={'document_id':doc['id'],'version':doc['sha256'],'pages':[2],'mode':'native'}).json()
+        for _ in range(300):
+            task=self.client.get('/api/document-processing/tasks/'+task['id']).json()
+            if task['status'] not in {'queued','running'}:break
+            time.sleep(.01)
+        self.assertEqual('completed',task['status'],task)
+        active=task['result']['parse_id'];self.assertNotEqual(before['parse_id'],active)
+        self.assertEqual('located',self.bind(doc,'成本：80万元。',page=2,parse_id=before['parse_id']).json()['status'])
+        self.assertEqual(self.client.post('/api/documents/'+doc['id']+'/archive').status_code,200)
+        self.assertEqual(self.client.post('/api/documents/'+doc['id']+'/restore').status_code,200)
+        restored=self.get(doc,'/view').json();self.assertEqual(active,restored['active_parse_id'])
+        self.assertTrue(any(p['parse_id']==before['parse_id'] and not p['is_active'] for p in restored['parses']))
+        self.assertEqual(400,self.client.post('/api/document-processing/tasks',json={'document_id':doc['id'],'pages':[1],'mode':'ocr'}).status_code)
+
+    def test_webp_import_and_document_image_endpoint_return_original_geometry(self):
+        image=Image.new('RGB',(120,80),'#849bb0');blob=io.BytesIO();image.save(blob,format='WEBP')
+        imported=self.import_bytes(blob.getvalue(),'public-fixture.webp');doc=imported['document']
+        self.assertTrue(imported['ok']);self.assertEqual('needs_review',doc['status'])
+        page=self.get(doc,'/pages/1').json();self.assertEqual((120,80),(page['width'],page['height']))
+        with urllib.request.urlopen(self.client.url+'/api/documents/'+doc['id']+'/pages/1/image?version='+doc['sha256']) as response:
+            with Image.open(io.BytesIO(response.read())) as rendered:self.assertEqual((120,80),rendered.size)
+
     def test_followup_preserves_document_scope_but_new_sales_query_leaves_it(self):
         d,_=self.source('# 范围测试\n\n营业收入：100万元。\n')
         scoped=self.bind(d,'营业收入：100万元。').json()
@@ -179,7 +222,7 @@ class DocumentReaderTest(unittest.TestCase):
         self.assertEqual(d['status'],'ready')
         meta=self.get(d,'/view').json()
         self.assertEqual([h['level'] for h in meta['outline']],[1,2])
-        self.assertEqual(meta['structure'],'Word 标题与表格')
+        self.assertIn('DOCX 标题与逻辑节',meta['structure'])
         p=self.get(d,'/pages/1').json()
         self.assertTrue(p['text_available']);self.assertFalse(p['ocr_required'])
         for block in p['blocks']:
@@ -187,7 +230,7 @@ class DocumentReaderTest(unittest.TestCase):
         quote='免费维修期为签收次日起 18 个月。'
         r=self.bind(d,quote).json()
         self.assertEqual(r['status'],'located');self.assertEqual(r['quote'],quote)
-        self.assertEqual(r['locator']['location_precision'],'text_range')
+        self.assertEqual(r['locator']['location_precision'],'package_structure')
         rows=[b for b in p['blocks'] if b['kind']=='table_row']
         self.assertTrue(rows);self.assertIn('280 元',p['text'])
         self.assertEqual(self.get(d,'/search',q=urllib.parse.quote('280 元')).json()['matches'][0]['page'],1)

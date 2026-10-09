@@ -1,0 +1,1433 @@
+{
+  "date": "2026-10-09",
+  "version": "0.7.0",
+  "integrated_main_commit": "2376ff2f238dedf328c525e64c2e825163409ca9",
+  "scope": "Windows current-machine sealed-runtime regression and public synthetic OCR/source/RAG checks; no external semantic quality claim",
+  "python": {
+    "unique_tests": 331,
+    "isolated_modules": [
+      {
+        "module": "tests.test_agent",
+        "tests": 23,
+        "duration_seconds": 79.043,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_connections",
+        "tests": 32,
+        "duration_seconds": 22.456,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_conversations",
+        "tests": 11,
+        "duration_seconds": 5.403,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_counter_check",
+        "tests": 8,
+        "duration_seconds": 0.406,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_database_agent",
+        "tests": 14,
+        "duration_seconds": 66.516,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_database_import",
+        "tests": 10,
+        "duration_seconds": 3.971,
+        "status": "passed",
+        "repaired_and_rerun": true,
+        "rerun_after_model_verification_change": true
+      },
+      {
+        "module": "tests.test_database_query",
+        "tests": 15,
+        "duration_seconds": 2.627,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_document_native",
+        "tests": 10,
+        "duration_seconds": 0.148,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_document_providers",
+        "tests": 20,
+        "duration_seconds": 0.191,
+        "status": "passed",
+        "repaired_and_rerun": true,
+        "rerun_after_model_verification_change": true
+      },
+      {
+        "module": "tests.test_document_reader",
+        "tests": 23,
+        "duration_seconds": 6.313,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_document_tasks",
+        "tests": 19,
+        "duration_seconds": 4.052,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": true
+      },
+      {
+        "module": "tests.test_home_analysis",
+        "tests": 10,
+        "duration_seconds": 6.617,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_ocr",
+        "tests": 16,
+        "duration_seconds": 0.895,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_rag_agent",
+        "tests": 13,
+        "duration_seconds": 53.963,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_rag_providers",
+        "tests": 11,
+        "duration_seconds": 20.355,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_rag_retrieval",
+        "tests": 37,
+        "duration_seconds": 9.426,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_runtime_bundle",
+        "tests": 4,
+        "duration_seconds": 0.02,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_scenarios",
+        "tests": 15,
+        "duration_seconds": 6.244,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_settings",
+        "tests": 16,
+        "duration_seconds": 2.582,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      },
+      {
+        "module": "tests.test_sql_guard",
+        "tests": 24,
+        "duration_seconds": 0.162,
+        "status": "passed",
+        "repaired_and_rerun": false,
+        "rerun_after_model_verification_change": false
+      }
+    ],
+    "status": "passed",
+    "execution": "Complete 20-module run followed by affected-module reruns after version assertion and same-timestamp digest protection repairs; reruns are not counted twice."
+  },
+  "node": {
+    "frontend_render_api_tests": 32,
+    "pet_state_tests": 6,
+    "total": 38,
+    "status": "passed"
+  },
+  "typescript": "passed",
+  "vite_production_build": "passed",
+  "browser_visual_acceptance_this_round": false,
+  "real_local_ocr": {
+    "versions": {
+      "rapidocr": "3.9.0",
+      "pyclipper": "1.4.0",
+      "opencv-python": "5.0.0.93",
+      "shapely": "2.2.0",
+      "omegaconf": "2.3.1",
+      "antlr4-python3-runtime": "4.9.3",
+      "requests": "2.34.2",
+      "urllib3": "2.8.0",
+      "charset-normalizer": "3.5.2",
+      "colorlog": "6.12.0",
+      "numpy": "2.5.3",
+      "onnxruntime": "1.23.2",
+      "Pillow": "12.3.0",
+      "PyYAML": "6.0.3",
+      "tqdm": "4.70.1",
+      "six": "1.17.0",
+      "certifi": "2026.7.22",
+      "idna": "3.20"
+    },
+    "dependencies_satisfied": true,
+    "provider": {
+      "ready": true,
+      "local": true,
+      "mode": "local",
+      "provider_id": "ppocrv5-mobile-zh",
+      "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+      "model_revision": "RapidAI/RapidOCR-v3.9.0",
+      "engine": "rapidocr",
+      "engine_version": "3.9.0",
+      "execution_provider": "CPUExecutionProvider",
+      "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+      "reason": "",
+      "error": null,
+      "location_precision": "line",
+      "onnxruntime_version": "1.23.2"
+    },
+    "results": [
+      {
+        "lines": [
+          {
+            "text": "证流 OCR 验收",
+            "box": [
+              0.04071429,
+              0.09076923,
+              0.34928571,
+              0.21384615
+            ],
+            "polygon": [
+              [
+                0.04071429,
+                0.09076923
+              ],
+              [
+                0.34928571,
+                0.09384615
+              ],
+              [
+                0.34928571,
+                0.21384615
+              ],
+              [
+                0.04071429,
+                0.21076923
+              ]
+            ],
+            "confidence": 0.92687,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 0,
+            "location_precision": "line"
+          },
+          {
+            "text": "项目收入12345.67 元",
+            "box": [
+              0.04,
+              0.30461538,
+              0.49214286,
+              0.43076923
+            ],
+            "polygon": [
+              [
+                0.04,
+                0.30769231
+              ],
+              [
+                0.49214286,
+                0.30461538
+              ],
+              [
+                0.49214286,
+                0.42769231
+              ],
+              [
+                0.04,
+                0.43076923
+              ]
+            ],
+            "confidence": 0.96517,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 1,
+            "location_precision": "line"
+          },
+          {
+            "text": "合同编号 EF-2026-08",
+            "box": [
+              0.04142857,
+              0.52,
+              0.48285714,
+              0.64769231
+            ],
+            "polygon": [
+              [
+                0.04142857,
+                0.52307692
+              ],
+              [
+                0.48285714,
+                0.52
+              ],
+              [
+                0.48285714,
+                0.64307692
+              ],
+              [
+                0.04142857,
+                0.64769231
+              ]
+            ],
+            "confidence": 0.97932,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 2,
+            "location_precision": "line"
+          },
+          {
+            "text": "任务数量 42 件",
+            "box": [
+              0.04142857,
+              0.73846154,
+              0.35,
+              0.86
+            ],
+            "polygon": [
+              [
+                0.04142857,
+                0.73846154
+              ],
+              [
+                0.35,
+                0.73846154
+              ],
+              [
+                0.35,
+                0.86
+              ],
+              [
+                0.04142857,
+                0.86
+              ]
+            ],
+            "confidence": 0.94855,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 3,
+            "location_precision": "line"
+          }
+        ],
+        "issues": [],
+        "method": "ocr",
+        "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+        "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+        "duration_ms": 2636,
+        "rotation": 0,
+        "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+        "provenance": {
+          "method": "ocr",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "engine_version": "3.9.0",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+          "rotation": 0,
+          "width": 1400,
+          "height": 650,
+          "duration_ms": 2636,
+          "local": true,
+          "location_precision": "line",
+          "confidence_scope": "uncalibrated_recognition_score"
+        },
+        "provider": {
+          "ready": true,
+          "local": true,
+          "mode": "local",
+          "provider_id": "ppocrv5-mobile-zh",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "engine": "rapidocr",
+          "engine_version": "3.9.0",
+          "execution_provider": "CPUExecutionProvider",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "reason": "",
+          "error": null,
+          "location_precision": "line",
+          "onnxruntime_version": "1.23.2"
+        },
+        "width": 1400,
+        "height": 650
+      },
+      {
+        "lines": [
+          {
+            "text": "任务数量 42 件",
+            "box": [
+              0.03928571,
+              0.73230769,
+              0.35142857,
+              0.86461538
+            ],
+            "polygon": [
+              [
+                0.03928571,
+                0.86461538
+              ],
+              [
+                0.03928571,
+                0.73538462
+              ],
+              [
+                0.35142857,
+                0.73230769
+              ],
+              [
+                0.35142857,
+                0.86153846
+              ]
+            ],
+            "confidence": 0.93619,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 0,
+            "location_precision": "line"
+          },
+          {
+            "text": "合同编号 EF-2026-08",
+            "box": [
+              0.03928571,
+              0.51230769,
+              0.485,
+              0.65538462
+            ],
+            "polygon": [
+              [
+                0.04,
+                0.65538462
+              ],
+              [
+                0.03928571,
+                0.52
+              ],
+              [
+                0.485,
+                0.51230769
+              ],
+              [
+                0.485,
+                0.64615385
+              ]
+            ],
+            "confidence": 0.97039,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 1,
+            "location_precision": "line"
+          },
+          {
+            "text": "项目收入 12345.67 元",
+            "box": [
+              0.03714286,
+              0.29538462,
+              0.49357143,
+              0.44307692
+            ],
+            "polygon": [
+              [
+                0.03714286,
+                0.44307692
+              ],
+              [
+                0.03714286,
+                0.3
+              ],
+              [
+                0.49357143,
+                0.29538462
+              ],
+              [
+                0.49357143,
+                0.43692308
+              ]
+            ],
+            "confidence": 0.95992,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 2,
+            "location_precision": "line"
+          },
+          {
+            "text": "证流OCR 验收",
+            "box": [
+              0.03785714,
+              0.08307692,
+              0.35,
+              0.22
+            ],
+            "polygon": [
+              [
+                0.03785714,
+                0.21538462
+              ],
+              [
+                0.03857143,
+                0.08307692
+              ],
+              [
+                0.35,
+                0.08769231
+              ],
+              [
+                0.35,
+                0.22
+              ]
+            ],
+            "confidence": 0.97942,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 3,
+            "location_precision": "line"
+          }
+        ],
+        "issues": [],
+        "method": "ocr",
+        "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+        "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+        "duration_ms": 363,
+        "rotation": 90,
+        "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+        "provenance": {
+          "method": "ocr",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "engine_version": "3.9.0",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+          "rotation": 90,
+          "width": 1400,
+          "height": 650,
+          "duration_ms": 363,
+          "local": true,
+          "location_precision": "line",
+          "confidence_scope": "uncalibrated_recognition_score"
+        },
+        "provider": {
+          "ready": true,
+          "local": true,
+          "mode": "local",
+          "provider_id": "ppocrv5-mobile-zh",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "engine": "rapidocr",
+          "engine_version": "3.9.0",
+          "execution_provider": "CPUExecutionProvider",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "reason": "",
+          "error": null,
+          "location_precision": "line",
+          "onnxruntime_version": "1.23.2"
+        },
+        "width": 1400,
+        "height": 650
+      },
+      {
+        "lines": [
+          {
+            "text": "任务数量 42 件",
+            "box": [
+              0.04214286,
+              0.73846154,
+              0.34928571,
+              0.86
+            ],
+            "polygon": [
+              [
+                0.34928571,
+                0.86
+              ],
+              [
+                0.04214286,
+                0.86
+              ],
+              [
+                0.04214286,
+                0.73846154
+              ],
+              [
+                0.34928571,
+                0.73846154
+              ]
+            ],
+            "confidence": 0.96025,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 0,
+            "location_precision": "line"
+          },
+          {
+            "text": "合同编号 EF-2026-08",
+            "box": [
+              0.04214286,
+              0.51846154,
+              0.48142857,
+              0.64769231
+            ],
+            "polygon": [
+              [
+                0.48142857,
+                0.63692308
+              ],
+              [
+                0.04285714,
+                0.64769231
+              ],
+              [
+                0.04214286,
+                0.52923077
+              ],
+              [
+                0.48142857,
+                0.51846154
+              ]
+            ],
+            "confidence": 0.98476,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 1,
+            "location_precision": "line"
+          },
+          {
+            "text": "项目收入12345.67 元",
+            "box": [
+              0.04,
+              0.30769231,
+              0.49142857,
+              0.43384615
+            ],
+            "polygon": [
+              [
+                0.49142857,
+                0.43076923
+              ],
+              [
+                0.04,
+                0.43384615
+              ],
+              [
+                0.04,
+                0.31076923
+              ],
+              [
+                0.49142857,
+                0.30769231
+              ]
+            ],
+            "confidence": 0.99039,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 2,
+            "location_precision": "line"
+          },
+          {
+            "text": "证流OCR 验收",
+            "box": [
+              0.03928571,
+              0.08615385,
+              0.35142857,
+              0.22
+            ],
+            "polygon": [
+              [
+                0.35142857,
+                0.22
+              ],
+              [
+                0.03928571,
+                0.21692308
+              ],
+              [
+                0.03928571,
+                0.08615385
+              ],
+              [
+                0.35142857,
+                0.08923077
+              ]
+            ],
+            "confidence": 0.98159,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 3,
+            "location_precision": "line"
+          }
+        ],
+        "issues": [],
+        "method": "ocr",
+        "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+        "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+        "duration_ms": 358,
+        "rotation": 180,
+        "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+        "provenance": {
+          "method": "ocr",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "engine_version": "3.9.0",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+          "rotation": 180,
+          "width": 1400,
+          "height": 650,
+          "duration_ms": 358,
+          "local": true,
+          "location_precision": "line",
+          "confidence_scope": "uncalibrated_recognition_score"
+        },
+        "provider": {
+          "ready": true,
+          "local": true,
+          "mode": "local",
+          "provider_id": "ppocrv5-mobile-zh",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "engine": "rapidocr",
+          "engine_version": "3.9.0",
+          "execution_provider": "CPUExecutionProvider",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "reason": "",
+          "error": null,
+          "location_precision": "line",
+          "onnxruntime_version": "1.23.2"
+        },
+        "width": 1400,
+        "height": 650
+      },
+      {
+        "lines": [
+          {
+            "text": "项目收入 12345.67 元",
+            "box": [
+              0.03928571,
+              0.29538462,
+              0.49357143,
+              0.43846154
+            ],
+            "polygon": [
+              [
+                0.49357143,
+                0.29538462
+              ],
+              [
+                0.49357143,
+                0.43692308
+              ],
+              [
+                0.03928571,
+                0.43846154
+              ],
+              [
+                0.03928571,
+                0.29692308
+              ]
+            ],
+            "confidence": 0.95377,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 0,
+            "location_precision": "line"
+          },
+          {
+            "text": "合同编号 EF-2026-08",
+            "box": [
+              0.04071429,
+              0.50615385,
+              0.48642857,
+              0.65384615
+            ],
+            "polygon": [
+              [
+                0.48571429,
+                0.50615385
+              ],
+              [
+                0.48642857,
+                0.64153846
+              ],
+              [
+                0.04142857,
+                0.65384615
+              ],
+              [
+                0.04071429,
+                0.51692308
+              ]
+            ],
+            "confidence": 0.98889,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 1,
+            "location_precision": "line"
+          },
+          {
+            "text": "证流OCR 验收",
+            "box": [
+              0.04142857,
+              0.08923077,
+              0.34928571,
+              0.21538462
+            ],
+            "polygon": [
+              [
+                0.34928571,
+                0.08923077
+              ],
+              [
+                0.34928571,
+                0.21538462
+              ],
+              [
+                0.04142857,
+                0.21538462
+              ],
+              [
+                0.04142857,
+                0.08923077
+              ]
+            ],
+            "confidence": 0.94748,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 2,
+            "location_precision": "line"
+          },
+          {
+            "text": "任务数量 42 件",
+            "box": [
+              0.04428571,
+              0.73384615,
+              0.35214286,
+              0.86615385
+            ],
+            "polygon": [
+              [
+                0.35214286,
+                0.73384615
+              ],
+              [
+                0.35214286,
+                0.86307692
+              ],
+              [
+                0.04428571,
+                0.86615385
+              ],
+              [
+                0.04428571,
+                0.73692308
+              ]
+            ],
+            "confidence": 0.94037,
+            "status": "confirmed",
+            "method": "ocr",
+            "line_id": 3,
+            "location_precision": "line"
+          }
+        ],
+        "issues": [],
+        "method": "ocr",
+        "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+        "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+        "duration_ms": 346,
+        "rotation": 270,
+        "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+        "provenance": {
+          "method": "ocr",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "engine_version": "3.9.0",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "input_image_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+          "rotation": 270,
+          "width": 1400,
+          "height": 650,
+          "duration_ms": 346,
+          "local": true,
+          "location_precision": "line",
+          "confidence_scope": "uncalibrated_recognition_score"
+        },
+        "provider": {
+          "ready": true,
+          "local": true,
+          "mode": "local",
+          "provider_id": "ppocrv5-mobile-zh",
+          "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+          "model_revision": "RapidAI/RapidOCR-v3.9.0",
+          "engine": "rapidocr",
+          "engine_version": "3.9.0",
+          "execution_provider": "CPUExecutionProvider",
+          "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+          "reason": "",
+          "error": null,
+          "location_precision": "line",
+          "onnxruntime_version": "1.23.2"
+        },
+        "width": 1400,
+        "height": 650
+      }
+    ]
+  },
+  "real_formal_ocr_to_local_rag": {
+    "date": "2026-10-09",
+    "runtime": "Windows x64 portable Python 3.13.6",
+    "dependency_sha256": "59a078f0ab912b915b5dd37323105917dbf4b2450d0d22957f1eb0fdd4654a5e",
+    "real_ocr_provider": {
+      "ready": true,
+      "local": true,
+      "mode": "local",
+      "provider_id": "ppocrv5-mobile-zh",
+      "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+      "model_revision": "RapidAI/RapidOCR-v3.9.0",
+      "engine": "rapidocr",
+      "engine_version": "3.9.0",
+      "execution_provider": "CPUExecutionProvider",
+      "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+      "reason": "",
+      "error": null,
+      "location_precision": "line",
+      "onnxruntime_version": "1.23.2"
+    },
+    "local_rag": true,
+    "cases": [
+      {
+        "format": "png",
+        "source_sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+        "before_parse_id": "d2243b35e3c7479ca044120f0a0255e8",
+        "after_parse_id": "b2bb8ea85894433dad833432cd980d59",
+        "task_status": "completed",
+        "events": [
+          {
+            "duration_ms": 1535.37,
+            "finished_at": "2026-10-09T05:00:46.230+00:00",
+            "id": "dc019dc180254bca8d34264172a2916b",
+            "media_id": null,
+            "method": "ocr",
+            "page": 1,
+            "started_at": "2026-10-09T05:00:44.681+00:00",
+            "status": "completed",
+            "summary": "解析结果已校验，等待整批发布"
+          }
+        ],
+        "duration_ms": 1703.79,
+        "source_locator": {
+          "document_id": "c751d0a2910d602bbbe3",
+          "sha256": "05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+          "parse_id": "b2bb8ea85894433dad833432cd980d59",
+          "page": 1,
+          "source_url": "/api/documents/c751d0a2910d602bbbe3/original?version=05543aa99af8c3a0c0e921dda7e30316368c00ae1cdb522c779e90e4eefc8926",
+          "text_range": {
+            "start": 11,
+            "end": 25,
+            "text_sha256": "fb79594372c541fd7330d38ec0b4b0204c73c13be72eb17aa8e723b00e3b5ae5"
+          },
+          "rects": [
+            [
+              0.04,
+              0.30461538,
+              0.49214286,
+              0.43076923
+            ]
+          ],
+          "location_precision": "line",
+          "extraction_method": "ocr",
+          "source_refs": [
+            {
+              "id": "p1-derived-d2d64f027fda44cf",
+              "source_method": "ocr",
+              "kind": "text",
+              "media_id": null,
+              "observation_id": 1
+            }
+          ],
+          "derived_view": true
+        },
+        "text": "证流 OCR 验收\n\n项目收入12345.67 元\n\n合同编号 EF-2026-08\n\n任务数量 42 件\n\n",
+        "historical_source_preserved": true,
+        "retrieval_status": "retrieved",
+        "retrieval_stages": [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:48.027+00:00",
+            "duration_ms": 12.94,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:48.040+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:48.040+00:00",
+            "duration_ms": 5.01,
+            "count": 3,
+            "finished_at": "2026-10-09T05:00:48.045+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:48.045+00:00",
+            "duration_ms": 60.43,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:48.105+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:48.105+00:00",
+            "duration_ms": 0.02,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:48.105+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:48.105+00:00",
+            "duration_ms": 1438.45,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:49.544+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:49.544+00:00",
+            "duration_ms": 10.7,
+            "count": 1,
+            "finished_at": "2026-10-09T05:00:49.554+00:00"
+          }
+        ],
+        "retrieved_count": 1,
+        "total_check_seconds": 5.079
+      },
+      {
+        "format": "pdf",
+        "source_sha256": "11a42ce8627942bde84821ecb3671ed1cac7e5a21955951f8d08b60e648af8a8",
+        "before_parse_id": "87c4b996ae7c49d1a26b371f2745e9ec",
+        "after_parse_id": "2bbdb8276b5e475b84b770800c97a7a7",
+        "task_status": "completed",
+        "events": [
+          {
+            "duration_ms": 568.57,
+            "finished_at": "2026-10-09T05:00:50.456+00:00",
+            "id": "a4df7eaefab94f86806082fa963397b1",
+            "media_id": null,
+            "method": "ocr",
+            "page": 1,
+            "started_at": "2026-10-09T05:00:49.872+00:00",
+            "status": "completed",
+            "summary": "解析结果已校验，等待整批发布"
+          }
+        ],
+        "duration_ms": 770.36,
+        "source_locator": {
+          "document_id": "8eab77622ce449c16f9f",
+          "sha256": "11a42ce8627942bde84821ecb3671ed1cac7e5a21955951f8d08b60e648af8a8",
+          "parse_id": "2bbdb8276b5e475b84b770800c97a7a7",
+          "page": 1,
+          "source_url": "/api/documents/8eab77622ce449c16f9f/original?version=11a42ce8627942bde84821ecb3671ed1cac7e5a21955951f8d08b60e648af8a8",
+          "text_range": {
+            "start": 11,
+            "end": 25,
+            "text_sha256": "fb79594372c541fd7330d38ec0b4b0204c73c13be72eb17aa8e723b00e3b5ae5"
+          },
+          "rects": [
+            [
+              0.04,
+              0.30461538,
+              0.49214286,
+              0.43076923
+            ]
+          ],
+          "location_precision": "line",
+          "extraction_method": "ocr",
+          "source_refs": [
+            {
+              "id": "p1-derived-8a16a9a644e64ce0",
+              "source_method": "ocr",
+              "kind": "text",
+              "media_id": null,
+              "observation_id": 1
+            }
+          ],
+          "derived_view": true
+        },
+        "text": "证流 OCR 验收\n\n项目收入12345.67 元\n\n合同编号 EF-2026-08\n\n任务数量 42 件\n\n",
+        "historical_source_preserved": true,
+        "retrieval_status": "retrieved",
+        "retrieval_stages": [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:51.130+00:00",
+            "duration_ms": 16.1,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:51.146+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:51.147+00:00",
+            "duration_ms": 4.81,
+            "count": 3,
+            "finished_at": "2026-10-09T05:00:51.151+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:51.151+00:00",
+            "duration_ms": 54.28,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:51.206+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:51.206+00:00",
+            "duration_ms": 0.02,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:51.206+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:51.206+00:00",
+            "duration_ms": 110.29,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:51.316+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:51.316+00:00",
+            "duration_ms": 15.98,
+            "count": 1,
+            "finished_at": "2026-10-09T05:00:51.332+00:00"
+          }
+        ],
+        "retrieved_count": 1,
+        "total_check_seconds": 1.718
+      },
+      {
+        "format": "docx",
+        "source_sha256": "46acedcdc7d3e3955dc88f8003cb062b0aab342444d1660a1c132c1b33ab1881",
+        "before_parse_id": "4d3998700452452e95503d0a76a044aa",
+        "after_parse_id": "d1f9fbc6b7394daa83bc470ddafaa361",
+        "task_status": "completed",
+        "events": [
+          {
+            "duration_ms": 549.17,
+            "finished_at": "2026-10-09T05:00:52.161+00:00",
+            "id": "d0b08ab942f4444490668d582a68ae67",
+            "media_id": "media-05543aa99af8c3a0c0e9",
+            "method": "ocr",
+            "page": 1,
+            "started_at": "2026-10-09T05:00:51.604+00:00",
+            "status": "completed",
+            "summary": "解析结果已校验，等待整批发布"
+          }
+        ],
+        "duration_ms": 734.98,
+        "source_locator": {
+          "document_id": "db5755d7c2349bf7627e",
+          "sha256": "46acedcdc7d3e3955dc88f8003cb062b0aab342444d1660a1c132c1b33ab1881",
+          "parse_id": "d1f9fbc6b7394daa83bc470ddafaa361",
+          "page": 1,
+          "source_url": "/api/documents/db5755d7c2349bf7627e/original?version=46acedcdc7d3e3955dc88f8003cb062b0aab342444d1660a1c132c1b33ab1881",
+          "text_range": {
+            "start": 33,
+            "end": 47,
+            "text_sha256": "fb79594372c541fd7330d38ec0b4b0204c73c13be72eb17aa8e723b00e3b5ae5"
+          },
+          "rects": [
+            [
+              0.04,
+              0.30461538,
+              0.49214286,
+              0.43076923
+            ]
+          ],
+          "location_precision": "line",
+          "extraction_method": "ocr",
+          "source_refs": [
+            {
+              "id": "p1-derived-18769061c5ed4332",
+              "source_method": "ocr",
+              "kind": "text",
+              "media_id": "media-05543aa99af8c3a0c0e9",
+              "observation_id": 1
+            }
+          ],
+          "derived_view": true,
+          "media_id": "media-05543aa99af8c3a0c0e9",
+          "coordinate_space": "media"
+        },
+        "text": "合成扫描票据，非实际业务。正文原生保留。\n\n证流 OCR 验收\n\n项目收入12345.67 元\n\n合同编号 EF-2026-08\n\n任务数量 42 件\n\n",
+        "historical_source_preserved": true,
+        "retrieval_status": "retrieved",
+        "retrieval_stages": [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:52.982+00:00",
+            "duration_ms": 14.9,
+            "count": 5,
+            "finished_at": "2026-10-09T05:00:52.997+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:52.997+00:00",
+            "duration_ms": 5.0,
+            "count": 4,
+            "finished_at": "2026-10-09T05:00:53.002+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:53.002+00:00",
+            "duration_ms": 59.23,
+            "count": 5,
+            "finished_at": "2026-10-09T05:00:53.061+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:53.061+00:00",
+            "duration_ms": 0.03,
+            "count": 5,
+            "finished_at": "2026-10-09T05:00:53.061+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:53.061+00:00",
+            "duration_ms": 164.24,
+            "count": 5,
+            "finished_at": "2026-10-09T05:00:53.226+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-09T05:00:53.226+00:00",
+            "duration_ms": 11.39,
+            "count": 1,
+            "finished_at": "2026-10-09T05:00:53.237+00:00"
+          }
+        ],
+        "retrieved_count": 1,
+        "total_check_seconds": 1.856
+      }
+    ],
+    "external_vision_quality_tested": false,
+    "full_launcher_tested": false
+  },
+  "dependencies": {
+    "distributions": 62,
+    "canonical_zip_sha256": "59a078f0ab912b915b5dd37323105917dbf4b2450d0d22957f1eb0fdd4654a5e",
+    "source_parts": 3,
+    "source_parts_sha256_matches": true
+  },
+  "frontend_build": {
+    "assets/chart-B6j1iiVM.js": {
+      "bytes": 518361,
+      "sha256": "1aeb8d2d80943422f24627caf6b99232e6941794e5cf2501b3a5e6c4b4c0734f"
+    },
+    "assets/index-BHHduX0P.css": {
+      "bytes": 339171,
+      "sha256": "1f253f134068543dcbb7290e5720bab0d20b3c92852697ce81ca92fa91599b6e"
+    },
+    "assets/index-vVsJiXRp.js": {
+      "bytes": 530437,
+      "sha256": "1ed05acdaf814862fc49c65eee13343a1a0b6c15e363a1230dfe12fe4832e26c"
+    },
+    "background-home.webp": {
+      "bytes": 816264,
+      "sha256": "0735794fc4336c365ee00a064b3bd368527efea274f210bc1103d2bdcd4228af"
+    },
+    "background-sidebar.webp": {
+      "bytes": 780426,
+      "sha256": "b7ccb6353bd73dfe50a2e9ec00f611a92e913e36e0fedf3e303a40db2a772899"
+    },
+    "brand-horizontal.svg": {
+      "bytes": 5308,
+      "sha256": "bbd73045dd14d06c5ab1c0f90b744b8142b366896cfca53d55f70b3545fafbae"
+    },
+    "brand-icon.svg": {
+      "bytes": 1131,
+      "sha256": "1b84c0d6e536f54c04601ba4b998d7edd6fd30145adae89e42de482cbf8f2e0b"
+    },
+    "brand-stacked.svg": {
+      "bytes": 5304,
+      "sha256": "94fac4e8daf0650421706f1bf11e5ac5ac2c32266491a5307a78b83ddf229e8a"
+    },
+    "evidence-landscape.png": {
+      "bytes": 1136828,
+      "sha256": "b926389e86b946d0ee0ec10f3d7a5a451a838ea8d14f1a107c1c91ec827fe0d5"
+    },
+    "glass-01-data.webp": {
+      "bytes": 9258,
+      "sha256": "6fce839e3645ae47efb55b8e25d98ed4b8280f56b79cab25f73a0493d550a3ce"
+    },
+    "glass-02-documents.webp": {
+      "bytes": 7884,
+      "sha256": "1f6f89d612f089f5c26243832ea0c87942c4c4a58423747640418ca97b7c33c0"
+    },
+    "glass-03-chat.webp": {
+      "bytes": 9730,
+      "sha256": "aa4a897b5927e1dd2a486592e8d4a002330ea6013e5f2d9b5017376bfb0aa2ff"
+    },
+    "glass-04-projects.webp": {
+      "bytes": 7276,
+      "sha256": "c586b44ff06575b72b20d2c202c983efee327758767df809956356229acc77f4"
+    },
+    "glass-05-formula.webp": {
+      "bytes": 8228,
+      "sha256": "c7b6c8bbe88883c7e643a5bc47110efce5f8f14a2128cafeefa21ab144824bd1"
+    },
+    "glass-06-baseline.webp": {
+      "bytes": 7704,
+      "sha256": "6a5b9044ece9812215afc5af40d0ad83314825539085bc72d090a104c1b5d9cf"
+    },
+    "glass-07-scenario.webp": {
+      "bytes": 8194,
+      "sha256": "c1ac5d5275af0d655ba9b60f92b8df7d15baa857b8b70dc066b0a736b840de73"
+    },
+    "handwriting.webp": {
+      "bytes": 164180,
+      "sha256": "d9df51bc29aa02bcc2f8e34083cf8665824ea26e797783161c3fa8d96ed9a0da"
+    },
+    "hero-welcome.webp": {
+      "bytes": 573646,
+      "sha256": "d47012b736f5df3774b3309af855a79f8a1f890d0f157f5838182fb9ad2a9084"
+    },
+    "index.html": {
+      "bytes": 411,
+      "sha256": "8c782f1f14831fc50223f37b9495bae4599f8ab8f0880a930ab33f9b32eafd85"
+    },
+    "pet-01-idle.webp": {
+      "bytes": 609086,
+      "sha256": "41424dca602d0daa11405e73e9acb6232aa9bcb56a7bd9375173f0ee391f82c2"
+    },
+    "pet-02-welcome.webp": {
+      "bytes": 704062,
+      "sha256": "8484d3458658458427b6704bcb6a2f5e7d3fbd1402cd9c75282ba4cd39a806c4"
+    },
+    "pet-03-listen.webp": {
+      "bytes": 591886,
+      "sha256": "fa6278a0576ecb40e2698a18d0f963e46e51f45835e08d6c318bad8bc45da031"
+    },
+    "pet-04-thinking-v2.webp": {
+      "bytes": 464402,
+      "sha256": "08500b3ca32ced9eb6a94033e32e5c280892bde992f5b080f8d066c6082bb3a7"
+    },
+    "pet-05-search.webp": {
+      "bytes": 684010,
+      "sha256": "7f82efeb5638ba5c9c6f87069d0b7d991ea7fd1d3b3d40f9aa98452c26d688a5"
+    },
+    "pet-06-reading-v2.webp": {
+      "bytes": 446178,
+      "sha256": "f93a9432af6d15a461a3b574be3ff4079710aa5554aa479a55ec046f036ff02e"
+    },
+    "pet-07-calculate.webp": {
+      "bytes": 685782,
+      "sha256": "6f5b09d61368fd7c1b66e9ba520f3dfafeab077bbdbc99758f37c8186d5bb84a"
+    },
+    "pet-08-explain-left.webp": {
+      "bytes": 554608,
+      "sha256": "f756d4d956c6258875067805e5dc0a9b0dc44d30b6e1b5c8f9e553849b0b4fd7"
+    },
+    "pet-09-pointing-v2.webp": {
+      "bytes": 462618,
+      "sha256": "65f42b9ad003ab8634865c6a86c54740538e8b2669fcecf16965788c64101bf6"
+    },
+    "pet-10-success.webp": {
+      "bytes": 482644,
+      "sha256": "0d73a7c52cb86edc607aa6e9255d28ad9a505ae057a1b4325f40ed1a874ae29a"
+    },
+    "pet-11-clarify.webp": {
+      "bytes": 638276,
+      "sha256": "2c74205d2f3d496aa16d05a17a538ab99deaf1803acfbaa1b4e0aaacdb24bc3f"
+    },
+    "pet-12-error.webp": {
+      "bytes": 562340,
+      "sha256": "81f59f4b8612dcfd6b8b1166259ce22e9e4c3607f42365c33ad1265c91f893ec"
+    },
+    "pet-13-sleep.webp": {
+      "bytes": 607498,
+      "sha256": "8d920763583b751029a7aa1b241ef6e87fac0dd1396724d7e682141ec798a262"
+    },
+    "pet-14-drag.webp": {
+      "bytes": 521318,
+      "sha256": "82a60fd241cf1540862d59c990e66fa3b4cd37a3911d410ddbd1f108ee54d89d"
+    },
+    "prism-knot.webp": {
+      "bytes": 212546,
+      "sha256": "79efb424bca8724a1177824d4197dbb81a2148a0583d8e4a2808d49e786755da"
+    },
+    "welcome-stream.webp": {
+      "bytes": 85966,
+      "sha256": "14a47071a8f42fe6ab0f8906a5b96535ab5fb0e09be7ea62f377d2c05695c9cf"
+    }
+  },
+  "preserved_upstream": {
+    "counter_check": true,
+    "docx_public_sample": true,
+    "requirements_file": true,
+    "historical_windows_launcher_and_dpapi_record": "Windows实机与DOCX验收.json; version 0.6.0, not repeated as 0.7.0 launcher acceptance"
+  },
+  "not_verified": [
+    "real external vision semantic quality",
+    "real primary model business answer accuracy",
+    "independent complex scanned/table/chart dataset accuracy",
+    "cross-page table merging quality",
+    "fresh Windows 10/11 complete BAT cold start",
+    "fresh-machine cache",
+    "moved-directory launch",
+    "other-account DPAPI",
+    "Mac native runtime this round",
+    "real PostgreSQL/MySQL business service",
+    "large-document/concurrency performance"
+  ],
+  "semantic_accuracy_proven": false,
+  "personal_runtime_data_used": false,
+  "handoff_archive_verification": "05_比赛与交接/文件清单与许可证/交接包校验.json"
+}

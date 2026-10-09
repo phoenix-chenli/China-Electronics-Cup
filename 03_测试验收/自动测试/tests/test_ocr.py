@@ -26,7 +26,7 @@ os.environ["EVIDENCEFLOW_OCR_MODEL_PACK"] = str(Path(TEMP.name) / "OCR模型包.
 import numpy as np
 from PIL import Image
 
-from backend import documents, ocr, store as s
+from backend import documents, ocr, document_providers as providers, document_tasks as tasks, store as s
 
 DETECTION_BYTES = b"fixture-detection-weights"
 RECOGNITION_BYTES = b"fixture-recognition-weights"
@@ -208,10 +208,8 @@ class OcrSkeletonTest(unittest.TestCase):
         self.assertIn("免费维修期为 24 个月", page["text"])
         for block in page["blocks"]:
             self.assertEqual(page["text"][block["start"]:block["end"]], block["text"])
-            self.assertEqual(len(block["chars"]), len(block["text"]))
-            for character in block["chars"]:
-                self.assertGreaterEqual(character["box"][0], block["box"][0] - 1e-6)
-                self.assertLessEqual(character["box"][2], block["box"][2] + 1e-6)
+            self.assertEqual(block["chars"], [])
+            self.assertEqual(block['location_precision'],'line')
         self.assertEqual(page["info"]["box_precision"], "line")
         self.assertFalse(page["info"]["verified"])
         self.assertEqual(page["low_confidence"], 1)
@@ -223,20 +221,38 @@ class OcrSkeletonTest(unittest.TestCase):
         path.write_bytes(buffer.getvalue())
         return path
 
+    def formal_recognize(self, document):
+        identity={'ready':True,'local':True,'fingerprint':'upstream-ocr-protocol-fixture','model':'protocol-fixture'}
+        def recognize(raw,**kwargs):
+            return {'lines':[{'text':line['text'],'box':line['box'],'confidence':line['score'],
+                             'status':'confirmed' if line['score']>=.8 else 'pending'} for line in STUB_RESULT['lines']],
+                    'tables':[],'issues':[],'model':identity['model'],'fingerprint':identity['fingerprint'],
+                    'input_image_sha256':digest(raw),'duration_ms':1,'provenance':{'method':'ocr','location_precision':'line'}}
+        manager=tasks.Manager(workers=1)
+        try:
+            with patch.object(providers,'describe',return_value=identity),patch.object(providers,'ocr',side_effect=recognize),patch('backend.rag_index.submit_index',return_value={'id':'protocol-index'}):
+                result=manager.submit(tasks.ParseRequest(document_id=document['id'],version=document['sha256'],pages=[1],mode='ocr'),synchronous=True)
+                self.assertEqual(result['status'],'completed',result)
+                return result
+        finally:manager.pool.shutdown(wait=True)
+
     def test_scanned_image_is_indexed_with_text_and_flagged_for_review(self):
         path = self.write_png("review.png")
         caps, recognize = self.stub()
-        with caps, recognize:
+        with caps, recognize as called:
             document = s.index_document(path)
+            called.assert_not_called()  # import preserves raw source; OCR is an explicit task
+        self.formal_recognize(document)
+        document=s.docrow(s.doc_get(document['id']))
         self.assertEqual(document["status"], "needs_review")
-        self.assertIn("识别结果待复核", document["quality"]["quality_flags"])
+        self.assertIn("结构或识别待复核", document["quality"]["quality_flags"])
         self.assertNotIn("需要文字识别", document["quality"]["quality_flags"])
-        self.assertEqual(document["quality"]["location_precision"], "text_range")
-        self.assertEqual(document["quality"]["ocr"]["box_precision"], "line")
+        self.assertEqual(document['quality']['pending_text_lines'],1)
         blocks = s.blocks(document["id"])
         self.assertTrue(blocks)
-        self.assertTrue(all(block["quality"].get("ocr") for block in blocks))
+        self.assertTrue(all(block["quality"].get("location_precision")=="line" for block in blocks))
         self.assertTrue(any("免费维修期" in block["text"] for block in blocks))
+        self.assertFalse(any('320' in block['text'] for block in blocks))
 
     def test_image_without_ocr_stays_pending_recognition(self):
         path = self.write_png("pending.png")
@@ -248,27 +264,27 @@ class OcrSkeletonTest(unittest.TestCase):
 
     def test_recognized_page_is_locatable_by_text_range(self):
         path = self.write_png("locate.png")
-        quote = "电池上限 320 元"
+        quote = "免费维修期为 24 个月"
         caps, recognize = self.stub()
         with caps, recognize:
             document = s.index_document(path)
-            bound = documents.resolve({"document_id": document["id"], "sha256": document["sha256"], "page": 1}, quote)
+        self.formal_recognize(document)
+        bound = documents.resolve({"document_id": document["id"], "sha256": document["sha256"], "page": 1}, quote)
         self.assertEqual(bound["status"], "located")
         self.assertEqual(bound["quote"], quote)
-        self.assertEqual(bound["locator"]["location_precision"], "text_range")
+        self.assertEqual(bound["locator"]["location_precision"], "line")
         self.assertTrue(bound["locator"]["rects"])
+        self.assertEqual(documents.resolve({'document_id':document['id'],'page':1},'电池上限 320 元')['status'],'unlocated')
 
     def test_reparse_reports_the_recognition_change(self):
         path = self.write_png("reparse.png")
         document = s.index_document(path)
         before = documents.layout(document["id"], document["sha256"])
-        caps, recognize = self.stub()
-        with caps, recognize:
-            record = documents.reparse(document["id"], 1, document["sha256"], before["parse_id"])
-        self.assertTrue(record["changed"])
-        self.assertIn("识别", record["method"])
-        self.assertEqual(record["ocr"]["box_precision"], "line")
-        self.assertNotEqual(record["after_parse_id"], before["parse_id"])
+        record=self.formal_recognize(document)
+        self.assertNotEqual(record['result']['parse_id'],before['parse_id'])
+        self.assertEqual(record['events'][0]['method'],'ocr')
+        self.assertIsInstance(record['events'][0]['duration_ms'],(int,float))
+        self.assertEqual(documents.layout(document['id'],parse_id=before['parse_id'])['pages'][0]['text'],'')
 
 
 if __name__ == "__main__":

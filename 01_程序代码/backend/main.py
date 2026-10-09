@@ -21,12 +21,13 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from . import store as s
-from . import engine, conversations, scenarios, settings, connections, extensions, sharing, ocr, agent, database_query
+from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
 from . import documents as document_engine
 from . import rag_index, rag_providers
+from . import document_tasks, document_providers
 from .seed import seed_business, write_seed_docs
 
-app=FastAPI(title="证流",version="0.6.0")
+app=FastAPI(title="证流",version="0.7.0")
 app.include_router(conversations.router)
 app.include_router(scenarios.router)
 app.include_router(settings.router)
@@ -35,11 +36,12 @@ app.include_router(extensions.router)
 app.include_router(sharing.router)
 app.include_router(agent.router)
 app.include_router(rag_providers.router)
+app.include_router(document_tasks.router)
 def init_app():
     s.init(); seed_business(); write_seed_docs()
     seed_docs=s.PROJECT_ROOT/'02_数据资料'/'示例数据'/'docs'
     for source in sorted(seed_docs.glob('*')):
-        if source.is_file() and not source.is_symlink() and source.suffix in {'.md','.txt','.docx','.pdf','.png'}:
+        if source.is_file() and not source.is_symlink() and source.suffix in {'.md','.txt','.pdf','.png','.jpg','.jpeg','.webp','.docx'}:
             target=s.DOCS/source.name
             if not target.exists(): shutil.copy2(source,target)
     scenarios.initialize()
@@ -47,12 +49,14 @@ def init_app():
     connections.initialize()
     agent.initialize()
     rag_providers.initialize()
+    document_providers.initialize()
     for p in sorted(s.DOCS.iterdir()):
         if p.is_file(): s.index_document(p)
 @app.on_event("startup")
 def startup():
     init_app()
     conversations.initialize()
+    document_tasks.initialize()
 
 @app.middleware("http")
 async def local_origin(request: Request, call_next):
@@ -141,20 +145,7 @@ def run(req, cancelled=None, progress=None):
 @app.get("/api/health")
 def health():
     cfg=agent.saved_config()
-    return {"ok":True,"service":"evidenceflow","version":"0.6.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":ocr.capabilities()["ready"]},"ocr":ocr.capabilities(),"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
-
-@app.get("/api/ocr/status")
-def ocr_status():
-    return {"capabilities":ocr.capabilities(),"manifest":str(ocr.manifest_path()),"pack":str(ocr.pack_path()),
-            "boundary":"只有模型包内每个文件都与清单 SHA-256 一致时才会执行识别；未安装时扫描页保持待复核，不会用重新读取文字层冒充 OCR。"}
-
-@app.post("/api/ocr/install")
-def ocr_install():
-    return {"capabilities":ocr.install(),"message":"OCR 模型已校验并安装"}
-
-@app.post("/api/ocr/uninstall")
-def ocr_uninstall():
-    return {"capabilities":ocr.uninstall(),"message":"OCR 模型已移除，扫描页恢复待复核"}
+    return {"ok":True,"service":"evidenceflow","version":"0.7.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":bool(document_providers.describe().get('ready'))},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
 
 @app.get("/api/summary")
 def summary():
@@ -275,7 +266,15 @@ def document_page(did: str,number: int,version: str | None=None,parse_id: str | 
     return document_engine.get_page(did,number,version,parse_id)
 @app.get("/api/documents/{did}/pages/{number}/image")
 def document_image(did: str,number: int,version: str | None=None):
-    return Response(document_engine.render(did,number,version),media_type="image/png",headers={"Cache-Control":"private, max-age=3600","X-Content-Type-Options":"nosniff"})
+    return Response(document_engine.render_image(did,number,version),media_type="image/png",headers={"Cache-Control":"private, max-age=3600","X-Content-Type-Options":"nosniff"})
+
+@app.get("/api/documents/{did}/media/{media_id}")
+def document_media(did:str,media_id:str,version:str|None=None):
+    d,path=document_engine.version(did,version)
+    if d['format']!='docx': raise ValueError('此原件不是 DOCX')
+    from .document_native import read_docx_media
+    raw,media=read_docx_media(path,media_id)
+    return Response(raw,media_type=media,headers={"Cache-Control":"private, max-age=3600","X-Content-Type-Options":"nosniff","Content-Security-Policy":"default-src 'none'; sandbox"})
 @app.get("/api/documents/{did}/search")
 def document_search(did: str,q: str="",version: str | None=None,parse_id: str | None=None):
     return document_engine.search(did,q,version,parse_id)
@@ -302,7 +301,9 @@ def archive_doc(did: str):
 @app.post("/api/documents/{did}/restore")
 def restore_doc(did: str):
     d=s.doc_get(did)
-    with s.conn() as c: c.execute("UPDATE documents SET status='pending',quality_json='{}' WHERE id=?",(did,))
+    quality=json.loads(d['quality_json'] or '{}')
+    restored_status='failed' if quality.get('errors') else 'needs_review' if quality.get('quality_flags') else 'ready'
+    with s.conn() as c: c.execute("UPDATE documents SET status=? WHERE id=?",(restored_status,did))
     value=s.index_document(Path(d["path"]),d["name"])
     rag_index.submit_index([did])
     return value
@@ -387,12 +388,12 @@ def restore(sid: str):
 async def import_file(file: UploadFile=File(...)):
     name=Path(file.filename or "upload").name
     suffix=Path(name).suffix.lower()
-    if suffix not in {".csv",".xlsx",".sqlite",".db",".md",".txt",".docx",".pdf",".png",".jpg",".jpeg"}: raise ValueError("支持 CSV、XLSX、SQLite、DOCX、PDF、TXT、Markdown 和图片")
+    if suffix not in {".csv",".xlsx",".sqlite",".db",".md",".txt",".pdf",".docx",".png",".jpg",".jpeg",".webp"}: raise ValueError("支持 CSV、XLSX、SQLite、DOCX、PDF、TXT、Markdown 和图片")
     content=await file.read(50*1024*1024+1)
     if len(content)>50*1024*1024: raise HTTPException(413,"文件超过 50 MB")
     if not content: raise ValueError("文件为空，请选择包含数据的文件")
     dest=s.UPLOADS/(uuid.uuid4().hex[:10]+"_"+name); dest.write_bytes(content)
-    if suffix in {".md",".txt",".docx",".pdf",".png",".jpg",".jpeg"}:
+    if suffix in {".md",".txt",".pdf",".docx",".png",".jpg",".jpeg",".webp"}:
         d=s.index_document(dest,name)
         rag_index.submit_index([d['id']])
         return {"ok":d["status"]!="failed","kind":"document","document":d,"message":"解析失败，原文件已保留，可查看原因后重试" if d["status"]=="failed" else "文档已导入"}

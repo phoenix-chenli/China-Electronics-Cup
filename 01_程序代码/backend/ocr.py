@@ -395,9 +395,8 @@ def _adapter(name):
 def recognize_page(image_bytes):
     """Recognize a page and shape it like a parse page. None when not installed.
 
-    Character offsets inside a line are exact; per-character boxes are spread
-    across the recognized line box, which callers record as ``box_precision``
-    so line geometry is never presented as character geometry.
+    Text offsets refer to decoded line text. Only measured line geometry is
+    retained; recognition cannot supply independent character coordinates.
     """
     if not capabilities().get("ready"):
         return None
@@ -407,16 +406,11 @@ def recognize_page(image_bytes):
         content = line["text"].strip()
         if not content:
             continue
-        box, chars, span = line["box"], [], max(1, len(content))
-        for offset, character in enumerate(content):
-            left = box[0] + (box[2] - box[0]) * offset / span
-            right = box[0] + (box[2] - box[0]) * (offset + 1) / span
-            chars.append({"start": len(text) + offset, "end": len(text) + offset + len(character),
-                          "text": character, "box": [left, box[1], right, box[3]]})
+        box, chars = line["box"], []
         start = len(text)
         text += content
         blocks.append({"id": f"p1-b{index}", "start": start, "end": len(text), "text": content,
-                       "kind": "text", "level": 0, "title_path": "", "box": box, "chars": chars})
+                       "kind": "text", "level": 0, "title_path": "", "box": box, "chars": chars,"location_precision":"line"})
         index += 1
         text += "\n"
     return {"text": text, "blocks": blocks, "line_count": result["line_count"],
