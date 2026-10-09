@@ -108,6 +108,9 @@
 .focus-analysis.analysis-art .citation {display: inline-flex; align-items: center; gap: 4px; min-width: 0; min-height: 26px; margin: 0; padding: 4px 7px; background: var(--analysis-soft-blue); color: var(--analysis-blue); border: 1px solid transparent; border-radius: 6px; font-size: 10px; line-height: 1.4; transition: background .18s ease,border-color .18s ease,transform .18s ease}
 .focus-analysis.analysis-art .citation:hover {border-color: color-mix(in srgb,var(--analysis-blue) 24%,transparent); transform: translateY(-1px)}
 .focus-analysis.analysis-art .analysis-evidence-gap {display: inline-flex; align-items: center; gap: 4px; color: var(--analysis-amber); font-size: 11px; padding: 3px 0}
+.focus-analysis.analysis-art .claim-counter {display: inline-flex; align-items: center; gap: 4px; padding: 3px 7px; border-radius: 6px; font-size: 10px; line-height: 1.4; border: 1px solid transparent}
+.focus-analysis.analysis-art .claim-counter.ok {color: var(--analysis-blue); background: var(--analysis-soft-blue)}
+.focus-analysis.analysis-art .claim-counter.warn {color: var(--analysis-amber); background: color-mix(in srgb,var(--analysis-amber) 11%,transparent)}
 .focus-analysis.analysis-art .conclusion-footer {display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0 0; padding: 14px 0 4px; border: 0; color: var(--analysis-muted); font-size: 11px}
 .focus-analysis.analysis-art .conclusion-footer .text-link {font-size: 12px}
 .focus-analysis.analysis-art .result-details {border: 1px solid var(--analysis-line); margin: 26px 0 0; border-radius: 15px; background: var(--analysis-paper); overflow: hidden; scroll-margin-top: 20px; transition: box-shadow .22s ease}

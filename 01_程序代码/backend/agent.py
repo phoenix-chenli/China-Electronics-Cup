@@ -28,7 +28,7 @@ MAX_SQL_ATTEMPTS = 3
 TOOLS = {
     "schema.inspect": "查看销售工作区表、字段和关联元数据；不返回整库数据",
     "business.query": "只读查询现有销售指标、排名、同比、目标或有来源的奖金；不支持任意新表 SQL",
-    "document.search": "在固定范围混合检索原文并重排，返回完整片段和引用位置；不执行 OCR",
+    "document.search": "在固定范围混合检索原文并重排，返回完整片段和引用位置；扫描页仅在校验模型包已安装时使用本机识别文字",
     "evidence.assess": "检查问题所需事实是否被本轮文档和工具证据充分支持",
     "formula.calculate": "使用已查得且有来源的数值参数执行安全 Decimal 公式",
     "evidence.verify": "检查本轮已有来源、原文位置和数值参数绑定",

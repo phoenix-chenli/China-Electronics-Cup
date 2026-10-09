@@ -10,6 +10,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from datetime import date
 from threading import Event
 from . import store as s
+from . import counter_check
 
 FEATURES={"clarification":True,"semantic_validation":True,"evidence_binding":True,"document_reparse":True,"temporal_rules":True,"unit_guard":True}
 METRICS={"net_sales":"净销售额","gross_sales":"销售额（未扣退货）","count":"客户与订单数","growth_rate":"净销售额增长率","document":"文档查找","bonus":"奖金","target":"目标达成率","preview":"数据预览"}
@@ -202,8 +203,11 @@ def execute(question, previous=None, overrides=None, features=None, cancelled=No
     def add_evidence(e):
         if all(x["id"]!=e["id"] for x in result["evidence"]): result["evidence"].append(e)
         return e["id"]
-    def claim(text,ids=(),status="supported",value=None,unit=None,kind="fact"):
-        result["claims"].append({"id":"claim-"+str(len(result["claims"])+1),"text":text,"evidence_ids":list(ids) if flags["evidence_binding"] else [],"status":status,"value":value,"unit":unit,"kind":kind})
+    def claim(text,ids=(),status="supported",value=None,unit=None,kind="fact",counter=None):
+        item={"id":"claim-"+str(len(result["claims"])+1),"text":text,"evidence_ids":list(ids) if flags["evidence_binding"] else [],"status":status,"value":value,"unit":unit,"kind":kind}
+        if counter: item["counter_check"]=counter
+        result["claims"].append(item)
+        return item
     def finish():
         evidence_ids={e["id"] for e in result["evidence"]}
         total=len(result["claims"])
@@ -294,7 +298,15 @@ def execute(question, previous=None, overrides=None, features=None, cancelled=No
         sql=f"SELECT ROUND(SUM({amount}),2) AS {amount_key},COUNT(DISTINCT o.order_id) AS order_count FROM orders o WHERE {filter_sql}"
     rows,truncated=step("sql","读取查询结果",lambda:s.read(sql,params),"sqlite.readonly")
     result["sql"]=sql; result["rows"]=rows; result["columns"]=list(rows[0]) if rows else []; result["truncated"]=truncated
-    eid=add_evidence({"id":"sql-"+rid,"type":"sql_result","source":"订单"+(" · 产品" if join else ""),"snippet":"按当前条件执行的汇总结果；可查看查询语句和贡献订单。","status":"executed","locator":{"sql":sql,"params":params,"columns":result["columns"],"row_count":len(rows),"rows":rows,"contribution_sql":f"SELECT o.* FROM orders o WHERE {checked_filter} ORDER BY o.order_date","contribution_params":checked_params,"version":result["data_version"]}})
+    contribution={"sql":sql,"params":params,"columns":result["columns"],"row_count":len(rows),"rows":rows,"contribution_sql":f"SELECT o.* FROM orders o WHERE {checked_filter} ORDER BY o.order_date","contribution_params":checked_params,"version":result["data_version"]}
+    eid=add_evidence({"id":"sql-"+rid,"type":"sql_result","source":"订单"+(" · 产品" if join else ""),"snippet":"按当前条件执行的汇总结果；可查看查询语句和贡献订单。","status":"executed","locator":contribution})
+    # Independently re-derive the headline number from the contribution rows
+    # before any figure is published as verified.
+    counter=step("counter","独立复算关键数值",lambda:counter_check.verify(spec,rows,{"locator":contribution}),"counter.check")
+    if counter: result["counter_checks"]=[counter]
+    blocked=bool(counter) and counter["status"]=="failed"
+    numeric_status="needs_evidence" if blocked else "verified"
+    if blocked: claim(counter["detail"],status="needs_evidence",kind="gap")
     label=f"{year} 年{region or '全域'}"+(" · "+product if product else "")
     first=rows[0] if rows else {}
     if not first or (first.get(amount_key) is None and spec["metric"] not in {"count","growth_rate"}):
@@ -305,11 +317,11 @@ def execute(question, previous=None, overrides=None, features=None, cancelled=No
             claim("对比数据缺失或基期不大于零，暂不输出增长率。",[eid],status="needs_evidence",kind="gap")
         else:
             rate=calculate("(current-base)/base",{"current":current,"base":base})
-            claim(f"{label}相比 {spec['compare_year']} 年，净销售额增长率为 {rate*100:.2f}%。",[eid],"verified",float(rate),"ratio")
+            claim(f"{label}相比 {spec['compare_year']} 年，净销售额增长率为 {rate*100:.2f}%。",[eid],numeric_status,float(rate),"ratio",counter=counter)
             result["metrics"]=[{"label":"本期净销售额","value":current,"unit":"CNY","evidence_ids":[eid]},{"label":"对比期净销售额","value":base,"unit":"CNY","evidence_ids":[eid]},{"label":"增长率","value":float(rate),"unit":"ratio","evidence_ids":[eid]}]
         return finish()
     if spec["metric"]=="count":
-        claim(f"{label}有 {first['customer_count']} 个客户、{first['order_count']} 笔订单。",[eid],"verified")
+        claim(f"{label}有 {first['customer_count']} 个客户、{first['order_count']} 笔订单。",[eid],numeric_status,counter=counter)
         result["metrics"]=[{"label":"客户","value":first["customer_count"],"unit":"个","evidence_ids":[eid]},{"label":"订单","value":first["order_count"],"unit":"笔","evidence_ids":[eid]}]
         return finish()
     sales=first[amount_key]
@@ -318,9 +330,9 @@ def execute(question, previous=None, overrides=None, features=None, cancelled=No
             spec["resolved_entity"]=first["product_name"]; spec["resolved_product_id"]=first["product_id"]
         if spec["asks_top"]:
             ties=[r["product_name"] for r in rows if r[amount_key]==sales]
-            claim(label+METRICS.get(amount_key,"净销售额")+"最高的产品是"+("、".join(ties))+"。",[eid],"verified")
+            claim(label+METRICS.get(amount_key,"净销售额")+"最高的产品是"+("、".join(ties))+"。",[eid],numeric_status,counter=counter)
         else: claim(label+"的产品销售结果已找到。",[eid],"verified")
-    else: claim(label+METRICS.get(amount_key,"净销售额")+"为 "+money(sales)+"。",[eid],"verified",sales,"CNY")
+    else: claim(label+METRICS.get(amount_key,"净销售额")+"为 "+money(sales)+"。",[eid],numeric_status,sales,"CNY",counter=counter)
     result["metrics"]=[{"label":"销售额" if spec["metric"]=="gross_sales" else "净销售额","value":sales,"unit":"CNY","evidence_ids":[eid]},{"label":"订单","value":first["order_count"],"unit":"笔","evidence_ids":[eid]}]
 
     if spec["metric"]=="target":
@@ -346,7 +358,7 @@ def execute(question, previous=None, overrides=None, features=None, cancelled=No
             target=sum(decimal(r["target_amount"]) for r in targetrows);rate=calculate("sales/target",{"sales":matched_sales,"target":target})
             te=add_evidence({"id":"target-"+rid,"type":"sql_result","source":"年度目标表","snippet":"同一年度、区域及产品的目标；无销售的目标也纳入分母。","status":"executed","locator":{"sql":target_sql,"params":target_params,"rows":targetrows,"columns":list(targetrows[0]),"row_count":len(targetrows),"version":result["data_version"]}})
             me=add_evidence({"id":"target-base-"+rid,"type":"sql_result","source":"有目标的销售范围","snippet":"销售额仅计入具有同年度、同区域、同产品目标的订单。","status":"executed","locator":{"sql":matched_sql,"params":matched_params,"rows":matched,"columns":list(matched[0]),"row_count":1,"version":result["data_version"]}})
-            claim("有目标的产品与区域，目标达成率为 "+f"{rate*100:.2f}%"+ "。",[me,te],"verified",float(rate),"ratio")
+            claim("有目标的产品与区域，目标达成率为 "+f"{rate*100:.2f}%"+ "。",[me,te],numeric_status,float(rate),"ratio",counter=counter)
             result["metrics"]=[{"label":"有目标的净销售额","value":matched_sales,"unit":"CNY","evidence_ids":[me]},{"label":"目标额","value":float(target),"unit":"CNY","evidence_ids":[te]},{"label":"目标达成率","value":float(rate),"unit":"ratio","evidence_ids":[me,te]}]
             excluded_sql=f"SELECT COUNT(DISTINCT o.order_id) AS order_count,COALESCE(ROUND(SUM({amount}),2),0) AS net_sales FROM orders o WHERE {scope_filter} AND NOT {match}"
             excluded=s.read(excluded_sql,matched_params)[0]

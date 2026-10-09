@@ -6,10 +6,13 @@ import time
 import unittest
 import uuid
 import urllib.request
+import urllib.parse
+import zipfile
 from PIL import Image
 import pymupdf
 from tests.test_conversations import LocalClient,TEMP,conv,s,engine
 from backend import documents as docs
+from backend import docx_reader as docx
 
 
 def pdf_bytes(rotation=0,scan=False):
@@ -163,6 +166,82 @@ class DocumentReaderTest(unittest.TestCase):
                 bound=self.bind(d,t).json();evs.append({'id':str(n),'type':'document','snippet':t,'source':d['name'],'locator':bound['locator']})
             r={'run_id':str(uuid.uuid4()),'question':'比较收入','status':'completed','claims':[{'id':'c','text':'收入核验','evidence_ids':['0','1']}],'evidence':evs}
             s.snapshot_run(r);check=docs.verify_claim(r['run_id'],'c');self.assertEqual(check['checks'][2]['status'],status)
+
+    def docx_source(self,elements):
+        return self.source(docx.build(elements),'docx')
+    def test_docx_headings_table_and_exact_location(self):
+        d,_=self.docx_source([
+            {"kind":"paragraph","text":"服务办法","level":1},
+            {"kind":"paragraph","text":"本节说明免费维修期。","level":2},
+            {"kind":"paragraph","text":"免费维修期为签收次日起 18 个月。","level":0},
+            {"kind":"table","rows":[["零件","额度"],["电池","280 元"]]},
+        ])
+        self.assertEqual(d['status'],'ready')
+        meta=self.get(d,'/view').json()
+        self.assertEqual([h['level'] for h in meta['outline']],[1,2])
+        self.assertEqual(meta['structure'],'Word 标题与表格')
+        p=self.get(d,'/pages/1').json()
+        self.assertTrue(p['text_available']);self.assertFalse(p['ocr_required'])
+        for block in p['blocks']:
+            self.assertEqual(p['text'][block['start']:block['end']],block['text'])
+        quote='免费维修期为签收次日起 18 个月。'
+        r=self.bind(d,quote).json()
+        self.assertEqual(r['status'],'located');self.assertEqual(r['quote'],quote)
+        self.assertEqual(r['locator']['location_precision'],'text_range')
+        rows=[b for b in p['blocks'] if b['kind']=='table_row']
+        self.assertTrue(rows);self.assertIn('280 元',p['text'])
+        self.assertEqual(self.get(d,'/search',q=urllib.parse.quote('280 元')).json()['matches'][0]['page'],1)
+    def test_docx_heading_path_matches_markdown_convention(self):
+        d,_=self.docx_source([{"kind":"paragraph","text":"甲","level":1},
+                              {"kind":"paragraph","text":"乙","level":2},
+                              {"kind":"paragraph","text":"正文。","level":0}])
+        blocks=self.get(d,'/pages/1').json()['blocks']
+        self.assertEqual(blocks[0]['title_path'],'甲')
+        self.assertEqual(blocks[1]['title_path'],'甲 / 乙')
+        self.assertEqual(blocks[2]['title_path'],'甲 / 乙')
+    def test_docx_failures_are_explicit_and_original_is_retained(self):
+        broken,_=self.source(b'this is not a zip archive','docx')
+        self.assertEqual(broken['status'],'failed')
+        self.assertTrue(broken['quality']['errors'])
+        self.assertEqual(self.get(broken,'/view').status_code,400)
+        self.assertEqual(self.get(broken,'/pages/1').status_code,400)
+        self.assertEqual(self.get(broken,'/original').status_code,200)
+        buffer=io.BytesIO()
+        with zipfile.ZipFile(buffer,'w') as archive:archive.writestr('hello.txt','no body part')
+        missing,_=self.source(buffer.getvalue(),'docx')
+        self.assertEqual(missing['status'],'failed')
+        self.assertTrue(missing['quality']['errors'])
+        buffer=io.BytesIO()
+        with zipfile.ZipFile(buffer,'w') as archive:archive.writestr('word/document.xml','<w:document><w:body>')
+        malformed,_=self.source(buffer.getvalue(),'docx')
+        self.assertEqual(malformed['status'],'failed')
+    def test_docx_recognition_flag_only_when_an_image_is_embedded(self):
+        plain,_=self.docx_source([{"kind":"paragraph","text":"   ","level":0}])
+        self.assertEqual(plain['status'],'ready')
+        self.assertNotIn('需要文字识别',plain['quality']['quality_flags'])
+        self.assertFalse(self.get(plain,'/pages/1').json()['ocr_required'])
+        buffer=io.BytesIO()
+        with zipfile.ZipFile(buffer,'w',zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr('word/document.xml','<?xml version="1.0"?><w:document xmlns:w="'+docx.NS+
+                             '"><w:body><w:p><w:r><w:drawing/></w:r></w:p></w:body></w:document>')
+            archive.writestr('word/media/image1.png',b'\x89PNG\r\n\x1a\n'+b'0'*32)
+        scan,_=self.source(buffer.getvalue(),'docx')
+        self.assertEqual(scan['status'],'needs_review')
+        self.assertIn('需要文字识别',scan['quality']['quality_flags'])
+        page=self.get(scan,'/pages/1').json()
+        self.assertTrue(page['ocr_required']);self.assertFalse(page['text_available'])
+        self.assertFalse(page['vision_verified'])
+    def test_docx_reparse_keeps_outline_and_pins_previous_parse(self):
+        d,_=self.docx_source([{"kind":"paragraph","text":"标题甲","level":1},
+                              {"kind":"paragraph","text":"正文。","level":0}])
+        meta=self.get(d,'/view').json()
+        record=self.client.post('/api/documents/'+d['id']+'/reparse',
+                                 json={'page':1,'version':d['sha256'],'parse_id':meta['parse_id']}).json()
+        self.assertFalse(record['changed'])
+        self.assertNotEqual(record['after_parse_id'],meta['parse_id'])
+        self.assertEqual([h['level'] for h in self.get(d,'/view',parse_id=record['after_parse_id']).json()['outline']],[1])
+        self.assertEqual(self.get(d,'/pages/1',parse_id=meta['parse_id']).status_code,200)
+        self.assertEqual(self.bind(d,'正文。',parse_id=meta['parse_id']).json()['status'],'located')
 
 
 if __name__=='__main__':unittest.main()

@@ -10,6 +10,7 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel, ConfigDict, Field
 from . import store as s, engine
+from . import ocr
 
 router = APIRouter(prefix='/api')
 
@@ -28,7 +29,7 @@ def settings():
     caps=connections.capabilities()
     return {'local_only': connections.local_only(), 'can_disable_local_only': True,
             'external_services': [{'id':x['id'],'name':x['name'],'enabled':x['enabled']} for x in connections.listing() if not connections.is_local(x)],
-            'text_model': caps['text'], 'vision_model': caps['vision'], 'ocr': False,
+            'text_model': caps['text'], 'vision_model': caps['vision'], 'ocr': ocr.capabilities(),
             'storage': {'database': str(s.APP_DB), 'documents': str(s.DOCS), 'uploads': str(s.UPLOADS)},
             'temporary': {'persistent': False, 'timeout_seconds': 1800, 'uploads': False},
             'boundary': '临时问答仅查询现有数据，不调用外部服务、不保存分析；关闭即丢弃，意外断连最多保留 30 分钟内存。'}
@@ -94,11 +95,11 @@ def help_answer(req: HelpRequest):
     elif any(x in q for x in ['来源','证据']):
         text='点击结论后的来源编号，可查看同版本文档、原文位置或实际 SQL。精简只收起片段，详细会显示版本与参数，来源数量不变。';action='evidence';state='explain_right'
     elif any(x in q for x in ['导入','上传','文件格式']):
-        text='在“数据”选择“导入”。支持 CSV、Excel、SQLite、PDF、文本和图片；扫描件与图片只保留原件，文字识别未配置。';action='data'
+        text='在“数据”选择“导入”。支持 CSV、Excel、SQLite、Word、PDF、文本和图片；Word 与文本按段落和标题定位，扫描件与图片只保留原件，文字识别未配置。';action='data'
     elif any(x in q for x in ['临时','隐私','本机','外发']):
         text='普通分析保存在本机 SQLite，文件保存在本机目录。临时问答只使用内存，不写入历史；关闭或刷新会退出。外部调用由“仅本机处理”开关控制；临时问答始终只在本机查询。';action='settings'
     elif any(x in q for x in ['模型','联网','能做什么']):
-        text='主问答可在模型连接页选择自动、本地或指定模型。已测试并启用的文本模型可规划只读业务查询、文档检索、计算和来源核验；模型补充与联网检索仍可单独预览调用。OCR 仍未启用，临时问答只在本机处理。';action='settings'
+        text='主问答可在模型连接页选择自动、本地或指定模型。已测试并启用的文本模型可规划只读业务查询、文档检索、计算和来源核验；模型补充与联网检索仍可单独预览调用。'+('本机离线识别已安装，扫描页可生成文字并标记待复核。' if ocr.capabilities().get('ready') else '文字识别未安装：扫描页与图片保持待复核，不会用重新读取文字层冒充识别。')+'临时问答只在本机处理。';action='settings'
     elif any(x in q for x in ['主题','深色','字号','字体','密度','动画','配置','设置']):
         p=req.preferences
         text='当前主题：'+{'light':'浅色','dark':'深色','system':'跟随系统'}.get(p.get('theme'),'浅色')+'；字号：'+str(p.get('fontSize',14))+'px。修改外观立即生效。关闭动画仍可提问；系统减少动态效果优先。';action='settings'

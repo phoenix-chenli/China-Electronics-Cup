@@ -21,7 +21,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from . import store as s
-from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
+from . import engine, conversations, scenarios, settings, connections, extensions, sharing, ocr, agent, database_query
 from . import documents as document_engine
 from . import rag_index, rag_providers
 from .seed import seed_business, write_seed_docs
@@ -39,7 +39,7 @@ def init_app():
     s.init(); seed_business(); write_seed_docs()
     seed_docs=s.PROJECT_ROOT/'02_数据资料'/'示例数据'/'docs'
     for source in sorted(seed_docs.glob('*')):
-        if source.is_file() and not source.is_symlink() and source.suffix in {'.md','.txt','.pdf','.png'}:
+        if source.is_file() and not source.is_symlink() and source.suffix in {'.md','.txt','.docx','.pdf','.png'}:
             target=s.DOCS/source.name
             if not target.exists(): shutil.copy2(source,target)
     scenarios.initialize()
@@ -141,7 +141,20 @@ def run(req, cancelled=None, progress=None):
 @app.get("/api/health")
 def health():
     cfg=agent.saved_config()
-    return {"ok":True,"service":"evidenceflow","version":"0.6.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":False},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
+    return {"ok":True,"service":"evidenceflow","version":"0.6.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":ocr.capabilities()["ready"]},"ocr":ocr.capabilities(),"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
+
+@app.get("/api/ocr/status")
+def ocr_status():
+    return {"capabilities":ocr.capabilities(),"manifest":str(ocr.manifest_path()),"pack":str(ocr.pack_path()),
+            "boundary":"只有模型包内每个文件都与清单 SHA-256 一致时才会执行识别；未安装时扫描页保持待复核，不会用重新读取文字层冒充 OCR。"}
+
+@app.post("/api/ocr/install")
+def ocr_install():
+    return {"capabilities":ocr.install(),"message":"OCR 模型已校验并安装"}
+
+@app.post("/api/ocr/uninstall")
+def ocr_uninstall():
+    return {"capabilities":ocr.uninstall(),"message":"OCR 模型已移除，扫描页恢复待复核"}
 
 @app.get("/api/summary")
 def summary():
@@ -374,12 +387,12 @@ def restore(sid: str):
 async def import_file(file: UploadFile=File(...)):
     name=Path(file.filename or "upload").name
     suffix=Path(name).suffix.lower()
-    if suffix not in {".csv",".xlsx",".sqlite",".db",".md",".txt",".pdf",".png",".jpg",".jpeg"}: raise ValueError("支持 CSV、XLSX、SQLite、PDF、TXT、Markdown 和图片")
+    if suffix not in {".csv",".xlsx",".sqlite",".db",".md",".txt",".docx",".pdf",".png",".jpg",".jpeg"}: raise ValueError("支持 CSV、XLSX、SQLite、DOCX、PDF、TXT、Markdown 和图片")
     content=await file.read(50*1024*1024+1)
     if len(content)>50*1024*1024: raise HTTPException(413,"文件超过 50 MB")
     if not content: raise ValueError("文件为空，请选择包含数据的文件")
     dest=s.UPLOADS/(uuid.uuid4().hex[:10]+"_"+name); dest.write_bytes(content)
-    if suffix in {".md",".txt",".pdf",".png",".jpg",".jpeg"}:
+    if suffix in {".md",".txt",".docx",".pdf",".png",".jpg",".jpeg"}:
         d=s.index_document(dest,name)
         rag_index.submit_index([d['id']])
         return {"ok":d["status"]!="failed","kind":"document","document":d,"message":"解析失败，原文件已保留，可查看原因后重试" if d["status"]=="failed" else "文档已导入"}

@@ -84,8 +84,13 @@ def write_seed_docs() -> None:
         candidates = ([Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts" / f for f in ("msyh.ttc", "simsun.ttc")] if os.name == "nt" else [Path("/System/Library/Fonts/Supplemental/Songti.ttc")])
         font_path = next((p for p in candidates if p.exists()), None)
         if font_path is None: return  # Never generate missing-glyph artwork.
-        with sqlite3.connect(BUSINESS_DB) as con:
+        # sqlite3's context manager commits but never closes, which would keep
+        # a Windows file handle on business.db and block later cleanup.
+        con = sqlite3.connect(BUSINESS_DB)
+        try:
             rows = con.execute("SELECT t.region,p.product_name,t.target_amount FROM targets t JOIN products p ON p.product_id=t.product_id WHERE t.target_year=2024 ORDER BY t.target_id").fetchall()
+        finally:
+            con.close()
         if not rows: return
         font = ImageFont.truetype(str(font_path), 25)
         title_font = ImageFont.truetype(str(font_path), 35)

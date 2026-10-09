@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-09",
+  "version": "0.6.0",
+  "host": {
+    "platform": "Windows AMD64 (Windows 11, 10.0.26300)",
+    "runtime": "06_运行环境/Windows_x64 python.exe, CPython 3.13.6 (MSC v.1944 64 bit)",
+    "launch": "01_程序代码/启动与打包/launcher.py start（根目录 .bat 调用的同一入口）",
+    "dependency_cache": "%LOCALAPPDATA%/EvidenceFlow/runtime/d41fb969f7208f80f8d6（已存在并被复用）"
+  },
+  "checks": [
+    {
+      "name": "服务启动与健康状态",
+      "status": "passed",
+      "detail": "launcher.py start 输出“证流已启动：http://127.0.0.1:8765”；/api/health 返回 ok=true、version=0.6.0、mode=configurable-agent、platform=Windows AMD64。"
+    },
+    {
+      "name": "重复启动复用同一实例",
+      "status": "passed",
+      "detail": "服务运行中再次执行 start，输出“证流已在运行。”，实例 PID 保持 33844，未启动第二个进程。"
+    },
+    {
+      "name": "文档索引与示例复制",
+      "status": "passed",
+      "detail": "首次启动自动复制示例文件并索引，/api/documents 返回 27 份：25 Markdown、1 DOCX、1 PNG。"
+    },
+    {
+      "name": "DOCX 解析与原文定位",
+      "status": "passed",
+      "detail": "衡岭设备保修办法.docx 状态 ready、location_precision=text_range、structure=Word 标题与表格、outline 三级标题正确、第 1 页 text_available=true 且 ocr_required=false；/api/evidence/resolve 对正文引用返回 located，quote 与原文逐字一致；/api/documents/{id}/search 命中。"
+    },
+    {
+      "name": "业务查询与数值反证",
+      "status": "passed",
+      "detail": "“2024 年华东净销售额是多少？”返回 ¥1,740,000.00；counter_checks 状态 passed（明细求和，6 条明细 Decimal 独立求和一致，订单去重 6 笔一致），结论 status=verified，coverage 1/1。"
+    },
+    {
+      "name": "核验接口展示数值反证",
+      "status": "passed",
+      "detail": "/api/evidence/verify 返回四项检查：引用定位 passed、单位与数值 not_checked、多源一致性 not_checked、数值反证 passed。"
+    },
+    {
+      "name": "会话任务流、追问、条件修改、保存",
+      "status": "passed",
+      "detail": "新建会话后提交任务 completed；追问“那华北呢？”得到 2024 年华北 ¥510,000.00 且 counter passed；mode=recompute 改区域为华南得到 ¥570,000.00；/api/saved 保存成功并在列表可见且 stale=false；会话消息数 8。"
+    },
+    {
+      "name": "文档范围提问",
+      "status": "passed",
+      "detail": "对 DOCX 以 document_context 提问，返回 3 条来源，全部 location_precision=text_range 且 /api/evidence/resolve 均为 located；回答给出保修期原文。"
+    },
+    {
+      "name": "停止与重启",
+      "status": "passed",
+      "detail": "launcher.py stop 输出“证流已停止。”，随后 /api/health 不可达；再次 start 成功并分配新实例 PID 772。"
+    },
+    {
+      "name": "DPAPI 凭据保护",
+      "status": "passed",
+      "detail": "backend/vault.py 在 os.name=nt 下生成 32 字节密钥并写入带 EF-DPAPI-1 前缀的文件；读回与生成值一致（DPAPI 加解密往返成功）。写入非 DPAPI（其它平台）密钥后读取被明确拒绝并提示在当前 Windows 电脑重新配置。"
+    },
+    {
+      "name": "端口冲突保护",
+      "status": "passed",
+      "detail": "停止服务后由外部进程占用 8765，launcher.py start 以退出码 1 拒绝并提示“8765 端口已被其他程序或另一份证流占用。请先停止对应服务。”，未结束该外部进程；释放端口后可正常启动。"
+    },
+    {
+      "name": "前端构建产物可服务",
+      "status": "passed",
+      "detail": "/ 返回 index.html（408 字节），其引用的 /assets/index-CS7BTNZx.js（497,538 字节）与 /assets/index-CHqyu1PO.css（334,542 字节）均返回 200。"
+    },
+    {
+      "name": "Python 隔离回归",
+      "status": "passed",
+      "detail": "03_测试验收/自动测试/运行测试.py 在封装运行时下运行 17 个模块共 280 项，全部通过，未通过模块：无。"
+    },
+    {
+      "name": "OCR 能力状态诚实上报",
+      "status": "passed",
+      "detail": "未提供已审定模型包时 /api/health 返回 ocr=false 且 /api/ocr/status 给出具体原因（未提供 OCR 模型清单）；/api/settings 返回同一能力对象；示例目标图仍为 needs_review 且带“需要文字识别”标记，未生成任何文字。识别所需模型包与清单须由操作者提供并通过逐文件 SHA-256 校验。"
+    },
+    {
+      "name": "TypeScript 与正式构建",
+      "status": "passed",
+      "detail": "tsc --noEmit 退出码 0；vite build 成功（index 497.53 kB、样式 334.54 kB、chart 518.36 kB），chart 分块超过 500 kB 的告警为既有情况。"
+    }
+  ],
+  "not_verified": [
+    "完整 BAT 首次启动的干净机器全流程：本机依赖缓存已存在并被复用，未在全新电脑上重建",
+    "移动目录后重启、目录不可写、离线启动等场景本轮未逐一执行",
+    "DPAPI 在其他 Windows 用户账户或另一台电脑上的行为",
+    "浏览器视觉与交互检查（本轮未重跑，沿用此前记录）",
+    "OCR 真实识别：缺少已审定模型包，识别准确率、旋转、模糊页面与跨页表均未实测",
+    "真实外部模型语义质量、真实 PostgreSQL / MySQL 服务",
+    "RAG 冻结评估集的真实生成质量与人工答案审查"
+  ],
+  "scope": "本轮验证 DOCX 解析、数值反证、OCR 接入骨架的状态上报与本机 Windows 实机启动路径；上述 not_verified 项目不能视为已通过。"
+}

@@ -17,7 +17,7 @@
 .source-files .evidence-entry small{display:block;line-height:1.6}
 .file-format{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;width:34px;min-height:42px;color:#3078cd;background:#e7f1ff;border-radius:5px}
 .file-format small{font-size:9px!important;line-height:1!important;margin:2px 0}
-.file-pdf{color:#dd4b52;background:#ffe9ec}.file-png,.file-jpg,.file-jpeg{color:#168c81;background:#def7ee}
+.file-pdf{color:#dd4b52;background:#ffe9ec}.file-docx{color:#1f5fb0;background:#dfeaff}.file-png,.file-jpg,.file-jpeg{color:#168c81;background:#def7ee}
 .query-sources{font-size:12px;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
 .query-sources summary{cursor:pointer;color:var(--muted)}
 .query-sources .text-link{display:flex;white-space:normal;text-align:left}

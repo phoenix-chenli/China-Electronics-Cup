@@ -109,6 +109,34 @@ def blocks(did, page=None):
         rows=c.execute(sql+" ORDER BY page,id", p).fetchall()
     return [{**dict(r), "bbox":json.loads(r["bbox_json"]), "quality":json.loads(r["quality_json"])} for r in rows]
 
+def _recognize_page_bytes(png_bytes):
+    from . import ocr
+    return ocr.recognize_page(png_bytes)
+
+
+def _recognize_pdf(path, number):
+    """Render one PDF page and recognize it. None keeps the honest empty state."""
+    from . import ocr
+    if not ocr.capabilities().get("ready"): return None
+    import pymupdf
+    with pymupdf.open(path) as doc:
+        if not 1<=number<=len(doc): return None
+        page=doc[number-1]
+        scale=min(2,2000/max(page.rect.width,page.rect.height))
+        pixmap=page.get_pixmap(matrix=pymupdf.Matrix(scale,scale),alpha=False)
+        return ocr.recognize_page(pixmap.tobytes("png"))
+
+
+def _ocr_blocks(recognized, page):
+    """Turn recognized lines into catalog blocks that keep their page position."""
+    info=recognized["info"]
+    quality={"text_extracted":True,"ocr_required":False,"vision_verified":False,
+             "location_precision":"text_range","box_precision":info.get("box_precision"),
+             "ocr":info}
+    return [{"page":page,"text":piece["text"],"title_path":"","content_type":"text",
+             "bbox":piece["box"],"quality":dict(quality)} for piece in recognized["blocks"]]
+
+
 def extract(path):
     suffix=path.suffix.lower(); out=[]
     def block(text, page, title="", kind="text", quality=None):
@@ -118,7 +146,11 @@ def extract(path):
         reader=PdfReader(path)
         for i,page in enumerate(reader.pages,1):
             text=page.extract_text() or ""
-            out.append(block(text,i,quality={"text_extracted":bool(text.strip()),"location_precision":"page","rotation_degrees":int(page.get("/Rotate",0)),"ocr_required":not bool(text.strip())}))
+            recognized=_recognize_pdf(path,i) if not text.strip() else None
+            if recognized:
+                out.extend(_ocr_blocks(recognized,i))
+            else:
+                out.append(block(text,i,quality={"text_extracted":bool(text.strip()),"location_precision":"page","rotation_degrees":int(page.get("/Rotate",0)),"ocr_required":not bool(text.strip())}))
     elif suffix in {".png",".jpg",".jpeg",".webp"}:
         from PIL import Image, ImageStat, ImageFilter
         with Image.open(path) as im:
@@ -127,7 +159,24 @@ def extract(path):
             w,h=im.size
             gray=im.convert("L").resize((min(w,512),min(h,512)))
             edge_variance=ImageStat.Stat(gray.filter(ImageFilter.FIND_EDGES)).var[0]
-        out.append(block("",1,kind="image",quality={"text_extracted":False,"ocr_required":True,"vision_verified":False,"width":w,"height":h,"edge_variance":round(edge_variance,2),"location_precision":"page"}))
+        recognized=_recognize_page_bytes(path.read_bytes())
+        if recognized:
+            out.extend(_ocr_blocks(recognized,1))
+        else:
+            out.append(block("",1,kind="image",quality={"text_extracted":False,"ocr_required":True,"vision_verified":False,"width":w,"height":h,"edge_variance":round(edge_variance,2),"location_precision":"page"}))
+    elif suffix==".docx":
+        from . import docx_reader
+        data=docx_reader.page(path)
+        for piece in data["blocks"]:
+            kind=piece["kind"] if piece["kind"] in {"heading","table_row"} else "text"
+            out.append(block(piece["text"],1,piece["title_path"],kind,
+                             {"text_extracted":bool(piece["text"].strip()),"location_precision":"text_range"}))
+        if not data["text"].strip():
+            # An empty body is only "needs recognition" when an image is really
+            # embedded; otherwise it is simply a document without text.
+            media=docx_reader.has_media(path)
+            out=[block("",1,kind="image" if media else "text",
+                       quality={"text_extracted":False,"ocr_required":media,"vision_verified":False,"location_precision":"page"})]
     else:
         text=path.read_text(encoding="utf-8-sig")
         titles=[]; buf=[]
@@ -165,7 +214,12 @@ def index_document(path, name=None):
         if errors: flags.append("解析失败")
         if any(x["quality"].get("ocr_required") for x in pieces): flags.append("需要文字识别")
         if any(x["quality"].get("rotation_degrees",0) for x in pieces): flags.append("页面带有旋转")
-        quality={"parser_version":2,"block_count":len(pieces),"visual_blocks":sum(x["content_type"]=="image" for x in pieces),"quality_flags":flags,"errors":errors,"location_precision":"page","structure":"Markdown 标题" if path.suffix.lower()==".md" else "按页；目录层级未恢复"}
+        if any((x["quality"].get("ocr") or {}).get("low_confidence",0) for x in pieces): flags.append("识别结果待复核")
+        recognized=any(x["quality"].get("ocr") for x in pieces)
+        precision="text_range" if path.suffix.lower() in {".md",".txt",".docx"} or recognized else "page"
+        quality={"parser_version":2,"block_count":len(pieces),"visual_blocks":sum(x["content_type"]=="image" for x in pieces),"quality_flags":flags,"errors":errors,"location_precision":precision,"structure":"Markdown 标题" if path.suffix.lower()==".md" else "Word 标题与表格" if path.suffix.lower()==".docx" else "按页；目录层级未恢复"}
+        if recognized:
+            quality["ocr"]=next(x["quality"]["ocr"] for x in pieces if x["quality"].get("ocr"))
         version_file=VERSIONS/(sha+path.suffix.lower())
         if not version_file.exists(): version_file.write_bytes(path.read_bytes())
         stamp=now(); status="failed" if errors else "needs_review" if flags else "ready"

@@ -2,7 +2,11 @@
 
 PDF coordinates use the displayed (rotated) page, normalized to [0, 1].
 Text ranges use Unicode code points in the stored page text, never DOM offsets.
-No OCR, visual verification, inferred headings, or semantic confidence is used.
+Markdown and DOCX heading levels come from what the file itself declares
+(heading syntax or Word outline levels), not from font size or position.
+Local OCR supplies text only when a verified model pack is installed; its boxes
+are line-level and results stay marked for review. No visual verification or
+semantic confidence is used.
 """
 from __future__ import annotations
 
@@ -73,10 +77,18 @@ def _box(rect, page):
     return [round(max(0,min(1,x)),7) for x in (r.x0/w,r.y0/h,r.x1/w,r.y1/h)]
 
 
+def _ocr_page(png_bytes, width, height):
+    """Recognize one page image. Returns (text, blocks, info) or None when unavailable."""
+    from . import ocr
+    recognized=ocr.recognize_page(png_bytes)
+    if not recognized: return None
+    return recognized["text"],recognized["blocks"],recognized["info"]
+
+
 def parse_page(path, page_number):
     """Read only the requested page. PDF render and extraction share rotation."""
     fmt = path.suffix.lower().lstrip(".")
-    text=""; blocks=[]; images=[]; headings=[]; width,height=595,842
+    text=""; blocks=[]; images=[]; headings=[]; width,height=595,842; ocr_info=None
     if fmt == "pdf":
         import pymupdf
         with pymupdf.open(path) as doc:
@@ -98,11 +110,21 @@ def parse_page(path, page_number):
                 text+="\n"
             images=[{"box":_box(i["bbox"],p)} for i in p.get_image_info()]
             rotation=p.rotation
+            if not text.strip():
+                # A page with no extractable text may be a scan. Recognition only
+                # runs with a verified pack; otherwise the page keeps its honest
+                # "needs recognition" state.
+                scale=min(2,2000/max(width,height))
+                pixmap=p.get_pixmap(matrix=pymupdf.Matrix(scale,scale),alpha=False)
+                recognized=_ocr_page(pixmap.tobytes("png"),width,height)
+                if recognized: text,blocks,ocr_info=recognized
     elif fmt in {"png","jpg","jpeg","webp"}:
         from PIL import Image
         if page_number!=1: raise ValueError("页码超出范围")
         with Image.open(path) as im: width,height=im.size
         rotation=0; images=[{"box":[0,0,1,1]}]
+        recognized=_ocr_page(path.read_bytes(),width,height)
+        if recognized: text,blocks,ocr_info=recognized
     elif fmt in {"md","txt"}:
         if page_number!=1: raise ValueError("页码超出范围")
         text=path.read_text(encoding="utf-8-sig"); offset=0; titles=[]; rotation=0
@@ -117,8 +139,23 @@ def parse_page(path, page_number):
                                "kind":"heading" if heading else "table_row" if fmt=="md" and content.strip().startswith("|") else "text",
                                "level":len(heading[1]) if heading else 0,"title_path":" / ".join(titles),"box":None,"chars":[]})
             offset+=len(line)
+    elif fmt=="docx":
+        from . import docx_reader
+        if page_number!=1: raise ValueError("页码超出范围")
+        # Word stores no fixed page layout, so one logical page keeps paragraph
+        # and table order without inventing page breaks.
+        body=docx_reader.page(path)
+        text=body["text"]; blocks=body["blocks"]; headings=body["headings"]; rotation=0
     else: raise ValueError("此格式暂不支持原文定位")
-    return {"number":page_number,"width":width,"height":height,"rotation":rotation,"text":text,"blocks":blocks,"images":images,"headings":headings,"text_available":bool(text.strip()),"ocr_required":not bool(text.strip()) and fmt not in {"md","txt"},"vision_verified":False}
+    blank=not bool(text.strip())
+    # Only claim recognition is needed where that is actually true. A DOCX with
+    # no embedded image is simply a document without text, and a page that was
+    # recognized no longer needs anything.
+    needs_ocr=blank and fmt not in {"md","txt"} and not ocr_info
+    if needs_ocr and fmt=="docx":
+        from . import docx_reader
+        needs_ocr=docx_reader.has_media(path)
+    return {"number":page_number,"width":width,"height":height,"rotation":rotation,"text":text,"blocks":blocks,"images":images,"headings":headings,"text_available":not blank,"ocr_required":needs_ocr,"ocr":ocr_info,"vision_verified":False}
 
 
 def _parse_file(path):
@@ -129,7 +166,7 @@ def _parse_file(path):
             toc=[{"level":x[0],"title":x[1],"page":x[2]} for x in doc.get_toc() if 1<=x[2]<=count]
     else: count=1; toc=[]
     pages=[parse_page(path,n) for n in range(1,count+1)]
-    return {"pages":pages,"outline":toc or [h for p in pages for h in p["headings"]],"structure":"原文件书签" if toc else "Markdown 标题" if path.suffix.lower()==".md" else "按页","parser":PARSER}
+    return {"pages":pages,"outline":toc or [h for p in pages for h in p["headings"]],"structure":"原文件书签" if toc else "Markdown 标题" if path.suffix.lower()==".md" else "Word 标题与表格" if path.suffix.lower()==".docx" else "按页","parser":PARSER}
 
 
 def _save_parse(did, sha, body, reason, page=None):
@@ -236,13 +273,17 @@ def reparse(did, number, sha=None, parse_id=None):
     before=layout(did,sha,parse_id);d,path=version(did,before["document"]["sha256"])
     if d["archived"]: raise ValueError("请先恢复文档")
     if not 1<=number<=len(before["pages"]): raise ValueError("页码超出范围")
-    if d["format"] in {"png","jpg","jpeg","webp"}: raise ValueError("未连接文字识别，未执行重读")
+    from . import ocr
+    if d["format"] in {"png","jpg","jpeg","webp"} and not ocr.capabilities().get("ready"):
+        raise ValueError("未连接文字识别，未执行重读")
     t=time.perf_counter(); fresh=parse_page(path,number)
-    if not fresh["text_available"]: raise ValueError("当前页没有可提取文字，未连接 OCR；未更改引用")
+    if not fresh["text_available"]:
+        raise ValueError("识别未得到文字，未更改引用" if ocr.capabilities().get("ready")
+                         else "当前页没有可提取文字，未连接 OCR；未更改引用")
     body={k:copy.deepcopy(before[k]) for k in ("pages","outline","structure","parser")};old=body["pages"][number-1];body["pages"][number-1]=fresh
-    if d["format"]=="md": body["outline"]=fresh["headings"]
+    if d["format"] in {"md","docx"}: body["outline"]=fresh["headings"]
     after=_save_parse(did,d["sha256"],body,"用户重读指定页面",number)
-    record={"id":str(uuid.uuid4()),"page":number,"sha256":d["sha256"],"before_parse_id":before["parse_id"],"after_parse_id":after["parse_id"],"before":old["text"],"after":fresh["text"],"changed":old["text"]!=fresh["text"],"method":"本机原始文字提取；未调用 OCR 或视觉模型","created_at":s.now(),"duration_ms":round((time.perf_counter()-t)*1000,2)}
+    record={"id":str(uuid.uuid4()),"page":number,"sha256":d["sha256"],"before_parse_id":before["parse_id"],"after_parse_id":after["parse_id"],"before":old["text"],"after":fresh["text"],"changed":old["text"]!=fresh["text"],"method":("本机模型识别扫描页；结果待复核" if fresh.get("ocr") else "本机原始文字提取；未调用 OCR 或视觉模型"),"ocr":fresh.get("ocr"),"created_at":s.now(),"duration_ms":round((time.perf_counter()-t)*1000,2)}
     with s.conn() as c:c.execute("INSERT INTO reparses VALUES (?,?,?,?,?)",(record["id"],did,number,record["created_at"],json.dumps(record,ensure_ascii=False)))
     return record
 
@@ -312,4 +353,9 @@ def verify_claim(run_id, claim_id):
         unit.update(status='passed' if refs_ok else 'needs_review',detail='仅对同名字段执行单位换算：元／万元／亿元换为人民币元，百分数换为比例。')
         consistency={'name':'多源一致性','status':'passed' if equal and refs_ok else 'needs_review','detail':'；'.join(f'{label}：{a[0]} {a[1]} / {b[0]} {b[1]}' for label,a,b in comparisons)+('；数值一致，不代表语义已验证。' if equal else '；存在冲突，未替你选择其中一个数值。')}
     checks.append(consistency)
+    counter=claim.get('counter_check')
+    if counter:
+        checks.append({"name":"数值反证",
+                       "status":{"passed":"passed","failed":"failed"}.get(counter.get("status"),"not_checked"),
+                       "detail":counter.get("detail") or "没有独立复算记录。"})
     return {"claim_id":claim_id,"checks":checks,"sources":located,"checked_at":s.now(),"scope":"仅当前结论","visual_verified":False}
