@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08",
+  "date": "2026-10-10",
   "engine": "RapidOCR 3.9.0",
   "model": "PP-OCRv5 mobile Chinese + PP-LCNet orientation",
   "model_revision": "RapidAI/RapidOCR v3.9.0",
@@ -49,7 +49,9 @@
   "pack": {
     "path": "06_运行环境/OCR模型包.zip",
     "bytes": 19616237,
-    "sha256": "45b08b916efbaf2c17cbfc9c882e1db370a37597fa990bff4decece925ce779b"
+    "sha256": "1399b0b8b5f18a2b39d445d53fba1d11161d01333d640ae1f827e043634d4f8b",
+    "verified_members": 6,
+    "privacy": "仅固定公开模型及其许可；不含运行数据库、上传、会话、索引或凭据。"
   },
   "install": "Explicit local-only button from bundled pack; source checkout explicit install downloads only pinned public artifacts.",
   "notes": "Public dictionary has locally fixed SHA rather than published registry SHA; actual ONNX embedded dictionary equality verified. Recognition confidence is uncalibrated, not business accuracy."

@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-10",
+  "public_fixture": true,
+  "document_id": "633a72d50f2555b5bd66",
+  "name": "公开验收_扫描检修通知_20261010.png",
+  "original_sha256": "30cd61bce3d38dd7596867c7d536933c0016243825297ceb621b0b8b94b35010",
+  "original_unchanged": true,
+  "active_parse_id": "401a8cdb39c849988d4798b73b92048a",
+  "parse_history": [
+    {
+      "parse_id": "401a8cdb39c849988d4798b73b92048a",
+      "created_at": "2026-10-10T02:45:03.739+00:00",
+      "reason": "人工复核：Codex 自动验收（公开样本）",
+      "parser": "human-review-v1",
+      "is_active": true
+    },
+    {
+      "parse_id": "6d675b46b395441d921a6556ba60bbb6",
+      "created_at": "2026-10-10T02:38:08.625+00:00",
+      "reason": "人工复核：Codex 自动验收（公开样本）",
+      "parser": "human-review-v1",
+      "is_active": false
+    },
+    {
+      "parse_id": "ed2e70308f22431ea319c0bc77aa9452",
+      "created_at": "2026-10-10T02:35:21.322+00:00",
+      "reason": "正式解析任务：ocr",
+      "parser": "document-processing-v1",
+      "is_active": false
+    },
+    {
+      "parse_id": "df34765a9c70412c9cc2f9e2d4f211ff",
+      "created_at": "2026-10-10T02:28:39.528+00:00",
+      "reason": "原生格式解析",
+      "parser": "source-layout-v2",
+      "is_active": false
+    }
+  ],
+  "review_count": 2,
+  "reviews": [
+    {
+      "operator": "Codex 自动验收（公开样本）",
+      "time": "2026-10-10T02:38:08.624+00:00",
+      "page": 1,
+      "target": "block:p1-derived-942423bc55e74e57",
+      "base_parse_id": "ed2e70308f22431ea319c0bc77aa9452",
+      "before": {
+        "id": "block:p1-derived-942423bc55e74e57",
+        "kind": "text",
+        "text": "设备返修初检限期为5个工作日。",
+        "box": [
+          0.04,
+          0.27692308,
+          0.65733333,
+          0.42884615
+        ],
+        "media_id": null,
+        "status": "confirmed"
+      },
+      "after": {
+        "text": "设备返修初检限期为5个工作日。",
+        "label": "",
+        "series_name": "",
+        "unit": "",
+        "title": "",
+        "x_label": "",
+        "y_label": ""
+      },
+      "confirmation": "用户声明已对照原件确认；不代表系统独立核验"
+    },
+    {
+      "operator": "Codex 自动验收（公开样本）",
+      "time": "2026-10-10T02:45:03.738+00:00",
+      "page": 1,
+      "target": "block:p1-derived-a52e266bc2574c18",
+      "base_parse_id": "6d675b46b395441d921a6556ba60bbb6",
+      "before": {
+        "id": "block:p1-derived-a52e266bc2574c18",
+        "kind": "text",
+        "text": "2025年扫描检修通知",
+        "box": [
+          0.03866667,
+          0.06346154,
+          0.438,
+          0.21730769
+        ],
+        "media_id": null,
+        "status": "confirmed"
+      },
+      "after": {
+        "text": "2025年扫描检修通知",
+        "label": "",
+        "series_name": "",
+        "unit": "",
+        "title": "",
+        "x_label": "",
+        "y_label": ""
+      },
+      "confirmation": "用户声明已对照原件确认；不代表系统独立核验"
+    }
+  ],
+  "checks": {
+    "ocr_preview_and_local_execution": "passed",
+    "review_422_document_id_regression": "passed",
+    "review_success_modal_retained": "passed",
+    "old_parse_retained_until_explicit_switch": "passed",
+    "documents_page_20_then_8": "passed",
+    "rag_index_pages_10_and_first_to_second_page": "passed",
+    "search_resets_page": "passed",
+    "selection_retained_across_filter_and_page": "passed",
+    "keyboard_enter_clear_selection": "passed",
+    "narrow_viewport": {
+      "width": 390,
+      "height": 844,
+      "page_width": 390
+    },
+    "keyboard_escape_closes_review": "passed"
+  },
+  "review_boundary": "Codex 自动验收公开样本；操作者标识明确记录，不是独立人工语义评审。仅确认标题和一条正确识别文字，不声称整页已人工审核。",
+  "screenshots": [
+    "原件复核保存验收-20261010.jpg",
+    "资料库窄屏验收-20261010.jpg"
+  ],
+  "public_fixture_archived_after_acceptance": true,
+  "archive_recoverable": true,
+  "screenshot_scope": "仅公开样本及其审计记录；不含当前用户的最近会话列表。"
+}

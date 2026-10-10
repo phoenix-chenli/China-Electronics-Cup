@@ -6,6 +6,7 @@ owned; a model cannot execute arbitrary SQL/code or declare its output verified.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import re
 import time
@@ -22,7 +23,7 @@ from . import connections as c, documents, engine, store as s, database_query, r
 router = APIRouter(prefix="/api/agent")
 MAX_STEPS = 8
 MAX_MODEL_CALLS = 12
-MAX_SECONDS = 180
+MAX_SECONDS = 600
 MAX_CONTEXT_CHARS = 26000
 MAX_SQL_ATTEMPTS = 3
 TOOLS = {
@@ -45,18 +46,24 @@ schema.inspect参数为空，或table_names字符串数组。
 database.schema参数为空，或table_names字符串数组。先读取结构，再生成SQL；表太多时按返回表清单选择相关表。
 database.query参数sql、params位置参数列表（SQL用?占位）、explanation中文关联/汇总说明。
 数据库问数只使用当前指定数据源。JOIN必须沿已声明或已验证关系，字段歧义/多条路径无法确定时使用clarification，不猜业务口径。
+读取candidate_tables的实际字段名匹配和关联grain_note。表字段候选不是授权扩展，不自行创造中文别名或单位。一对多时明确统计父实体、子记录或金额；两个子表先各自按关联键汇总再JOIN，不能直接SUM放大的父表/另一子表金额。COUNT实体与COUNT行不混淆，不明确时澄清。
 只执行SELECT/WITH，可使用JOIN、聚合、CTE和嵌套查询，禁止写入、系统表、外部函数、笛卡尔积或递归。最多3次SQL尝试（含初次），不能因为错误放宽保护。
 数据库查询返回最多200行。截断结果只代表可见片段，不当作全表统计。查看返回列名、值及查询作用域再选择事实，不能自行推断单位。
 business.query参数question（完整业务问题）、confirmed（可选已知条件）；仅支持销售示例口径。
 document.search参数query，可选focus字符串数组、year。依据查得实体再搜索，不能自行猜冠军。
 formula.calculate参数expression、parameters:[{name,value,unit,evidence_ids}]；每个数值必须来自本轮工具的数值事实或公式参数。
+应用文档公式时额外给formula_source:{support_span_id,source_quote,result_unit}。原文需有明确公式如fee [元] = base + max(0, minutes - included) * price；结构和量纲由服务端核对。只列数字或自然语言规则不能当作已确认公式，不明确时澄清。
 文档参数额外给support_span_id、source_quote（原文精确数值及单位，如"5%"）；服务端检查后才允许百分比或元/万元转换，不猜单位。
+计费率可精确引用"每分钟收取2元"并用CNY/min，不能把原文改写成不存在的"2元/分钟"。
+数据库fact单位为untyped时，只有直接字段或SUM/AVG/MIN/MAX可通过原文声明绑定单位；参数给unit_source:{support_span_id,source_quote:"minutes 的单位为分钟"}，evidence_ids同时包含查询来源和单位文档来源。COUNT、算术计算列不从底层字段继承单位。
+原文公式含中文变量时，参数额外给source_name（如"可计费分钟"）；原文60、2、300等系数均作为精确引用的参数，表达式保留原文运算顺序。公式原文无明确结果单位时必须能定位同名量的单位声明，不猜测。
 evidence.verify参数evidence_ids（可选）；这是确定性来源检查，不能证明任意改写语义。
 完成时返回{action:"answer",claims:[{fact_id:"工具返回的事实id"},{evidence_id:"来源id",quote:"该来源的精确连续原文"}]}。
 文档综合结论可用{kind:"synthesis",text:"可单独核对的结论",support_span_ids:["实际返回的原文位置id"]}；每条都要有直接支持，不自造引用。
 knowledge范围只使用文档；hybrid范围结合当前指定数据库与文档规则。数据库数值及计算只用fact_id，不在综合文字中自行计算。
-文档工具返回充分性检查；缺事实时按missing_requirements最多补一次检索，保留原问题对象、日期与条件；仍不足返回空claims，不能凭常识补齐。
+文档工具返回充分性检查；缺事实时按missing_requirements最多补一次检索，保留原问题对象、日期与条件。独立子问已有直接依据时保留其fact或引用，缺失的原因等另列缺口；只有不能独立回答或完全无依据时返回空claims，不能凭常识补齐。
 需要用户明确口径或关联路径时返回{action:"clarify",question:"具体需要确认的问题"}，不要自行猜测。
+用户补充澄清条件时结合previous_question与previous_clarification，只更改用户补充的缺项，保留已经明确的实体、时间、口径和固定资料范围。
 只选与问题相关的事实、摘录或有直接原文支持的综合结论，保持单位、实体、时间、模拟边界。不能用自由改写替代数值事实。
 最终数据结论只选择同一次查询的facts；需要跨表统计时用JOIN/CTE/子查询在一条SQL内完成，不混合不同查询的范围。
 没有证据时claims为空；不要捏造。business.query要求澄清时系统会直接向用户询问。
@@ -195,18 +202,34 @@ class AgentFailure(ValueError):
         self.result = result
 
 
+class PlannerProtocolError(ValueError):
+    """A received response failed schema validation, distinct from HTTP failure."""
+
+
 def _object(text):
     if len(text) > 24000:
-        raise ValueError("模型结构化回答过长")
+        raise PlannerProtocolError("模型结构化回答过长")
     text = text.strip()
     if text.startswith("```") and text.endswith("```"):
         text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.I)[:-3].strip()
     try:
         body = json.loads(text)
     except (json.JSONDecodeError, TypeError):
-        raise ValueError("模型没有返回有效的规划 JSON") from None
+        raise PlannerProtocolError("模型没有返回有效的规划 JSON") from None
+    # Some compatible providers place the explicit tool name in action. This is
+    # unambiguous only for our existing allowlist, with no conflicting tool/key.
+    if isinstance(body,dict) and body.get('action') in TOOLS and set(body)<={'action','arguments','plan'}:
+        body={**body,'tool':body['action'],'action':'tool'}
+    # Also accept an explicit existing tool misplaced inside arguments. Never
+    # infer a tool, reconcile conflicting names, or bypass the scope/SQL guards.
+    if (isinstance(body,dict) and body.get('action')=='tool' and 'tool' not in body
+            and set(body)<={'action','arguments','plan'} and isinstance(body.get('arguments'),dict)
+            and body['arguments'].get('tool') in TOOLS):
+        args=dict(body['arguments'])
+        name=args.pop('tool')
+        body={**body,'tool':name,'arguments':args}
     if not isinstance(body, dict) or body.get("action") not in {"tool", "answer", "clarify"}:
-        raise ValueError("模型规划缺少有效的 action")
+        raise PlannerProtocolError("模型规划缺少有效的 action")
     return body
 
 
@@ -259,16 +282,31 @@ class Run:
         if self.rag_enabled:
             self.result['rag'] = {'scope': copy.deepcopy(self.rag_scope), 'requirements': [], 'retrieval': [], 'assessment': None}
         self.start = time.monotonic()
-        self.tool_count = self.calls = 0
+        self.tool_count = self.calls = self.protocol_repairs = 0
         self.facts, self.evidence, self.parameters = {}, {}, []
         self.result["agent"] = {"mode": "model", "connection_id": connection["id"],
                                 "model": connection["model"], "plan": [], "calls": 0,
                                 "usage": {}, "review": {"status": "pending", "detail": "尚未核验"}}
-        self.messages = [{"role": "system", "content": SYSTEM + "\n可用工具：" + c.encode(TOOLS)},
+        scope=self.database_context.get('query_scope','sales')
+        self.allowed_tools=set(TOOLS)
+        if scope=='sales':
+            self.allowed_tools-={'database.schema','database.query'}
+            guidance='本轮是销售示例。已有明确年份、区域和指标时，直接调用business.query，arguments只填完整question和可选confirmed，不为已明确条件澄清。'
+        elif scope=='knowledge':
+            self.allowed_tools-={'database.schema','database.query','schema.inspect','business.query'}
+            guidance='本轮只使用固定范围文档，先检索document.search；不读取或查询销售数据库。'
+        else:
+            self.allowed_tools-={'business.query'}
+            guidance='本轮查询当前选定数据库。先database.schema再database.query，不切换到销售示例。'
+        guidance+='计划可省略，直接返回一个合法action。answer和clarify是action，不是tool；plan中的tool也必须来自本轮可用工具。'
+        self.messages = [{"role": "system", "content": SYSTEM + '\n'+guidance+"\n本轮可用工具：" + c.encode({k:v for k,v in TOOLS.items() if k in self.allowed_tools})},
                          {"role": "user", "content": c.encode({"question": question,
                           "previous_conditions": _limited_context(previous),
+                          "previous_question":str((previous or {}).get('question',''))[:2000],
+                          "previous_clarification":str((previous or {}).get('clarification_question',''))[:600],
                           "previous_database_query": {k: v for k, v in (previous or {}).items() if k in {'last_sql', 'last_params', 'question'} and self.database_mode},
                           "confirmed_conditions": _limited_context(confirmed),
+                          "known_conditions": _limited_context(initial),
                           "query_scope": self.database_context.get('query_scope', 'sales'),
                           "database_source": {'connection_id': self.database_context.get('database_connection_id'), 'local_workspace': not self.database_context.get('database_connection_id')},
                           "document_scope": {k: v for k, v in (self.document_context or {}).items() if k in {"document_id", "sha256", "page"}},
@@ -337,21 +375,43 @@ class Run:
             if d["revision"] != self.connection["revision"]:
                 raise ValueError("主模型连接已改变，请重新查询")
             d = dict(d, timeout=min(d["timeout"], max(.01, MAX_SECONDS - (time.monotonic() - self.start))))
-            response = c.chat(d, self.messages, max_tokens=1800, cancelled=self.cancelled)
+            response = c.chat(d, self.messages, max_tokens=1800, cancelled=self.cancelled,json_mode=True)
             self.result["agent"]["model"] = response["model"]
             usage = self.result["agent"]["usage"]
             for key, value in response.get("usage", {}).items():
                 usage[key] = usage.get(key, 0) + value
-            return {**_object(response["text"]), "model": response["model"], "usage": response.get("usage", {})}
-        body = self.step("model.plan" if self.calls == 1 else "model.decide", "规划任务" if self.calls == 1 else "根据工具结果决定下一步", call,
-                         {"call": self.calls, "message_count": len(self.messages)})
+            try:
+                protocol = _object(response["text"])
+            except PlannerProtocolError as exc:
+                self.result['agent'].setdefault('protocol_errors', []).append({
+                    'call': self.calls, 'detail': str(exc), 'response_characters': len(response['text']),
+                    'response_sha256': hashlib.sha256(response['text'].encode()).hexdigest()})
+                raise
+            return {**protocol, "model": response["model"], "usage": response.get("usage", {})}
+        try:
+            body = self.step("model.plan" if self.calls == 1 else "model.decide", "规划任务" if self.calls == 1 else "根据工具结果决定下一步", call,
+                             {"call": self.calls, "message_count": len(self.messages)})
+        except PlannerProtocolError as exc:
+            self.guard()
+            if self.protocol_repairs >= 1 or self.calls >= MAX_MODEL_CALLS:
+                raise
+            self.protocol_repairs += 1
+            self.result['agent']['protocol_repair_count'] = self.protocol_repairs
+            self.messages.append({'role': 'user', 'content': c.encode({
+                'protocol_error': str(exc),
+                'instruction': '上一条回复未通过格式验证，没有执行其中的工具或答案。仅修正规划格式一次：'
+                    '顶层 action 必须为 tool、answer 或 clarify。tool 时给出本轮允许的 tool 和 arguments；'
+                    'answer 时仅引用本轮已有 facts 或原文；clarify 时给出具体 question。'
+                    '不只返回 plan，不重复已经成功执行的步骤，不改变原问题、数据源、条件或预算。'})})
+            self.emit('修正规划格式')
+            return self.model()
         raw_plan = body.get("plan")
         if raw_plan is not None:
             if not isinstance(raw_plan, list) or not 1 <= len(raw_plan) <= MAX_STEPS:
                 raise ValueError("模型计划必须包含 1 至 8 项")
             plan = []
             for i, item in enumerate(raw_plan):
-                if not isinstance(item, dict) or item.get("tool") not in TOOLS:
+                if not isinstance(item, dict) or item.get("tool") not in self.allowed_tools:
                     raise ValueError("模型计划包含不可用工具")
                 plan.append({"id": str(item.get("id", i + 1))[:40], "label": str(item.get("label") or TOOLS[item["tool"]])[:120],
                              "tool": item["tool"], "status": "pending"})
@@ -374,7 +434,7 @@ class Run:
                 raise ValueError('主模型连接已改变，请重新查询')
             d = dict(d, timeout=min(d['timeout'], max(.01, MAX_SECONDS - (time.monotonic() - self.start))))
             response = c.chat(d, [{'role': 'system', 'content': system},
-                {'role': 'user', 'content': c.encode(payload)}], max_tokens=3000, cancelled=self.cancelled)
+                {'role': 'user', 'content': c.encode(payload)}], max_tokens=3000, cancelled=self.cancelled,json_mode=True)
             self.result['agent']['model'] = response['model']
             usage = self.result['agent']['usage']
             for key, value in response.get('usage', {}).items():
@@ -457,7 +517,7 @@ class Run:
         cid = self.database_context.get('database_connection_id')
         if cid and c.ready(cid, c.DB_KINDS)['revision'] != self.database_context.get('database_connection_revision'):
             raise ValueError('问数数据库连接已改变，请重新查询')
-        snapshot = database_query.inspect(cid, table_names=args.get('table_names'), cancelled=self.cancelled)
+        snapshot = database_query.inspect(cid, table_names=args.get('table_names'), cancelled=self.cancelled,query=self.result['question'])
         self.database_snapshot = snapshot if not snapshot.get('needs_selection') else None
         return {k: v for k, v in snapshot.items() if k != 'guard_schema'}
 
@@ -493,7 +553,8 @@ class Run:
                 if type(number) in (int, float) and len(facts) < 24:
                     facts.append(self.add_fact({'id': 'cell-' + str(index + 1) + '-' + str(columns.index(col)), 'query_id': query_id,
                         'text': '返回结果第 ' + str(index + 1) + ' 行的 ' + str(col) + ' 为 ' + str(number) + '（未推断单位）。',
-                        'evidence_ids': [eid], 'status': 'supported', 'kind': 'database_value', 'value': number, 'unit': 'untyped'}, query_id))
+                        'evidence_ids': [eid], 'status': 'supported', 'kind': 'database_value', 'value': number, 'unit': 'untyped',
+                        'column':col,'unit_origin':value.get('validation',{}).get('unit_origins',{}).get(col)}, query_id))
         if not rows:
             facts.append(self.add_fact({'id': 'empty', 'query_id': query_id, 'text': '该只读查询返回0行；请核对查询条件与业务口径。',
                 'evidence_ids': [eid], 'status': 'supported', 'kind': 'database_empty', 'value': None, 'unit': None}, query_id))
@@ -515,6 +576,10 @@ class Run:
     def tool(self, name, args):
         if name not in TOOLS:
             raise ValueError("模型请求了未授权工具；只允许现有只读业务工具")
+        if name not in self.allowed_tools:
+            if name == 'business.query':
+                raise ValueError('本轮使用数据库或文档范围，不可切换到销售示例数据；请使用本轮可用工具')
+            raise ValueError('该工具不在本轮资料范围内，不可切换来源；请使用本轮可用工具')
         if not isinstance(args, dict):
             raise ValueError("工具参数必须是对象")
         if self.tool_count >= MAX_STEPS:
@@ -647,7 +712,7 @@ class Run:
         return out
 
     def calculate(self, args):
-        if set(args) - {"expression", "parameters"}:
+        if set(args) - {"expression", "parameters", "formula_source"}:
             raise ValueError("公式工具参数不正确")
         expr, params = args.get("expression"), args.get("parameters")
         if not isinstance(expr, str) or not 1 <= len(expr) <= 300 or not isinstance(params, list) or not 1 <= len(params) <= 8:
@@ -655,7 +720,8 @@ class Run:
         checked, seen, query_ids = [], set(), set()
         simulation = False
         candidates = self.parameters + [{"value": f["value"], "unit": f.get("unit"), "evidence_ids": f["evidence_ids"],
-            'query_id': f.get('query_id'), 'assumption': f.get('status') == 'simulation'} for f in self.facts.values() if f.get('value') is not None]
+            'query_id': f.get('query_id'), 'unit_origin':f.get('unit_origin'),
+            'assumption': f.get('status') == 'simulation'} for f in self.facts.values() if f.get('value') is not None]
         for p in params:
             if not isinstance(p, dict) or not re.fullmatch(r"[a-z][a-z0-9_]{0,30}", str(p.get("name", ""))) or p["name"] in seen:
                 raise ValueError("公式参数名不正确或重复")
@@ -665,6 +731,9 @@ class Run:
                 raise ValueError("公式参数没有本轮有效来源")
             if p.get('support_span_id'):
                 candidates.append(rag_grounding.document_parameter(p, self.spans, self.delivered_spans))
+            if p.get('unit_source'):
+                from . import formula_source
+                candidates.append(formula_source.database_parameter(p,candidates,self.spans,self.delivered_spans))
             try:
                 number = Decimal(str(p["value"]))
                 if not number.is_finite() or abs(number) > Decimal("1e18"):
@@ -679,10 +748,18 @@ class Run:
                 query_ids.add(match['query_id'])
             checked.append({"name": p["name"], "label": p["name"], "value": str(number), "unit": p.get("unit"), "evidence_ids": ids,
                             'assumption': bool(match.get('assumption')),
-                            **{k: match[k] for k in ('support_span_id', 'source_quote') if k in match}})
+                            **{k: match[k] for k in ('support_span_id', 'source_quote','unit_binding') if k in match},
+                            **({'source_name':p['source_name']} if 'source_name' in p else {})})
+        if any(p.get('source_quote') or p.get('unit_binding') for p in checked) and args.get('formula_source') is None:
+            raise ValueError('使用文档规则参数时必须同时绑定原文公式结构；缺少明确公式请先澄清')
         if len(query_ids) > 1:
             raise ValueError('公式不能混合不同查询范围的参数，请在同一次查询中取数')
-        engine.check_parameters(checked)
+        bound=None
+        if args.get('formula_source') is not None:
+            from . import formula_source
+            bound=formula_source.bind(expr,checked,args['formula_source'],self.spans,self.delivered_spans)
+        else:
+            engine.check_parameters(checked)
         # Constants are restricted to neutral 0/1; business coefficients require a sourced parameter.
         import ast
         tree = ast.parse(expr, mode="eval")
@@ -691,12 +768,14 @@ class Run:
         value = engine.calculate(expr, {p["name"]: p["value"] for p in checked})
         if not value.is_finite() or abs(value) > Decimal("1e18"):
             raise ValueError("计算结果超出范围")
-        ids = list(dict.fromkeys(e for p in checked for e in p["evidence_ids"]))
+        ids = list(dict.fromkeys([e for p in checked for e in p["evidence_ids"]]+([bound['evidence_id']] if bound else [])))
+        unit=bound['result_unit'] if bound else 'derived'
         fact = self.add_fact({"id": "formula", 'query_id': next(iter(query_ids), None),
-                              "text": ("按假设参数计算，" if simulation else "") + "按公式 " + expr + "，计算结果为 " + str(value) + "（模型选择的计算，未推断结果量纲）。",
-                              "evidence_ids": ids, "status": "simulation" if simulation else "supported", "kind": "formula", "value": str(value), "unit": "derived"}, "query-" + str(self.tool_count))
-        formula = {"expression": expr, "parameters": checked, "value": str(value), "unit": "derived", "display": expr,
-                   'origin': 'model_calculation', 'query_id': next(iter(query_ids), None), 'assumption': simulation,
+                              "text": ("按假设参数计算，" if simulation else "") + "按公式 " + expr + "，计算结果为 " + str(value) + ((' '+unit+'（原文公式及单位已核对；适用条件另行核验）。') if bound else '（模型选择的计算，未推断结果量纲）。'),
+                              "evidence_ids": ids, "status": "simulation" if simulation else "supported", "kind": "formula", "value": str(value), "unit": unit}, "query-" + str(self.tool_count))
+        formula = {"expression": expr, "parameters": checked, "value": str(value), "unit": unit, "display": expr,
+                   'origin': 'document_formula' if bound else 'model_calculation', 'source_binding':bound,
+                   'query_id': next(iter(query_ids), None), 'assumption': simulation,
                    'simulation': simulation, 'fact_id': fact['id']}
         self.result["formulas"].append(formula)
         self.calculations[fact['id']] = copy.deepcopy(formula)
@@ -752,9 +831,14 @@ class Run:
             bound = documents.resolve(quote_locator, quote)
             if bound["status"] != "located":
                 raise ValueError("模型引用的原文无法定位")
+            support_ids=[sid for sid in self.delivered_spans
+                         if self.spans[sid]['evidence_id']==eid and quote in self.spans[sid]['text']]
+            if self.rag_enabled and not support_ids:
+                raise ValueError('摘录未绑定本轮已发送的原文位置')
             quote_id=eid+'-quote-'+str(len(claims)+1)
             self.evidence[quote_id]={**copy.deepcopy(evidence),'id':quote_id,'snippet':quote,'locator':bound['locator'],'location_status':bound['status']}
-            claims.append({"text": quote, "evidence_ids": [quote_id], "kind": "excerpt", "status": "supported", "value": None, "unit": None})
+            claims.append({"text": quote, "evidence_ids": [quote_id], "support_span_ids":sorted(support_ids),
+                           "kind": "excerpt", "status": "supported", "value": None, "unit": None})
         for i, claim in enumerate(claims):
             claim["id"] = "claim-" + str(i + 1)
         query_ids = {f['query_id'] for f in claims if f.get('query_id')}
@@ -779,9 +863,7 @@ class Run:
                 check = rag_grounding.review(self.result['question'], self.requirements, claims,
                                               self.spans, self.facts, self.judge)
                 # A later self-review cannot silently waive a pre-generation gap.
-                if assessment['status'] != 'sufficient' and check['answer_status'] == 'supported':
-                    check.update(claims=[], answer_status='refused',
-                                 missing_requirements=assessment['missing_requirements'])
+                check=rag_grounding.retain_independent(check,assessment,self.requirements)
                 self.result['rag']['verification'] = copy.deepcopy(check)
                 self.result.update(answer_status=check['answer_status'],
                     missing_requirements=check['missing_requirements'], conflicts=check['conflicts'])
@@ -852,6 +934,7 @@ class Run:
                 if not isinstance(question, str) or not 1 <= len(question.strip()) <= 600:
                     raise ValueError('模型澄清必须包含具体问题')
                 self.result.update(status='needs_clarification', clarification={'title': question, 'fields': []}, headline=question)
+                self.result['query_spec'].update(question=self.result['question'],clarification_question=question)
                 self.result['agent']['review'] = {'status': 'needs_clarification', 'detail': '关联路径或业务口径需要用户确认，未生成业务结论。'}
                 return self.finish()
             if body["action"] == "answer":

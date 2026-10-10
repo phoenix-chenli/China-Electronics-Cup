@@ -120,6 +120,22 @@ class RagRetrievalTest(unittest.TestCase):
         before = s.blocks(doc["id"])
         self.scope([doc["id"]])
         self.assertEqual(before, s.blocks(doc["id"]))
+
+    def test_short_overlap_does_not_hide_required_original_conditions(self):
+        text = '保修期限为12个月。申请人须提交发票和验收单。人为损坏不在保修范围内。'
+        doc, _ = self.source(text)
+        scope = self.scope([doc['id']])
+        full = index.chunks_for_scope(scope)[0]
+        short = {**full, 'id': full['id'] + '-short', 'start': full['end'] - 13,
+                 'text': full['text'][-13:]}
+        packed = retrieval._pack([{'id': short['id']}, {'id': full['id']}],
+                                  {short['id']: short, full['id']: full}, scope)
+        self.assertEqual(len(packed), 2)
+        self.assertIn('发票和验收单', packed[1]['snippet'])
+        self.assertTrue(all(documents.resolve(e['locator'], e['snippet'])['status'] == 'located' for e in packed))
+        reverse = retrieval._pack([{'id': full['id']}, {'id': short['id']}],
+                                   {short['id']: short, full['id']: full}, scope)
+        self.assertEqual(len(reverse), 1)
     def test_frozen_lexical_statistics_survive_new_publication(self):
         doc, _ = self.source("软件采购规则：采购金额需审核。")
         old = self.scope([doc["id"]])

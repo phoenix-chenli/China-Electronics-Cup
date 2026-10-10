@@ -3,6 +3,7 @@ import {ArrowUpRight,BookOpen,ChartNoAxesColumnIncreasing,ChevronDown,Database,F
 import {Chart,examples,Modal,Obj,QueryInput,timeLabel} from './ui'
 import {ToolShelf} from './controls'
 import {PetBlob} from './pet-blob'
+import {QueryContextBar} from './agent'
 
 const names:Obj={queued:'等待中',running:'查询中',cancelling:'取消中',completed:'已完成',failed:'未完成',cancelled:'已取消'}
 const capabilities=[
@@ -40,7 +41,7 @@ function useTypewriter(lines:string[],active:boolean){
  return text
 }
 
-export function HomePage({tables,docs,dataReady,dashboard,dashboardError,reloadDashboard,question,setQuestion,run,busy,importFile,uploading,project,sessions,onSession,tools,onImport,onCatalog,presented=true}:Obj){
+export function HomePage({tables,docs,dataReady,dashboard,dashboardError,reloadDashboard,question,setQuestion,run,busy,importFile,uploading,project,sessions,onSession,tools,onImport,onCatalog,presented=true,agentConfig,onAgentSettings}:Obj){
  const [allSessions,setAllSessions]=useState(false),[filter,setFilter]=useState(''),[drag,setDrag]=useState(false),[focused,setFocused]=useState(false)
  const typed=useTypewriter(examples,presented&&!question)
  const ready=docs.filter((d:Obj)=>d.status==='ready'),pending=docs.length-ready.length
@@ -58,6 +59,7 @@ export function HomePage({tables,docs,dataReady,dashboard,dashboardError,reloadD
   </section>
 
   <section className={'home-ask rise rise-1 '+(question.trim()?'has-draft':'')} aria-label="提问" onFocusCapture={()=>setFocused(true)} onBlurCapture={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node))setFocused(false)}}>
+   <QueryContextBar config={agentConfig||null} onSettings={onAgentSettings||(()=>{})}/>
    <div className="home-typewriter" aria-hidden="true">{!question&&<><span>{typed}</span><i className="typewriter-caret"/></>}</div>
    <QueryInput value={question} onChange={setQuestion} onSend={()=>run(question)} busy={busy} large placeholder="输入你的问题，例如：2024 年华东净销售额是多少？" actions={<ToolShelf items={tools}/>}/>
    <div className="home-ask-foot"><span>Enter 发送 · Shift + Enter 换行</span><span>支持拖拽文件到本页导入</span></div>

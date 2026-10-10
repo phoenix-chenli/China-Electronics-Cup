@@ -9,6 +9,7 @@ import copy
 import hashlib
 import json
 import math
+import re
 import sqlite3
 import threading
 import time
@@ -369,12 +370,30 @@ def _relations(db, config, tables, stop, deadline):
         relation = {"id": "relation-" + _hash([_key(left), lcols, _key(right), rcols])[:16],
             "left_table": _key(left), "left_columns": lcols, "right_table": _key(right), "right_columns": rcols,
             "source": "foreign_key" if fk else "verified_candidate" if verified else "candidate",
-            "declared": fk, "verified": verified, "basis": basis, "verification": detail}
+            "declared": fk, "verified": verified, "basis": basis, "verification": detail,
+            "cardinality": 'one_to_one' if any(set(lcols)==set(key) for key in [left['primary_key']]+[k['columns'] for k in left['unique_keys']] if key) else 'many_to_one_possible',
+            "grain_note": '子表多行可能对应同一父表键；父表计数用明确粒度，金额先按目标粒度聚合，避免两个子表 JOIN 放大。'}
         (declared if fk else candidates).append(relation)
     return declared, candidates, len(proposals) > MAX_RELATIONS
 
 
-def _inspect_on(db, config, table_names, stop, deadline):
+def _candidates(items,query):
+    if not query:return []
+    words=set(re.findall(r'[a-z][a-z0-9]+',query.casefold()))
+    def score(text):
+        name=text.casefold();tokens=set(re.findall(r'[a-z][a-z0-9]+',name.replace('_',' ')))
+        stems={t.rstrip('s') for t in tokens};wanted={t.rstrip('s') for t in words}
+        return 5*int(name in query.casefold())+len(stems&wanted)
+    ranked=[]
+    for item in items:
+        fields=[{'name':c['name'],'type':c.get('type'),'match_score':score(c['name'])} for c in item.get('columns',[]) if score(c['name'])]
+        value=score(item['name'])+sum(f['match_score'] for f in fields)
+        if value:ranked.append({'table':item.get('qualified_name') or _key(item),'score':value,'fields':sorted(fields,key=lambda f:-f['match_score'])[:16],
+                               'basis':'问题中的实际表字段名匹配；未推断业务别名或读取样本值'})
+    return sorted(ranked,key=lambda x:(-x['score'],x['table']))[:12]
+
+
+def _inspect_on(db, config, table_names, stop, deadline, query=None):
     listing = _listing(db, config)
     _guard(stop, deadline)
     selected = listing
@@ -395,6 +414,7 @@ def _inspect_on(db, config, table_names, stop, deadline):
         source["fingerprint"] = _hash([source, listing])
         return {"dialect": _dialect(config), "source": source, "tables": [], "table_listing": listing,
                 "needs_selection": True, "truncated": False, "relation_candidates": [], "relations": [],
+                "candidate_tables":_candidates(listing,query),
                 "boundary": "源含超过 50 张表，请明确选择相关表后读取字段；未静默丢弃剩余表。"}
     imports = _import_metadata() if config["id"] is None else {}
     tables = []
@@ -408,14 +428,16 @@ def _inspect_on(db, config, table_names, stop, deadline):
     return {"dialect": _dialect(config), "source": source, "tables": tables, "table_listing": listing,
             "needs_selection": False, "truncated": False, "relations": relations,
             "relation_candidates": candidates, "relations_truncated": relation_truncated,
+            "candidate_tables":_candidates(tables,query),
             "boundary": "字段与约束来自数据库；候选关联仅通过当前键唯一/值覆盖检查，未冒充声明外键。"}
 
 
-def inspect(connection_id=None, table_names=None, cancelled=None):
+def inspect(connection_id=None, table_names=None, cancelled=None, query=None):
+    if query is not None and (not isinstance(query,str) or len(query)>2000):raise ValueError('结构定位问题应为不超过2000字的文字')
     def operation(stop, deadline):
         config = _configuration(connection_id)
         with _database(config, stop, deadline) as db:
-            return _inspect_on(db, config, table_names, stop, deadline)
+            return _inspect_on(db, config, table_names, stop, deadline,query)
     return _bounded(operation, cancelled)
 
 

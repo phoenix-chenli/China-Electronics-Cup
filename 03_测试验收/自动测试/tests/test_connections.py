@@ -12,6 +12,8 @@ class Provider(BaseHTTPRequestHandler):
  def do_POST(self):
   data=json.loads(self.rfile.read(int(self.headers['Content-Length'])));self.calls.append((self.path,dict(self.headers),data))
   if self.mode=='auth':self.send_response(401);self.end_headers();self.wfile.write(b'{"secret":"provider-should-not-leak"}');return
+  if self.mode=='unavailable':self.send_response(503);self.end_headers();self.wfile.write(b'{"secret":"provider-should-not-leak"}');return
+  if self.mode=='disconnect':self.close_connection=True;return
   if self.mode=='redirect':self.send_response(307);self.send_header('Location','https://example.com');self.end_headers();return
   msg=data['messages'][-1]['content']
   if isinstance(msg,list):
@@ -71,6 +73,68 @@ class ConnectionsTests(unittest.TestCase):
   d=self.create();r=self.client.patch('/api/connections/'+d['id']+'/enabled',json={'enabled':True});self.assertEqual(r.status_code,400)
  def test_text_probe_and_token_limit(self):
   d=self.ready_connection();self.assertEqual(len(Provider.calls),1);self.assertEqual(Provider.calls[0][2]['max_completion_tokens'],1200);self.assertTrue(c.capabilities()['text'])
+ def test_slow_model_timeout_can_be_configured_without_unbounded_wait(self):
+  self.assertEqual(self.create(timeout=120)['timeout'],120)
+  self.assertEqual(self.create(timeout=300)['timeout'],300)
+  r=self.client.post('/api/connections',json={'name':'超时上限','kind':'text','endpoint':self.endpoint,'model':'fixture','timeout':301})
+  self.assertEqual(r.status_code,422)
+ def test_tokendance_planner_uses_json_without_hidden_thinking(self):
+  d={**c.get(self.create()['id'],True),'endpoint':'https://tokendance.space/gateway/v1','model':'qwen3.8-max'}
+  response={'choices':[{'message':{'content':'{"action":"answer","claims":[]}'}}]}
+  with patch.object(c,'request_json',return_value=response) as call:
+   c.chat(d,[{'role':'user','content':'只返回 JSON'}],json_mode=True)
+   body=call.call_args.args[2]
+   self.assertEqual(body['response_format'],{'type':'json_object'});self.assertEqual(body['temperature'],0);self.assertFalse(body['enable_thinking'])
+   c.chat(d,[{'role':'user','content':'普通文字补充'}])
+   self.assertNotIn('response_format',call.call_args.args[2]);self.assertNotIn('enable_thinking',call.call_args.args[2])
+ def test_other_compatible_providers_keep_the_existing_contract(self):
+  d=c.get(self.create()['id'],True)
+  with patch.object(c,'request_json',return_value={'choices':[{'message':{'content':'{}'}}]}) as call:
+   c.chat(d,[{'role':'user','content':'JSON'}],json_mode=True)
+   self.assertNotIn('response_format',call.call_args.args[2]);self.assertNotIn('enable_thinking',call.call_args.args[2])
+ def test_connection_setup_retries_before_one_post(self):
+  import httpcore
+  from httpcore._backends.sync import SyncBackend
+  original=SyncBackend.connect_tcp;attempts=[]
+  def connect(backend,*args,**kwargs):
+   attempts.append(1)
+   if len(attempts)==1:raise httpcore.ConnectError('fixture transient connect error')
+   return original(backend,*args,**kwargs)
+  d=self.create()
+  with patch.object(SyncBackend,'connect_tcp',autospec=True,side_effect=connect):tested=c.test(d['id'])
+  self.assertTrue(tested['last_test']['ok'],tested);self.assertEqual(len(attempts),2);self.assertEqual(len(Provider.calls),1)
+ def test_submitted_requests_are_not_automatically_replayed(self):
+  for mode in ['unavailable','disconnect']:
+   with self.subTest(mode=mode):
+    d=self.create();Provider.mode=mode;Provider.calls.clear();tested=c.test(d['id'])
+    self.assertFalse(tested['last_test']['ok']);self.assertEqual(len(Provider.calls),1)
+    self.assertNotIn('provider-should-not-leak',json.dumps(tested))
+ def test_total_deadline_also_applies_without_cancel_event(self):
+  d={**c.get(self.create()['id'],True),'timeout':.15};release=threading.Event();entered=threading.Event()
+  def stalled(*args):entered.set();release.wait(2);return {}
+  started=time.monotonic()
+  try:
+   with patch.object(c,'_request_json_transport',side_effect=stalled):
+    with self.assertRaisesRegex(ValueError,'总时限'):c.request_json(d,self.endpoint+'/chat/completions',{})
+   self.assertTrue(entered.is_set());self.assertLess(time.monotonic()-started,.6)
+  finally:release.set()
+ def test_transport_slots_bound_calls_without_cancel_event(self):
+  d=c.get(self.create()['id'],True);release=threading.Event();entered=threading.Barrier(5);errors=[]
+  def stalled(*args):entered.wait(timeout=2);release.wait(2);return {}
+  def invoke():
+   try:c.request_json(d,self.endpoint+'/chat/completions',{})
+   except BaseException as exc:errors.append(exc)
+  workers=[threading.Thread(target=invoke) for _ in range(4)]
+  with patch.object(c,'_request_json_transport',side_effect=stalled) as transport:
+   try:
+    for worker in workers:worker.start()
+    entered.wait(timeout=2)
+    with self.assertRaisesRegex(ValueError,'繁忙'):c.request_json({**d,'timeout':.15},self.endpoint+'/chat/completions',{})
+    self.assertEqual(transport.call_count,4)
+   finally:
+    release.set()
+    for worker in workers:worker.join(2)
+  self.assertEqual(errors,[])
  def test_bad_probe_does_not_grant_capability(self):
   d=self.create();Provider.mode='wrong';r=self.client.post('/api/connections/'+d['id']+'/test').json();self.assertFalse(r['last_test']['ok']);self.assertFalse(r['enabled'])
  def test_vision_separate_image_probe(self):

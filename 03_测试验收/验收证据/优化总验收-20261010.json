@@ -1,0 +1,159 @@
+{
+  "date": "2026-10-10",
+  "backend_regression": {
+    "tests": 364,
+    "modules": 23,
+    "failed": 0
+  },
+  "frontend": {
+    "tests": 38,
+    "failed": 0,
+    "typescript": "passed",
+    "build": "passed",
+    "main_js_bytes": 412000,
+    "chart_js_bytes": 518362,
+    "chart_lazy": true
+  },
+  "dataset_sha256": "0488270e42a80e96bf1627ab5ada5fab3bf3ab49735d8cc019a075200c000cab",
+  "development_baseline": {
+    "executed_questions": 39,
+    "execution_errors": 5,
+    "sql_rows": {
+      "matches": 15,
+      "denominator": 22
+    },
+    "reference_atoms": {
+      "present": 26,
+      "denominator": 38
+    },
+    "citations": {
+      "located": 123,
+      "denominator": 123,
+      "semantic_support": "human_pending"
+    },
+    "expected_refusal": {
+      "matching": 6,
+      "denominator": 6
+    },
+    "supported_cases_refused_or_clarified": {
+      "count": 5,
+      "denominator": 31
+    },
+    "expected_state_matches": 27,
+    "latency_ms": {
+      "p50": 9253.3,
+      "p95": 40046.15,
+      "includes_errors": true
+    },
+    "model_calls": 159,
+    "model_tokens": 499649,
+    "boundary": "结果匹配、精确文字与定位是自动诊断；引用语义、业务口径、答全及拒答合理性仍保留人工审核，不提供总准确率。"
+  },
+  "development_full_first_fix": {
+    "executed_questions": 39,
+    "execution_errors": 0,
+    "sql_rows": {
+      "matches": 21,
+      "denominator": 22
+    },
+    "reference_atoms": {
+      "present": 38,
+      "denominator": 38
+    },
+    "citations": {
+      "located": 186,
+      "denominator": 186,
+      "semantic_support": "human_pending"
+    },
+    "expected_refusal": {
+      "matching": 6,
+      "denominator": 6
+    },
+    "supported_cases_refused_or_clarified": {
+      "count": 2,
+      "denominator": 31
+    },
+    "expected_state_matches": 36,
+    "latency_ms": {
+      "p50": 11751.82,
+      "p95": 41972.83,
+      "includes_errors": true
+    },
+    "model_calls": 192,
+    "model_tokens": 728496,
+    "boundary": "结果匹配、精确文字与定位是自动诊断；引用语义、业务口径、答全及拒答合理性仍保留人工审核，不提供总准确率。"
+  },
+  "holdout_first_run": {
+    "executed_questions": 39,
+    "execution_errors": 1,
+    "sql_rows": {
+      "matches": 19,
+      "denominator": 22
+    },
+    "reference_atoms": {
+      "present": 39,
+      "denominator": 40
+    },
+    "citations": {
+      "located": 182,
+      "denominator": 182,
+      "semantic_support": "human_pending"
+    },
+    "expected_refusal": {
+      "matching": 5,
+      "denominator": 6
+    },
+    "supported_cases_refused_or_clarified": {
+      "count": 1,
+      "denominator": 31
+    },
+    "expected_state_matches": 36,
+    "latency_ms": {
+      "p50": 13953.26,
+      "p95": 41409.93,
+      "includes_errors": true
+    },
+    "model_calls": 197,
+    "model_tokens": 735769,
+    "boundary": "结果匹配、精确文字与定位是自动诊断；引用语义、业务口径、答全及拒答合理性仍保留人工审核，不提供总准确率。"
+  },
+  "holdout_completed": true,
+  "human_semantic_review": "pending",
+  "windows_current_real_machine": "pending_user_deferred",
+  "real_external_vision": "pending",
+  "real_postgresql_mysql": "pending",
+  "public_browser_review": "Codex 自动验收，原件不改，2 个确认记录；非独立人工评审",
+  "performance_report": "性能实测-20261010.json",
+  "source_sha256": {
+    "01_程序代码/backend/scenarios.py": "6f5bc3e8ff3b27e0aac7cfbbd254cce391e6c2272f89cf4d3ec3eeba0d0b44e8",
+    "01_程序代码/backend/document_review.py": "994964727199a2e209f622b7e7d9e1e83f98105bcf2e72753cd3177fcc2918d8",
+    "01_程序代码/backend/store.py": "f5ae47d577b27bdcf4d67f8110a70cb4f4eaf095f04198b6d6067654398e3539",
+    "01_程序代码/backend/sharing.py": "c6feb52b0c66c2af4ead230b3528796a3dc4fa006e9c9b0a0830e20f2de3aa1c",
+    "01_程序代码/backend/document_native.py": "7dd532f3dba5c925fbfcf2cbb9c5c1cdb28cd3fbbc3f1b61be3fb9ece4307d20",
+    "01_程序代码/backend/rag_index.py": "613b2289711c8db2dbcc482dcdc8c0acd63232633fe36296f67be688e99c958e",
+    "01_程序代码/backend/docx_reader.py": "f29afc4197ab59ff38e6efce7c97078224a853202b145d080193a2d33cd38584",
+    "01_程序代码/backend/documents.py": "92e934099a124686911b8ade6b793e4d5b64cde852dc6d6b5c0d6dbf7a81643c",
+    "01_程序代码/backend/evaluation.py": "cfb04d53f3b9a107a6cb93fac4068ce984d02b77235f28900f665e3a9f0b1470",
+    "01_程序代码/backend/connections.py": "b93e39c261242f5c8120e6b03a8ce237cf8586d4954597ae977c7555156b1be7",
+    "01_程序代码/backend/formula_source.py": "bdc168e8096fc06b57fced002a16bd04372c9ed8f034df26d00fa11aa08779a2",
+    "01_程序代码/backend/ocr.py": "04535790da73e913e302819b0c7f57bbcb566cb597a4d5532332b5e8f02eb888",
+    "01_程序代码/backend/extensions.py": "592b4bd79723f172a98e4cbec95f6fbd971c36254979818c9989dad635cccf41",
+    "01_程序代码/backend/seed.py": "50fcefe4b03c303e1c5b0c66cc510f4389d2ec6d49a46d8e71c805923fc86bea",
+    "01_程序代码/backend/engine.py": "d2cc48f53c681a30cdcd4bc0fda983e16fbc1c0ddf7899a7658110556b2544de",
+    "01_程序代码/backend/vault.py": "82641fd63200c8fe4ecdc55215049068d66edd4b688039e5c34d5fe8ad5375ab",
+    "01_程序代码/backend/document_tasks.py": "70da0aa20e6f419e613dc85509dca769102d5cadfda7fe73ede780a4d1abc331",
+    "01_程序代码/backend/agent.py": "26fac58c55bc9016fea38aa9ae4d3b7c6127200fdbb996abb00f4aa94893757d",
+    "01_程序代码/backend/settings.py": "5e3ccc63a3ed3b8b14216688faf0b7fd23e74f416ccb788e282a263b911fde89",
+    "01_程序代码/backend/rag_grounding.py": "9a134efd233278519634613ed8ef49117213e9f30cc5b7eda46d544d9da621db",
+    "01_程序代码/backend/document_providers.py": "f7a72915ba8e1a70e8c1dd2cdebe7ff2d097fb9d1458cd07e109fac9c3b664a6",
+    "01_程序代码/backend/rag_retrieval.py": "2ef4ea059fdb70e1f6ae617ebe78f43c116245c155074c3fec01548e9591a57d",
+    "01_程序代码/backend/counter_check.py": "698ce6a9a94336e1eaec7416d98a6a8aae0704dd4e5582b8d5de7b4c2e47804f",
+    "01_程序代码/backend/main.py": "4f2e8b4f8bcbb1d9f6044786e89980184d11bd56798af8761f841ca00817aa47",
+    "01_程序代码/backend/database_query.py": "45128192de682b000f3f71dca5cb797ece975ac6ab1769487dfd1d758b8a3d12",
+    "01_程序代码/backend/document_quality.py": "a7d652681adfa9bb81666564d0b74bd45e7dc1a75f1579fdd814a800354dadb8",
+    "01_程序代码/backend/conversations.py": "fbfa329733d0285eb1cb85d33ae0454888b089278f81d3c3e12afc32bd8ffb92",
+    "01_程序代码/backend/sql_guard.py": "fa27e951370d6a6edf310b61237cee188038e2d18c30dd0af35afa83e1b01897",
+    "01_程序代码/backend/rag_providers.py": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02"
+  },
+  "boundary": "不提供业务准确率或90%达标结论；最终打包校验在作者目录单独记录，避免压缩包自引用。"
+}

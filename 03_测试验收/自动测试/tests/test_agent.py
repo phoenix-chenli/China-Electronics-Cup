@@ -282,6 +282,42 @@ class AgentTests(unittest.TestCase):
         self.assertIn("不接受 SQL", ModelFixture.calls[-1]["messages"][-1]["content"])
         self.assertEqual(s.digest(s.BUSINESS_DB), before)
 
+    def test_sales_prompt_freezes_known_conditions_and_available_tools(self):
+        self.ready()
+        self.script(query_action(), lambda p: {"action":"answer","claims":[{"fact_id":tool_results(p)[0]['result']['facts'][0]['id']}]})
+        response=self.query()
+        self.assertEqual(response.status_code,200,response.text)
+        prompt=ModelFixture.calls[0]['messages']
+        available=json.loads(prompt[0]['content'].rsplit('本轮可用工具：',1)[1])
+        self.assertIn('business.query',available);self.assertNotIn('database.query',available)
+        known=json.loads(prompt[1]['content'])['known_conditions']
+        self.assertEqual(known['year'],2024);self.assertEqual(known['region'],'华东');self.assertEqual(known['metric'],'net_sales')
+
+    def test_explicit_tool_shorthand_keeps_scope_and_readonly_guards(self):
+        self.ready()
+        self.script({'action':'business.query','arguments':{'question':'2024年华东净销售额是多少？'}},select_fact)
+        result=self.query()
+        self.assertEqual(result.status_code,200,result.text)
+        self.assertEqual(result.json()['claims'][0]['value'],self.expected_sales())
+        self.script({'action':'tool','arguments':{'tool':'business.query','question':'2024年华东净销售额是多少？'}},select_fact)
+        nested=self.query()
+        self.assertEqual(nested.status_code,200,nested.text)
+        self.assertEqual(nested.json()['claims'][0]['value'],self.expected_sales())
+        before=s.digest(s.BUSINESS_DB)
+        self.script({'action':'database.query','arguments':{'sql':'DELETE FROM orders','params':[]}},
+                    {'action':'answer','claims':[]})
+        forbidden=self.query()
+        self.assertEqual(forbidden.status_code,200,forbidden.text)
+        self.assertIn('不可切换',ModelFixture.calls[-1]['messages'][-1]['content'])
+        self.assertFalse(any(e['tool']=='database.query' for e in forbidden.json()['events']))
+        self.assertEqual(forbidden.json()['claims'],[]);self.assertEqual(s.digest(s.BUSINESS_DB),before)
+        with self.assertRaises(ValueError):agent._object('{"action":"python.exec","arguments":{}}')
+        with self.assertRaises(ValueError):agent._object('{"action":"business.query","tool":"python.exec","arguments":{}}')
+        self.assertEqual(agent._object('{"action":"tool","arguments":{"tool":"python.exec"}}')['arguments']['tool'],'python.exec')
+        conflicting=agent._object('{"action":"tool","tool":"business.query","arguments":{"tool":"database.query"}}')
+        self.assertEqual(conflicting['tool'],'business.query')
+        self.assertIn('tool',conflicting['arguments'])  # dispatch rejects the extra parameter
+
     def test_formula_uses_sourced_values_and_preserves_decimal_result(self):
         self.ready()
         def calculate(payload):
@@ -370,11 +406,45 @@ class AgentTests(unittest.TestCase):
 
     def test_invalid_planner_json_is_not_treated_as_an_answer(self):
         self.ready()
-        self.script("这里是模型直接给出的未核验答案：999万元")
+        self.script("这里是模型直接给出的未核验答案：999万元", "仍然没有有效动作")
         response = self.query()
         self.assertEqual(response.status_code, 400, response.text)
         self.assertIn("规划 JSON", response.json()["detail"])
         self.assert_trace(response.json(), "failed")
+        self.assertEqual(len(ModelFixture.calls), 2)
+        self.assertEqual(response.json()['agent']['protocol_repair_count'], 1)
+        self.assertEqual(s.get_run(response.json()['run_id'])['claims'], [])
+
+    def test_received_invalid_format_can_be_corrected_once_before_tools(self):
+        self.ready()
+        self.script({'plan': [{'tool': 'business.query', 'label': '查询'}]}, query_action(), select_fact)
+        response = self.query()
+        self.assertEqual(response.status_code, 200, response.text)
+        result = response.json()
+        self.assertEqual(result['metrics'][0]['value'], self.expected_sales())
+        self.assertEqual(result['agent']['calls'], 3)
+        self.assertEqual(result['agent']['protocol_repair_count'], 1)
+        self.assertEqual(len(result['agent']['protocol_errors']), 1)
+        self.assertEqual(len([e for e in result['events'] if e['tool'] == 'business.query']), 1)
+        self.assertEqual(result['events'][0]['status'], 'failed')
+        self.assertIn('不改变原问题、数据源、条件或预算', ModelFixture.calls[1]['messages'][-1]['content'])
+
+    def test_format_correction_respects_call_budget_and_cancellation(self):
+        self.ready()
+        self.script({'plan': []})
+        with patch.object(agent, 'MAX_MODEL_CALLS', 1):
+            response = self.query()
+        self.assertEqual(response.status_code, 400, response.text)
+        self.assertEqual(len(ModelFixture.calls), 1)
+        self.assertNotIn('protocol_repair_count', response.json()['agent'])
+        stop = threading.Event()
+        def progress(result):
+            if any(e.get('status') == 'failed' for e in result.get('events', [])):
+                stop.set()
+        self.script({'plan': []})
+        with self.assertRaises(InterruptedError):
+            agent.execute('2024年华东净销售额是多少？', cancelled=stop, progress=progress, persist=False)
+        self.assertEqual(len(ModelFixture.calls), 2)
 
     def test_tool_budget_stops_repeated_calls(self):
         self.ready()

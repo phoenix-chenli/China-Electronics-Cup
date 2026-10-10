@@ -24,7 +24,7 @@ from . import store as s
 from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
 from . import documents as document_engine
 from . import rag_index, rag_providers
-from . import document_tasks, document_providers
+from . import document_tasks, document_providers, document_review
 from .seed import seed_business, write_seed_docs
 
 app=FastAPI(title="证流",version="0.7.0")
@@ -35,6 +35,7 @@ app.include_router(connections.router)
 app.include_router(extensions.router)
 app.include_router(sharing.router)
 app.include_router(agent.router)
+app.include_router(document_review.router)
 app.include_router(rag_providers.router)
 app.include_router(document_tasks.router)
 def init_app():

@@ -1,0 +1,58 @@
+(node:55186) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test-loader.mjs", pathToFileURL("./")); register("./test-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ database table keeps colliding field names, exact numeric and decimal text, and NULL (21.658083ms)
+✔ database result retains every column and SQL evidence without guessed currency charts (3.090167ms)
+✔ database analysis suppresses sales conditions, bonus shortcuts, metrics and regional followups (11.557667ms)
+✔ database SQL source preview also preserves original column labels and precision (1.1795ms)
+✔ empty database result still exposes SQL and saved names do not invent a sales year (1.046875ms)
+(node:55187) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test-loader.mjs", pathToFileURL("./")); register("./test-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ source-view metadata retains its document identity in the processing request (21.422333ms)
+✔ vision requires a concrete preview and submits the frozen document and page selection (1.762458ms)
+✔ expired or changed preview rejection remains a failure instead of creating a completed state (10.291042ms)
+✔ actual progress and cancellation do not claim successful publication (2.762292ms)
+✔ completed task offers an explicit new parse while retaining historical citations (1.328ms)
+✔ range limits reject invalid pages and never silently truncate a selection (1.314917ms)
+✔ preview renders the actual send volume and service without exposing private connection fields (2.811625ms)
+✔ merged cells preserve original blank and zero without propagating merged text (1.363542ms)
+✔ charts retain axes and legend but mark estimates and unknown values for review (2.44075ms)
+✔ page provenance uses actual method and line geometry without fabricated character positions (1.251125ms)
+✔ model files alone do not establish a working OCR provider (1.395542ms)
+✔ DOCX previews list each embedded image and task progress counts actual images (1.652ms)
+✔ native chart cache preserves axis display scale and labels values as saved data (0.811667ms)
+✔ a selection across DOCX images preserves separate media coordinates and rejects malformed boxes (0.410083ms)
+(node:55188) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test-loader.mjs", pathToFileURL("./")); register("./test-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ completed retrieval refusal shows reason, missing facts, conflicts and inspectable originals (7.356792ms)
+✔ partial output preserves supported content while exposing the unanswered requirement (2.331792ms)
+✔ local excerpt retrieval never presents itself as generated synthesis (1.08175ms)
+✔ each synthesis claim retains multiple citations and separates model review from original location (2.18175ms)
+✔ index states reflect actual progress and degradation without claiming mixed readiness (1.329292ms)
+✔ provider status never infers readiness from the presence of a model name (0.252292ms)
+✔ scope preview displays frozen versions and knowledge saved names avoid sales years (0.4595ms)
+✔ page and selection submission preserve version and offsets instead of silently expanding retrieval (1.036042ms)
+✔ whole-document and corpus retrieval require deliberate scope and never carry a hidden page restriction (0.294291ms)
+✔ analysis view shows completed refusal without green completion, empty coverage or sales shortcuts (9.845292ms)
+✔ retrieval history displays the latest real channels and records failed reranking (0.56775ms)
+✔ selected evidence and empty retrieval history do not invent dense or reranking success (0.31825ms)
+✔ an empty claim list cannot display generated answer success even when status is inconsistent (0.99375ms)
+✔ companion refuses celebration for insufficient or partially answered completed results (0.113ms)
+(node:55189) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test-loader.mjs", pathToFileURL("./")); register("./test-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ missing detail is unverified, not an arithmetic contradiction (11.901042ms)
+✔ source event summary preserves failure, cancellation and unknown duration (46.573916ms)
+✔ followup shows its frozen source and model after global config changes (0.962833ms)
+✔ new query explains unavailable model while local sales stays usable (0.895083ms)
+✔ model package distinguishes installed, bundled, absent and failed states (0.936042ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 511.599792

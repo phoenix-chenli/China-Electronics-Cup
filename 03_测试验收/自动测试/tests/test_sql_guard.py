@@ -24,6 +24,14 @@ class SQLGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError, msg=sql):
             validate(sql, self.schema, **kwargs)
 
+    def test_unit_origins_follow_only_direct_columns_and_preserving_aggregates(self):
+        result=validate('SELECT SUM(amount) AS total, COUNT(amount) AS n, SUM(amount)*2 AS changed FROM orders',self.schema)
+        self.assertEqual(result['unit_origins'],{'total':'main.orders.amount'})
+        result=validate('WITH subtotals AS (SELECT region,SUM(amount) AS total FROM orders GROUP BY region) SELECT SUM(total) AS amount FROM subtotals',self.schema)
+        self.assertEqual(result['unit_origins'],{'amount':'main.orders.amount'})
+        result=validate('WITH changed AS (SELECT amount*2 AS total FROM orders) SELECT SUM(total) AS amount FROM changed',self.schema)
+        self.assertEqual(result['unit_origins'],{})
+
     def test_select_aggregate_and_bound_parameters_execute_on_sqlite(self):
         result = validate("SELECT region, SUM(amount) AS total FROM orders WHERE year=? GROUP BY region ORDER BY total DESC", self.schema)
         self.assertEqual(result["tables"], ["main.orders"])

@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-10",
+  "baseline_files": 21,
+  "unchanged_files": 18,
+  "original_business_database_unchanged": true,
+  "original_uploads_and_versions_unchanged": true,
+  "expected_changed_files": [
+    "app.db",
+    "日志/服务日志.log",
+    "日志/启动锁"
+  ],
+  "change_reason": "运行记录、公开样本复核/可恢复归档，以及服务启动日志；原有业务库、上传和固定原文未改。",
+  "public_test_fixture_archived": true,
+  "model_config_after_restart": "identical",
+  "connection_key_permissions": "0o600",
+  "personal_data_in_handoff": false,
+  "boundary": "这里只记录保留核验及计数，不导出个人数据内容或连接记录。"
+}

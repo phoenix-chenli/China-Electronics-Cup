@@ -88,6 +88,32 @@ class RagAgentTest(unittest.TestCase):
         self.assertNotIn('fusion',returned['retrieval'])
         self.assertTrue(result['rag']['retrieval'][0]['fusion'])
 
+    def test_exact_excerpt_sends_original_context_to_support_review(self):
+        doc,_=self.source();self.setup_rag()
+        quote='甲产品售后处理要求申请人提交发票。'
+        def excerpt(payload):
+            source=legacy.tool_results(payload)[-1]['result']['evidence'][0]
+            return {'action':'answer','claims':[{'evidence_id':source['id'],'quote':quote}]}
+        def review_with_citations(payload):
+            value=json.loads(payload['messages'][-1]['content'])
+            claim=value['claims'][0]
+            self.assertEqual(claim['text'],quote)
+            self.assertIsNone(claim['fact'])
+            self.assertEqual(len(claim['citations']),1)
+            self.assertIn(quote,claim['citations'][0]['text'])
+            self.assertIn('特殊型号除外',claim['citations'][0]['text'])
+            return support(payload)
+        self.script({'action':'tool','tool':'document.search','arguments':{'query':'甲产品售后发票'}},
+                    required,assessment,excerpt,assessment,review_with_citations)
+        result=self.ask(doc).json()
+        self.assertEqual(result['answer_status'],'supported')
+        claim=result['claims'][0]
+        self.assertEqual(claim['kind'],'excerpt')
+        self.assertTrue(claim['support_span_ids'])
+        source=next(e for e in result['evidence'] if e['id']==claim['evidence_ids'][0])
+        resolved=self.client.post('/api/evidence/resolve',json={'locator':source['locator'],'quote':quote}).json()
+        self.assertEqual(resolved['status'],'located')
+
     def test_relevant_quote_cannot_replace_missing_conditions(self):
         doc,_=self.source();self.setup_rag()
         def reject(payload):
@@ -173,6 +199,25 @@ class RagAgentTest(unittest.TestCase):
             needed=[{'id':'R1','text':'条件一','independent':independent},{'id':'R2','text':'条件二','independent':False}]
             result=grounding.review('条件一和二',needed,claims,{}, {'F1':{'id':'F1','text':'有依据'}},judge)
             self.assertEqual(result['answer_status'],expected)
+
+    def test_final_review_preserves_independent_identity_without_waiving_missing_cause(self):
+        needed=[{'id':'R1','text':'设备名称','independent':True},{'id':'R2','text':'根因','independent':False}]
+        assessment={'status':'insufficient','coverage':[{'requirement_id':'R1','status':'supported'},
+            {'requirement_id':'R2','status':'missing','reason':'报告未记载原因'}],'missing_requirements':['根因未记载']}
+        check={'answer_status':'supported','claims':[{'id':'C1','text':'设备名来自只读结果'},
+            {'id':'C2','text':'报告没有根因'}],'coverage':[{'requirement_id':'R1','status':'supported','claim_ids':['C1']},
+            {'requirement_id':'R2','status':'supported','claim_ids':['C2']}],'missing_requirements':[]}
+        result=grounding.retain_independent(check,assessment,needed)
+        self.assertEqual(result['answer_status'],'partial')
+        self.assertEqual([c['id'] for c in result['claims']],['C1'])
+        self.assertEqual(result['missing_requirements'],['根因未记载'])
+        self.assertEqual(result['coverage'][1]['status'],'missing')
+        # A compound claim that also purports to cover the missing dependency
+        # cannot survive merely because its identity component was independent.
+        check['coverage'][1]['claim_ids']=['C1']
+        self.assertEqual(grounding.retain_independent(check,assessment,needed)['answer_status'],'refused')
+        needed[0]['independent']=False
+        self.assertEqual(grounding.retain_independent(check,assessment,needed)['claims'],[])
 
     def test_remote_index_requires_one_use_matching_preview(self):
         doc,_=self.source()

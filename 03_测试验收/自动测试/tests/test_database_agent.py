@@ -96,6 +96,28 @@ class DatabaseAgentTests(unittest.TestCase):
                               'JOIN logs l ON p.id=l.project_id ORDER BY p.id')
         self.assertEqual(result['rows'], [{'title': '云平台', 'total': 19.5, 'count': 2}, {'title': '网络升级', 'total': 6.25, 'count': 1}])
 
+    def test_free_text_clarification_keeps_server_parent_question_and_source(self):
+        cid,_=self.database()
+        original='研发部的项目结算金额，请按明确的统计粒度汇总。'
+        clarification='需要按项目统计还是按结算明细统计？'
+        self.script({'action':'clarify','question':clarification})
+        session=self.client.post('/api/projects/default/sessions').json()
+        first=self.client.post('/api/tasks',json={'question':original,'session_id':session['id'],'request_id':uuid.uuid4().hex}).json()
+        result=self.wait_task(first['id'])
+        self.assertEqual(result['result']['status'],'needs_clarification')
+        parent=self.client.get('/api/sessions/'+session['id']).json()['selected_message_id']
+        def inspect(payload):
+            context=json.loads(payload['messages'][1]['content'])
+            self.assertEqual(context['previous_question'],original)
+            self.assertEqual(context['previous_clarification'],clarification)
+            self.assertEqual(context['database_source']['connection_id'],cid)
+            return schema_action()
+        self.script(inspect,sql_action('SELECT p.title,SUM(s.amount) AS amount FROM projects p JOIN settlements s ON s.project_id=p.id JOIN departments d ON d.id=p.department_id WHERE d.name=? GROUP BY p.id,p.title',['研发部']),fixture.select_fact)
+        next_task=self.client.post('/api/tasks',json={'question':'按项目统计','session_id':session['id'],'request_id':uuid.uuid4().hex,'parent_message_id':parent}).json()
+        result=self.wait_task(next_task['id'])
+        self.assertEqual(result['status'],'completed',result)
+        self.assertEqual(result['result']['rows'],[{'title':'云平台','amount':19.5}])
+
     def test_nested_aggregate_and_parameter_binding(self):
         self.database()
         result = self.run_sql('SELECT title FROM projects WHERE id IN (SELECT project_id FROM settlements '

@@ -247,6 +247,23 @@ def _origin(scope, column, tables, dialect, depth=0):
     return None
 
 
+def _unit_origin(scope,node,tables,dialect,depth=0):
+    """Only direct fields and unit-preserving aggregates can inherit a declared unit."""
+    if depth>MAX_DEPTH:return None
+    if isinstance(node,exp.Alias):return _unit_origin(scope,node.this,tables,dialect,depth+1)
+    if isinstance(node,(exp.Sum,exp.Avg,exp.Min,exp.Max)):
+        return _unit_origin(scope,node.this,tables,dialect,depth+1)
+    if not isinstance(node,exp.Column) or not node.table:return None
+    source=scope.selected_sources.get(node.table)
+    if source is None:return None
+    source=source[1];name=_norm(node.name,dialect)
+    if isinstance(source,exp.Table):return _table_key(source,tables,dialect)+'.'+name
+    if isinstance(source,Scope) and isinstance(source.expression,exp.Select):
+        selections=[p for p in source.expression.selects if _norm(p.alias_or_name,dialect)==name]
+        if len(selections)==1:return _unit_origin(source,selections[0],tables,dialect,depth+1)
+    return None
+
+
 def _conjuncts(node):
     while isinstance(node, exp.Paren):
         node = node.this
@@ -456,6 +473,9 @@ def validate(sql, schema, *, dialect="sqlite", max_rows=200, max_nodes=500):
         _output_names(tree)
         scopes = list(traverse_scope(tree))
         relations = _relations(schema, tables, dialect)
+        root_scope=scopes[-1]
+        unit_origins={p.alias_or_name:origin for p in tree.selects
+                      if (origin:=_unit_origin(root_scope,p,tables,dialect)) is not None}
         used = (_joins(scopes, tables, relations, dialect) + _correlations(scopes, tables, relations, dialect)
                 + _subquery_keys(scopes, tables, relations, dialect))
         columns = set()
@@ -474,7 +494,7 @@ def validate(sql, schema, *, dialect="sqlite", max_rows=200, max_nodes=500):
     except (ParseError, TokenError, OptimizeError, sqlglot.errors.UnsupportedError, RecursionError):
         _error("SQL 无法安全解析，或表字段及作用域不匹配")
     return {"sql": normalized, "driver_sql": driver_sql, "tables": sorted(physical),
-            "columns": sorted(columns), "relations": used, "limit": limit,
+            "columns": sorted(columns), "relations": used, "unit_origins":unit_origins,"limit": limit,
             "parameter_count": count, "parameter_style": "qmark" if dialect == "sqlite" else "format",
             "checks": [{"name": "单条只读查询及结构", "status": "passed"},
                        {"name": "表字段和作用域", "status": "passed"},

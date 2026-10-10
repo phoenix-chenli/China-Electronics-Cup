@@ -1,0 +1,5010 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "evidenceflow-public-rag-regression-20261010",
+  "status": "frozen_for_regression",
+  "license": "CC0-1.0",
+  "synthetic": true,
+  "description": "20份公开合成政策；160个独立问题。人工确认答案、引用支持与拒答仍待评，模型检查不能视为正确率。",
+  "source_directory": "02_数据资料/示例数据/docs",
+  "documents": [
+    {
+      "file": "RAG_01_青岚终端2024保修.md",
+      "sha256": "44e83ca20e4e51ab5ee97cb2bb8749f635651194033e3fa5de775e8ac01060a1",
+      "synthetic": true,
+      "title": "青岚 QL-4 终端 2024 年保修办法",
+      "characters": 501,
+      "fact_count": 6,
+      "previous_manifest_sha256": "7b3e2c7eb6548ea583462f979aafd990b99e5e413527850dea0148fc1825acc5"
+    },
+    {
+      "file": "RAG_02_青岚终端2025更新.md",
+      "sha256": "87603b85e638119ef33f77263b25e82f7dfce0601b2069d4b19e8dd92da79404",
+      "synthetic": true,
+      "title": "青岚 QL-4 终端 2025 年服务更新",
+      "characters": 532,
+      "fact_count": 6,
+      "previous_manifest_sha256": "d66e2658af4ccccbcfd842f2db01e9f4fefe3386c5637e2b91d87dc476a5e9c8"
+    },
+    {
+      "file": "RAG_03_澄海云盘服务.md",
+      "sha256": "383b6bdf9d484b1777249a1e13b2a72b0b6e26814053ab9c8cd354a1326d9177",
+      "synthetic": true,
+      "title": "澄海云盘标准版服务约定",
+      "characters": 534,
+      "fact_count": 6,
+      "previous_manifest_sha256": "45638503d871cb66586030c43a09e8a0641a4bc9eb22f3254c407b3a73bf2aff"
+    },
+    {
+      "file": "RAG_04_澄海云盘计费.md",
+      "sha256": "6dc727917eb8ec391b384b77ba4d25b081553a55c39c88492b437fb57b5cb476",
+      "synthetic": true,
+      "title": "澄海云盘标准版计费规则",
+      "characters": 544,
+      "fact_count": 6,
+      "previous_manifest_sha256": "0413326ead4300e43110591abb964b2a902fded9308626dcf907088bd91a1120"
+    },
+    {
+      "file": "RAG_05_沐川设备领用.md",
+      "sha256": "fbd6332e00b0e37c775647c26910a2b61dee23d52257cb9333ee42c404b57fab",
+      "synthetic": true,
+      "title": "沐川远程测量仪领用办法",
+      "characters": 498,
+      "fact_count": 6,
+      "previous_manifest_sha256": "b61684b4e5c19d57ee770584c6d5dfa0ca11112f3bdd9492d2201247da438d32"
+    },
+    {
+      "file": "RAG_06_沐川设备返修.md",
+      "sha256": "a9e8a59287b5fd67245675cc1c46111d45283f468ffc47f46ac10f09923f0585",
+      "synthetic": true,
+      "title": "沐川 MC-7 返修与替换办法",
+      "characters": 525,
+      "fact_count": 6,
+      "previous_manifest_sha256": "a16ea0c546fb735bdb1a63c5e2901be69e0426b1d8cdb52e09a2cb5561b373be"
+    },
+    {
+      "file": "RAG_07_星湾园区年度入场.md",
+      "sha256": "616e25bf9437e8537876849e2411e35b8be736bca2e75dc552cd6f56ff0c90e6",
+      "synthetic": true,
+      "title": "星湾园区 2025 年访客入场规定",
+      "characters": 480,
+      "fact_count": 6,
+      "previous_manifest_sha256": "8c28503413ca59da568f5b0984761883c8da8c883d518778ed88e40d2cc3aaca"
+    },
+    {
+      "file": "RAG_08_星湾园区七月告示.md",
+      "sha256": "fda0651579ad46a1097835544f03dbe1ea5cc9f29c5ba6c62fa5a6251ad02a92",
+      "synthetic": true,
+      "title": "星湾园区 A 门七月访客告示",
+      "characters": 525,
+      "fact_count": 6,
+      "previous_manifest_sha256": "a669fc711f80a704e3a618d5f63d959b36973357a4d6ca897d8199e67ec1aa8a"
+    },
+    {
+      "file": "RAG_09_镜河批次验收.md",
+      "sha256": "c10b45c953ed26d00ad8e1aba29701e9f2b21f8d2eb33b97beaf117bea91e04e",
+      "synthetic": true,
+      "title": "镜河 RH-2 模块批次验收标准",
+      "characters": 505,
+      "fact_count": 6,
+      "previous_manifest_sha256": "a0ab26dcba8706f8837dc64f6a09dfd76b6bbdf0b441a12517b5b572b4824c17"
+    },
+    {
+      "file": "RAG_10_镜河退货流程.md",
+      "sha256": "0816c521ca3fcd006822fef3219e4d58b2fce221a5421bdf622b1f5e87715511",
+      "synthetic": true,
+      "title": "镜河 RH-2 退货申请流程",
+      "characters": 490,
+      "fact_count": 6,
+      "previous_manifest_sha256": "6286d1865d3e84858aa84fd25cecf85cec11a876f36ee3ee2e1cf36566447450"
+    },
+    {
+      "file": "RAG_11_知序培训报名.md",
+      "sha256": "4b604101d86c2f2ceda38f1da9b753313be6b0b8e17e0020205f949b62729c69",
+      "synthetic": true,
+      "title": "知序数据课程报名说明",
+      "characters": 513,
+      "fact_count": 6,
+      "previous_manifest_sha256": "da290728cd3f825af3a0a70dd134ab8340e2019b9ecb8a2a52c03778ea3081d7"
+    },
+    {
+      "file": "RAG_12_知序课程考核.md",
+      "sha256": "3a01f8f1a174899cbfe3bbbf060e8438bb41fb5483236e057c06610aef97538c",
+      "synthetic": true,
+      "title": "知序秋季数据课程考核办法",
+      "characters": 494,
+      "fact_count": 6,
+      "previous_manifest_sha256": "8baa7f8d4b5e8589c0fe0a8f15be6f12844208b14046a2029c553dad519a7c98"
+    },
+    {
+      "file": "RAG_13_皓石市内差旅.md",
+      "sha256": "d563f2f9d933cf7b244e3a106db180d176292a02b71198479a8ff218e37711ad",
+      "synthetic": true,
+      "title": "皓石研究组 2025 年市内出行规定",
+      "characters": 514,
+      "fact_count": 6,
+      "previous_manifest_sha256": "845f8dcb1af7e08d2e60652bef75fcf8bb0fec23e051b3d38fd696d052bc71cb"
+    },
+    {
+      "file": "RAG_14_皓石异地差旅.md",
+      "sha256": "686ef5e17a75947767f640c9038c78b5c58ddcb371cefc2e04f7cbc00e6f1458",
+      "synthetic": true,
+      "title": "皓石研究组 2025 年异地出差规定",
+      "characters": 506,
+      "fact_count": 6,
+      "previous_manifest_sha256": "d8efefd220756cba84719fe67b3115020636181633137560292d3a9ea79f2aa4"
+    },
+    {
+      "file": "RAG_15_松岑资料保留.md",
+      "sha256": "10a05c9aa7ce5e6d4e004045835ffd52ba7eb0570e343f36e9629215979151e4",
+      "synthetic": true,
+      "title": "松岑项目资料保留办法",
+      "characters": 494,
+      "fact_count": 6,
+      "previous_manifest_sha256": "a74a66bfbcc7ed5664eddfe5bb5017f1aea338b5ebbb37a7d2e10d4881969d57"
+    },
+    {
+      "file": "RAG_16_松岑资料共享.md",
+      "sha256": "90acfd852f5d4e452939eae8365286d726740dca9acaab766edc9acd481aa63f",
+      "synthetic": true,
+      "title": "松岑实验项目资料共享办法",
+      "characters": 504,
+      "fact_count": 6,
+      "previous_manifest_sha256": "c24312a93b77507a630051d624a0fe8fedc0db5fdbfd1a5a250646a8d704b677"
+    },
+    {
+      "file": "RAG_17_清峦应急演练.md",
+      "sha256": "f5f01563c490b412014b63f26545820a24172a8a34203fde9df5466b3b1cd2b1",
+      "synthetic": true,
+      "title": "清峦机房 2025 年应急供电演练",
+      "characters": 511,
+      "fact_count": 6,
+      "previous_manifest_sha256": "6a5ded415202d3c0dc96f020a05f18fc93fc96f28cfbe76e4a87682b2da47495"
+    },
+    {
+      "file": "RAG_18_清峦值守交接.md",
+      "sha256": "0351e301e8abeb42df540106384864fabeec21367f3cdbec2cdf3624d1928c42",
+      "synthetic": true,
+      "title": "清峦机房 G 区值守交接办法",
+      "characters": 488,
+      "fact_count": 6,
+      "previous_manifest_sha256": "9eb94c74de935f9bebc34d49091996be770a8cc35397b3990fc002a11d14bcc8"
+    },
+    {
+      "file": "RAG_19_扶桑奖助公告甲.md",
+      "sha256": "c4117224d8470cf7d01e262160735353f439e888865a5147c58ffb0d2d4684e9",
+      "synthetic": true,
+      "title": "扶桑培训项目 2025 年奖助公告甲",
+      "characters": 483,
+      "fact_count": 6,
+      "previous_manifest_sha256": "a878f8a5e301360a61b0bdb89730a734c66582226f32f26fc7c57dc08afb4328"
+    },
+    {
+      "file": "RAG_20_扶桑奖助公告乙.md",
+      "sha256": "051ebbe4fbc41590f9690938a889b491ab5dd111911369ade993f1b76f471249",
+      "synthetic": true,
+      "title": "扶桑培训项目 2025 年奖助公告乙",
+      "characters": 501,
+      "fact_count": 6,
+      "previous_manifest_sha256": "b7a44c8f612a0e0be60361cef0a9beadfb8ff37660fc497572857e100618d127"
+    }
+  ],
+  "cases": [
+    {
+      "id": "RAG-001",
+      "question": "2024年购买的青岚QL-4出厂故障能免费维修多久？",
+      "category": "single_source",
+      "tags": [
+        "synonym"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "保修起算与期限",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "出厂质量故障的免费维修期为签收次日起 18 个月。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "出厂质量故障的免费维修期为签收次日起 18 个月。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-002",
+      "question": "QL-4在2024年自然损坏的电池最多免付多少维修费？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "电池自然损坏上限",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "电池因自然衰减维修时，单次免费额度不超过 280 元。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "电池因自然衰减维修时，单次免费额度不超过 280 元。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-003",
+      "question": "青岚QL-4进水以后仍能走2024年的免费保修吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "进水例外",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "浸水、私自拆机和超规格供电引起的故障均不属于免费维修。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "浸水、私自拆机和超规格供电引起的故障均不属于免费维修。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-004",
+      "question": "申请QL-4的2024年免费维修，只有机器没有凭证行不行？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "申请材料",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "申请必须同时提交购买凭证和可读的设备序列号；缺任一项须补齐。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "申请必须同时提交购买凭证和可读的设备序列号；缺任一项须补齐。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-005",
+      "question": "2024年青岚终端质保维修寄回去的运费由谁承担？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "物流责任",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "确认属于免费维修的，往返标准快递费由服务方承担；加急费由客户承担。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "确认属于免费维修的，往返标准快递费由服务方承担；加急费由客户承担。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-006",
+      "question": "青岚QL-4的2024年服务多久应首次联系报修人？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "首次响应时限",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "资料齐全后的 2 个工作日内首次响应；响应不等于维修完成。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "资料齐全后的 2 个工作日内首次响应；响应不等于维修完成。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-007",
+      "question": "2025年买的青岚QL-4主板故障享有几个月免费维修？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "2025质保期",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "主板出厂质量故障的免费维修期为签收次日起 24 个月。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "主板出厂质量故障的免费维修期为签收次日起 24 个月。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-008",
+      "question": "2025年QL-4电池正常老化时，一次免付上限是多少？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "2025电池额度",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "电池自然衰减的单次免费维修额度为 350 元。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "电池自然衰减的单次免费维修额度为 350 元。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-009",
+      "question": "2025年青岚QL-4已经换过第三方主板，是否继续免费保修？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "第三方改装条件",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "第三方更换主板的设备不享受本办法的免费维修。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "第三方更换主板的设备不享受本办法的免费维修。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-010",
+      "question": "QL-4在2025年购买后十个月申请备用机，需要哪些条件？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "备用机条件",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "购买后 12 个月内且预计维修超过 7 个自然日的，可申请备用机；需登记归还日期。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "购买后 12 个月内且预计维修超过 7 个自然日的，可申请备用机；需登记归还日期。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-011",
+      "question": "2025版青岚终端预计什么时候维修完？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "完成时间边界",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "正常配件在库时，签收待修设备后 7 个自然日内完成维修；缺件另行通知，不承诺此时限。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "正常配件在库时，签收待修设备后 7 个自然日内完成维修；缺件另行通知，不承诺此时限。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-012",
+      "question": "2025年QL-4免费维修上限用的是什么币种，是否包税？",
+      "category": "single_source",
+      "tags": [
+        "unit"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "金额单位",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "本办法所有金额为含税人民币元，不含客户自选的加急运输费。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "本办法所有金额为含税人民币元，不含客户自选的加急运输费。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-013",
+      "question": "澄海云盘标准版每月正常运行比例承诺多少？",
+      "category": "single_source",
+      "tags": [
+        "synonym"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "月度可用率",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "标准版每自然月的服务可用率目标为 99.5%。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "标准版每自然月的服务可用率目标为 99.5%。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-014",
+      "question": "澄海云盘标准版的计划维护停机算入不可用时间吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "维护排除条件",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "提前至少 48 小时公告且每月累计不超过 4 小时的计划维护，不计入不可用时间。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "提前至少 48 小时公告且每月累计不超过 4 小时的计划维护，不计入不可用时间。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-015",
+      "question": "标准版云盘出了严重上传故障，支持人员最晚多久首次回应？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "严重事件响应",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "严重上传故障提交工单后，首次人工响应不超过 30 分钟。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "严重上传故障提交工单后，首次人工响应不超过 30 分钟。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-016",
+      "question": "澄海云盘标准版的数据删除后还能恢复几天？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "回收窗口",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "用户删除文件后进入回收区，保留 14 个自然日；主动清空回收区后不能据此申请恢复。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "用户删除文件后进入回收区，保留 14 个自然日；主动清空回收区后不能据此申请恢复。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-017",
+      "question": "客户自己的断网会影响澄海云盘标准版服务赔付指标吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "客户网络例外",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "客户网络中断、错误权限设置和账号主动停用，不纳入服务方不可用时间。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "客户网络中断、错误权限设置和账号主动停用，不纳入服务方不可用时间。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-018",
+      "question": "本期澄海云盘标准版投诉可用率，应拿出什么日志？",
+      "category": "single_source",
+      "tags": [
+        "evidence_requirement"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "可用率核对材料",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "核对月度可用率须提供工单编号、带时区的起止时间和失败请求编号。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "核对月度可用率须提供工单编号、带时区的起止时间和失败请求编号。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-019",
+      "question": "澄海标准版云盘的基础存储包含多少GiB？",
+      "category": "single_source",
+      "tags": [
+        "unit"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "基础配额",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "每个付费账号包含 120 GiB 存储；GiB 按 2 的 30 次方字节计算。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每个付费账号包含 120 GiB 存储；GiB 按 2 的 30 次方字节计算。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-020",
+      "question": "澄海云盘超出基础存储额度怎么收钱？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "超额单价",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "超额存储按每日峰值计量，单价为 0.08 元/GiB/日，按月汇总。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "超额存储按每日峰值计量，单价为 0.08 元/GiB/日，按月汇总。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-021",
+      "question": "一个标准版云盘账号每天可免付多少下载流量？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "下载流量限额",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "每个账号每日前 20 GiB 下载流量免费；未用余额不结转。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每个账号每日前 20 GiB 下载流量免费；未用余额不结转。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-022",
+      "question": "澄海云盘标准版月可用率低于99.5%后怎样给服务抵扣？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "补偿条件",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "当月可用率低于 99.5% 且通过工单核实时，抵扣次月基础服务费的 10%；不是现金退款。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "当月可用率低于 99.5% 且通过工单核实时，抵扣次月基础服务费的 10%；不是现金退款。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-023",
+      "question": "新开通的澄海云盘标准版当月基础费会收满月吗？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "不足月折算",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "当月中途开通的基础费按实际启用自然日占当月天数折算；超额存储仍按日计。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "当月中途开通的基础费按实际启用自然日占当月天数折算；超额存储仍按日计。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-024",
+      "question": "澄海云盘标准版年度预付会打几折？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "年付折扣",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "一次预付连续 12 个月的基础服务费享九五折，即支付原价的 95%；超额存储和下载费不打折。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "一次预付连续 12 个月的基础服务费享九五折，即支付原价的 95%；超额存储和下载费不打折。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-025",
+      "question": "驻点工程师领MC-7时最多可同时借几台？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "领用数量",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "每名驻点工程师最多同时领用 2 台 MC-7。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每名驻点工程师最多同时领用 2 台 MC-7。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-026",
+      "question": "新同事还没有安全培训证明，可以领沐川测量仪吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "领用资格",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "完成安全培训并取得有效授权的工程师才可领用；实习生须由导师共同登记。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "完成安全培训并取得有效授权的工程师才可领用；实习生须由导师共同登记。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-027",
+      "question": "沐川MC-7外借一次最长多久，延期怎样处理？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "借用时长",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "单次借用期限为 30 个自然日；延期须在到期前 3 个工作日提交申请。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "单次借用期限为 30 个自然日；延期须在到期前 3 个工作日提交申请。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-028",
+      "question": "领用MC-7时应记录哪些信息，为什么不能只写姓名？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "登记字段",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "登记至少包含设备序列号、工程师工号、驻点地点和计划归还日。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "登记至少包含设备序列号、工程师工号、驻点地点和计划归还日。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-029",
+      "question": "MC-7借到手发现旧划痕会直接扣我押金吗？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "外观问题归责",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "领用时共同拍照确认的旧划痕不计入本次损坏责任；本制度不收取领用押金。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "领用时共同拍照确认的旧划痕不计入本次损坏责任；本制度不收取领用押金。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-030",
+      "question": "沐川测量仪领用满三十天当天晚上归还算逾期吗？",
+      "category": "single_source",
+      "tags": [
+        "boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "到期边界",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "计划归还日当天 17:00 前交到登记库房视为按时归还，17:00 后视为逾期。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "计划归还日当天 17:00 前交到登记库房视为按时归还，17:00 后视为逾期。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-031",
+      "question": "驻点MC-7故障后还可以继续采样吗？",
+      "category": "single_source",
+      "tags": [
+        "synonym"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "故障处置",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "出现读数跳变时应立即停机、保存最后一次校准记录，并通知设备管理员。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "出现读数跳变时应立即停机、保存最后一次校准记录，并通知设备管理员。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-032",
+      "question": "沐川MC-7读数漂移的判定标准是什么？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "漂移阈值",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "连续 3 次标准源检查均偏离参考值超过 1.5% 时，判为漂移异常。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "连续 3 次标准源检查均偏离参考值超过 1.5% 时，判为漂移异常。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-033",
+      "question": "MC-7返修要不要带回原先的电源适配器？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "返修附件",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "返修应同时交回原适配器和探头；现场遗失附件需单独登记，不得用第三方件冒充原件。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "返修应同时交回原适配器和探头；现场遗失附件需单独登记，不得用第三方件冒充原件。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-034",
+      "question": "MC-7预计修理超过几天可拿临时替代设备？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "替换门槛",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "预计维修超过 5 个工作日且驻点任务仍在执行时，可申请临时替代设备。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "预计维修超过 5 个工作日且驻点任务仍在执行时，可申请临时替代设备。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-035",
+      "question": "MC-7设备维修通常多久需要给工程师处理方案？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "方案时限",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "收到设备和完整记录后的 1 个工作日内给出处置方案；方案不保证当天修好。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "收到设备和完整记录后的 1 个工作日内给出处置方案；方案不保证当天修好。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-036",
+      "question": "沐川MC-7因为用错适配器损坏，维修费由谁负责？",
+      "category": "single_source",
+      "tags": [
+        "missing_amount"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "损坏费用",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "未经授权使用不匹配适配器导致损坏的，费用按责任核定；本办法未给出固定罚款金额。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "未经授权使用不匹配适配器导致损坏的，费用按责任核定；本办法未给出固定罚款金额。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-037",
+      "question": "2025年星湾园区A门访客早上什么时候能进？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "年度开放时段",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "普通访客入场时段为每日 08:00 至 18:00。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "普通访客入场时段为每日 08:00 至 18:00。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-038",
+      "question": "普通访客到星湾A门需要哪些身份证明？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "身份材料",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "访客须携有效身份证件和当天预约码，二者缺一不可。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "访客须携有效身份证件和当天预约码，二者缺一不可。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-039",
+      "question": "星湾园区A门普通访客当天最多可进入几次？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "入场次数",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "每个访客码当天最多使用 2 次，第二次入场仍需核对证件。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每个访客码当天最多使用 2 次，第二次入场仍需核对证件。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-040",
+      "question": "星湾园区A门遇到红色天气预警还接受普通访客吗？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "天气例外",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "当地发布红色暴雨或台风预警时，暂停普通访客入场。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "当地发布红色暴雨或台风预警时，暂停普通访客入场。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-041",
+      "question": "一个十二岁孩子参观星湾园区需要什么陪同？",
+      "category": "single_source",
+      "tags": [
+        "boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "未成年人条件",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "未满 16 周岁的访客须由已预约的成年监护人全程陪同。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "未满 16 周岁的访客须由已预约的成年监护人全程陪同。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-042",
+      "question": "2025年普通访客进星湾园区带车辆怎么处理？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "车辆边界",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "普通访客预约不含车辆通行权限，车辆须另办许可。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "普通访客预约不含车辆通行权限，车辆须另办许可。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-043",
+      "question": "星湾A门七月告示写明几点开始接待普通访客？",
+      "category": "single_source",
+      "tags": [
+        "conflict_source"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "七月公布时段",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "七月告示写明普通访客入场时段为每日 07:30 至 18:00。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "七月告示写明普通访客入场时段为每日 07:30 至 18:00。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-044",
+      "question": "七月访客在星湾A门可免费存放一个多大的箱子？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "寄存限制",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "每人可寄存 1 件最长边不超过 60 厘米的箱包，禁止寄存易燃物。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每人可寄存 1 件最长边不超过 60 厘米的箱包，禁止寄存易燃物。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-045",
+      "question": "星湾A门七月预约码截屏能代替本人证件吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "身份确认",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "预约码截屏不能代替本人有效身份证件，证件要求沿用年度规定。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "预约码截屏不能代替本人有效身份证件，证件要求沿用年度规定。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-046",
+      "question": "星湾园区七月临时咨询窗口周日开门吗？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "咨询时段",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "临时咨询窗口仅周一至周六开放，09:00 至 16:00；周日关闭。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "临时咨询窗口仅周一至周六开放，09:00 至 16:00；周日关闭。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-047",
+      "question": "星湾园区七月丢失寄存牌以后怎样取回箱包？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "失牌流程",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "寄存牌丢失须核对预约姓名及箱包特征，填写取回记录后领取。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "寄存牌丢失须核对预约姓名及箱包特征，填写取回记录后领取。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-048",
+      "question": "七月星湾A门的雨棚能容纳多少等待访客？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "容量与例外",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "临时雨棚最多容纳 35 人；雨棚不改变红色天气预警下暂停入场的规定。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "临时雨棚最多容纳 35 人；雨棚不改变红色天气预警下暂停入场的规定。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-049",
+      "question": "采购120件镜河RH-2模块，验收应抽查几件？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "抽样数量",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "每批不超过 200 件的，抽取 12 件检测；超过 200 件的，抽取 20 件。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每批不超过 200 件的，抽取 12 件检测；超过 200 件的，抽取 20 件。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-050",
+      "question": "镜河RH-2开箱发现封签损坏会直接接收吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "封签处理",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "封签破损的模块单独隔离并记录，不得直接计入已通过的批次。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "封签破损的模块单独隔离并记录，不得直接计入已通过的批次。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-051",
+      "question": "镜河RH-2模块验收参考电压需要多大？",
+      "category": "single_source",
+      "tags": [
+        "unit"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "检测单位",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "性能检测使用 12.0 伏参考电源，允许波动为正负 0.1 伏。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "性能检测使用 12.0 伏参考电源，允许波动为正负 0.1 伏。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-052",
+      "question": "镜河模块抽检十二件有两件性能不过关，批次怎么办？",
+      "category": "single_source",
+      "tags": [
+        "boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "性能判定",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "性能抽样中出现 2 件及以上不合格时，整批进入复检，不能直接判定整批报废。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "性能抽样中出现 2 件及以上不合格时，整批进入复检，不能直接判定整批报废。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-053",
+      "question": "镜河RH-2哪些颜色差异可不算外观不合格？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "外观例外",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "不影响标识可读性的壳体轻微色差不算外观不合格；裂纹仍是不合格。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "不影响标识可读性的壳体轻微色差不算外观不合格；裂纹仍是不合格。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-054",
+      "question": "镜河RH-2批次验收记录必须保留多久？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "记录保留",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "验收记录和样品照片自验收日期起保存 2 年。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "验收记录和样品照片自验收日期起保存 2 年。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-055",
+      "question": "RH-2已经验收，质量退货最晚应在什么时候申请？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "退货窗口",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "质量退货应在验收日期后 15 个自然日内提出，逾期先进行责任核对。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "质量退货应在验收日期后 15 个自然日内提出，逾期先进行责任核对。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-056",
+      "question": "镜河RH-2质量退货申请需要什么材料？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "退货材料",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "申请需提供采购单号、批次序列号清单和对应不合格记录。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "申请需提供采购单号、批次序列号清单和对应不合格记录。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-057",
+      "question": "镜河模块批准质量退货后，普通快递费谁支付？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "退货物流责任",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "确认质量原因并批准退货后，标准物流费由供应方承担。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "确认质量原因并批准退货后，标准物流费由供应方承担。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-058",
+      "question": "客户误插镜河RH-2造成损坏，是否仍按质量退货处理？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "人为损坏例外",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "错误接线导致的损坏不按质量原因直接退货，须另行协商。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "错误接线导致的损坏不按质量原因直接退货，须另行协商。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-059",
+      "question": "镜河RH-2退货审批一次最多覆盖多少件？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "审批数量",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "单次退货审批最多覆盖 50 件；大批量须拆分审批单，不等于免检。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "单次退货审批最多覆盖 50 件；大批量须拆分审批单，不等于免检。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-060",
+      "question": "RH-2提交退货后过几天可得到受理回应？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "受理时限",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "材料齐全后的 2 个工作日内给予受理回复；受理不等于退货批准。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "材料齐全后的 2 个工作日内给予受理回复；受理不等于退货批准。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-061",
+      "question": "知序2025秋季数据课程什么时候停止报名？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "报名截止",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "报名截止为 2025-09-05 18:00，迟于此时间的申请进入候补名单。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "报名截止为 2025-09-05 18:00，迟于此时间的申请进入候补名单。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-062",
+      "question": "知序秋季数据课程每班最多招多少正式学员？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "班额",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "每班正式学员上限为 24 人，候补人数不计入正式班额。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每班正式学员上限为 24 人，候补人数不计入正式班额。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-063",
+      "question": "报名知序数据课程要先满足哪些基础条件？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "入学条件",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "申请人需完成基础统计先修课并能独立读取 CSV；无先修记录可参加入学测验。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "申请人需完成基础统计先修课并能独立读取 CSV；无先修记录可参加入学测验。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-064",
+      "question": "知序课程开班前两周退课会全额退费吗？",
+      "category": "single_source",
+      "tags": [
+        "boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "退款边界",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "开班前至少 10 个自然日提出退课可退还全部学费；不足 10 日按另行签署协议处理。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "开班前至少 10 个自然日提出退课可退还全部学费；不足 10 日按另行签署协议处理。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-065",
+      "question": "知序数据课程学费是多少，教材是不是另收费？",
+      "category": "single_source",
+      "tags": [
+        "unit"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "学费单位",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "本期学费为每人 1800 元人民币，已含纸质教材，餐饮不包含。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "本期学费为每人 1800 元人民币，已含纸质教材，餐饮不包含。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-066",
+      "question": "知序秋季课程需要学员自带电脑吗？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "学习设备",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "学员须自备可本机运行 Python 的电脑，不要求购买云端算力。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "学员须自备可本机运行 Python 的电脑，不要求购买云端算力。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-067",
+      "question": "知序秋季数据课程多少出勤率才可参加结业考核？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "考核资格",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "正式学员出勤率至少达到 80% 才可参加结业考核。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "正式学员出勤率至少达到 80% 才可参加结业考核。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-068",
+      "question": "知序数据课程结业成绩怎样分配项目和笔试？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "分数组成",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "结业总评中实践项目占 60%，笔试占 40%；均按百分制计算。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "结业总评中实践项目占 60%，笔试占 40%；均按百分制计算。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-069",
+      "question": "知序数据课程总评65分但笔试45分能拿结业证书吗？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "证书门槛",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "总评至少 60 分且笔试至少 50 分，才可获得结业证书。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "总评至少 60 分且笔试至少 50 分，才可获得结业证书。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-070",
+      "question": "知序学员第一次笔试不及格，有几次补考机会？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "补考限制",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "符合出勤资格的正式学员有 1 次笔试补考机会，须在成绩公布后 7 个自然日内申请。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "符合出勤资格的正式学员有 1 次笔试补考机会，须在成绩公布后 7 个自然日内申请。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-071",
+      "question": "旁听知序秋季数据课程可以领取正式结业证书吗？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "旁听例外",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "旁听生可参与项目讨论，但不能凭旁听记录领取正式结业证书。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "旁听生可参与项目讨论，但不能凭旁听记录领取正式结业证书。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-072",
+      "question": "知序秋季课程提交项目时要交什么可复查材料？",
+      "category": "single_source",
+      "tags": [
+        "evidence_requirement"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "项目材料",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "实践项目须提交源数据说明、可复运行步骤和结果解释，不能只交截图。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "实践项目须提交源数据说明、可复运行步骤和结果解释，不能只交截图。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-073",
+      "question": "皓石研究组市内乘网约车，每天通常最多报多少？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "市内车费限额",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "经批准的网约车费每人每日上限为 120 元；超额需说明并重新审批。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "经批准的网约车费每人每日上限为 120 元；超额需说明并重新审批。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-074",
+      "question": "皓石研究组下班后去私人聚会能报市内交通费吗？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "私人行程例外",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "私人聚会、通勤和购物产生的交通费不属于工作出行报销范围。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "私人聚会、通勤和购物产生的交通费不属于工作出行报销范围。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-075",
+      "question": "市内出行的皓石员工可按天领饭费补助吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "市内餐补",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "市内工作出行不按天发放餐费补助，实际工作餐须另有审批。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "市内工作出行不按天发放餐费补助，实际工作餐须另有审批。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-076",
+      "question": "皓石市内交通费凭证只写一个总额能报销吗？",
+      "category": "single_source",
+      "tags": [
+        "evidence_requirement"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "市内凭证",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "报销需提供有效票据、实际出行日期、起终点和工作事项，单一总额不足。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "报销需提供有效票据、实际出行日期、起终点和工作事项，单一总额不足。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-077",
+      "question": "皓石市内工作出行报销有多久提交期限？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "市内报销期限",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "应在出行结束后 20 个自然日内提交材料；超期需部门负责人说明。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "应在出行结束后 20 个自然日内提交材料；超期需部门负责人说明。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-078",
+      "question": "皓石员工因深夜紧急维修乘车超120元，能直接按实报吗？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "紧急例外条件",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "22:00 至次日 06:00 的紧急维修可申请按实报车费，但仍需事前授权或事后 1 日内补批。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "22:00 至次日 06:00 的紧急维修可申请按实报车费，但仍需事前授权或事后 1 日内补批。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-079",
+      "question": "皓石研究组去异地工作，住宿每天的含税上限是多少？",
+      "category": "single_source",
+      "tags": [
+        "unit"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "异地住宿额度",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "普通地区住宿每人每晚含税上限 420 元；展会旺季须另行审批。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "普通地区住宿每人每晚含税上限 420 元；展会旺季须另行审批。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-080",
+      "question": "皓石异地出差餐补是否含出发日和回程日？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "异地餐补起算",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "异地工作出差餐费补助为 70 元/人/自然日，出发日和返回日均计入。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "异地工作出差餐费补助为 70 元/人/自然日，出发日和返回日均计入。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-081",
+      "question": "皓石异地出差坐高铁默认允许什么席别？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "跨城席别",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "高铁默认报销二等座；无二等座票须先获授权再购买其他席别。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "高铁默认报销二等座；无二等座票须先获授权再购买其他席别。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-082",
+      "question": "皓石团队出差提前结束，已拿的多余餐补怎么处理？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "提前返回例外",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "提前结束出差的按实际返回日重算餐补，多领部分须退回。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "提前结束出差的按实际返回日重算餐补，多领部分须退回。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-083",
+      "question": "皓石异地出差和市内出行的材料提交期限一样吗？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "异地报销期限",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "异地出差材料应在返回后 15 个自然日内提交。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "异地出差材料应在返回后 15 个自然日内提交。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-084",
+      "question": "皓石在展会旺季住宿500元一晚，能否直接报销？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "旺季审批",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "展会旺季高于普通地区限额的住宿，必须取得事前批准并附展会证明；不自动全额报销。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "展会旺季高于普通地区限额的住宿，必须取得事前批准并附展会证明；不自动全额报销。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-085",
+      "question": "松岑2025实验原始测量记录至少保存几年？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "原始记录期限",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "原始测量记录自项目关闭之日起至少保留 5 年。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "原始测量记录自项目关闭之日起至少保留 5 年。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-086",
+      "question": "松岑实验项目关闭后临时草稿要保存多久？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "草稿期限",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "未被正式报告引用的临时草稿保留 90 个自然日；被引用的按正式附件处理。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "未被正式报告引用的临时草稿保留 90 个自然日；被引用的按正式附件处理。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-087",
+      "question": "松岑项目资料五年期限已到但争议没解决，可以删除吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "争议冻结",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "与未结争议相关的资料须暂停删除，直至争议解决并收到书面解除通知。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "与未结争议相关的资料须暂停删除，直至争议解决并收到书面解除通知。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-088",
+      "question": "松岑实验原始记录里允许改掉错误数值再覆盖吗？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "更正追溯",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "更正原始记录须保留原值、更正值、原因和操作者，不得直接覆盖且不留痕。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "更正原始记录须保留原值、更正值、原因和操作者，不得直接覆盖且不留痕。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-089",
+      "question": "松岑项目关闭日期不清楚时，资料保存期该怎么起算？",
+      "category": "single_source",
+      "tags": [
+        "ambiguity"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "起算缺口",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "项目关闭日期以审批记录为准；日期缺失须补确认，不能从文件修改时间推断。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "项目关闭日期以审批记录为准；日期缺失须补确认，不能从文件修改时间推断。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-090",
+      "question": "松岑资料删除审批至少需要几个人确认？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "删除审批",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "到期删除须由项目负责人和资料管理员共同批准，并保留删除清单。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "到期删除须由项目负责人和资料管理员共同批准，并保留删除清单。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-091",
+      "question": "松岑实验表格发给外部合作者前哪些个人字段要处理？",
+      "category": "single_source",
+      "tags": [
+        "synonym"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "脱敏字段",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "外发前移除姓名、手机号和精确家庭地址；工号替换为无直接映射的随机编号。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "外发前移除姓名、手机号和精确家庭地址；工号替换为无直接映射的随机编号。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-092",
+      "question": "松岑实验数据发出后，默认下载链接几天失效？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "共享有效期",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "外部下载链接默认有效 7 个自然日，不提供永久公开链接。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "外部下载链接默认有效 7 个自然日，不提供永久公开链接。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-093",
+      "question": "外部合作者只签过保密协议就能拿松岑所有实验数据吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "最小共享范围",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "签署保密协议仍仅能共享审批清单列明的字段和行范围，不授权获取全部数据。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "签署保密协议仍仅能共享审批清单列明的字段和行范围，不授权获取全部数据。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-094",
+      "question": "松岑资料共享如果发现合作者转发，可以怎么办？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "撤销处理",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "发现未经允许转发时立即撤销共享链接并登记事件；撤销不能保证已下载副本自动消失。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "发现未经允许转发时立即撤销共享链接并登记事件；撤销不能保证已下载副本自动消失。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-095",
+      "question": "松岑共享审批必须记录对方哪几项身份用途信息？",
+      "category": "single_source",
+      "tags": [
+        "evidence_requirement"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "共享记录",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "审批记录须含接收单位、联系人、使用目的、授权字段及截止日期。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "审批记录须含接收单位、联系人、使用目的、授权字段及截止日期。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-096",
+      "question": "松岑内部资料标注“公开”后是否就免审批外发？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "公开标签边界",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "内部标注为公开的资料仍需确认对外发布授权，标签本身不等于授权。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "内部标注为公开的资料仍需确认对外发布授权，标签本身不等于授权。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-097",
+      "question": "清峦G区应急供电演练多长时间做一次？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "演练频率",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "每季度至少开展 1 次应急供电演练，不能以例行设备巡检替代。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每季度至少开展 1 次应急供电演练，不能以例行设备巡检替代。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-098",
+      "question": "清峦G区切换备用电源之前须检查什么？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "切换前置条件",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "切换前确认负载清单、旁路状态和消防联动记录，并取得值班负责人批准。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "切换前确认负载清单、旁路状态和消防联动记录，并取得值班负责人批准。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-099",
+      "question": "清峦G区备用电源连续带载演练要持续多久？",
+      "category": "single_source",
+      "tags": [
+        "unit"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "演练时长",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "稳定带载演练至少持续 25 分钟，期间每 5 分钟记录一次电压与频率。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "稳定带载演练至少持续 25 分钟，期间每 5 分钟记录一次电压与频率。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-100",
+      "question": "清峦供电演练中出现冒烟还要坚持满25分钟吗？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "紧急终止",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "出现冒烟、异味或温升失控应立即终止演练并执行隔离，不等待计划时间结束。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "出现冒烟、异味或温升失控应立即终止演练并执行隔离，不等待计划时间结束。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-101",
+      "question": "清峦G区演练成功能证明所有真实故障都能撑过吗？",
+      "category": "single_source",
+      "tags": [
+        "boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "结论边界",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "演练记录只证明本次负载与条件下的表现，不能保证所有故障场景下的可用性。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "演练记录只证明本次负载与条件下的表现，不能保证所有故障场景下的可用性。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-102",
+      "question": "清峦供电演练收尾要谁签字并保存什么？",
+      "category": "single_source",
+      "tags": [
+        "evidence_requirement"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "演练闭环",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "演练结束由操作人和监督人签字，保存负载清单、测量记录和异常处置记录。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "演练结束由操作人和监督人签字，保存负载清单、测量记录和异常处置记录。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-103",
+      "question": "清峦G区夜班交接什么时候开始，交多久？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "夜班时间",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "夜班交接在每日 20:00 开始，预留 20 分钟共同核对。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "夜班交接在每日 20:00 开始，预留 20 分钟共同核对。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-104",
+      "question": "清峦G区有几个人必须共同完成交接？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "交接人数",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "交班人和接班人必须同时在场完成核对，不能仅留一条聊天消息。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "交班人和接班人必须同时在场完成核对，不能仅留一条聊天消息。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-105",
+      "question": "清峦G区未处理的电源告警应如何交给下一班？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "未结告警",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "未解除的告警须逐项说明编号、开始时间、已采取措施和下一步负责人。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "未解除的告警须逐项说明编号、开始时间、已采取措施和下一步负责人。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-106",
+      "question": "清峦接班人迟到后交班人可以直接离岗吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "迟到例外",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "接班人未到场时交班人不得擅自离岗，应联系值班负责人安排替代。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "接班人未到场时交班人不得擅自离岗，应联系值班负责人安排替代。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-107",
+      "question": "清峦值守交接记录是否能代替季度应急供电演练？",
+      "category": "single_source",
+      "tags": [
+        "boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "任务区分",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "日常交接记录不能代替季度应急供电演练记录，二者分别归档。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "日常交接记录不能代替季度应急供电演练记录，二者分别归档。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-108",
+      "question": "清峦G区夜班结束发现表格漏签，怎么补救？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "漏签补救",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "漏签须由当班双方补签并注明实际核对时间及补签原因，不得伪造原签署时间。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "漏签须由当班双方补签并注明实际核对时间及补签原因，不得伪造原签署时间。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-109",
+      "question": "扶桑秋季奖助公告甲规定每名符合条件学员拿多少钱？",
+      "category": "single_source",
+      "tags": [
+        "conflict_source"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "甲公告额度",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "公告甲规定符合条件的每名学员奖助金为 1500 元人民币。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "公告甲规定符合条件的每名学员奖助金为 1500 元人民币。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-110",
+      "question": "扶桑2025秋季奖助金要求出勤至少多少？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "共同资格",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "申请奖助金的正式学员出勤率须至少达到 90%。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "申请奖助金的正式学员出勤率须至少达到 90%。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-111",
+      "question": "扶桑奖助公告甲规定实践项目必须达到几分？",
+      "category": "single_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "项目成绩门槛",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "实践项目成绩须达到 85 分，且不存在数据造假记录。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "实践项目成绩须达到 85 分，且不存在数据造假记录。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-112",
+      "question": "扶桑奖助金允许旁听生申请吗？",
+      "category": "single_source",
+      "tags": [
+        "exception"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "申请对象",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "旁听生不属于奖助金申请对象。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "旁听生不属于奖助金申请对象。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-113",
+      "question": "扶桑奖助公告甲的申请材料包括哪些？",
+      "category": "single_source",
+      "tags": [
+        "evidence_requirement"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "申请材料",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "需提交学号、出勤证明、项目评分记录和本人收款账户确认书。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "需提交学号、出勤证明、项目评分记录和本人收款账户确认书。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-114",
+      "question": "扶桑秋季奖助公告甲的报名截止到哪天？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "申请截止",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "申请截止为 2025-11-15 17:00，以系统接收时间为准。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "申请截止为 2025-11-15 17:00，以系统接收时间为准。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-115",
+      "question": "扶桑奖助公告乙写的2025秋季每人发放额度是多少？",
+      "category": "single_source",
+      "tags": [
+        "conflict_source"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "乙公告额度",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "公告乙写明每名符合条件学员的奖助金为 1800 元人民币。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "公告乙写明每名符合条件学员的奖助金为 1800 元人民币。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-116",
+      "question": "扶桑奖助公告乙规定名单公示多少天？",
+      "category": "single_source",
+      "tags": [
+        "temporal"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "公示期",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "拟奖助名单公示 5 个工作日，公示期间受理实名异议。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "拟奖助名单公示 5 个工作日，公示期间受理实名异议。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-117",
+      "question": "扶桑奖助公告乙允许一个学员领取两次本期奖助吗？",
+      "category": "single_source",
+      "tags": [
+        "numeric"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "领取次数",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "每名学员本期最多领取 1 次奖助金，不能以多门项目重复申请。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每名学员本期最多领取 1 次奖助金，不能以多门项目重复申请。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-118",
+      "question": "扶桑秋季奖助乙公告仍要求九成出勤吗？",
+      "category": "single_source",
+      "tags": [
+        "condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "共同出勤条件",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "公告乙沿用至少 90% 出勤的正式学员资格要求。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "公告乙沿用至少 90% 出勤的正式学员资格要求。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-119",
+      "question": "扶桑奖助金名单有错误，乙公告要求怎么申诉？",
+      "category": "single_source",
+      "tags": [
+        "workflow"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "异议流程",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "异议应实名提交至项目秘书，附相应证明，匿名消息不启动正式复核。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "异议应实名提交至项目秘书，附相应证明，匿名消息不启动正式复核。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-120",
+      "question": "扶桑2025秋季奖助乙公告承诺最终哪一天到账了吗？",
+      "category": "single_source",
+      "tags": [
+        "missing_date"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "到账信息缺失",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "到账日期待名单公示及审批结束后另行通知，本公告没有确定到账日。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "到账日期待名单公示及审批结束后另行通知，本公告没有确定到账日。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-121",
+      "question": "2024年和2025年分别购买的青岚QL-4，电池自然衰减免费额度各是多少？",
+      "category": "cross_source",
+      "tags": [
+        "temporal_multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md",
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "电池自然损坏上限",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "电池因自然衰减维修时，单次免费额度不超过 280 元。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "2025电池额度",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "电池自然衰减的单次免费维修额度为 350 元。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "电池因自然衰减维修时，单次免费额度不超过 280 元。; 电池自然衰减的单次免费维修额度为 350 元。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-122",
+      "question": "2024年购入QL-4在2025年坏了，是否自动获得2025新版的24个月保修？",
+      "category": "cross_source",
+      "tags": [
+        "date_disambiguation"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_01_青岚终端2024保修.md",
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "保修起算与期限",
+          "evidence": [
+            {
+              "source": "RAG_01_青岚终端2024保修.md",
+              "quote": "出厂质量故障的免费维修期为签收次日起 18 个月。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "适用范围与边界",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "适用于 2025-01-01 至 2025-12-31 新购买的青岚 QL-4。旧购买日期继续按其原条款处理；本更新不追溯改变 2024 年合同。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "出厂质量故障的免费维修期为签收次日起 18 个月。; 适用于 2025-01-01 至 2025-12-31 新购买的青岚 QL-4。旧购买日期继续按其原条款处理；本更新不追溯改变 2024 年合同。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-123",
+      "question": "2026年新买的青岚QL-4主板坏了，确定的免费期限是多久？",
+      "category": "refused",
+      "tags": [
+        "out_of_period"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "2026年新购设备适用条款"
+      ],
+      "conflicts": [],
+      "answer_outline": "2026年新购设备适用条款",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-124",
+      "question": "分别回答：2025年新购QL-4电池额度是多少？2026年新购的电池额度是多少？",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_02_青岚终端2025更新.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "2025电池额度",
+          "evidence": [
+            {
+              "source": "RAG_02_青岚终端2025更新.md",
+              "quote": "电池自然衰减的单次免费维修额度为 350 元。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "2026年新购设备的电池额度"
+      ],
+      "conflicts": [],
+      "answer_outline": "电池自然衰减的单次免费维修额度为 350 元。; 2026年新购设备的电池额度",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-125",
+      "question": "澄海云盘标准版严重上传故障多久先回应，以及可用率不达标如何抵扣？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md",
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "严重事件响应",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "严重上传故障提交工单后，首次人工响应不超过 30 分钟。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "补偿条件",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "当月可用率低于 99.5% 且通过工单核实时，抵扣次月基础服务费的 10%；不是现金退款。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "严重上传故障提交工单后，首次人工响应不超过 30 分钟。; 当月可用率低于 99.5% 且通过工单核实时，抵扣次月基础服务费的 10%；不是现金退款。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-126",
+      "question": "2025年5月澄海标准版一个月运行比例不达99.5%，抵扣是现金退款吗？审核要哪些日志？",
+      "category": "cross_source",
+      "tags": [
+        "multi_condition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md",
+        "RAG_04_澄海云盘计费.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "可用率核对材料",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "核对月度可用率须提供工单编号、带时区的起止时间和失败请求编号。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "补偿条件",
+          "evidence": [
+            {
+              "source": "RAG_04_澄海云盘计费.md",
+              "quote": "当月可用率低于 99.5% 且通过工单核实时，抵扣次月基础服务费的 10%；不是现金退款。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "核对月度可用率须提供工单编号、带时区的起止时间和失败请求编号。; 当月可用率低于 99.5% 且通过工单核实时，抵扣次月基础服务费的 10%；不是现金退款。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-127",
+      "question": "澄海云盘企业版的月可用率和超额存储单价是多少？",
+      "category": "refused",
+      "tags": [
+        "wrong_entity"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "企业版服务与计费规则"
+      ],
+      "conflicts": [],
+      "answer_outline": "企业版服务与计费规则",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-128",
+      "question": "分别说明澄海标准版月可用率目标，以及企业版的年度折扣。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_03_澄海云盘服务.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "月度可用率",
+          "evidence": [
+            {
+              "source": "RAG_03_澄海云盘服务.md",
+              "quote": "标准版每自然月的服务可用率目标为 99.5%。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "企业版年度折扣"
+      ],
+      "conflicts": [],
+      "answer_outline": "标准版每自然月的服务可用率目标为 99.5%。; 企业版年度折扣",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-129",
+      "question": "MC-7借出前怎样登记，故障导致超过五个工作日无法用时如何申请替代？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md",
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "登记字段",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "登记至少包含设备序列号、工程师工号、驻点地点和计划归还日。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "替换门槛",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "预计维修超过 5 个工作日且驻点任务仍在执行时，可申请临时替代设备。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "登记至少包含设备序列号、工程师工号、驻点地点和计划归还日。; 预计维修超过 5 个工作日且驻点任务仍在执行时，可申请临时替代设备。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-130",
+      "question": "已授权工程师领用MC-7遇到读数跳变，应继续采样还是停机，领用额度最多几台？",
+      "category": "cross_source",
+      "tags": [
+        "condition_integration"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md",
+        "RAG_06_沐川设备返修.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "领用数量",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "每名驻点工程师最多同时领用 2 台 MC-7。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "故障处置",
+          "evidence": [
+            {
+              "source": "RAG_06_沐川设备返修.md",
+              "quote": "出现读数跳变时应立即停机、保存最后一次校准记录，并通知设备管理员。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每名驻点工程师最多同时领用 2 台 MC-7。; 出现读数跳变时应立即停机、保存最后一次校准记录，并通知设备管理员。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-131",
+      "question": "MC-8测量仪借三十天后损坏，固定罚款是多少元？",
+      "category": "refused",
+      "tags": [
+        "wrong_entity_missing_amount"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "MC-8领用与维修规则",
+        "固定罚款金额"
+      ],
+      "conflicts": [],
+      "answer_outline": "MC-8领用与维修规则; 固定罚款金额",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-132",
+      "question": "分别回答MC-7单次最长借用时间，以及未经授权用错适配器的固定罚款金额。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_05_沐川设备领用.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "借用时长",
+          "evidence": [
+            {
+              "source": "RAG_05_沐川设备领用.md",
+              "quote": "单次借用期限为 30 个自然日；延期须在到期前 3 个工作日提交申请。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "不匹配适配器损坏的固定罚款金额"
+      ],
+      "conflicts": [],
+      "answer_outline": "单次借用期限为 30 个自然日；延期须在到期前 3 个工作日提交申请。; 不匹配适配器损坏的固定罚款金额",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-133",
+      "question": "2025年7月普通访客进星湾A门要带什么，能寄存多大箱包？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md",
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "身份材料",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "访客须携有效身份证件和当天预约码，二者缺一不可。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "寄存限制",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "每人可寄存 1 件最长边不超过 60 厘米的箱包，禁止寄存易燃物。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "访客须携有效身份证件和当天预约码，二者缺一不可。; 每人可寄存 1 件最长边不超过 60 厘米的箱包，禁止寄存易燃物。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-134",
+      "question": "2025年7月10日普通访客到星湾A门，07:40肯定能入场吗？",
+      "category": "refused",
+      "tags": [
+        "unresolved_conflict"
+      ],
+      "expected_status": "refused",
+      "required_sources": [
+        "RAG_07_星湾园区年度入场.md",
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "年度开放时段",
+          "evidence": [
+            {
+              "source": "RAG_07_星湾园区年度入场.md",
+              "quote": "普通访客入场时段为每日 08:00 至 18:00。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "七月公布时段",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "七月告示写明普通访客入场时段为每日 07:30 至 18:00。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "年度规定与七月告示的优先级"
+      ],
+      "conflicts": [
+        "年度规定08:00开始，七月告示07:30开始；没有优先级依据。"
+      ],
+      "answer_outline": "普通访客入场时段为每日 08:00 至 18:00。; 七月告示写明普通访客入场时段为每日 07:30 至 18:00。; 年度规定与七月告示的优先级; 年度规定08:00开始，七月告示07:30开始；没有优先级依据。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-135",
+      "question": "2025年7月星湾园区B门的车辆通行费是多少？",
+      "category": "refused",
+      "tags": [
+        "wrong_location"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "B门车辆收费条款"
+      ],
+      "conflicts": [],
+      "answer_outline": "B门车辆收费条款",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-136",
+      "question": "分别说明七月星湾A门雨棚容量，以及B门车辆通行收费。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_08_星湾园区七月告示.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "容量与例外",
+          "evidence": [
+            {
+              "source": "RAG_08_星湾园区七月告示.md",
+              "quote": "临时雨棚最多容纳 35 人；雨棚不改变红色天气预警下暂停入场的规定。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "B门车辆通行收费"
+      ],
+      "conflicts": [],
+      "answer_outline": "临时雨棚最多容纳 35 人；雨棚不改变红色天气预警下暂停入场的规定。; B门车辆通行收费",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-137",
+      "question": "采购120件RH-2应抽多少件，验收后发现质量问题的退货申请期限是多少？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md",
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "抽样数量",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "每批不超过 200 件的，抽取 12 件检测；超过 200 件的，抽取 20 件。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "退货窗口",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "质量退货应在验收日期后 15 个自然日内提出，逾期先进行责任核对。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每批不超过 200 件的，抽取 12 件检测；超过 200 件的，抽取 20 件。; 质量退货应在验收日期后 15 个自然日内提出，逾期先进行责任核对。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-138",
+      "question": "RH-2十二件抽样出现两件性能不合格，能直接报废整批并当作退货已批准吗？",
+      "category": "cross_source",
+      "tags": [
+        "decision_boundary"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md",
+        "RAG_10_镜河退货流程.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "性能判定",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "性能抽样中出现 2 件及以上不合格时，整批进入复检，不能直接判定整批报废。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "受理时限",
+          "evidence": [
+            {
+              "source": "RAG_10_镜河退货流程.md",
+              "quote": "材料齐全后的 2 个工作日内给予受理回复；受理不等于退货批准。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "性能抽样中出现 2 件及以上不合格时，整批进入复检，不能直接判定整批报废。; 材料齐全后的 2 个工作日内给予受理回复；受理不等于退货批准。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-139",
+      "question": "实际收到的镜河批次A已经有几件不合格，能否确定已批准退货？",
+      "category": "refused",
+      "tags": [
+        "missing_actual_data"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "批次A实际检验记录",
+        "具体退货审批结果"
+      ],
+      "conflicts": [],
+      "answer_outline": "批次A实际检验记录; 具体退货审批结果",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-140",
+      "question": "分别说明RH-2性能检测参考电压，以及本月实际退货获批件数。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_09_镜河批次验收.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "检测单位",
+          "evidence": [
+            {
+              "source": "RAG_09_镜河批次验收.md",
+              "quote": "性能检测使用 12.0 伏参考电源，允许波动为正负 0.1 伏。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "本月实际退货审批台账"
+      ],
+      "conflicts": [],
+      "answer_outline": "性能检测使用 12.0 伏参考电源，允许波动为正负 0.1 伏。; 本月实际退货审批台账",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-141",
+      "question": "知序秋季课程报名最后时间是什么，拿证书需要达到什么成绩条件？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_11_知序培训报名.md",
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "报名截止",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "报名截止为 2025-09-05 18:00，迟于此时间的申请进入候补名单。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "证书门槛",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "总评至少 60 分且笔试至少 50 分，才可获得结业证书。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "报名截止为 2025-09-05 18:00，迟于此时间的申请进入候补名单。; 总评至少 60 分且笔试至少 50 分，才可获得结业证书。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-142",
+      "question": "正式学员出勤85%、总评65分但笔试45分，能拿知序本期证书吗？",
+      "category": "cross_source",
+      "tags": [
+        "conjunctive_threshold"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_12_知序课程考核.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "考核资格",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "正式学员出勤率至少达到 80% 才可参加结业考核。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "证书门槛",
+          "evidence": [
+            {
+              "source": "RAG_12_知序课程考核.md",
+              "quote": "总评至少 60 分且笔试至少 50 分，才可获得结业证书。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "正式学员出勤率至少达到 80% 才可参加结业考核。; 总评至少 60 分且笔试至少 50 分，才可获得结业证书。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-143",
+      "question": "知序2026春季数据课程什么时候开班和考试？",
+      "category": "refused",
+      "tags": [
+        "future_missing"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "2026春季课程安排"
+      ],
+      "conflicts": [],
+      "answer_outline": "2026春季课程安排",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-144",
+      "question": "分别说明知序2025秋季班学费，以及2026春季班开班日。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_11_知序培训报名.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "学费单位",
+          "evidence": [
+            {
+              "source": "RAG_11_知序培训报名.md",
+              "quote": "本期学费为每人 1800 元人民币，已含纸质教材，餐饮不包含。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "2026春季开班日"
+      ],
+      "conflicts": [],
+      "answer_outline": "本期学费为每人 1800 元人民币，已含纸质教材，餐饮不包含。; 2026春季开班日",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-145",
+      "question": "皓石2025市内与异地工作报销分别要在结束后多少天交材料？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md",
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "市内报销期限",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "应在出行结束后 20 个自然日内提交材料；超期需部门负责人说明。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "异地报销期限",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "异地出差材料应在返回后 15 个自然日内提交。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "应在出行结束后 20 个自然日内提交材料；超期需部门负责人说明。; 异地出差材料应在返回后 15 个自然日内提交。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-146",
+      "question": "皓石2025出差遇展会每晚住宿500元，可直接照市内交通每日120元限额套用吗？",
+      "category": "cross_source",
+      "tags": [
+        "unit_scope_disambiguation"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_13_皓石市内差旅.md",
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "市内车费限额",
+          "evidence": [
+            {
+              "source": "RAG_13_皓石市内差旅.md",
+              "quote": "经批准的网约车费每人每日上限为 120 元；超额需说明并重新审批。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "旺季审批",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "展会旺季高于普通地区限额的住宿，必须取得事前批准并附展会证明；不自动全额报销。"
+            }
+          ]
+        },
+        {
+          "id": "R3",
+          "text": "适用范围与边界",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "适用于离开皓石研究组注册城市的 2025 年工作出差。往返跨城交通不适用市内每日网约车上限；其他事项不得自动类推。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "经批准的网约车费每人每日上限为 120 元；超额需说明并重新审批。; 展会旺季高于普通地区限额的住宿，必须取得事前批准并附展会证明；不自动全额报销。; 适用于离开皓石研究组注册城市的 2025 年工作出差。往返跨城交通不适用市内每日网约车上限；其他事项不得自动类推。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-147",
+      "question": "皓石研究组2026年海外差旅的美元住宿限额是多少？",
+      "category": "refused",
+      "tags": [
+        "wrong_period_currency"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "2026海外差旅规定",
+        "美元住宿限额"
+      ],
+      "conflicts": [],
+      "answer_outline": "2026海外差旅规定; 美元住宿限额",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-148",
+      "question": "分别说明皓石2025异地餐补单价，以及2026海外美元住宿上限。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_14_皓石异地差旅.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "异地餐补起算",
+          "evidence": [
+            {
+              "source": "RAG_14_皓石异地差旅.md",
+              "quote": "异地工作出差餐费补助为 70 元/人/自然日，出发日和返回日均计入。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "2026海外美元住宿上限"
+      ],
+      "conflicts": [],
+      "answer_outline": "异地工作出差餐费补助为 70 元/人/自然日，出发日和返回日均计入。; 2026海外美元住宿上限",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-149",
+      "question": "松岑原始测量记录最少留几年，外发这些表格前需要怎么处理个人字段？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md",
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "原始记录期限",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "原始测量记录自项目关闭之日起至少保留 5 年。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "脱敏字段",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "外发前移除姓名、手机号和精确家庭地址；工号替换为无直接映射的随机编号。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "原始测量记录自项目关闭之日起至少保留 5 年。; 外发前移除姓名、手机号和精确家庭地址；工号替换为无直接映射的随机编号。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-150",
+      "question": "松岑项目关账日未知但文件已保存五年，签过保密协议的合作者能拿全量并立即删除原件吗？",
+      "category": "cross_source",
+      "tags": [
+        "missing_precondition"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_15_松岑资料保留.md",
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "起算缺口",
+          "evidence": [
+            {
+              "source": "RAG_15_松岑资料保留.md",
+              "quote": "项目关闭日期以审批记录为准；日期缺失须补确认，不能从文件修改时间推断。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "最小共享范围",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "签署保密协议仍仅能共享审批清单列明的字段和行范围，不授权获取全部数据。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "项目关闭日期以审批记录为准；日期缺失须补确认，不能从文件修改时间推断。; 签署保密协议仍仅能共享审批清单列明的字段和行范围，不授权获取全部数据。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-151",
+      "question": "松岑项目S17在哪一天正式关闭，其原始记录最早何时可以删除？",
+      "category": "refused",
+      "tags": [
+        "missing_instance"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "S17关闭审批日期",
+        "争议冻结状态及删除批准"
+      ],
+      "conflicts": [],
+      "answer_outline": "S17关闭审批日期; 争议冻结状态及删除批准",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-152",
+      "question": "分别说明松岑外部链接默认有效期，以及S17项目实际关闭日。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_16_松岑资料共享.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "共享有效期",
+          "evidence": [
+            {
+              "source": "RAG_16_松岑资料共享.md",
+              "quote": "外部下载链接默认有效 7 个自然日，不提供永久公开链接。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "S17关闭审批日期"
+      ],
+      "conflicts": [],
+      "answer_outline": "外部下载链接默认有效 7 个自然日，不提供永久公开链接。; S17关闭审批日期",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-153",
+      "question": "清峦G区季度供电演练和夜班交接，各要保留哪些核对信息？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md",
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "演练闭环",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "演练结束由操作人和监督人签字，保存负载清单、测量记录和异常处置记录。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "未结告警",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "未解除的告警须逐项说明编号、开始时间、已采取措施和下一步负责人。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "演练结束由操作人和监督人签字，保存负载清单、测量记录和异常处置记录。; 未解除的告警须逐项说明编号、开始时间、已采取措施和下一步负责人。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-154",
+      "question": "清峦G区每天都交接且没有漏签，可据此免做季度供电演练吗？",
+      "category": "cross_source",
+      "tags": [
+        "task_disambiguation"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md",
+        "RAG_18_清峦值守交接.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "演练频率",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "每季度至少开展 1 次应急供电演练，不能以例行设备巡检替代。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "任务区分",
+          "evidence": [
+            {
+              "source": "RAG_18_清峦值守交接.md",
+              "quote": "日常交接记录不能代替季度应急供电演练记录，二者分别归档。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "每季度至少开展 1 次应急供电演练，不能以例行设备巡检替代。; 日常交接记录不能代替季度应急供电演练记录，二者分别归档。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-155",
+      "question": "清峦机房H区真实断电时备用电源确定可以支撑多久？",
+      "category": "refused",
+      "tags": [
+        "wrong_location_actual"
+      ],
+      "expected_status": "refused",
+      "required_sources": [],
+      "requirements": [],
+      "missing_requirements": [
+        "H区应急供电条款",
+        "真实负载与设备状态测试记录"
+      ],
+      "conflicts": [],
+      "answer_outline": "H区应急供电条款; 真实负载与设备状态测试记录",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-156",
+      "question": "分别说明清峦G区带载演练最短时长，以及H区真实停电时的续航保证。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_17_清峦应急演练.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "演练时长",
+          "evidence": [
+            {
+              "source": "RAG_17_清峦应急演练.md",
+              "quote": "稳定带载演练至少持续 25 分钟，期间每 5 分钟记录一次电压与频率。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "H区真实负载续航依据"
+      ],
+      "conflicts": [],
+      "answer_outline": "稳定带载演练至少持续 25 分钟，期间每 5 分钟记录一次电压与频率。; H区真实负载续航依据",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-157",
+      "question": "扶桑2025秋季奖助申请需哪些材料，拟名单公示多久？",
+      "category": "cross_source",
+      "tags": [
+        "multi_hop"
+      ],
+      "expected_status": "supported",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md",
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "申请材料",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "需提交学号、出勤证明、项目评分记录和本人收款账户确认书。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "公示期",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "拟奖助名单公示 5 个工作日，公示期间受理实名异议。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [],
+      "conflicts": [],
+      "answer_outline": "需提交学号、出勤证明、项目评分记录和本人收款账户确认书。; 拟奖助名单公示 5 个工作日，公示期间受理实名异议。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-158",
+      "question": "扶桑2025秋季符合资格的正式学员最终确定拿1500元还是1800元？",
+      "category": "refused",
+      "tags": [
+        "unresolved_conflict"
+      ],
+      "expected_status": "refused",
+      "required_sources": [
+        "RAG_19_扶桑奖助公告甲.md",
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "甲公告额度",
+          "evidence": [
+            {
+              "source": "RAG_19_扶桑奖助公告甲.md",
+              "quote": "公告甲规定符合条件的每名学员奖助金为 1500 元人民币。"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "text": "乙公告额度",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "公告乙写明每名符合条件学员的奖助金为 1800 元人民币。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "两公告的优先级或统一更正说明"
+      ],
+      "conflicts": [
+        "公告甲每人1500元，公告乙每人1800元；没有替代说明。"
+      ],
+      "answer_outline": "公告甲规定符合条件的每名学员奖助金为 1500 元人民币。; 公告乙写明每名符合条件学员的奖助金为 1800 元人民币。; 两公告的优先级或统一更正说明; 公告甲每人1500元，公告乙每人1800元；没有替代说明。",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-159",
+      "question": "扶桑2025秋季奖助金确定会在11月20日到账吗？",
+      "category": "refused",
+      "tags": [
+        "missing_date"
+      ],
+      "expected_status": "refused",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "到账信息缺失",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "到账日期待名单公示及审批结束后另行通知，本公告没有确定到账日。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "审批及公示结束后的确定到账通知"
+      ],
+      "conflicts": [],
+      "answer_outline": "到账日期待名单公示及审批结束后另行通知，本公告没有确定到账日。; 审批及公示结束后的确定到账通知",
+      "human_review": "pending",
+      "synthetic": true
+    },
+    {
+      "id": "RAG-160",
+      "question": "分别说明扶桑本期名单公示天数，以及最终确定到账日。",
+      "category": "partial",
+      "tags": [
+        "independent_partial"
+      ],
+      "expected_status": "partial",
+      "required_sources": [
+        "RAG_20_扶桑奖助公告乙.md"
+      ],
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "公示期",
+          "evidence": [
+            {
+              "source": "RAG_20_扶桑奖助公告乙.md",
+              "quote": "拟奖助名单公示 5 个工作日，公示期间受理实名异议。"
+            }
+          ]
+        }
+      ],
+      "missing_requirements": [
+        "确定到账通知"
+      ],
+      "conflicts": [],
+      "answer_outline": "拟奖助名单公示 5 个工作日，公示期间受理实名异议。; 确定到账通知",
+      "human_review": "pending",
+      "synthetic": true
+    }
+  ],
+  "counts": {
+    "supported": 138,
+    "partial": 10,
+    "refused": 12
+  },
+  "revalidation": {
+    "date": "2026-10-10",
+    "reason": "当前20份文件与用户最新20261010压缩包一致，但旧清单中的20个摘要全部不匹配；核对当前原文中的全部参考引文后重新冻结。",
+    "original_manifest_sha256": "a0af768e4096c074cb81bfd0ec5d1d9d0dae701a940af7ab52b8833b8821e2c7",
+    "questions_and_reference_quotes_changed": false,
+    "quality": "原有回归集；不是新的独立留出集；人工语义审查仍待完成。"
+  }
+}

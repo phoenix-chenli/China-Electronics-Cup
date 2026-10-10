@@ -77,7 +77,7 @@ class Config(Strict):
     username:str=Field(default='',max_length=128)
     secret:str|None=Field(default=None,max_length=4096)
     enabled:bool=False
-    timeout:int=Field(default=20,ge=3,le=60)
+    timeout:int=Field(default=60,ge=3,le=300)
     expected_revision:int|None=None
 
 def validate(d):
@@ -150,53 +150,76 @@ def history(cid:str):
     with s.conn() as c:return [json.loads(r[0]) for r in c.execute('SELECT body FROM ef_connection_events WHERE connection_id=? ORDER BY rowid DESC LIMIT 30',(cid,))]
 
 def request_json(d,url,body=None,headers=None,cancelled=None):
+    """One bounded submission; only connection setup can be retried automatically."""
     gate(d)
     if d.get('_required_kind'):
         current=ready(d['id'],{d['_required_kind']})
         if current['revision']!=d['revision']:raise ValueError('连接已改变，请重新准备请求')
-    if cancelled is not None:
-        # Bound in-flight transports even when a provider stalls. The query can
-        # cancel promptly; an already-sent HTTP call ends at its own deadline.
-        wait_until=time.monotonic()+d.get('timeout',20)
-        while not _model_slots.acquire(timeout=.1):
-            if cancelled.is_set():raise InterruptedError('查询已取消')
-            if time.monotonic()>wait_until:raise ValueError('模型请求繁忙，请稍后重试')
-        if cancelled.is_set():
-            _model_slots.release();raise InterruptedError('查询已取消')
-        future=_model_pool.submit(request_json,d,url,body,headers)
-        future.add_done_callback(lambda _: _model_slots.release())
-        while True:
-            if cancelled.is_set():
-                future.cancel();raise InterruptedError('查询已取消')
-            try:
-                value=future.result(timeout=.1)
-                if cancelled.is_set():raise InterruptedError('查询已取消')
-                return value
-            except FutureTimeout:
-                if time.monotonic()>wait_until:
-                    future.cancel();raise ValueError('模型请求超过总时限')
-    deadline=time.monotonic()+d.get('timeout',20)
+    deadline=time.monotonic()+d.get('timeout',60)
+    while True:
+        if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
+        remaining=deadline-time.monotonic()
+        if remaining<=0:raise ValueError('模型请求繁忙，请稍后重试')
+        if _model_slots.acquire(timeout=min(.1,remaining)):break
+    if cancelled is not None and cancelled.is_set():
+        _model_slots.release();raise InterruptedError('查询已取消')
     try:
-        with httpx.Client(timeout=httpx.Timeout(d.get('timeout',20),connect=5),follow_redirects=False,trust_env=False) as client:
+        future=_model_pool.submit(_request_json_transport,d,url,body,headers,deadline,cancelled)
+    except BaseException:
+        _model_slots.release();raise
+    # Keep the slot until the actual HTTP call ends, including after cancellation.
+    future.add_done_callback(lambda _: _model_slots.release())
+    while True:
+        if cancelled is not None and cancelled.is_set():
+            future.cancel();raise InterruptedError('查询已取消')
+        remaining=deadline-time.monotonic()
+        if remaining<=0:
+            future.cancel();raise ValueError('模型请求超过总时限；可重试本轮，已发送的请求未自动重复提交')
+        try:
+            value=future.result(timeout=min(.1,remaining))
+            if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
+            return value
+        except FutureTimeout:continue
+
+def _request_json_transport(d,url,body,headers,deadline,cancelled):
+    gate(d)
+    if d.get('_required_kind'):
+        current=ready(d['id'],{d['_required_kind']})
+        if current['revision']!=d['revision']:raise ValueError('连接已改变，请重新准备请求')
+    if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
+    remaining=deadline-time.monotonic()
+    if remaining<=0:raise ValueError('模型请求超过总时限')
+    try:
+        # HTTPX retries ConnectError/ConnectTimeout before sending the body, never
+        # read/write failures or HTTP errors after a possibly billable submission.
+        transport=httpx.HTTPTransport(retries=1,trust_env=False)
+        with httpx.Client(timeout=httpx.Timeout(remaining,connect=min(5,remaining)),transport=transport,follow_redirects=False,trust_env=False) as client:
             with client.stream('POST' if body is not None else 'GET',url,json=body,headers={'User-Agent':'EvidenceFlow/0.3 (local research tool)',**(headers or {})}) as r:
                 if r.is_redirect:raise ValueError('服务要求重定向；请填写最终地址，凭据未转发')
                 if r.status_code>=400:raise ValueError({401:'凭据无效或已过期',403:'服务拒绝访问，请检查权限或服务访问限制',404:'接口或模型不存在',429:'服务限流或额度不足'}.get(r.status_code,'服务请求失败')+f'（HTTP {r.status_code}）')
                 data=bytearray()
                 for chunk in r.iter_bytes():
+                    if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
                     if time.monotonic()>deadline:raise ValueError('请求超过总时限，请稍后重试')
                     data.extend(chunk)
                     if len(data)>2*1024*1024:raise ValueError('服务响应超过 2 MB')
         return json.loads(data)
-    except httpx.TimeoutException:raise ValueError('连接超时，请检查地址或稍后重试') from None
-    except httpx.RequestError:raise ValueError('无法连接服务，请检查地址、网络和证书') from None
+    except httpx.TimeoutException:raise ValueError('连接超时；本轮未自动重复提交，可检查网络后重试') from None
+    except httpx.RequestError:raise ValueError('无法连接服务，请检查地址、网络和证书；本轮未自动重复提交') from None
     except (json.JSONDecodeError,UnicodeDecodeError):raise ValueError('服务返回的内容不是有效 JSON') from None
 
-def chat(d,messages,max_tokens=1200,cancelled=None):
+def chat(d,messages,max_tokens=1200,cancelled=None,json_mode=False):
     headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
-    r=request_json(d,d['endpoint']+'/chat/completions',{'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens},headers,cancelled=cancelled)
+    body={'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens}
+    if json_mode and urlsplit(d['endpoint']).hostname=='tokendance.space':
+        body.update(response_format={'type':'json_object'},temperature=0)
+        if d['model'].startswith('qwen3.8-'):body['enable_thinking']=False
+    r=request_json(d,d['endpoint']+'/chat/completions',body,headers,cancelled=cancelled)
     try:text=r['choices'][0]['message']['content']
     except (KeyError,IndexError,TypeError):raise ValueError('服务未返回文本回答') from None
-    if not isinstance(text,str) or not text.strip():raise ValueError('服务返回空回答')
+    if not isinstance(text,str) or not text.strip():
+        if r['choices'][0].get('finish_reason')=='length':raise ValueError('模型在输出预算内未生成回答，请换用其他模型或缩短问题')
+        raise ValueError('服务返回空回答，请检查模型状态或换用其他模型')
     return {'text':text[:30000],'model':str(r.get('model',d['model']))[:150],'usage':{k:v for k,v in (r.get('usage') or {}).items() if k in {'prompt_tokens','completion_tokens','total_tokens'} and isinstance(v,int)}}
 
 def _bounded_texts(texts, maximum=32):

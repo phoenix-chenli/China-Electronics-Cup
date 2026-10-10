@@ -216,8 +216,12 @@ def _pack(ranked, by_id, scope, cancelled=None, deadline=None):
         chunk = by_id[ranking["id"]]
         # Do not spend the entire budget on overlapping windows. Different
         # documents remain independent even if their prose is similar.
-        overlap = any(c["document_id"] == chunk["document_id"] and c["sha256"] == chunk["sha256"] and c["page"] == chunk["page"] and
-                      max(0, min(c["end"], chunk["end"])-max(c["start"], chunk["start"])) >= .75*min(c["end"]-c["start"], chunk["end"]-chunk["start"]) for c in covered)
+        # Judge how much of this candidate is already present. A short returned
+        # excerpt must not suppress a longer original containing missing rules.
+        # Separate source revisions and parses cannot cover each other's text.
+        overlap = any(c["document_id"] == chunk["document_id"] and c["sha256"] == chunk["sha256"] and
+                      c["parse_id"] == chunk["parse_id"] and c["page"] == chunk["page"] and
+                      max(0, min(c["end"], chunk["end"])-max(c["start"], chunk["start"])) >= .75*(chunk["end"]-chunk["start"]) for c in covered)
         if overlap:
             continue
         if characters+len(chunk["text"]) > CONTEXT_CHAR_LIMIT:

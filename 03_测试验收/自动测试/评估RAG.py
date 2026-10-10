@@ -19,7 +19,7 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATASET = ROOT / '03_测试验收/测试样本/RAG冻结评估集.json'
+DEFAULT_DATASET = ROOT / '03_测试验收/测试样本/RAG回归评估集-20261010.json'
 
 
 def digest(path):
@@ -28,6 +28,9 @@ def digest(path):
 
 def validate(dataset_path=DEFAULT_DATASET):
     path = Path(dataset_path).resolve()
+    checksum = path.with_suffix('.sha256')
+    if checksum.is_file() and digest(path) != checksum.read_text().split()[0]:
+        raise ValueError('评估清单已偏离冻结摘要')
     data = json.loads(path.read_text(encoding='utf-8'))
     if data.get('schema_version') != '1.0' or not data.get('synthetic'):
         raise ValueError('评估清单格式不正确，必须使用公开合成资料')

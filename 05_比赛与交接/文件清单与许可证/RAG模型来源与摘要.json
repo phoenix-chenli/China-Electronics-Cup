@@ -1,9 +1,11 @@
 {
-  "date": "2026-10-06",
+  "date": "2026-10-10",
   "pack": {
-    "name": "RAG模型包.zip",
-    "bytes": 320859826,
-    "sha256": "ba7b7ed2cf92e64466fb5327dec8423956dea1cf7aac883d3214dae71aa9d575"
+    "path": "06_运行环境/RAG模型包.zip",
+    "bytes": 241613104,
+    "sha256": "fcbe2c1bc68c36aa5da17a4fa9c97fac4deecc06c0837f2509fadca5f41a0e82",
+    "verified_members": 10,
+    "privacy": "仅固定公开模型及其许可；不含运行数据库、上传、会话、索引或凭据。"
   },
   "models": {
     "bge-small-zh-v1.5": {

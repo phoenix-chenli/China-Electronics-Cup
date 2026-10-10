@@ -16,12 +16,38 @@ const modeNames:Record<AgentMode,string>={auto:'自动选择',local:'本地确�
 const statusNames:Record<string,string>={pending:'待执行',planned:'待执行',queued:'等待中',running:'进行中',completed:'已完成',failed:'失败',cancelled:'已取消',cancelling:'正在取消',skipped:'已跳过',passed:'通过',needs_evidence:'待补充证据',needs_review:'待复核',needs_clarification:'待确认条件',local:'本地规则检查'}
 const statusName=(status?:string)=>status?statusNames[status]||'状态待确认':'未记录状态'
 
-function StatusIcon({status}: {status?:string}){
+export function StatusIcon({status}: {status?:string}){
  if(status==='running'||status==='cancelling')return <LoaderCircle size={16} className="spin"/>
  if(status==='completed'||status==='passed')return <CheckCircle2 size={16}/>
  if(status==='failed')return <AlertCircle size={16}/>
  if(status==='cancelled')return <XCircle size={16}/>
  return <Clock3 size={16}/>
+}
+
+export function EventSummary({event}:{event:AgentEvent}){
+ return <div className={'event-summary status-'+(event.status||'unknown')}><StatusIcon status={event.status}/><span>{event.label||event.tool||'执行步骤'}</span><small>{statusName(event.status)}{Number.isFinite(event.duration_ms)?' · '+num(event.duration_ms!)+' ms':''}</small></div>
+}
+
+export function ModelPackageStatus({model}:{model:Obj}){
+ const active=['pending','running','downloading','installing'].includes(model.status)
+ const label=model.installed&&model.verified?'文件校验通过':active?({pending:'等待安装',running:'正在安装',downloading:'正在下载',installing:'正在安装'} as Obj)[model.status]:model.status==='failed'?'安装失败':model.bundled===true?'随包可安装':model.bundled===false?'需下载模型':'安装来源尚未读取'
+ return <span className={'badge '+(model.installed&&model.verified?'green':'amber')}>{label}</span>
+}
+
+export function QueryContextBar({config,result,onSettings,onNew}:{config:AgentConfig|null;result?:Obj|null;onSettings:()=>void;onNew?:()=>void}){
+ const scopeNames:Record<string,string>={sales:'销售示例',database:'数据库问数',knowledge:'知识库问答',hybrid:'数据库与文档',document:'当前文档'}
+ if(!config&&!result)return <div className="query-context"><span>问答配置尚未读取</span><button type="button" className="text-link" onClick={onSettings}>检查设置</button></div>
+ const scope=result?(result.query_spec?.metric==='document'?'document':result.query_spec?.query_scope||'sales'):config?.query_scope||'sales'
+ const database=result?.database_query?.source||result?.query_spec?.database_source
+ const cid=result?(database?.connection_id??result.query_spec?.database_connection_id??null):config?.database_connection_id
+ const source=scope==='database'||scope==='hybrid'?database?.name||config?.databases?.find(d=>d.id===cid)?.name||(cid?'所选数据库':'本机工作库'):scope==='sales'?'本机销售示例':scope==='document'?'固定文档版本':'本机知识库'
+ const items=(config?.connections||[]).filter(c=>c.enabled&&c.available)
+ const selected=config?.connection_id?config.connections.find(c=>c.id===config.connection_id):items.length===1?items[0]:undefined
+ const resolvedLocal=config?.mode==='local'||config?.mode==='auto'&&!config.connection_id&&items.length===0
+ const mode=result?(result.agent?.mode==='model'?result.agent.model||'模型驱动':result.agent?.mode==='local'?'本地确定性':'处理方式未记录'):resolvedLocal?(scope==='knowledge'?'关键词原文检索':'本地确定性查询'):selected?.available&&selected.enabled?selected.model||selected.name:'问答模型不可用'
+ const blocked=!result&&((scope==='database'||scope==='hybrid')&&(resolvedLocal||!selected?.available)||config?.mode==='model'&&!selected?.available||!!config?.connection_id&&!selected?.available||config?.mode==='auto'&&!config.connection_id&&items.length>1)
+ const changed=!!result&&!!config&&(scope!==(config.query_scope||'sales')||(scope==='database'||scope==='hybrid')&&(cid??null)!==(config.database_connection_id??null))
+ return <div className={'query-context'+(blocked?' needs-setup':'')} aria-label="当前提问范围"><div><strong>{result?'追问沿用':'新问答'} · {scopeNames[scope]||'范围待确认'}</strong><span>{source} · {mode}</span>{result&&<small>来源与版本沿用本轮记录。</small>}{blocked&&<small>请先选择可用模型和数据源。</small>}{!result&&scope==='knowledge'&&resolvedLocal&&<small>当前仅返回检索原文，尚未启用综合回答。</small>}{changed&&<small>默认设置已改变；切换来源请新建问答。</small>}</div><button type="button" className="text-link" onClick={changed&&onNew?onNew:onSettings}>{changed&&onNew?'新建问答':'问答设置'}</button></div>
 }
 
 export function AgentConfigPanel({notify,updated,refreshKey=0}:Obj){

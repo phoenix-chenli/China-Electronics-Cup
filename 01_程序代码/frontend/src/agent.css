@@ -72,3 +72,13 @@
 .agent-failure>.text-link {font-size:12px}
 @media(max-width:768px){.agent-mode-options {grid-template-columns:1fr}.agent-config-heading {align-items:flex-start;flex-wrap:wrap}.agent-config-footer {flex-wrap:wrap}.agent-config-footer .button {max-width:100%}.agent-event>summary>strong {flex-basis:calc(100% - 30px)}.agent-event-duration {margin-left:auto}.agent-config {padding:18px}.agent-summary>.text-link {margin-left:0}}
 @media(max-width:768px){.agent-mode-options.agent-scope-options {grid-template-columns:1fr}.database-query-source>span {margin-left:24px;flex-basis:100%}}
+.query-context{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 4px;margin:0 0 6px;border-bottom:1px solid var(--line);font-size:12px}
+.query-context>div{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;min-width:0}
+.query-context strong,.query-context span{overflow-wrap:anywhere}
+.query-context small{flex-basis:100%;color:var(--muted)}
+.query-context .text-link{flex-shrink:0;white-space:nowrap}
+.query-context.needs-setup small{color:var(--text)}
+.event-summary{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:12px}
+.event-summary span{flex:1;min-width:0;overflow-wrap:anywhere}
+.event-summary small{color:var(--muted)}
+.event-summary.status-failed,.event-summary.status-cancelled{color:var(--text)}

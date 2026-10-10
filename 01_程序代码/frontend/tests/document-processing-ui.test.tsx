@@ -2,9 +2,17 @@ import assert from 'node:assert/strict'
 import {test} from 'node:test'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
-import {DocumentStructures,OcrProviderStatus,PageProvenance,ProcessingPreview,ProcessingTaskStatus,StructuredChart,StructuredTable,documentPosition,ocrReady,processingPages,sourceHighlightRegions,submitProcessingTask,validSourceBox} from '../src/document-processing'
+import {DocumentStructures,OcrProviderStatus,PageProvenance,ProcessingPreview,ProcessingTaskStatus,StructuredChart,StructuredTable,documentPosition,ocrReady,processingDocumentId,processingPages,sourceHighlightRegions,submitProcessingTask,validSourceBox} from '../src/document-processing'
 
 const request={document_id:'public-doc',version:'a'.repeat(64),parse_id:'old-parse',pages:[1,3],mode:'vision' as const,rotation:90 as const,connection_id:'vision-tested'}
+test('source-view metadata retains its document identity in the processing request',async()=>{
+ const view={document:{document_id:'fixed-source',sha256:'b'.repeat(64)},parse_id:'fixed-parse'}
+ const original=globalThis.fetch;let body:any
+ globalThis.fetch=(async(_path:any,options:any)=>{body=JSON.parse(options.body);return new Response(JSON.stringify({id:'task',status:'queued'}),{status:200})}) as typeof fetch
+ try{await submitProcessingTask({document_id:processingDocumentId(view.document),version:view.document.sha256,parse_id:view.parse_id,pages:[1],mode:'ocr',rotation:0});assert.equal(body.document_id,'fixed-source');assert.equal(body.parse_id,'fixed-parse');assert.equal(body.version,view.document.sha256)}finally{globalThis.fetch=original}
+ assert.equal(processingDocumentId({id:'catalog-id'}),'catalog-id')
+ assert.throws(()=>processingDocumentId({document_id:'one',id:'another'}),/标识未确认/)
+})
 test('vision requires a concrete preview and submits the frozen document and page selection',async()=>{
  const original=globalThis.fetch;const sent:{path:string,body:any}[]=[]
  globalThis.fetch=(async(path:any,options:any)=>{sent.push({path,body:JSON.parse(options.body)});return new Response(JSON.stringify({id:'task-1',status:'queued',processed:0,total:2}),{status:200,headers:{'Content-Type':'application/json'}})}) as typeof fetch

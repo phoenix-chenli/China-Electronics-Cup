@@ -146,13 +146,17 @@ def parse_page(path, page_number):
     if fmt=="pdf":
         from .document_native import enhance_pdf_page
         result=enhance_pdf_page(path,page_number,result)
-    return result
+    from . import document_quality
+    return document_quality.inspect(result)
 
 
 def _parse_file(path):
     if path.suffix.lower()==".docx":
         from .document_native import parse_docx
-        return parse_docx(path)
+        body=parse_docx(path)
+        from . import document_quality
+        body['pages']=[document_quality.inspect(p) for p in body['pages']]
+        return body
     if path.suffix.lower()==".pdf":
         import pymupdf
         with pymupdf.open(path) as doc:
@@ -264,7 +268,7 @@ def resolve(locator, quote=""):
         precisions={b.get("location_precision",p.get("location_precision",p.get("provenance",{}).get("location_precision","text_range"))) for b in relevant}
         methods={b.get("source_method",b.get("method",p.get("provenance",{}).get("method",p.get("method","native_text")))) for b in relevant}
         loc.update(text_range={"start":start,"end":end,"text_sha256":hashlib.sha256(actual.encode()).hexdigest()},rects=rects_for(p,start,end),location_precision=next(iter(precisions)) if len(precisions)==1 else "mixed",extraction_method=next(iter(methods)) if len(methods)==1 else "mixed",source_refs=refs)
-        loc["derived_view"]=any(b.get("table_id") or b.get("chart_id") or b.get("source_method") in {"ocr","visual_observed"} for b in relevant)
+        loc["derived_view"]=any(b.get("table_id") or b.get("chart_id") or b.get("source_method") in {"ocr","visual_observed","human_review"} for b in relevant)
         media_ids={b.get("media_id") for b in relevant}
         if len(media_ids)==1 and next(iter(media_ids)):
             loc.update(media_id=next(iter(media_ids)),coordinate_space="media")
@@ -274,7 +278,7 @@ def resolve(locator, quote=""):
     else: loc.update(rects=[],location_precision="page");loc.pop("text_range",None)
     method=p.get("provenance",{}).get("method",p.get("method","native_text"))
     scores=[b["confidence"] for b in relevant if isinstance(b.get("confidence"),(int,float)) and not isinstance(b.get("confidence"),bool) and 0<=b["confidence"]<=1]
-    quality={"confirmed":status=="located","human_reviewed":False,"derived_view":bool(loc.get("derived_view")),"source_methods":sorted(methods),"location_precision":loc["location_precision"],"min_ocr_confidence":min(scores) if scores else None,"semantic_accuracy":"not_proven"}
+    quality={"confirmed":status=="located","human_reviewed":bool(relevant) and all(b.get('human_reviewed') is True for b in relevant),"derived_view":bool(loc.get("derived_view")),"source_methods":sorted(methods),"location_precision":loc["location_precision"],"min_ocr_confidence":min(scores) if scores else None,"semantic_accuracy":"not_proven"}
     return {"status":status,"matches":len(found),"locator":loc,"is_current":data["document"]["is_current"],"text_available":p["text_available"],"quote":p["text"][found[0][0]:found[0][1]] if status=="located" else quote,"method":"固定解析文字定位："+method,"recognition_derived":method not in {"native_text","docx_native","pdf_native","native"},"visual_verified":False,"quality":quality}
 
 

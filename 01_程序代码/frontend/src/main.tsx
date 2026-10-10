@@ -1,16 +1,15 @@
-import React,{useEffect,useRef,useState} from 'react'
+import React,{lazy,Suspense,useEffect,useRef,useState} from 'react'
 import {createRoot} from 'react-dom/client'
 import {ArrowRight,BookOpen,Calculator,CheckCircle2,ChevronRight,Database,FileCheck2,FileText,History,Home,Menu,MessageCircle,Plus,Search,Settings,ShieldCheck,X} from 'lucide-react'
-import {api,Obj,Page,IconButton,Mascot,Modal,SaveDialog} from './ui'
+import {api,Obj,Page,IconButton,Mascot,Modal,SaveDialog,Spinner} from './ui'
 import {isDatabaseResult} from './result-presentation'
 import {isKnowledgeResult} from './rag'
 import {AnalysisPage} from './workspace'
-import {ScenarioPage} from './scenario'
-import {EvidencePage} from './evidence'
+import {PageLoadBoundary} from './page-loading'
+import {processingDocumentId} from './document-processing'
 import {ChecksDialog,DataPage,RecordsPage} from './catalog'
 import {HomePage} from './home'
 import Pet from './Pet'
-import {SettingsPage} from './settings'
 import {ConnectionsPanel,ExtensionDialog,ShareDialog} from './connections'
 import './connections.css'
 import Temporary from './Temporary'
@@ -27,6 +26,9 @@ import './evidence.css'
 import './scenario.css'
 import './companion.css'
 import {useConversations,ProjectDialog,RenameSessionDialog} from './conversations'
+const EvidencePage=lazy(()=>import('./evidence').then(m=>({default:m.EvidencePage})))
+const ScenarioPage=lazy(()=>import('./scenario').then(m=>({default:m.ScenarioPage})))
+const SettingsPage=lazy(()=>import('./settings').then(m=>({default:m.SettingsPage})))
 function App(){
  const [importOpen,setImportOpen]=useState(false)
  const [connectionOpen,setConnectionOpen]=useState(false),[extension,setExtension]=useState<Obj|null>(null),[share,setShare]=useState<Obj|null>(null)
@@ -46,7 +48,7 @@ function App(){
  const navigate=(p:Page)=>{navigationRevision.current++;setPage(p);try{localStorage.setItem('ef-page',p)}catch{}setMobileNav(false);window.scrollTo({top:0});document.querySelector('.content')?.scrollTo(0,0)}
  const dashSerial=useRef(0),projectRef=useRef(c.projectId);projectRef.current=c.projectId
  const loadDashboard=async()=>{const serial=++dashSerial.current,pid=c.projectId;try{const d=await api('/api/dashboard?project_id='+encodeURIComponent(pid));if(serial===dashSerial.current&&pid===projectRef.current){setDashboard(d);setDashboardError('')}}catch(e){if(serial===dashSerial.current&&pid===projectRef.current){setDashboard(null);setDashboardError((e as Error).message)}}}
- const load=async()=>{const responses=await Promise.allSettled([api('/api/health'),api('/api/tables'),api('/api/documents'),api('/api/saved')]);const problem=responses.slice(1,3).find(r=>r.status==='rejected');setCatalogReady(!problem);setCatalogError(problem?'数据目录暂未读取':'');const setters=[setHealth,setTables,setDocs,setSaved];responses.forEach((r,i)=>{if(r.status==='fulfilled')setters[i](r.value);else if(i===0){setHealth(null);notify('本地服务未连接，请双击“启动证流.command”','error')}});await loadDashboard()}
+ const load=async()=>{const responses=await Promise.allSettled([api('/api/health'),api('/api/tables'),api('/api/documents'),api('/api/saved')]);const problem=responses.slice(1,3).find(r=>r.status==='rejected');setCatalogReady(!problem);setCatalogError(problem?'数据目录暂未读取':'');const setters=[setHealth,setTables,setDocs,setSaved];responses.forEach((r,i)=>{if(r.status==='fulfilled')setters[i](r.value);else if(i===0){setHealth(null);notify('本地服务未连接，请双击对应系统的“启动证流_Mac.command”或“启动证流_Windows.bat”','error')}});await loadDashboard()}
  useEffect(()=>{setDashboard(null);void loadDashboard()},[c.projectId,c.sessions.map((s:Obj)=>s.id+s.updated_at+s.task_status).join('|')])
   useEffect(()=>{void load()},[])
   useEffect(()=>{let live=true,serial=0;const refresh=async()=>{const request=++serial;try{const config=await api('/api/agent/config');if(live&&request===serial)setAgentConfig(config)}catch{if(live&&request===serial)setAgentConfig(null)}};void refresh();window.addEventListener('ef-agent-config-changed',refresh);window.addEventListener('ef-connections-changed',refresh);return()=>{live=false;window.removeEventListener('ef-agent-config-changed',refresh);window.removeEventListener('ef-connections-changed',refresh)}},[])
@@ -65,7 +67,7 @@ function App(){
  const onEvidence=(e:Obj)=>{if(e){setReaderState(old=>({...old,target:e,page:e.locator?.page||1,focus:null,view:'reader'}));setSelected(e);navigate('evidence')}}
  const askDocument=async(text:string,scope:Obj)=>{if(!text.trim()||running||c.loading)return;navigate('analysis');return safe(()=>c.submit(text.trim(),{},false,'query',false,scope.rag_scope?null:scope,scope.rag_scope||null))}
  const openCatalog=(tab:string,table?:string)=>{setDataTarget({tab,table});navigate('data')}
- const openDoc=(d:Obj)=>onEvidence({id:d.id,type:'document',source:d.name,locator:{document_id:d.id,page:1,sha256:d.sha256,...(d.parse_id?{parse_id:d.parse_id}:{}),source_url:'/api/documents/'+d.id+'/original?version='+d.sha256}})
+ const openDoc=(d:Obj)=>{const id=processingDocumentId(d);onEvidence({id,type:'document',source:d.name,locator:{document_id:id,page:1,sha256:d.sha256,...(d.parse_id?{parse_id:d.parse_id}:{}),source_url:'/api/documents/'+id+'/original?version='+d.sha256}})}
  const copy=async(sources:boolean)=>{if(!result)return;try{await navigator.clipboard.writeText(result.answer+(sources?'\n\n'+result.evidence.map((e:Obj,i:number)=>`[${i+1}] ${e.source}${e.locator.page?' · 第 '+e.locator.page+' 页':''}\n${e.locator.source_url?location.origin+e.locator.source_url:e.locator.sql||''}`).join('\n'):''));notify('已复制'+(sources?'答案与来源':'答案'))}catch{notify('复制未成功，请手动选择文字','error')}}
  const pet=(text?:string)=>{setPreferences((old:Obj)=>({...old,pet:true}));if(page==='settings'&&!['appearance','assistant'].includes(settingsTab))setSettingsTab('assistant');setPetRequest({id:Date.now(),text})}
  const newAnalysis=()=>{navigate('home');editQuestion('');requestAnimationFrame(()=>document.querySelector<HTMLTextAreaElement>('.query-input textarea')?.focus())}
@@ -83,16 +85,16 @@ function App(){
   {id:'evidence',label:'阅读原文',icon:BookOpen,detail:'文档与逐结论来源',onSelect:()=>navigate('evidence')}
  ]
  const viewImport=()=>{setDataTarget({tab:importState?.kind==='table'?'tables':'docs',table:importState?.tables?.[0],document:importState?.document?.name});setImportOpen(false);navigate('data')}
-  const common={tools:workTools,onShare:()=>result&&setShare({kind:'analysis',id:result.run_id}),onExtension:(mode:string)=>setExtension({mode}),onAgentSettings:()=>{setSettingsTab('models');navigate('settings')},result,baseline:scenarioBase,run,recompute,busy:running||c.loading,navigate,onEvidence,onSave:()=>setSaveOpen(true)}
+  const common={agentConfig,onNew:newAnalysis,tools:workTools,onShare:()=>result&&setShare({kind:'analysis',id:result.run_id}),onExtension:(mode:string)=>setExtension({mode}),onAgentSettings:()=>{setSettingsTab('models');navigate('settings')},result,baseline:scenarioBase,run,recompute,busy:running||c.loading,navigate,onEvidence,onSave:()=>setSaveOpen(true)}
  return <PreferencesContext.Provider value={preferences as typeof defaultPrefs}><WorkspaceLayout petState={petState} page={page} collapsed={collapsed} setCollapsed={setCollapsed} mobileNav={mobileNav} setMobileNav={setMobileNav} navigate={navigate} health={health} saved={saved} tables={tables} openSaved={openSaved} onNew={newAnalysis} onSearch={()=>setSearchOpen(true)} onStatus={()=>setStatusOpen(true)} onPet={pet} showPet={preferences.pet} project={c.project} sessions={c.sessions.map((s:Obj)=>s.id===c.session?.id?{...s,task_status:c.session?.tasks.at(-1)?.status}:s)} sessionId={c.session?.id} onProject={()=>{setMobileNav(false);setProjectOpen(true)}} onSession={(sid:string)=>{navigate('analysis');void safe(()=>c.openSession(sid))}}> {queryError&&<div className="error-banner" role="alert"><span>{queryError}</span><button className="text-link" onClick={()=>void safe(c.session?c.retrySubmission:c.bootstrap)}>重新连接</button></div>}{stale&&page==='analysis'&&<div className="change-notice"><span>{isKnowledgeResult(result)?'知识库或连接已变化，当前保留原查询范围与版本。':isDatabaseResult(result)?'问数来源结构或连接已变化，当前为原查询快照。':'这是保存时的快照，数据已更新。'}</span><button className="text-link" onClick={()=>isDatabaseResult(result)||isKnowledgeResult(result)?newAnalysis():recompute({})}>{isDatabaseResult(result)||isKnowledgeResult(result)?'新建问答':'刷新结果'}<ArrowRight size={14}/></button></div>}
- {page==='home'&&<HomePage tools={workTools} onImport={()=>setImportOpen(true)} onCatalog={openCatalog} onConnect={()=>setConnectionOpen(true)} onExtension={(mode:string)=>setExtension({mode})} tables={tables} docs={docs} dashboard={dashboard} dataReady={catalogReady} dashboardError={dashboardError||catalogError} reloadDashboard={load} question={question} setQuestion={editQuestion} run={homeRun} busy={running||c.loading} navigate={navigate} importFile={upload} uploading={uploading} importState={importState} onViewImport={()=>{setDataTarget({tab:importState?.kind==='table'?'tables':'docs',table:importState?.tables?.[0],document:importState?.document?.name});navigate('data')}} onPet={pet} showPet={preferences.pet} project={c.project} sessions={c.sessions} onSession={resumeSession} onQuestion={resumeQuestion} onProjects={()=>setProjectOpen(true)}/>}
+ {page==='home'&&<HomePage agentConfig={agentConfig} onAgentSettings={()=>{setSettingsTab('models');navigate('settings')}} tools={workTools} onImport={()=>setImportOpen(true)} onCatalog={openCatalog} onConnect={()=>setConnectionOpen(true)} onExtension={(mode:string)=>setExtension({mode})} tables={tables} docs={docs} dashboard={dashboard} dataReady={catalogReady} dashboardError={dashboardError||catalogError} reloadDashboard={load} question={question} setQuestion={editQuestion} run={homeRun} busy={running||c.loading} navigate={navigate} importFile={upload} uploading={uploading} importState={importState} onViewImport={()=>{setDataTarget({tab:importState?.kind==='table'?'tables':'docs',table:importState?.tables?.[0],document:importState?.document?.name});navigate('data')}} onPet={pet} showPet={preferences.pet} project={c.project} sessions={c.sessions} onSession={resumeSession} onQuestion={resumeQuestion} onProjects={()=>setProjectOpen(true)}/>}
  {page==='analysis'&&<AnalysisPage key={c.session?.id||'empty'} {...common} question={question} setQuestion={editQuestion} undo={undo} onUndo={()=>{if(c.undoId)void safe(async()=>{await c.select(c.undoId!);c.setUndoId(null);notify('已恢复修改前的结果')})}} choose={(conditions:Obj)=>recompute(conditions)} onCopy={copy} session={c.session} projectName={c.project?.name} loading={c.loading} selectedMessageId={c.resultMessage?.id} onSelectMessage={selectMessage} onRetry={(tid:string)=>void safe(()=>c.retry(tid))} onCancel={()=>void safe(c.cancel)} task={c.task} stage={c.task?.stage} onRename={()=>setRenameOpen(true)}/>}
- {page==='evidence'&&<EvidencePage onShare={()=>result&&setShare({kind:'analysis',id:result.run_id})} onVision={(document:Obj)=>setExtension({mode:'vision',document})} result={result} docs={docs} selected={selected} onSelect={setSelected} navigate={navigate} notify={notify} state={readerState} onState={setReaderState} onAsk={askDocument} busy={running||c.loading}/>}
+ <PageLoadBoundary key={page}><Suspense fallback={<Spinner text="正在打开页面…"/>}>{page==='evidence'&&<EvidencePage onShare={()=>result&&setShare({kind:'analysis',id:result.run_id})} onVision={(document:Obj)=>setExtension({mode:'vision',document})} result={result} docs={docs} selected={selected} onSelect={setSelected} navigate={navigate} notify={notify} state={readerState} onState={setReaderState} onAsk={askDocument} busy={running||c.loading}/>}
  {page==='scenario'&&<ScenarioPage key={c.projectId+'-'+(c.session?.id||'new')} {...common} onShare={(id:string)=>setShare({kind:'scenario',id})} projectId={c.projectId} sessionId={c.session?.id} notify={notify} onConnection={(connected:boolean)=>{if(!connected)setHealth(null);else if(!health)void load()}} onOrigin={async(base:Obj)=>{if(base.session_id){await c.openSession(base.session_id);const detail=await api('/api/sessions/'+base.session_id);const msg=detail.messages.find((m:Obj)=>m.result?.run_id===base.origin_run_id);if(msg)await c.select(msg.id)}navigate('analysis')}}/>}
  {page==='data'&&<DataPage onConnect={()=>setConnectionOpen(true)} initialTarget={dataTarget} consumeTarget={()=>setDataTarget(null)} tables={tables} docs={docs} upload={upload} uploading={uploading} refresh={load} onDocument={openDoc} notify={notify}/>}
  {page==='records'&&<RecordsPage saved={saved} openSaved={openSaved} refresh={load} notify={notify} onNew={newAnalysis}/>}
  {page==='settings'&&<SettingsPage onConnectionsUpdated={load} preferences={preferences} setPreferences={setPreferences} health={health} onPet={pet} onCheck={()=>setChecksOpen(true)} notify={notify} onTemporary={()=>setTemporaryOpen(true)} settingsTab={settingsTab} setSettingsTab={setSettingsTab} petState={petState}/>}
- </WorkspaceLayout>
+ </Suspense></PageLoadBoundary></WorkspaceLayout>
  {!c.loading&&<Pet compact key={c.projectId+':'+(c.session?.id||'new')} preferences={preferences} page={page} projectId={c.projectId} sessionId={c.session?.id} sessionName={c.session?.title} mainResult={result} task={c.task||c.session?.tasks?.at(-1)} onQuery={petQuery} onEvidence={onEvidence} navigate={navigate} request={petRequest} resetRequest={()=>setPetRequest(null)} onState={setPetState} settingsTab={settingsTab} setPreferences={setPreferences} sourceContext={{evidence_id:selected?.id}}/>}
   {importOpen&&<ImportDialog close={()=>setImportOpen(false)} upload={upload} uploading={uploading} state={importState} onView={viewImport}/>}
  {connectionOpen&&<Modal title="数据库连接" wide close={()=>setConnectionOpen(false)}><ConnectionsPanel filter="database" notify={notify} updated={load}/></Modal>}

@@ -221,7 +221,7 @@ def _extraction_quality(page,start,end):
     methods=sorted({b.get("source_method") or provenance.get("method") or page.get("method","native_text") for b in blocks})
     precisions=sorted({b.get("location_precision") or provenance.get("location_precision") or page.get("location_precision","character") for b in blocks})
     quality={"confirmed":all(b.get("status","confirmed")=="confirmed" for b in blocks),
-             "human_reviewed":False,"source_methods":methods,"location_precisions":precisions,
+             "human_reviewed":bool(blocks) and all(b.get('human_reviewed') is True for b in blocks),"source_methods":methods,"location_precisions":precisions,
              "derived_view":any(b.get("derived_view",False) for b in blocks)}
     for field in ("media_id","source_part","table_id","cell_ids","chart_id","point_id"):
         values=[]
