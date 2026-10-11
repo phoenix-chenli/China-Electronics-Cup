@@ -8,6 +8,11 @@ import {AnalysisPage,Claims} from '../src/workspace'
 import {savedAnalysisName} from '../src/result-presentation'
 
 const noop=()=>{}
+test('missing source pages request rereading originals without claiming complete recall',()=>{
+ const html=renderToStaticMarkup(<RetrievalStatus result={{rag:{retrieval:[{channels:{bm25:[],dense:[]},reranked:false}],source_gaps:[{page:9,reason:'没有文字',instruction:'请重新识别固定原件'}]}}}/>)
+ for(const text of ['1 页缺少可用文字','第 9 页','重新识别固定原件'])assert.ok(html.includes(text),text)
+ assert.ok(!html.includes('候选重排：实际完成'))
+})
 const evidence=[{id:'doc-1',type:'document',source:'2024售后条款.pdf',snippet:'甲产品限额为100元。',locator:{document_id:'d1',sha256:'a'.repeat(64),parse_id:'p1',page:2}},{id:'doc-2',type:'document',source:'补充条件.md',snippet:'正常使用适用。',locator:{document_id:'d2',sha256:'b'.repeat(64),parse_id:'p2',page:1}}]
 const base={run_id:'rag-fixture',question:'2025年甲产品限额及例外条件？',status:'completed',answer_status:'refused',answer:'现有资料没有2025年适用条款，无法给出赔付结论。',query_spec:{metric:'document',query_scope:'knowledge'},claims:[],evidence,coverage:{supported:0,total:0},rows:[],columns:[],events:[],actions:[],rag:{retrieval:{mode:'lexical'}},missing_requirements:['2025年有效条款','例外条件'],conflicts:['两份旧资料的适用期不同'],agent:{mode:'model',calls:3}}
 

@@ -79,6 +79,7 @@ source_vocabulary是当前公开资料的真实维度取值与定义，不是示
 database.query返回already_executed表示同一SQL已在本轮成功执行，返回原查询快照及原fact_id；不是一次新的数据读取。停止重复该SQL。数值已足够时转document.search或answer；缺少计算列时在新SQL中一次补全。
 business.query参数question（完整业务问题）、confirmed（可选已知条件）；仅支持销售示例口径。
 document.search参数query，可选focus字符串数组、year整数（例如2024，不是字符串）、document_ids本轮rag_scope.documents中的文档ID数组。补查某份原文时可限定document_ids，不能引用范围外文档。用需要核对的指标、原句关键词与对象组成简短查询，不把整段复杂问题重复作检索词。依据查得实体再搜索，不能自行猜冠军。
+document.search的source_gaps说明固定来源有缺失文字页，需要重新识别原件；重复搜索不能恢复空页。不得据此宣称资料不存在所问内容，不把待复核公式或未确认表头当作确定证据。
 formula.calculate参数expression、parameters:[{name,value,unit,evidence_ids}]；每个数值必须来自本轮工具的数值事实或公式参数。
 应用文档公式时额外给formula_source:{support_span_id,source_quote,result_unit}。原文需有明确公式如fee [元] = base + max(0, minutes - included) * price；结构和量纲由服务端核对。只列数字或自然语言规则不能当作已确认公式，不明确时澄清。
 文档参数额外给support_span_id、source_quote（原文精确数值及单位，如"5%"）；服务端检查后才允许百分比或元/万元转换，不猜单位。
@@ -722,11 +723,13 @@ class Run:
         public = self.public_evidence(sources)
         self.latest_spans = rag_grounding.retrieved_span_order(public,value.get('retrieval',{}))
         self.result.setdefault('rag', {'scope': copy.deepcopy(self.rag_scope), 'retrieval': []})['retrieval'].append(copy.deepcopy(value.get('retrieval', {})))
+        self.result['rag']['source_gaps']=copy.deepcopy(value.get('source_gaps',[]))
         assessment = self.assess_evidence() if self.rag_enabled else None
         retrieval=value.get('retrieval',{})
         summary={k:copy.deepcopy(retrieval[k]) for k in ('candidate_count','document_filter','preserved_lexical_candidate','reranked','errors','lexical_generation','rrf_k','duration_ms','boundary') if k in retrieval}
         summary['channel_counts']={k:len(rows) for k,rows in retrieval.get('channels',{}).items()}
         result = {'evidence': public, 'count': len(public), 'status': value['status'],
+                'source_gaps':copy.deepcopy(value.get('source_gaps',[])),
                 'retrieval': summary, 'assessment': assessment,
                 'boundary': '完整固定原文；检索分数不是答案置信度。未执行OCR。'}
         self.search_cache[key] = copy.deepcopy(result)
@@ -1401,6 +1404,7 @@ def local_retrieval(question, context, stop, progress=None):
     value.update(evidence=retrieved['evidence'],claims=[],answer=reason,headline='检索原文',answer_status='refused',refusal_reason=reason,
                  missing_requirements=['需要可用主问答模型完成证据充分性及逐条支持核验'],conflicts=[],conditions=[],
                  rag={'scope':copy.deepcopy(context['rag_scope']),'requirements':[],'assessment':None,'retrieval':[retrieved['retrieval']],
+                      'source_gaps':copy.deepcopy(retrieved.get('source_gaps',[])),
                       'verification':{'status':'not_run','reason':'未连接主问答模型'}},
                  agent={'mode':'local','plan':[],'calls':0,'usage':{},'review':{'status':'local','detail':reason}},
                  coverage={'supported':0,'total':0,'percent':None,'meaning':'没有生成结论'},latency_ms=round((time.monotonic()-started)*1000,2))

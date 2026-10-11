@@ -10,6 +10,9 @@ import json
 import re
 import sqlite3
 import time
+from difflib import SequenceMatcher
+from collections import Counter
+import heapq
 
 from . import documents, rag_index as index, store as s
 
@@ -18,6 +21,61 @@ RERANK_LIMIT = 30
 EVIDENCE_LIMIT = 8
 CONTEXT_CHAR_LIMIT = 12000
 RRF_K = 60
+
+
+def _noise_recall(query, candidates, cancelled=None, deadline=None):
+    """Bounded spelling-tolerant recall only; original evidence is never rewritten."""
+    stop={'what','which','the','is','in','of','on','for','with','and','to','a','an','was','does','by','as','it','that','this'}
+    terms=sorted(set(re.findall(r'[a-z0-9]{3,}',query.lower()))-stop,key=lambda t:(-len(t),t))[:24]
+    if not terms:return []
+    # Cheap bounded preselection for large corpora, then expensive spelling
+    # comparisons over at most 400 original chunks. No index text is rewritten.
+    if len(candidates)>400:
+        anchors=sorted({term[i:i+3] for term in terms[:3] for i in range(len(term)-2)})[:24]
+        def preselection():
+            for chunk in candidates:
+                _guard(cancelled,deadline)
+                text=chunk['text'].lower()
+                score=4*sum(term in text for term in terms)+sum(anchor in text for anchor in anchors)
+                yield score,chunk['id'],chunk
+        candidates=[row[2] for row in heapq.nlargest(400,preselection(),key=lambda row:(row[0],row[1]))]
+    frequency=Counter(); vocabularies=[]
+    for chunk in candidates:
+        _guard(cancelled,deadline)
+        words=set(re.findall(r'[a-z0-9]{3,}',chunk['text'].lower()))
+        vocabularies.append(words);frequency.update(words)
+    scores=[]
+    for chunk,words in zip(candidates,vocabularies):
+        _guard(cancelled,deadline)
+        score=0.;matched=0
+        for term in terms:
+            choices=sorted(w for w in words if w[0]==term[0] and abs(len(w)-len(term))<=2)
+            best=1. if term in words else max((SequenceMatcher(None,term,w,autojunk=False).ratio() for w in choices[:256]),default=0.)
+            if best>=.82:
+                matched+=1;score+=best/(1+frequency.get(term,0))
+        if matched>=min(2,len(terms)):
+            scores.append({'id':chunk['id'],'score':score,'matched_terms':matched})
+    scores.sort(key=lambda x:(-x['score'],-x['matched_terms'],x['id']))
+    return [{**row,'rank':i+1} for i,row in enumerate(scores[:RECALL_LIMIT])]
+
+
+def _source_gaps(scope, cancelled=None, deadline=None, document_ids=None):
+    gaps=[]
+    for source in scope['documents']:
+        _guard(cancelled,deadline)
+        if document_ids is not None and source['document_id'] not in document_ids:continue
+        if source.get('generation_id'):
+            with index.reader() as db:
+                row=db.execute('SELECT body FROM ef_rag_generations WHERE id=?',(source['generation_id'],)).fetchone()
+            missing=json.loads(row['body']).get('missing_pages',[]) if row else []
+        else:
+            body=documents.layout(source['document_id'],source['sha256'],source['parse_id'])
+            missing=[{'page':p['number'],'reason':'没有可用文字或结构待复核'} for p in body['pages']
+                     if p['number']==scope.get('page') and not p['text_available']]
+        for page in missing:
+            gaps.append({**source,**page,'action':'reparse_original','reason_code':'source_text_missing',
+                         'instruction':'请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据'})
+    return gaps
 
 
 def _guard(cancelled=None, deadline=None):
@@ -255,9 +313,10 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_
                 or not all(isinstance(d, str) and d in allowed_ids for d in document_ids)):
             raise ValueError('检索文档筛选必须来自本轮固定范围，不能扩大范围')
         candidates = [c for c in candidates if c['document_id'] in document_ids]
+    gaps=_stage(stages,'source_quality',lambda:_source_gaps(scope,cancelled,deadline,document_ids),cancelled,trace,deadline)
     by_id = {c["id"]: c for c in candidates}
     if not candidates:
-        return {"status": "insufficient", "evidence": [], "count": 0, "stages": stages,
+        return {"status": "insufficient", "evidence": [], "count": 0, "stages": stages,"source_gaps":gaps,
                 "index_manifest": scope, "retrieval": {"channels": {}, "errors": ["固定范围内没有可用文字，或来源已归档"], "duration_ms": round((time.monotonic()-started)*1000, 2)}}
     # A selected exact range is itself requested evidence. It need not contain
     # lexical overlap with a question such as '解释这段文字'.
@@ -280,6 +339,7 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_
         except Exception as exc:
             _guard(cancelled, deadline)
             errors.append({"stage": "dense", "error": str(exc)[:500]})
+        channels['noise_tolerant']=_stage(stages,'noise_tolerant',lambda:_noise_recall(query,candidates,cancelled,deadline),cancelled,trace,deadline)
     fused = _stage(stages, "rrf", lambda: reciprocal_rank_fusion(channels), cancelled, trace, deadline)
     ranked = fused
     reranked = False
@@ -311,7 +371,7 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_
     allowed = {d["document_id"] for d in index.validate_scope(scope, cancelled=cancelled, deadline=deadline)}
     evidence = [e for e in evidence if e["locator"]["document_id"] in allowed]
     _guard(cancelled, deadline)
-    return {"status": "degraded" if errors and evidence else "retrieved" if evidence else "insufficient",
+    return {"status": "degraded" if (errors or gaps) and evidence else "retrieved" if evidence else "insufficient","source_gaps":gaps,
             "evidence": evidence, "count": len(evidence), "index_manifest": scope, "stages": stages,
             "retrieval": {"channels": channels, "candidate_count": len(candidates), "fusion": fused[:RERANK_LIMIT],
                           "document_filter": list(document_ids) if document_ids is not None else None,

@@ -223,7 +223,7 @@ def _extraction_quality(page,start,end):
     quality={"confirmed":all(b.get("status","confirmed")=="confirmed" for b in blocks),
              "human_reviewed":bool(blocks) and all(b.get('human_reviewed') is True for b in blocks),"source_methods":methods,"location_precisions":precisions,
              "derived_view":any(b.get("derived_view",False) for b in blocks)}
-    for field in ("media_id","source_part","table_id","cell_ids","chart_id","point_id"):
+    for field in ("media_id","source_part","table_id","cell_ids","chart_id","point_id","formula_id"):
         values=[]
         for block in blocks:
             value=block.get(field)

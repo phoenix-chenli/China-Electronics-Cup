@@ -15,12 +15,28 @@ class DocumentReviewTests(unittest.TestCase):
     def tearDownClass(cls):
         conv.manager.pool.shutdown(wait=True);cls.client.close();TEMP.cleanup()
     def source(self,text='限额为100万元。\n下一条保持不变。'):
-        p=s.UPLOADS/(uuid.uuid4().hex+'.md');p.write_text(text)
+        p=s.UPLOADS/(uuid.uuid4().hex+'.md');p.write_text(text,encoding='utf-8')
         d=s.index_document(p);return d,p,documents.layout(d['id'])
     def correct(self,d,data,target,**values):
         return self.client.post('/api/documents/'+d['id']+'/review',json={
             'version':d['sha256'],'parse_id':data['parse_id'],'page':1,'target':target,
             'operator':'公开夹具验收者','accepted':True,**values})
+    def test_formula_review_confirms_complete_structure_and_keeps_old_parse(self):
+        from backend import document_native as native,ocr_structure
+        d,_,body=self.source('')
+        lines=[{'text':text,'box':box,'confidence':.95,'status':'confirmed'} for text,box in
+               [('ψ() =',[.4,.4,.46,.42]),('1',[.47,.39,.48,.41]),('∑',[.5,.4,.54,.42])]]
+        parsed={k:copy.deepcopy(v) for k,v in body.items() if k not in {'document','parse_id'}}
+        parsed['pages'][0]=native.apply_ocr_page(parsed['pages'][0],{'lines':lines,'formulas':ocr_structure.formulas(lines)})
+        with s.conn() as db: saved=documents.save_parse(db,d['id'],d['sha256'],parsed,'公开公式结构夹具')
+        pending=documents.layout(d['id']);target=next(t for t in document_review.targets(pending['pages'][0]) if t['kind']=='formula')
+        with patch.object(rag_index,'submit_index',return_value={'id':'formula-index'}):
+            response=self.correct(d,pending,target['id'],text=r'\psi(A)=\frac{1}{N}\sum_{i=1}^{N}p_i')
+        self.assertEqual(response.status_code,200,response.text)
+        after=documents.layout(d['id']);formula=after['pages'][0]['formulas'][0]
+        self.assertEqual(formula['status'],'confirmed');self.assertTrue(formula['human_reviewed'])
+        self.assertFalse(after['pages'][0]['recognition_pending'])
+        self.assertEqual(documents.layout(d['id'],d['sha256'],saved['parse_id'])['pages'][0]['formulas'][0]['status'],'pending')
     def test_original_and_historical_quote_survive_correction_and_stale_write(self):
         d,path,before=self.source();old_hash=s.digest(path)
         block=before['pages'][0]['blocks'][0]

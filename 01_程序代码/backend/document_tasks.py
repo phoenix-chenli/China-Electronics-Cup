@@ -282,6 +282,17 @@ class Manager:
                     if body["mode"]=="ocr":
                         result=providers.ocr(raw,rotation=body["rotation"],cancelled=stop,deadline=deadline)
                         if "tables" not in result: result["tables"]=native.detect_ruled_tables(raw,result.get("lines",[]))
+                        from . import ocr_structure
+                        spatial=ocr_structure.detect(result.get('lines',[]),body['rotation'])
+                        if not result['tables']:
+                            result['tables']=spatial['tables']
+                        result['formulas']=spatial['formulas']
+                        if result['formulas']:
+                            ocr_structure.reread_formulas(raw,result,providers.ocr,stop,deadline,body['rotation'])
+                            for formula in result['formulas']:
+                                call=formula.get('crop_call',{})
+                                body['events'].append({'id':uuid.uuid4().hex,'page':number,'media_id':media_id,
+                                    'method':'formula_crop_ocr','formula_id':formula['id'],**call})
                         fresh=native.apply_ocr_page(base,result,media_id=media_id)
                     else:
                         lines=[{"text":b["text"],"box":b.get("box"),"status":b.get("status","confirmed")} for b in base.get("blocks",[]) if b.get("text","").strip() and b.get("media_id")==media_id]
@@ -294,6 +305,11 @@ class Manager:
                                 observed=providers.ocr(raw,rotation=body["rotation"],cancelled=stop,deadline=deadline)
                                 self._guard(body,stop,deadline)
                                 if "tables" not in observed: observed["tables"]=native.detect_ruled_tables(raw,observed.get("lines",[]))
+                                from . import ocr_structure
+                                spatial=ocr_structure.detect(observed.get('lines',[]),body['rotation'])
+                                if not observed['tables']:
+                                    observed['tables']=spatial['tables']
+                                observed['formulas']=spatial['formulas']
                                 if not base.get("text_available") or media_id:
                                     fresh=native.apply_ocr_page(base,observed,media_id=media_id)
                                 else:

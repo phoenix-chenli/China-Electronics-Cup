@@ -1,0 +1,2066 @@
+{
+  "date": "2026-10-11",
+  "baseline_commit": "f104125900651876f94e0a145e8829dbc665b76a",
+  "dataset": "OHR-Bench academic/2305.02437v3",
+  "evidence_page_index_base": 0,
+  "page_indices": [
+    3,
+    6,
+    8
+  ],
+  "qa_count": 8,
+  "sample_limit": "three-page diagnostic, not official OHR-Bench score or answer accuracy",
+  "model_generation_tested": false,
+  "model_generation_reason": "no configured text model on this installation; local_only=true",
+  "source_sha256": {
+    "01_程序代码/backend/ocr_structure.py": "81fb8cefe11a1b10c2a14716ef25d69c0842d61658660c79c9defb2ccd808fd1",
+    "01_程序代码/backend/math_structure.py": "bdba15b3b345a784759f0541c5b5acc26d98a113e7d41535961876277a6d1519",
+    "01_程序代码/backend/document_native.py": "cdd71bdc4202085f577ae68224befb37937a432ee56af0d141354591f5b7b35d",
+    "01_程序代码/backend/document_tasks.py": "b287cbcb84c7a8ad1888ff101948c71d87fe38df6808286765b19ab8561a68a0",
+    "01_程序代码/backend/document_review.py": "7cccf031caa6a0d305e199e28c12125f28993bfcbc53165dc61f0db2b250a2bc",
+    "01_程序代码/backend/document_quality.py": "51b966b34543f5ef0b9ee1b86dcea37117b896e5080ac08c9238b0bff12551a6",
+    "01_程序代码/backend/rag_index.py": "25e5ac9f92cab9c5cdba56f4a69a505bfa0b5b411fb9e72571f003b8aca6e03d",
+    "01_程序代码/backend/rag_retrieval.py": "7a94007a4b8d7086f77e25dc3955cb305dbd0029c5de06fd501dc1f00828a8db",
+    "01_程序代码/backend/agent.py": "d6c953f1a5dbf3db4a3a58895d0720eb30cd8cb321de9f3a70f164d8ca38dce5",
+    "01_程序代码/backend/store.py": "728b998cd374f4fd3d2c01a1af3b9987f66c88561ece74e11fbdd13af002efda",
+    "01_程序代码/frontend/src/rag.tsx": "7f29b6b21b8596f32cc5781ad62031e8188b6d22ecb5b627b691432c0fa04ce0",
+    "01_程序代码/frontend/src/document-review.tsx": "21e5a271fbebc4ebf902dd9fed803aff0e777531f38eebd6424544aa23cab277"
+  },
+  "input_sha256": {
+    "ohr-paper.pdf": "cd4b3a22216e310c0322661875459e4f8762992f70f073d0b65ecfb0f584ada2",
+    "ohr-qas.json": "2446db28741fa9f392067ee7aae7f3b05e0d85c584069a50ddd5b1b5bc783f58",
+    "ohr-rows.json": "9b722b519c485725020b04ebbf7c03753a19c16cab6486bfcc9b3ed11524d29a"
+  },
+  "ocr": [
+    {
+      "page_index": 3,
+      "status": "completed",
+      "seconds": 10.482,
+      "table_count": 0,
+      "table_grids": [],
+      "formulas": [
+        {
+          "status": "pending",
+          "reason": "二维公式需要核对分母、上下标和求和范围；保留原图坐标，不以逐行文字替代完整公式",
+          "crop_call": {
+            "status": "completed",
+            "duration_ms": 339,
+            "input_image_sha256": "faf19f027b2e583fa96638ab5caa1f2641bce117e37b724ee43305c7e6636c49",
+            "page_pixel_rect": [
+              486,
+              803,
+              735,
+              881
+            ]
+          },
+          "fraction_count": 0
+        }
+      ]
+    },
+    {
+      "page_index": 6,
+      "status": "completed",
+      "seconds": 15.604,
+      "table_count": 2,
+      "table_grids": [
+        {
+          "rows": 9,
+          "columns": 9,
+          "status": "confirmed",
+          "headers": [
+            {
+              "text": "System",
+              "column": 0,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "Es→En",
+              "column": 1,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "En→Es",
+              "column": 3,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "De→En",
+              "column": 5,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "En→De",
+              "column": 7,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "Dev",
+              "column": 1,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 2,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Dev",
+              "column": 3,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 4,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Dev",
+              "column": 5,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 6,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Dev",
+              "column": 7,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 8,
+              "colspan": 1,
+              "row": 1
+            }
+          ]
+        },
+        {
+          "rows": 4,
+          "columns": 9,
+          "status": "confirmed",
+          "headers": [
+            {
+              "text": "System",
+              "column": 0,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "Es→En",
+              "column": 1,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "En→Es",
+              "column": 3,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "De→En",
+              "column": 5,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "En→De",
+              "column": 7,
+              "colspan": 2,
+              "row": 0
+            },
+            {
+              "text": "Dev",
+              "column": 1,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 2,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Dev",
+              "column": 3,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 4,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Dev",
+              "column": 5,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 6,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Dev",
+              "column": 7,
+              "colspan": 1,
+              "row": 1
+            },
+            {
+              "text": "Test",
+              "column": 8,
+              "colspan": 1,
+              "row": 1
+            }
+          ]
+        }
+      ],
+      "formulas": []
+    },
+    {
+      "page_index": 8,
+      "status": "completed",
+      "seconds": 12.015,
+      "table_count": 1,
+      "table_grids": [
+        {
+          "rows": 11,
+          "columns": 6,
+          "status": "confirmed",
+          "headers": [
+            {
+              "text": "System",
+              "column": 0,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "Memory",
+              "column": 1,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "B-1",
+              "column": 2,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "B-2",
+              "column": 3,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "D-1",
+              "column": 4,
+              "colspan": 1,
+              "row": 0
+            },
+            {
+              "text": "D-2",
+              "column": 5,
+              "colspan": 1,
+              "row": 0
+            }
+          ]
+        }
+      ],
+      "formulas": []
+    }
+  ],
+  "retrieval": {
+    "gt": {
+      "page_hits": 8,
+      "count": 8,
+      "median_seconds": 3.806,
+      "source_gap_count": 0,
+      "stage_errors": 0,
+      "questions": [
+        {
+          "qa_id": "6214c7da-0dc5-4357-875c-d320937c6786",
+          "page_hit": true,
+          "target_page_index": 3,
+          "seconds": 5.151,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.708+00:00",
+              "duration_ms": 54.75,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:51.763+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.763+00:00",
+              "duration_ms": 22.96,
+              "count": 0,
+              "finished_at": "2026-10-11T13:56:51.786+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.786+00:00",
+              "duration_ms": 15.5,
+              "count": 13,
+              "finished_at": "2026-10-11T13:56:51.801+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.801+00:00",
+              "duration_ms": 138.96,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:51.940+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.940+00:00",
+              "duration_ms": 3.19,
+              "count": 4,
+              "finished_at": "2026-10-11T13:56:51.943+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.943+00:00",
+              "duration_ms": 0.05,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:51.944+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:51.944+00:00",
+              "duration_ms": 4757.54,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:56.701+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:56.701+00:00",
+              "duration_ms": 113.03,
+              "count": 8,
+              "finished_at": "2026-10-11T13:56:56.814+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6224e485-39ff-4d02-911b-6c2825903f2e",
+          "page_hit": true,
+          "target_page_index": 3,
+          "seconds": 3.535,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:56.864+00:00",
+              "duration_ms": 46.33,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:56.910+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:56.910+00:00",
+              "duration_ms": 26.25,
+              "count": 0,
+              "finished_at": "2026-10-11T13:56:56.936+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:56.936+00:00",
+              "duration_ms": 23.13,
+              "count": 13,
+              "finished_at": "2026-10-11T13:56:56.959+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:56.959+00:00",
+              "duration_ms": 129.44,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:57.089+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:57.089+00:00",
+              "duration_ms": 2.76,
+              "count": 5,
+              "finished_at": "2026-10-11T13:56:57.092+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:57.092+00:00",
+              "duration_ms": 0.03,
+              "count": 14,
+              "finished_at": "2026-10-11T13:56:57.092+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:56:57.092+00:00",
+              "duration_ms": 3126.37,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:00.218+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.218+00:00",
+              "duration_ms": 136.59,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:00.355+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "623bc3cd-2d78-4b7a-a9ae-672615f8850e",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 3.829,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.402+00:00",
+              "duration_ms": 50.03,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:00.452+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.452+00:00",
+              "duration_ms": 29.93,
+              "count": 0,
+              "finished_at": "2026-10-11T13:57:00.482+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.482+00:00",
+              "duration_ms": 15.93,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:00.498+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.498+00:00",
+              "duration_ms": 135.58,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:00.634+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.634+00:00",
+              "duration_ms": 3.59,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:00.637+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.637+00:00",
+              "duration_ms": 0.04,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:00.637+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:00.637+00:00",
+              "duration_ms": 3446.43,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:04.084+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.084+00:00",
+              "duration_ms": 104.76,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:04.189+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "623fc5b9-976d-4953-a47f-1aaf5875de0f",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 3.939,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.236+00:00",
+              "duration_ms": 45.73,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:04.281+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.281+00:00",
+              "duration_ms": 33.49,
+              "count": 0,
+              "finished_at": "2026-10-11T13:57:04.315+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.315+00:00",
+              "duration_ms": 21.03,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:04.336+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.336+00:00",
+              "duration_ms": 132.05,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:04.468+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.468+00:00",
+              "duration_ms": 4.14,
+              "count": 13,
+              "finished_at": "2026-10-11T13:57:04.472+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.472+00:00",
+              "duration_ms": 0.04,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:04.472+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:04.472+00:00",
+              "duration_ms": 3493.89,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:07.966+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:07.966+00:00",
+              "duration_ms": 146.62,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:08.113+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6240c38c-01e0-4aaf-b376-7ceb0764a06c",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 4.061,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.185+00:00",
+              "duration_ms": 68.85,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:08.254+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.254+00:00",
+              "duration_ms": 38.43,
+              "count": 0,
+              "finished_at": "2026-10-11T13:57:08.292+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.292+00:00",
+              "duration_ms": 20.81,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:08.313+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.313+00:00",
+              "duration_ms": 185.48,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:08.499+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.499+00:00",
+              "duration_ms": 5.71,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:08.505+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.505+00:00",
+              "duration_ms": 0.04,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:08.505+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:08.505+00:00",
+              "duration_ms": 3583.95,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:12.089+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.089+00:00",
+              "duration_ms": 113.34,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:12.202+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6246ce0a-0e99-40ec-9c27-3f31551a9eb6",
+          "page_hit": true,
+          "target_page_index": 8,
+          "seconds": 3.677,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.251+00:00",
+              "duration_ms": 51.9,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:12.303+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.303+00:00",
+              "duration_ms": 24.78,
+              "count": 0,
+              "finished_at": "2026-10-11T13:57:12.328+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.328+00:00",
+              "duration_ms": 15.53,
+              "count": 13,
+              "finished_at": "2026-10-11T13:57:12.343+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.343+00:00",
+              "duration_ms": 141.81,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:12.485+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.485+00:00",
+              "duration_ms": 3.41,
+              "count": 7,
+              "finished_at": "2026-10-11T13:57:12.489+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.489+00:00",
+              "duration_ms": 0.03,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:12.489+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:12.489+00:00",
+              "duration_ms": 3285.16,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:15.774+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:15.774+00:00",
+              "duration_ms": 109.67,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:15.884+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "624aadae-ebbc-41f6-9edf-f24b3567c813",
+          "page_hit": true,
+          "target_page_index": 8,
+          "seconds": 3.782,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:15.938+00:00",
+              "duration_ms": 47.09,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:15.985+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:15.985+00:00",
+              "duration_ms": 24.2,
+              "count": 0,
+              "finished_at": "2026-10-11T13:57:16.009+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:16.009+00:00",
+              "duration_ms": 16.26,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:16.025+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:16.025+00:00",
+              "duration_ms": 151.84,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:16.177+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:16.177+00:00",
+              "duration_ms": 3.11,
+              "count": 13,
+              "finished_at": "2026-10-11T13:57:16.180+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:16.180+00:00",
+              "duration_ms": 0.03,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:16.180+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:16.180+00:00",
+              "duration_ms": 3387.13,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:19.568+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.568+00:00",
+              "duration_ms": 108.96,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:19.677+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "634ad5b9-fd72-4908-adb8-a483c65233ab",
+          "page_hit": true,
+          "target_page_index": 8,
+          "seconds": 3.642,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.730+00:00",
+              "duration_ms": 55.35,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:19.785+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.785+00:00",
+              "duration_ms": 26.01,
+              "count": 0,
+              "finished_at": "2026-10-11T13:57:19.811+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.811+00:00",
+              "duration_ms": 16.45,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:19.827+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.828+00:00",
+              "duration_ms": 131.12,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:19.959+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.959+00:00",
+              "duration_ms": 4.24,
+              "count": 12,
+              "finished_at": "2026-10-11T13:57:19.963+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.963+00:00",
+              "duration_ms": 0.04,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:19.963+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:19.963+00:00",
+              "duration_ms": 3255.66,
+              "count": 14,
+              "finished_at": "2026-10-11T13:57:23.219+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:57:23.219+00:00",
+              "duration_ms": 109.42,
+              "count": 8,
+              "finished_at": "2026-10-11T13:57:23.328+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    "ocr": {
+      "page_hits": 8,
+      "count": 8,
+      "median_seconds": 6.821,
+      "source_gap_count": 0,
+      "stage_errors": 0,
+      "questions": [
+        {
+          "qa_id": "6214c7da-0dc5-4357-875c-d320937c6786",
+          "page_hit": true,
+          "target_page_index": 3,
+          "seconds": 8.57,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.251+00:00",
+              "duration_ms": 113.51,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:10.365+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.365+00:00",
+              "duration_ms": 39.1,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:10.404+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.404+00:00",
+              "duration_ms": 28.55,
+              "count": 13,
+              "finished_at": "2026-10-11T14:17:10.432+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.432+00:00",
+              "duration_ms": 216.83,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:10.649+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.649+00:00",
+              "duration_ms": 4.07,
+              "count": 6,
+              "finished_at": "2026-10-11T14:17:10.653+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.653+00:00",
+              "duration_ms": 0.06,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:10.653+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:10.654+00:00",
+              "duration_ms": 7831.95,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:18.485+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:18.485+00:00",
+              "duration_ms": 243.99,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:18.729+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6224e485-39ff-4d02-911b-6c2825903f2e",
+          "page_hit": true,
+          "target_page_index": 3,
+          "seconds": 7.068,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:18.819+00:00",
+              "duration_ms": 106.41,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:18.926+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:18.926+00:00",
+              "duration_ms": 31.29,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:18.957+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:18.957+00:00",
+              "duration_ms": 21.69,
+              "count": 13,
+              "finished_at": "2026-10-11T14:17:18.979+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:18.979+00:00",
+              "duration_ms": 187.85,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:19.167+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:19.167+00:00",
+              "duration_ms": 3.75,
+              "count": 5,
+              "finished_at": "2026-10-11T14:17:19.170+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:19.170+00:00",
+              "duration_ms": 0.05,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:19.170+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:19.170+00:00",
+              "duration_ms": 6362.83,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:25.533+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:25.533+00:00",
+              "duration_ms": 261.52,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:25.795+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "623bc3cd-2d78-4b7a-a9ae-672615f8850e",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 7.144,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:25.886+00:00",
+              "duration_ms": 110.97,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:25.997+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:25.997+00:00",
+              "duration_ms": 38.63,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:26.036+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:26.036+00:00",
+              "duration_ms": 30.03,
+              "count": 15,
+              "finished_at": "2026-10-11T14:17:26.066+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:26.066+00:00",
+              "duration_ms": 218.72,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:26.285+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:26.285+00:00",
+              "duration_ms": 5.24,
+              "count": 14,
+              "finished_at": "2026-10-11T14:17:26.290+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:26.290+00:00",
+              "duration_ms": 0.06,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:26.290+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:26.290+00:00",
+              "duration_ms": 6377.02,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:32.667+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:32.667+00:00",
+              "duration_ms": 265.33,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:32.932+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "623fc5b9-976d-4953-a47f-1aaf5875de0f",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 6.573,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.031+00:00",
+              "duration_ms": 105.78,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:33.137+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.137+00:00",
+              "duration_ms": 40.88,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:33.178+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.178+00:00",
+              "duration_ms": 26.0,
+              "count": 18,
+              "finished_at": "2026-10-11T14:17:33.204+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.204+00:00",
+              "duration_ms": 191.79,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:33.395+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.396+00:00",
+              "duration_ms": 5.56,
+              "count": 14,
+              "finished_at": "2026-10-11T14:17:33.401+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.401+00:00",
+              "duration_ms": 0.06,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:33.401+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:33.401+00:00",
+              "duration_ms": 5859.46,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:39.261+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.261+00:00",
+              "duration_ms": 255.36,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:39.516+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6240c38c-01e0-4aaf-b376-7ceb0764a06c",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 5.842,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.606+00:00",
+              "duration_ms": 101.54,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:39.708+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.708+00:00",
+              "duration_ms": 35.22,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:39.743+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.743+00:00",
+              "duration_ms": 18.7,
+              "count": 18,
+              "finished_at": "2026-10-11T14:17:39.762+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.762+00:00",
+              "duration_ms": 179.07,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:39.941+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.941+00:00",
+              "duration_ms": 4.79,
+              "count": 15,
+              "finished_at": "2026-10-11T14:17:39.946+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.946+00:00",
+              "duration_ms": 0.05,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:39.946+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:39.946+00:00",
+              "duration_ms": 5198.64,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:45.145+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.145+00:00",
+              "duration_ms": 220.89,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:45.366+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6246ce0a-0e99-40ec-9c27-3f31551a9eb6",
+          "page_hit": true,
+          "target_page_index": 8,
+          "seconds": 7.776,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.447+00:00",
+              "duration_ms": 84.65,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:45.531+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.531+00:00",
+              "duration_ms": 32.02,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:45.563+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.563+00:00",
+              "duration_ms": 22.37,
+              "count": 18,
+              "finished_at": "2026-10-11T14:17:45.586+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.586+00:00",
+              "duration_ms": 171.48,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:45.757+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.757+00:00",
+              "duration_ms": 3.94,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:45.761+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.761+00:00",
+              "duration_ms": 0.05,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:45.761+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:45.761+00:00",
+              "duration_ms": 6987.88,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:52.749+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:52.749+00:00",
+              "duration_ms": 375.95,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:53.125+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "624aadae-ebbc-41f6-9edf-f24b3567c813",
+          "page_hit": true,
+          "target_page_index": 8,
+          "seconds": 6.348,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.224+00:00",
+              "duration_ms": 111.62,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:53.336+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.336+00:00",
+              "duration_ms": 41.54,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:53.377+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.377+00:00",
+              "duration_ms": 26.28,
+              "count": 18,
+              "finished_at": "2026-10-11T14:17:53.404+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.404+00:00",
+              "duration_ms": 173.08,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:53.577+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.577+00:00",
+              "duration_ms": 3.98,
+              "count": 14,
+              "finished_at": "2026-10-11T14:17:53.581+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.581+00:00",
+              "duration_ms": 0.08,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:53.581+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:53.581+00:00",
+              "duration_ms": 5603.7,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:59.185+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.185+00:00",
+              "duration_ms": 288.02,
+              "count": 8,
+              "finished_at": "2026-10-11T14:17:59.473+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "634ad5b9-fd72-4908-adb8-a483c65233ab",
+          "page_hit": true,
+          "target_page_index": 8,
+          "seconds": 6.227,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.571+00:00",
+              "duration_ms": 87.16,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:59.658+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.658+00:00",
+              "duration_ms": 32.18,
+              "count": 0,
+              "finished_at": "2026-10-11T14:17:59.691+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.691+00:00",
+              "duration_ms": 23.83,
+              "count": 18,
+              "finished_at": "2026-10-11T14:17:59.714+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.714+00:00",
+              "duration_ms": 179.13,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:59.894+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.894+00:00",
+              "duration_ms": 6.25,
+              "count": 15,
+              "finished_at": "2026-10-11T14:17:59.900+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.900+00:00",
+              "duration_ms": 0.17,
+              "count": 21,
+              "finished_at": "2026-10-11T14:17:59.900+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T14:17:59.900+00:00",
+              "duration_ms": 5581.98,
+              "count": 21,
+              "finished_at": "2026-10-11T14:18:05.482+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T14:18:05.482+00:00",
+              "duration_ms": 229.04,
+              "count": 8,
+              "finished_at": "2026-10-11T14:18:05.711+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    "noise": {
+      "page_hits": 5,
+      "count": 8,
+      "median_seconds": 2.154,
+      "source_gap_count": 1,
+      "stage_errors": 0,
+      "questions": [
+        {
+          "qa_id": "6214c7da-0dc5-4357-875c-d320937c6786",
+          "page_hit": true,
+          "target_page_index": 3,
+          "seconds": 1.318,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.496+00:00",
+              "duration_ms": 37.81,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:07.534+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.534+00:00",
+              "duration_ms": 17.88,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:07.552+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.552+00:00",
+              "duration_ms": 13.52,
+              "count": 5,
+              "finished_at": "2026-10-11T13:58:07.565+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.565+00:00",
+              "duration_ms": 101.57,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:07.667+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.667+00:00",
+              "duration_ms": 0.9,
+              "count": 2,
+              "finished_at": "2026-10-11T13:58:07.668+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.668+00:00",
+              "duration_ms": 0.01,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:07.668+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:07.668+00:00",
+              "duration_ms": 1034.93,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:08.703+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:08.703+00:00",
+              "duration_ms": 74.5,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:08.777+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6224e485-39ff-4d02-911b-6c2825903f2e",
+          "page_hit": true,
+          "target_page_index": 3,
+          "seconds": 1.463,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:08.848+00:00",
+              "duration_ms": 39.26,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:08.887+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:08.887+00:00",
+              "duration_ms": 17.23,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:08.904+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:08.904+00:00",
+              "duration_ms": 12.62,
+              "count": 5,
+              "finished_at": "2026-10-11T13:58:08.917+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:08.917+00:00",
+              "duration_ms": 98.78,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:09.016+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:09.016+00:00",
+              "duration_ms": 0.8,
+              "count": 3,
+              "finished_at": "2026-10-11T13:58:09.016+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:09.017+00:00",
+              "duration_ms": 0.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:09.017+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:09.017+00:00",
+              "duration_ms": 1172.08,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:10.189+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.189+00:00",
+              "duration_ms": 81.97,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:10.271+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "623bc3cd-2d78-4b7a-a9ae-672615f8850e",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 1.957,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.344+00:00",
+              "duration_ms": 38.47,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:10.383+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.383+00:00",
+              "duration_ms": 20.53,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:10.403+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.403+00:00",
+              "duration_ms": 12.25,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:10.416+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.416+00:00",
+              "duration_ms": 102.59,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:10.518+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.518+00:00",
+              "duration_ms": 1.32,
+              "count": 6,
+              "finished_at": "2026-10-11T13:58:10.520+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.520+00:00",
+              "duration_ms": 0.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:10.520+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:10.520+00:00",
+              "duration_ms": 1635.69,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:12.155+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.155+00:00",
+              "duration_ms": 96.67,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:12.252+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "623fc5b9-976d-4953-a47f-1aaf5875de0f",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 2.266,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.348+00:00",
+              "duration_ms": 46.68,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:12.395+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.395+00:00",
+              "duration_ms": 22.56,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:12.418+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.418+00:00",
+              "duration_ms": 15.45,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:12.433+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.433+00:00",
+              "duration_ms": 135.46,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:12.569+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.569+00:00",
+              "duration_ms": 2.13,
+              "count": 6,
+              "finished_at": "2026-10-11T13:58:12.571+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.571+00:00",
+              "duration_ms": 0.03,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:12.571+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:12.571+00:00",
+              "duration_ms": 1882.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:14.453+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.453+00:00",
+              "duration_ms": 111.9,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:14.565+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6240c38c-01e0-4aaf-b376-7ceb0764a06c",
+          "page_hit": true,
+          "target_page_index": 6,
+          "seconds": 2.222,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.678+00:00",
+              "duration_ms": 58.59,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:14.737+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.737+00:00",
+              "duration_ms": 30.6,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:14.767+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.767+00:00",
+              "duration_ms": 19.92,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:14.787+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.787+00:00",
+              "duration_ms": 155.33,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:14.943+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.943+00:00",
+              "duration_ms": 2.32,
+              "count": 4,
+              "finished_at": "2026-10-11T13:58:14.945+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.945+00:00",
+              "duration_ms": 0.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:14.945+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:14.945+00:00",
+              "duration_ms": 1797.41,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:16.742+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:16.742+00:00",
+              "duration_ms": 113.11,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:16.856+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "6246ce0a-0e99-40ec-9c27-3f31551a9eb6",
+          "page_hit": false,
+          "target_page_index": 8,
+          "seconds": 2.086,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:16.952+00:00",
+              "duration_ms": 55.41,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:17.007+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:17.008+00:00",
+              "duration_ms": 22.34,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:17.030+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:17.030+00:00",
+              "duration_ms": 16.03,
+              "count": 5,
+              "finished_at": "2026-10-11T13:58:17.046+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:17.046+00:00",
+              "duration_ms": 139.48,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:17.185+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:17.185+00:00",
+              "duration_ms": 1.69,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:17.187+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:17.187+00:00",
+              "duration_ms": 0.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:17.187+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:17.187+00:00",
+              "duration_ms": 1715.53,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:18.903+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:18.903+00:00",
+              "duration_ms": 89.5,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:18.992+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "624aadae-ebbc-41f6-9edf-f24b3567c813",
+          "page_hit": false,
+          "target_page_index": 8,
+          "seconds": 2.276,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.084+00:00",
+              "duration_ms": 46.17,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:19.130+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.130+00:00",
+              "duration_ms": 28.76,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:19.159+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.159+00:00",
+              "duration_ms": 17.17,
+              "count": 6,
+              "finished_at": "2026-10-11T13:58:19.176+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.176+00:00",
+              "duration_ms": 133.6,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:19.310+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.310+00:00",
+              "duration_ms": 1.58,
+              "count": 5,
+              "finished_at": "2026-10-11T13:58:19.312+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.312+00:00",
+              "duration_ms": 0.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:19.312+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:19.312+00:00",
+              "duration_ms": 1906.07,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:21.218+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.218+00:00",
+              "duration_ms": 99.6,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:21.317+00:00"
+            }
+          ]
+        },
+        {
+          "qa_id": "634ad5b9-fd72-4908-adb8-a483c65233ab",
+          "page_hit": false,
+          "target_page_index": 8,
+          "seconds": 2.223,
+          "stage_trace": [
+            {
+              "stage": "scope",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.414+00:00",
+              "duration_ms": 45.89,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:21.460+00:00"
+            },
+            {
+              "stage": "source_quality",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.460+00:00",
+              "duration_ms": 23.01,
+              "count": 1,
+              "finished_at": "2026-10-11T13:58:21.483+00:00"
+            },
+            {
+              "stage": "bm25",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.483+00:00",
+              "duration_ms": 17.27,
+              "count": 6,
+              "finished_at": "2026-10-11T13:58:21.500+00:00"
+            },
+            {
+              "stage": "dense",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.500+00:00",
+              "duration_ms": 133.03,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:21.633+00:00"
+            },
+            {
+              "stage": "noise_tolerant",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.633+00:00",
+              "duration_ms": 1.84,
+              "count": 5,
+              "finished_at": "2026-10-11T13:58:21.635+00:00"
+            },
+            {
+              "stage": "rrf",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.635+00:00",
+              "duration_ms": 0.02,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:21.635+00:00"
+            },
+            {
+              "stage": "rerank",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:21.635+00:00",
+              "duration_ms": 1863.84,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:23.499+00:00"
+            },
+            {
+              "stage": "evidence_pack",
+              "status": "completed",
+              "started_at": "2026-10-11T13:58:23.499+00:00",
+              "duration_ms": 92.59,
+              "count": 7,
+              "finished_at": "2026-10-11T13:58:23.592+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    "noise_with_original_ocr_repair": {
+      "page_hits": 8,
+      "count": 8,
+      "median_seconds": 4.502
+    }
+  },
+  "repair_method": "Replace the empty noise source with OCR parsed from the corresponding original PDF raster; preserve the other two noisy pages; no ground truth substituted.",
+  "validation": {
+    "structure_native_retrieval": 64,
+    "parse_tasks": 20,
+    "human_review": 6,
+    "rag_agent_protocol": 46,
+    "frontend": 62,
+    "typescript": "passed",
+    "build": "passed",
+    "http_test_setup": "isolated data; public demo disabled; IPv4 socketpair for native Windows async tests; no production startup verification"
+  },
+  "earlier_test_failures": "Windows HTTP fixture initially failed at socketpair initialization; isolated runner used IPv4 and elevated loopback. Multi-call tests hit the previous 8-second client deadline, leading to late requests contaminating the next fixture. Client deadline changed to 30 seconds; complete 46-test rerun passed."
+}

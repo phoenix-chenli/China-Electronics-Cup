@@ -30,8 +30,9 @@ def targets(page):
     items=[]
     for b in page.get('blocks',[]):
         if b.get('table_id') or b.get('chart_id') or b.get('source_pending_reason')=='unverified_chart_association':continue
-        items.append({'id':'block:'+b['id'],'kind':'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')})
+        items.append({'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')})
     for i,b in enumerate(page.get('recognition_pending',[])):
+        if b.get('source_pending_reason')=='formula_structure_requires_review':continue
         items.append({'id':'pending:'+str(i),'kind':'text','text':b.get('text',''),'box':b.get('box'),'media_id':b.get('media_id'),'status':'pending'})
     for t in page.get('tables',[]):
         for c in t.get('cells',[]):
@@ -93,6 +94,12 @@ def publish(did,req):
             if not req.text.strip():raise ValueError('文字修正不能为空')
             _rewrite(page,[(b['start'],b['end'],req.text)])
             b.update(**mark,source_method='human_review',location_precision='region' if b.get('box') else 'text_range')
+            if b.get('formula_id'):
+                formula=next(f for f in page['formulas'] if f['id']==b['formula_id'])
+                formula.update(text=req.text,latex=req.text,reason=None,**mark)
+                page['recognition_pending']=[l for l in page.get('recognition_pending',[])
+                    if not (l.get('media_id')==formula.get('media_id') and l.get('observation_id') in formula.get('evidence_lines',[]))]
+                b.pop('source_pending_reason',None)
         elif req.target.startswith('pending:'):
             i=int(req.target.split(':',1)[1]);line=page['recognition_pending'].pop(i)
             if not req.text.strip():raise ValueError('文字修正不能为空')
@@ -132,6 +139,8 @@ def publish(did,req):
         page.setdefault('provenance',{})['human_reviewed_targets']=sum(r['page']==req.page for r in body['human_reviews'])
         page['text_available']=any(b.get('status','confirmed')=='confirmed' and b.get('text','').strip() for b in page['blocks'])
         page['ocr_required']=not page['text_available']
+        from .document_quality import inspect
+        inspect(page)
         body['parser']='human-review-v1'
         with s.conn() as db:
             db.execute('BEGIN IMMEDIATE')

@@ -30,7 +30,10 @@ class LocalClient:
     def request(self, method, path, **kwargs):
         body = json.dumps(kwargs['json']).encode() if 'json' in kwargs else b'' if method != 'GET' else None
         req = urllib.request.Request(self.url + path, data=body, method=method, headers={'Content-Type': 'application/json'})
-        try: response = urllib.request.urlopen(req, timeout=8)
+        # A model-driven query may make several bounded calls before responding.
+        # Keep the client alive long enough to avoid leaking an unfinished run
+        # into the next scripted fixture, especially on Windows CPU runtimes.
+        try: response = urllib.request.urlopen(req, timeout=30)
         except urllib.error.HTTPError as exc: response = exc
         text = response.read().decode()
         return SimpleNamespace(status_code=response.code, text=text, json=lambda: json.loads(text))

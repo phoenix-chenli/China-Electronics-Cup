@@ -15,6 +15,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 NS={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main',
+    'm':'http://schemas.openxmlformats.org/officeDocument/2006/math',
     'r':'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
     'a':'http://schemas.openxmlformats.org/drawingml/2006/main',
     'c':'http://schemas.openxmlformats.org/drawingml/2006/chart'}
@@ -75,9 +76,14 @@ def _paragraph(node):
     def visible(parent):
         if parent.tag in {W+'del',W+'moveFrom',W+'drawing',W+'pict',W+'object',W+'tbl',W+'instrText'}:return
         yield parent
+        if parent.tag=='{'+NS['m']+'}oMath':return
         for child in parent:yield from visible(child)
     for child in visible(node):
-        if child.tag in {W+'t',W+'delText'}:
+        if child.tag=='{'+NS['m']+'}oMath':
+            from .math_structure import latex
+            try:text.append(' $'+latex(child)+'$ ')
+            except ValueError:text.append(' [公式结构需复核] ')
+        elif child.tag in {W+'t',W+'delText'}:
             if child.tag==W+'t':text.append(child.text or '')
         elif child.tag==W+'tab':text.append('\t')
         elif child.tag in {W+'br',W+'cr'}:text.append('\n')
@@ -115,6 +121,7 @@ def _table_rows(page,table,method):
             if not cell.get('text'):continue
             parents=[h for h in headers if h['row']<row and h['column']<=cell['column']<h['column']+h.get('colspan',1)]
             label=' / '.join(h['text'] for h in sorted(parents,key=lambda h:h['row']))
+            if not label and table.get('method')=='ocr_aligned_columns':label=f"第{cell['column']+1}列"
             pairs.append((label+'：' if label else '')+cell['text'])
         if not pairs:continue
         block=_append(page,title+f' · 第{row+1}行\n'+' | '.join(pairs),'table_row',table.get('box'),
@@ -300,6 +307,17 @@ def parse_docx(path):
                     block=_append(page,text,'heading' if level else 'text',source_part=location,source_method='docx_native',
                         level=level or 0,
                         title_path=' / '.join(titles),status='confirmed',location_precision='package_structure')
+                    for fi, math_node in enumerate(node.findall('.//m:oMath',NS)):
+                        from .math_structure import latex
+                        try:
+                            math_text=latex(math_node);math_status='confirmed';reason=None
+                        except ValueError as exc:
+                            math_text='';math_status='pending';reason=str(exc)
+                            if block:block.update(status='pending',source_pending_reason='unsupported_office_math')
+                        page.setdefault('formulas',[]).append({'id':f"docx-math-{page['number']}-{len(page.get('formulas',[]))}",
+                            'text':math_text,'latex':math_text,'status':math_status,'method':'docx_omml',
+                            'source_part':location+f'/math[{fi}]','original_xml':ET.tostring(math_node,encoding='unicode'),
+                            'reason':reason,'location_precision':'package_structure'})
                     if level and block:page['headings'].append({'title':text.strip(),'level':level,'page':page['number'],'start':block['start'],'end':block['end'],'block_id':block['id']})
                     for image in node.findall('.//a:blip',NS):
                         target=rels.get(image.get(R+'embed'))
@@ -464,7 +482,7 @@ def _remove_derived(page,media_id,visual_only=False):
     page['blocks']=kept
     for heading in page.get('headings',[]):
         heading['start']=offset(heading['start']);heading['end']=offset(heading['end'])
-    for field in ('tables','charts'):
+    for field in ('tables','charts','formulas'):
         page[field]=[x for x in page.get(field,[]) if not (x.get('media_id')==media_id and (not visual_only or x.get('method')=='visual_observed'))]
         for obj in page[field]:
             for span in obj.get('text_ranges',[]):span['start']=offset(span['start']);span['end']=offset(span['end'])
@@ -478,10 +496,17 @@ def apply_ocr_page(base_page,result,media_id=None):
     else:_remove_derived(page,media_id)
     page.setdefault('tables',[]);page.setdefault('charts',[]);page.setdefault('issues',[])
     page.setdefault('ocr_lines',[]);page.setdefault('recognition_pending',[])
+    page.setdefault('formulas',[])
+    if media_id is None:page['formulas']=[]
+    else:page['formulas']=[f for f in page['formulas'] if f.get('media_id')!=media_id]
+    formula_lines={i for f in result.get('formulas',[]) for i in f.get('evidence_lines',[])}
     if media_id is None:page['ocr_lines']=[];page['recognition_pending']=[]
     for index,line in enumerate(result.get('lines',[])):
         status=line.get('status') or ('confirmed' if line.get('confidence',0)>=.8 else 'pending')
         observation={**copy.deepcopy(line),'status':status,'media_id':media_id,'observation_id':index}
+        if index in formula_lines:
+            observation.update(status='pending',source_pending_reason='formula_structure_requires_review')
+            status='pending'
         page['ocr_lines'].append(observation)
         if status!='confirmed':
             page['recognition_pending'].append(observation);continue
@@ -492,6 +517,13 @@ def apply_ocr_page(base_page,result,media_id=None):
         table['id']=f"p{page['number']}-{media_id or 'page'}-{table['id']}"
         for ci,cell in enumerate(table.get('cells',[])):cell['id']=table['id']+f'-c{ci}'
         page['tables'].append(table);_table_rows(page,table,'ocr_geometry')
+    for formula in result.get('formulas',[]):
+        formula=copy.deepcopy(formula);formula['media_id']=media_id
+        formula['id']=f"p{page['number']}-{media_id or 'page'}-{formula['id']}"
+        page['formulas'].append(formula)
+        _append(page,formula['text'],'formula',formula['box'],source_method='ocr_spatial_formula',
+                status=formula['status'],media_id=media_id,formula_id=formula['id'],
+                location_precision='region',source_pending_reason='formula_structure_requires_review')
     page['text_available']=any(b.get('status','confirmed')=='confirmed' and b['text'].strip() for b in page['blocks'])
     page['ocr_required']=not page['text_available']
     _recognition_issues(page,result,'ocr',media_id,reset=True)
@@ -499,7 +531,8 @@ def apply_ocr_page(base_page,result,media_id=None):
     page['provenance']={**result.get('provenance',{}),'method':'ocr','model':result.get('model'),'location_precision':'line',
         'fingerprint':result.get('fingerprint'),'input_image_sha256':result.get('input_image_sha256'),
         'duration_ms':result.get('duration_ms'),'rotation':result.get('rotation',0),'human_reviewed':False}
-    return page
+    from .document_quality import inspect
+    return inspect(page)
 
 
 def apply_visual_page(base_page,result,media_id=None):

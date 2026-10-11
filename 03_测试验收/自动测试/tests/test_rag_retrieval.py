@@ -102,6 +102,24 @@ class RagRetrievalTest(unittest.TestCase):
             self.assertEqual(doc["sha256"], evidence["locator"]["sha256"])
             self.assertEqual("located", documents.resolve(evidence["locator"], evidence["snippet"])["status"])
         self.assertTrue(all(stage["duration_ms"] is not None for stage in result["stages"]))
+    def test_noise_recall_preserves_original_spelling_and_scope(self):
+        wanted,_=self.source('DailyDialog retrievel memory performance has a dialogue score of 26.01.')
+        outside,_=self.source('DailyDialog retrieval memory outside the selected corpus.')
+        result=retrieval.search('DailyDialog retrieval memory performance',self.scope([wanted['id']]))
+        self.assertTrue(result['retrieval']['channels']['noise_tolerant'])
+        self.assertTrue(any('retrievel' in e['snippet'] for e in result['evidence']))
+        self.assertEqual({wanted['id']},{e['locator']['document_id'] for e in result['evidence']})
+    def test_large_scope_noise_preselection_keeps_typo_candidate(self):
+        candidates=[{'id':str(i),'text':'unrelated forests birds'} for i in range(450)]
+        candidates.append({'id':'wanted','text':'DailyDialog retrievel memory performance'})
+        found=retrieval._noise_recall('DailyDialog retrieval memory performance',candidates)
+        self.assertEqual(found[0]['id'],'wanted')
+    def test_empty_source_reports_gap_instead_of_complete_retrieval(self):
+        good,_=self.source('DailyDialog scores have printed values.')
+        empty,_=self.source('',suffix='txt')
+        result=retrieval.search('DailyDialog scores',self.scope([good['id'],empty['id']]))
+        self.assertEqual('degraded',result['status'])
+        self.assertTrue(any(g['document_id']==empty['id'] and g['reason_code']=='source_text_missing' for g in result['source_gaps']))
     def test_scope_filter_happens_before_limit(self):
         wanted, _ = self.source("保险规定：车辆购置费用可以报销。")
         for _ in range(35):
