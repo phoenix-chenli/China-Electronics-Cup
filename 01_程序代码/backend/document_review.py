@@ -30,7 +30,7 @@ def targets(page):
     items=[]
     for b in page.get('blocks',[]):
         if b.get('table_id') or b.get('chart_id') or b.get('source_pending_reason')=='unverified_chart_association':continue
-        items.append({'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')})
+        items.append({'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') or b.get('formula_ids') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')})
     for i,b in enumerate(page.get('recognition_pending',[])):
         if b.get('source_pending_reason')=='formula_structure_requires_review':continue
         items.append({'id':'pending:'+str(i),'kind':'text','text':b.get('text',''),'box':b.get('box'),'media_id':b.get('media_id'),'status':'pending'})
@@ -94,6 +94,11 @@ def publish(did,req):
             if not req.text.strip():raise ValueError('文字修正不能为空')
             _rewrite(page,[(b['start'],b['end'],req.text)])
             b.update(**mark,source_method='human_review',location_precision='region' if b.get('box') else 'text_range')
+            if b.get('formula_ids'):
+                for fid in b['formula_ids']:
+                    formula=next(f for f in page['formulas'] if f['id']==fid)
+                    formula.update(status='superseded',verification='human_reviewed_paragraph',human_reviewed=True,reviewed_by=req.operator.strip(),replacement_block_id=b['id'],reason=None)
+                b.pop('source_pending_reason',None)
             if b.get('formula_id'):
                 formula=next(f for f in page['formulas'] if f['id']==b['formula_id'])
                 formula.update(text=req.text,latex=req.text,reason=None,**mark)

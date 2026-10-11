@@ -88,4 +88,41 @@ class StructureTest(unittest.TestCase):
         with self.assertRaises(ValueError):math_structure.latex(ET.fromstring('<m:unknown xmlns:m="'+math_structure.M[1:-1]+'"/>'))
 
 
+class BoundaryOptimizationTest(unittest.TestCase):
+    def test_hidden_degree_and_sum_bounds(self):
+        ns=math_structure.M[1:-1]
+        node=ET.fromstring(f'<m:rad xmlns:m="{ns}"><m:radPr><m:degHide/></m:radPr><m:deg><m:r><m:t>3</m:t></m:r></m:deg><m:e><m:r><m:t>x</m:t></m:r></m:e></m:rad>')
+        self.assertEqual(math_structure.latex(node),r'\sqrt{x}')
+        node=ET.fromstring(f'<m:nary xmlns:m="{ns}"><m:naryPr><m:chr m:val="∑"/><m:subHide/></m:naryPr><m:sub><m:r><m:t>i</m:t></m:r></m:sub><m:e><m:r><m:t>x</m:t></m:r></m:e></m:nary>')
+        self.assertEqual(math_structure.latex(node),r'\sum x')
+    def test_numeric_headers_and_missing_cell(self):
+        lines=[line('Model',.1,.1,.1),line('2023',.4,.1),line('2024',.6,.1)]
+        for y,name in [(.15,'Alpha'),(.2,'Beta'),(.25,'Gamma')]:
+            lines += [line(name,.1,y,.1),line('10',.4,y)]
+            if name!='Beta':lines.append(line('20',.6,y))
+        found=spatial.detect(lines)
+        self.assertEqual(len(found['tables']),1)
+        self.assertFalse(found['formulas'])
+        page=native.apply_ocr_page(native._page(1),{'lines':lines,**found})
+        row=next(b['text'] for b in page['blocks'] if b['kind']=='table_row' and 'Beta' in b['text'])
+        self.assertIn('2023：10',row);self.assertNotIn('2024：',row)
+    def test_merged_row_name_requires_observed_vertical_overlap(self):
+        lines=[line('Model',.1,.1,.1),line('Dev',.4,.1),line('Test',.6,.1)]
+        lines += [line('Alpha',.1,.15,.1,.065),line('10',.4,.15),line('20',.6,.15),line('30',.4,.2),line('40',.6,.2),line('Beta',.1,.25,.1),line('50',.4,.25),line('60',.6,.25)]
+        table=spatial.borderless_tables(lines)[0]
+        alpha=next(c for c in table['cells'] if c['text']=='Alpha')
+        self.assertEqual(alpha['rowspan'],2)
+        page=native.apply_ocr_page(native._page(1),{'lines':lines,'tables':[table]})
+        row=next(b['text'] for b in page['blocks'] if b['kind']=='table_row' and 'Test：40' in b['text'])
+        self.assertIn('Alpha',row)
+    def test_compact_fraction_is_pending_not_a_guessed_value(self):
+        lines=[line('1',.4,.3),line('N',.4,.34)]
+        found=spatial.detect(lines);self.assertEqual(len(found['formulas']),1)
+        page=native.apply_ocr_page(native._page(1),{'lines':lines,**found})
+        self.assertFalse(page['text_available'])
+    def test_noise_first_character_and_chinese(self):
+        from backend.rag_retrieval import _noise_recall
+        for query,text in [('营业收入增长','营叶收入增长'),('retrieval accuracy','xetrieval accuracy')]:
+            self.assertEqual(_noise_recall(query,[{'id':'one','text':text}])[0]['id'],'one')
+
 if __name__=='__main__':unittest.main()

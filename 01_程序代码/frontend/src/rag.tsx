@@ -22,7 +22,7 @@ export function RetrievalStatus({result}:Obj){
  const label=({hybrid:'关键词与向量',lexical:'仅关键词',dense:'仅向量',selection:'固定选中原文'} as Obj)[mode]
  const errors=Array.isArray(record.errors)?record.errors.map((item:unknown)=>typeof item==='string'?item:typeof item==='object'&&item!==null?String((item as Obj).error||''):String(item)).filter(Boolean):[]
  const gaps=Array.isArray(result.rag?.source_gaps)?result.rag.source_gaps:[]
- return <div className="rag-retrieval-status">{label&&<small>本轮检索：{label}</small>}{typeof record.reranked==='boolean'&&mode!=='selection'&&<small>候选重排：{record.reranked?'实际完成':'未完成，沿用召回排序'}</small>}{gaps.length>0&&<details><summary>有 {gaps.length} 页缺少可用文字，需要重识别原件</summary>{gaps.map((gap:Obj,i:number)=><p key={i}>第 {gap.page} 页：{gap.reason}。{gap.instruction}</p>)}</details>}{errors.length>0&&<details><summary>本轮检索降级说明</summary>{errors.map((error:string,i:number)=><p key={i}>{error}</p>)}</details>}</div>
+ return <div className="rag-retrieval-status">{label&&<small>本轮检索：{label}</small>}{typeof record.reranked==='boolean'&&mode!=='selection'&&<small>候选重排：{record.reranked?'实际完成':'未完成，沿用召回排序'}</small>}{gaps.length>0&&<details><summary>有 {gaps.length} 处来源缺失或结构待复核</summary>{gaps.map((gap:Obj,i:number)=><p key={i}>{gap.document_name||'文档'} · 第 {gap.page} 页：{gap.reason}。{gap.instruction}</p>)}</details>}{errors.length>0&&<details><summary>本轮检索降级说明</summary>{errors.map((error:string,i:number)=><p key={i}>{error}</p>)}</details>}</div>
 }
 
 export function documentQuestionScope(mode:string,document:Obj,page:number,selection:Obj|null=null):Obj{

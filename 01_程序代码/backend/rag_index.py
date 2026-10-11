@@ -20,7 +20,7 @@ from pathlib import Path
 
 from . import documents, store as s
 
-CHUNKER_VERSION = "source-spans-v2-confirmed"
+CHUNKER_VERSION = "source-spans-v3-partial-structure"
 CHUNK_TOKENS = 384
 OVERLAP_TOKENS = 48
 LOCK = threading.RLock()
@@ -266,6 +266,8 @@ def _build_document(document_id, cancelled=None):
         if not page["text_available"]:
             missing.append({"page": page["number"], "reason": "待文字识别" if page.get("ocr_required") else "没有文字"})
             continue
+        pending=[{'kind':kind,'id':obj.get('id')} for kind in ('formulas','tables','charts') for obj in page.get(kind,[]) if obj.get('status')=='pending']
+        if pending:missing.append({'page':page['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending','structures':pending})
         spans = [(offset+start,offset+end,hard) for offset,limit in _confirmed_ranges(page)
                  for start,end,hard in _split(page["text"][offset:limit],count,budget)]
         for start, end, hard_split in spans:

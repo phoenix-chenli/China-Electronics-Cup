@@ -26,7 +26,7 @@ RRF_K = 60
 def _noise_recall(query, candidates, cancelled=None, deadline=None):
     """Bounded spelling-tolerant recall only; original evidence is never rewritten."""
     stop={'what','which','the','is','in','of','on','for','with','and','to','a','an','was','does','by','as','it','that','this'}
-    terms=sorted(set(re.findall(r'[a-z0-9]{3,}',query.lower()))-stop,key=lambda t:(-len(t),t))[:24]
+    terms=sorted(set(re.findall(r'[a-z0-9]{3,}|[\u4e00-\u9fff]{2,}',query.lower()))-stop,key=lambda t:(-len(t),t))[:24]
     if not terms:return []
     # Cheap bounded preselection for large corpora, then expensive spelling
     # comparisons over at most 400 original chunks. No index text is rewritten.
@@ -42,14 +42,14 @@ def _noise_recall(query, candidates, cancelled=None, deadline=None):
     frequency=Counter(); vocabularies=[]
     for chunk in candidates:
         _guard(cancelled,deadline)
-        words=set(re.findall(r'[a-z0-9]{3,}',chunk['text'].lower()))
+        words=set(re.findall(r'[a-z0-9]{3,}|[\u4e00-\u9fff]{2,}',chunk['text'].lower()))
         vocabularies.append(words);frequency.update(words)
     scores=[]
     for chunk,words in zip(candidates,vocabularies):
         _guard(cancelled,deadline)
         score=0.;matched=0
         for term in terms:
-            choices=sorted(w for w in words if w[0]==term[0] and abs(len(w)-len(term))<=2)
+            choices=sorted(w for w in words if abs(len(w)-len(term))<=2)
             best=1. if term in words else max((SequenceMatcher(None,term,w,autojunk=False).ratio() for w in choices[:256]),default=0.)
             if best>=.82:
                 matched+=1;score+=best/(1+frequency.get(term,0))
@@ -70,11 +70,15 @@ def _source_gaps(scope, cancelled=None, deadline=None, document_ids=None):
             missing=json.loads(row['body']).get('missing_pages',[]) if row else []
         else:
             body=documents.layout(source['document_id'],source['sha256'],source['parse_id'])
-            missing=[{'page':p['number'],'reason':'没有可用文字或结构待复核'} for p in body['pages']
-                     if p['number']==scope.get('page') and not p['text_available']]
+            missing=[]
+            for p in body['pages']:
+                if p['number']!=scope.get('page'):continue
+                if not p['text_available']:missing.append({'page':p['number'],'reason':'没有可用文字或结构待复核'})
+                elif any(obj.get('status')=='pending' for kind in ('formulas','tables','charts') for obj in p.get(kind,[])):
+                    missing.append({'page':p['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending'})
         for page in missing:
-            gaps.append({**source,**page,'action':'reparse_original','reason_code':'source_text_missing',
-                         'instruction':'请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据'})
+            gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],'action':'reparse_original','reason_code':page.get('reason_code','source_text_missing'),
+                         'instruction':('本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据' if page.get('reason_code')=='source_structure_pending' else '请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据')})
     return gaps
 
 

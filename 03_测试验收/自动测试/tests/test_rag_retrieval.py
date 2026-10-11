@@ -114,6 +114,18 @@ class RagRetrievalTest(unittest.TestCase):
         candidates.append({'id':'wanted','text':'DailyDialog retrievel memory performance'})
         found=retrieval._noise_recall('DailyDialog retrieval memory performance',candidates)
         self.assertEqual(found[0]['id'],'wanted')
+    def test_readable_page_reports_pending_structure_in_frozen_generation(self):
+        doc,_=self.source('Readable introduction with source information.')
+        original=documents.layout(doc['id'])
+        body={k:copy.deepcopy(v) for k,v in original.items() if k not in {'document','parse_id'}}
+        body['pages'][0]['formulas']=[{'id':'formula-one','status':'pending','text':'incomplete'}]
+        with s.conn() as db:documents.save_parse(db,doc['id'],doc['sha256'],body,'public pending structure')
+        index.submit_index([doc['id']],synchronous=True)
+        scope=self.scope([doc['id']]);result=retrieval.search('Readable introduction',scope)
+        self.assertTrue(result['evidence'])
+        self.assertEqual(result['status'],'degraded')
+        self.assertEqual(result['source_gaps'][0]['reason_code'],'source_structure_pending')
+        self.assertEqual(result['source_gaps'][0]['structures'][0]['id'],'formula-one')
     def test_empty_source_reports_gap_instead_of_complete_retrieval(self):
         good,_=self.source('DailyDialog scores have printed values.')
         empty,_=self.source('',suffix='txt')

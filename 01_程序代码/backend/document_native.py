@@ -307,6 +307,7 @@ def parse_docx(path):
                     block=_append(page,text,'heading' if level else 'text',source_part=location,source_method='docx_native',
                         level=level or 0,
                         title_path=' / '.join(titles),status='confirmed',location_precision='package_structure')
+                    formula_ids=[]
                     for fi, math_node in enumerate(node.findall('.//m:oMath',NS)):
                         from .math_structure import latex
                         try:
@@ -318,6 +319,8 @@ def parse_docx(path):
                             'text':math_text,'latex':math_text,'status':math_status,'method':'docx_omml',
                             'source_part':location+f'/math[{fi}]','original_xml':ET.tostring(math_node,encoding='unicode'),
                             'reason':reason,'location_precision':'package_structure'})
+                        formula_ids.append(page['formulas'][-1]['id'])
+                    if block and formula_ids:block['formula_ids']=formula_ids
                     if level and block:page['headings'].append({'title':text.strip(),'level':level,'page':page['number'],'start':block['start'],'end':block['end'],'block_id':block['id']})
                     for image in node.findall('.//a:blip',NS):
                         target=rels.get(image.get(R+'embed'))

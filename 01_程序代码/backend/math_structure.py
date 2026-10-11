@@ -28,9 +28,12 @@ def latex(node, depth=0):
         return '{'+part('e')+'}^{'+part('sup')+'}'
     if name == 'sSubSup':
         return '{'+part('e')+'}_{'+part('sub')+'}^{'+part('sup')+'}'
+    def hidden(prop, key):
+        flag=node.find(M+prop+'/'+M+key)
+        return flag is not None and flag.get(M+'val','1') in {'1','true','on'}
     if name == 'rad':
         degree = node.find(M+'deg')
-        return r'\sqrt'+('['+latex(degree, depth+1)+']' if degree is not None and list(degree) else '')+'{'+part('e')+'}'
+        return r'\sqrt'+('['+latex(degree, depth+1)+']' if degree is not None and list(degree) and not hidden('radPr','degHide') else '')+'{'+part('e')+'}'
     if name == 'nary':
         prop = node.find(M+'naryPr/'+M+'chr')
         symbol = prop.get(M+'val', '∫') if prop is not None else '∫'
@@ -39,7 +42,7 @@ def latex(node, depth=0):
             raise ValueError('不支持的多项运算符')
         for tag, prefix in [('sub', '_'), ('sup', '^')]:
             term = node.find(M+tag)
-            if term is not None and list(term):
+            if term is not None and list(term) and not hidden('naryPr',tag+'Hide'):
                 op += prefix+'{'+latex(term, depth+1)+'}'
         return op+' '+part('e')
     if name in {'oMath', 'oMathPara', 'r', 'num', 'den', 'e', 'sub', 'sup', 'deg'}:

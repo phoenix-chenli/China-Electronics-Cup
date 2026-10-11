@@ -21,6 +21,21 @@ class DocumentReviewTests(unittest.TestCase):
         return self.client.post('/api/documents/'+d['id']+'/review',json={
             'version':d['sha256'],'parse_id':data['parse_id'],'page':1,'target':target,
             'operator':'公开夹具验收者','accepted':True,**values})
+    def test_docx_formula_paragraph_review_supersedes_old_observations(self):
+        from tests.test_document_native import docx
+        from backend import document_native as native
+        path=s.UPLOADS/(uuid.uuid4().hex+'.docx')
+        ns=native.NS['m']
+        docx(path,f'<w:p><m:oMath xmlns:m="{ns}"><m:d><m:e><m:r><m:t>x</m:t></m:r></m:e></m:d></m:oMath></w:p>')
+        d=s.index_document(path);before=documents.layout(d['id'])
+        target=next(t for t in document_review.targets(before['pages'][0]) if t['kind']=='formula')
+        with patch.object(rag_index,'submit_index',return_value={'id':'one-document-job'}):
+            response=self.correct(d,before,target['id'],text='(x)')
+        self.assertEqual(response.status_code,200,response.text)
+        page=documents.layout(d['id'])['pages'][0]
+        self.assertEqual(page['formulas'][0]['status'],'superseded')
+        self.assertEqual(next(c['value'] for c in page['quality_checks'] if c['name']=='公式结构待复核'),0)
+        self.assertEqual(documents.layout(d['id'],d['sha256'],before['parse_id'])['pages'][0]['formulas'][0]['status'],'pending')
     def test_formula_review_confirms_complete_structure_and_keeps_old_parse(self):
         from backend import document_native as native,ocr_structure
         d,_,body=self.source('')

@@ -6,7 +6,7 @@ def inspect(page):
         {'name':'可读取文字层','value':bool(text.strip()),'status':'observed'},
         {'name':'异常字符比例','value':round(ratio,4),'count':bad,'status':'needs_review' if bad>=2 and ratio>.02 else 'observed'},
         {'name':'待确认文字块','value':sum(b.get('status','confirmed')!='confirmed' for b in page.get('blocks',[])),'status':'observed'}]
-    formula_pending=sum(f.get('status')!='confirmed' for f in page.get('formulas',[]))
+    formula_pending=sum(f.get('status') not in {'confirmed','superseded'} for f in page.get('formulas',[]))
     page['issues']=[i for i in page.get('issues',[]) if not isinstance(i,dict) or i.get('code')!='formula_structure_incomplete']
     page['quality_checks'].append({'name':'公式结构待复核','value':formula_pending,'status':'needs_review' if formula_pending else 'observed'})
     if formula_pending:

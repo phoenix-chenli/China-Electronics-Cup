@@ -10,7 +10,7 @@ import {savedAnalysisName} from '../src/result-presentation'
 const noop=()=>{}
 test('missing source pages request rereading originals without claiming complete recall',()=>{
  const html=renderToStaticMarkup(<RetrievalStatus result={{rag:{retrieval:[{channels:{bm25:[],dense:[]},reranked:false}],source_gaps:[{page:9,reason:'没有文字',instruction:'请重新识别固定原件'}]}}}/>)
- for(const text of ['1 页缺少可用文字','第 9 页','重新识别固定原件'])assert.ok(html.includes(text),text)
+ for(const text of ['1 处来源缺失或结构待复核','第 9 页','重新识别固定原件'])assert.ok(html.includes(text),text)
  assert.ok(!html.includes('候选重排：实际完成'))
 })
 const evidence=[{id:'doc-1',type:'document',source:'2024售后条款.pdf',snippet:'甲产品限额为100元。',locator:{document_id:'d1',sha256:'a'.repeat(64),parse_id:'p1',page:2}},{id:'doc-2',type:'document',source:'补充条件.md',snippet:'正常使用适用。',locator:{document_id:'d2',sha256:'b'.repeat(64),parse_id:'p2',page:1}}]
@@ -135,4 +135,10 @@ test('companion refuses celebration for insufficient or partially answered compl
  }
  assert.equal(answerNeedsContext({...base,answer_status:'supported',claims:[{status:'supported'}]}),false)
  assert.equal(answerNeedsContext({...base,answer_status:'supported',claims:[]}),true)
+})
+
+test('partial structures identify the document without describing a readable page as empty',()=>{
+ const html=renderToStaticMarkup(<RetrievalStatus result={{rag:{retrieval:[{channels:{bm25:[],dense:[]}}],source_gaps:[{document_name:'公式说明.docx',page:1,reason:'页面局部结构尚待核验',instruction:'请对照原件人工复核'}]}}}/>)
+ for(const text of ['公式说明.docx','页面局部结构尚待核验','人工复核'])assert.ok(html.includes(text),text)
+ assert.ok(!html.includes('页缺少可用文字'))
 })
