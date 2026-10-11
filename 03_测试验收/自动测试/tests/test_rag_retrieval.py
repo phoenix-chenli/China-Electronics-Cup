@@ -3,6 +3,7 @@
 These protocol fixtures do not establish real Chinese model answer quality.
 """
 import hashlib
+import copy
 import json
 import os
 import sys
@@ -107,6 +108,41 @@ class RagRetrievalTest(unittest.TestCase):
             self.source("车辆购置车辆购置车辆购置，其他公司的保险规定。")
         result = retrieval.search("车辆购置保险规定", self.scope([wanted["id"]]))
         self.assertEqual({wanted["id"]}, {e["locator"]["document_id"] for e in result["evidence"]})
+    def test_model_document_filter_narrows_frozen_scope_before_recall(self):
+        wanted,_=self.source('甲机构报销条件：提交原始发票。')
+        other,_=self.source('乙机构报销条件：不接受发票复印件。')
+        scope=self.scope([wanted['id'],other['id']]); frozen=copy.deepcopy(scope)
+        result=retrieval.search('报销条件',scope,document_ids=[wanted['id']])
+        self.assertEqual(scope,frozen)
+        self.assertTrue(result['evidence'])
+        self.assertEqual({wanted['id']},{e['locator']['document_id'] for e in result['evidence']})
+        self.assertEqual(result['retrieval']['document_filter'],[wanted['id']])
+    def test_model_document_filter_cannot_expand_scope(self):
+        wanted,_=self.source('甲机构条件为提交发票。');outside,_=self.source('乙机构条件为提交凭证。')
+        scope=self.scope([wanted['id']])
+        for ids in [[],[outside['id']],['unknown'],wanted['id'],[None]]:
+            with self.assertRaisesRegex(ValueError,'固定范围'):
+                retrieval.search('提交条件',scope,document_ids=ids)
+    def test_exact_lexical_body_match_survives_semantic_reranker_demoting_it(self):
+        wanted,_=self.source('维修报销的原始凭证要求是原件发票和验收单。')
+        for i in range(9):
+            self.source(f'一般费用规则第{i}项，申请须经审批，不涉及维修原始凭证。')
+        scope=self.scope();chunks=index.chunks_for_scope(scope)
+        wanted_id=next(c['id'] for c in chunks if c['document_id']==wanted['id'])
+        lexical=[{'id':wanted_id,'score':-10.0,'rank':1}]
+        ranked=[{'id':c['id'],'rerank_rank':i+1} for i,c in enumerate(
+            sorted(chunks,key=lambda c:c['id']==wanted_id))]
+        with patch.object(retrieval,'_bm25',return_value=lexical),\
+             patch.object(retrieval,'_dense',return_value=[]),\
+             patch.object(retrieval,'reciprocal_rank_fusion',return_value=ranked),\
+             patch.object(retrieval,'_rerank',return_value=ranked):
+            result=retrieval.search('维修原始凭证要求',scope)
+        self.assertGreater(next(r['rerank_rank'] for r in ranked if r['id']==wanted_id),retrieval.EVIDENCE_LIMIT)
+        self.assertEqual(result['retrieval']['preserved_lexical_candidate'],wanted_id)
+        self.assertEqual(result['evidence'][0]['locator']['document_id'],wanted['id'])
+        self.assertLessEqual(result['count'],retrieval.EVIDENCE_LIMIT)
+        self.assertEqual(result['evidence'][0]['snippet'],next(c['text'] for c in chunks if c['id']==wanted_id))
+
     def test_chunk_bounds_preserve_unicode_and_original_text(self):
         doc, _ = self.source("# 条件😀\n\n"+("适用条件为年度营业收入达到门槛，金额为100万元。\n"*100))
         scope = self.scope([doc["id"]]); chunks = index.chunks_for_scope(scope)

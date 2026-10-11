@@ -36,6 +36,19 @@ test('database result retains every column and SQL evidence without guessed curr
  assert.ok(!html.includes('净销售额（元）'))
 })
 
+test('SQL precision view shows trailing zeros while original result and source remain unchanged',()=>{
+ const original={...result,rows:[{amount:19.5,product_id:'0007',note:null}],columns:['amount','product_id','note'],
+  database_query:{...result.database_query,rows:[{amount:19.5,product_id:'0007',note:null}],
+   display_rows:[{amount:'19.50',product_id:'0007',note:null}],display_decimals:{amount:2}}}
+ const before=JSON.stringify(original)
+ const html=renderToStaticMarkup(<ResultData result={original} onSource={noop}/>)
+ for(const value of ['19.50','0007','NULL','展开原始表格','原始返回值'])assert.ok(html.includes(value),value)
+ assert.equal(JSON.stringify(original),before)
+ const raw=renderToStaticMarkup(<DataTable rows={original.rows} columns={original.columns} raw/>)
+ assert.ok(raw.includes('19.5'))
+ assert.ok(!raw.includes('19.50'))
+})
+
 test('database analysis suppresses sales conditions, bonus shortcuts, metrics and regional followups',()=>{
  const storage=globalThis.localStorage
  Object.defineProperty(globalThis,'localStorage',{value:{getItem:()=>JSON.stringify(['scenario'])},configurable:true})

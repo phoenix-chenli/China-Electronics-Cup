@@ -4,10 +4,10 @@ import {api,Obj,num} from './ui'
 import './agent.css'
 
 type AgentMode='auto'|'local'|'model'
-type QueryScope='sales'|'database'|'knowledge'|'hybrid'
+export type QueryScope='sales'|'database'|'knowledge'|'hybrid'
 type AgentConnection={id:string;name:string;model?:string;enabled:boolean;available:boolean;reason?:string}
 type AgentDatabase={id:string;name:string;kind:string;available:boolean;reason?:string}
-type AgentConfig={mode:AgentMode;connection_id:string|null;max_steps:number;connections:AgentConnection[];available:boolean;query_scope?:QueryScope;database_connection_id?:string|null;databases?:AgentDatabase[]}
+type AgentConfig={mode:AgentMode;connection_id:string|null;max_steps:number;connections:AgentConnection[];available:boolean;query_scope?:QueryScope;database_connection_id?:string|null;databases?:AgentDatabase[];project?:Obj;project_name?:string;profile?:Obj;source_profile?:Obj;source_label?:string;default_scope?:string;document_count?:number;starter_questions?:string[];scope_options?:Obj[]}
 type AgentPlanStep={id?:string;label?:string;tool?:string;status?:string}
 export type AgentSnapshot={mode?:'model'|'local';connection_id?:string;model?:string;plan?:AgentPlanStep[];review?:{status?:string;detail?:string};usage?:Obj;calls?:number|Obj[]}
 export type AgentEvent={step_id?:string;id?:string;label?:string;tool?:string;status?:string;summary?:string;duration_ms?:number;started_at?:string;finished_at?:string;inputs?:Obj;outputs?:Obj}
@@ -34,20 +34,57 @@ export function ModelPackageStatus({model}:{model:Obj}){
  return <span className={'badge '+(model.installed&&model.verified?'green':'amber')}>{label}</span>
 }
 
-export function QueryContextBar({config,result,onSettings,onNew}:{config:AgentConfig|null;result?:Obj|null;onSettings:()=>void;onNew?:()=>void}){
+export const queryScopeOptions=[{id:'sales',label:'销售示例'},{id:'database',label:'数据库问数'},{id:'knowledge',label:'知识库问答'},{id:'hybrid',label:'数据库与文档'}]
+export function projectQueryProfile(config:Obj|null):Obj{return {...config,...(config?.source_profile||config?.profile||config?.project?.source_profile||{})}}
+export function queryScopeOverride(value:unknown):QueryScope|undefined{return queryScopeOptions.some(option=>option.id===value)?value as QueryScope:undefined}
+export function queryContextPolicy(hasResult:boolean,retainContext=true){
+ const inheritContext=hasResult&&retainContext
+ return {inheritContext,allowNewScope:!inheritContext}
+}
+
+export function taskFeedback(value:Obj):{kind:string;title:string;detail:string;action:string}{
+ const message=typeof value.error==='string'?value.error:typeof value.text==='string'?value.text:typeof value.answer==='string'?value.answer:''
+ const code=String(value.error_code||value.error_kind||value.failure_kind||'')+' '+message
+ if(value.status==='cancelled')return {kind:'cancelled',title:'本轮查询已取消',detail:message||'已停止继续执行本轮任务。',action:'可以修改问题后发送，或重试这一轮。'}
+ if(value.status==='needs_clarification'||value.answer_status==='needs_clarification')return {kind:'clarification',title:'需要补充问题范围',detail:value.clarification?.title||message||'请补充时间、对象或统计口径。',action:'确认条件后继续，已有资料和来源会保留。'}
+ if(value.error_detail?.category==='database')return {kind:'database',title:'数据库查询未完成',detail:message||'查询未通过校验或数据库未返回结果。',action:'检查字段、筛选条件和只读连接后再试；执行记录保留了具体失败步骤。'}
+ if(/timeout|timed.?out|超时|超过.*时限/i.test(code))return {kind:'timeout',title:'本轮请求超时',detail:message||'服务未在等待时限内返回结果。',action:'可缩小问题范围后重试，或检查模型连接。'}
+ if(/connect|network|unreachable|连接|断开|网络|不可达|服务未启动/i.test(code))return {kind:'connection',title:'连接暂时失败',detail:message||'当前无法连接所需服务。',action:'检查本地服务或模型连接，恢复后可重试本轮。'}
+ if(['refused','insufficient_evidence'].includes(value.answer_status)||/资料不足|证据不足|缺少.*资料|没有.*依据|insufficient/i.test(code))return {kind:'insufficient',title:'现有资料不足以回答',detail:value.refusal_reason||message||'未取得支持这个问题的充分资料。',action:'可补充资料，或缩小时间、对象和问题范围。'}
+ return {kind:'failed',title:'本轮查询未完成',detail:message||'执行结束，但未返回可展示的答案。',action:'可以重试这一轮，并查看执行记录中的具体原因。'}
+}
+
+export function TaskProgress({task,stage}:Obj){
+ const [now,setNow]=useState(Date.now)
+ useEffect(()=>{setNow(Date.now());if(!task||!['queued','running','cancelling'].includes(task.status))return;const timer=window.setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer)},[task?.id,task?.status])
+ const queued=task?.status==='queued',cancelling=task?.status==='cancelling'
+ const start=Date.parse(task?.created_at||''),seconds=Number.isFinite(start)?Math.max(0,Math.floor((now-start)/1000)):null
+ const elapsed=seconds===null?'':seconds<60?seconds+' 秒':Math.floor(seconds/60)+' 分 '+seconds%60+' 秒'
+ return <div className="task-stage-detail"><strong>{cancelling?'正在取消':queued?'正在排队':task?'正在执行':'正在提交问题'}</strong><span role="status">{stage||task?.stage||task?.progress||(queued?'等待执行资源':'准备读取问题与来源')}</span>{elapsed&&<small aria-live="off">{queued?'已等待':'提交后已过'} {elapsed}</small>}</div>
+}
+
+export function QueryContextBar({config,result:priorResult,inheritContext=true,onSettings,onNew,routePreview,scopeOverride='',onScopeChange,previewLoading=false,previewError='',busy=false}:{config:AgentConfig|null;result?:Obj|null;inheritContext?:boolean;onSettings:()=>void;onNew?:()=>void;routePreview?:Obj|null;scopeOverride?:string;onScopeChange?:(scope:string)=>void;previewLoading?:boolean;previewError?:string;busy?:boolean}){
+ const result=queryContextPolicy(!!priorResult,inheritContext).inheritContext?priorResult:null
  const scopeNames:Record<string,string>={sales:'销售示例',database:'数据库问数',knowledge:'知识库问答',hybrid:'数据库与文档',document:'当前文档'}
  if(!config&&!result)return <div className="query-context"><span>问答配置尚未读取</span><button type="button" className="text-link" onClick={onSettings}>检查设置</button></div>
- const scope=result?(result.query_spec?.metric==='document'?'document':result.query_spec?.query_scope||'sales'):config?.query_scope||'sales'
+ const profile=projectQueryProfile(config),preview=!result?routePreview:null
+ const scope=result?(result.query_spec?.metric==='document'&&result.query_spec?.document_context?'document':result.query_spec?.query_scope||'sales'):preview?.query_scope||scopeOverride||(profile.default_scope==='auto'?'auto':profile.default_scope||config?.query_scope||'sales')
  const database=result?.database_query?.source||result?.query_spec?.database_source
  const cid=result?(database?.connection_id??result.query_spec?.database_connection_id??null):config?.database_connection_id
- const source=scope==='database'||scope==='hybrid'?database?.name||config?.databases?.find(d=>d.id===cid)?.name||(cid?'所选数据库':'本机工作库'):scope==='sales'?'本机销售示例':scope==='document'?'固定文档版本':'本机知识库'
+ const projectName=config?.project_name||config?.project?.name
+ const frozenDocuments=result?.rag?.scope?.documents||result?.query_spec?.rag_scope?.documents||[]
+ const frozenSource=frozenDocuments.length?frozenDocuments.slice(0,2).map((document:Obj)=>document.name||'所选文档').join('、')+(frozenDocuments.length>2?' 等 '+frozenDocuments.length+' 份资料':''):''
+ const source=(!result&&preview?.source_label)||(!result&&!scopeOverride&&profile.source_label)||(scope==='database'||scope==='hybrid'?database?.name||config?.databases?.find(d=>d.id===cid)?.name||(cid?'所选数据库':'本机工作库'):scope==='sales'?'本机销售示例':scope==='document'?'固定文档版本':result?frozenSource||'查询时的知识库文档':profile.source_label||'本机知识库')
  const items=(config?.connections||[]).filter(c=>c.enabled&&c.available)
  const selected=config?.connection_id?config.connections.find(c=>c.id===config.connection_id):items.length===1?items[0]:undefined
  const resolvedLocal=config?.mode==='local'||config?.mode==='auto'&&!config.connection_id&&items.length===0
- const mode=result?(result.agent?.mode==='model'?result.agent.model||'模型驱动':result.agent?.mode==='local'?'本地确定性':'处理方式未记录'):resolvedLocal?(scope==='knowledge'?'关键词原文检索':'本地确定性查询'):selected?.available&&selected.enabled?selected.model||selected.name:'问答模型不可用'
- const blocked=!result&&((scope==='database'||scope==='hybrid')&&(resolvedLocal||!selected?.available)||config?.mode==='model'&&!selected?.available||!!config?.connection_id&&!selected?.available||config?.mode==='auto'&&!config.connection_id&&items.length>1)
- const changed=!!result&&!!config&&(scope!==(config.query_scope||'sales')||(scope==='database'||scope==='hybrid')&&(cid??null)!==(config.database_connection_id??null))
- return <div className={'query-context'+(blocked?' needs-setup':'')} aria-label="当前提问范围"><div><strong>{result?'追问沿用':'新问答'} · {scopeNames[scope]||'范围待确认'}</strong><span>{source} · {mode}</span>{result&&<small>来源与版本沿用本轮记录。</small>}{blocked&&<small>请先选择可用模型和数据源。</small>}{!result&&scope==='knowledge'&&resolvedLocal&&<small>当前仅返回检索原文，尚未启用综合回答。</small>}{changed&&<small>默认设置已改变；切换来源请新建问答。</small>}</div><button type="button" className="text-link" onClick={changed&&onNew?onNew:onSettings}>{changed&&onNew?'新建问答':'问答设置'}</button></div>
+ const modelReady=!!selected?.available&&!!selected.enabled
+ const mode=!config?'问答模型设置尚未读取':resolvedLocal?(scope==='knowledge'||scope==='document'?'关键词原文检索':'本地确定性查询'):modelReady?selected.model||selected.name:'问答模型不可用'
+ const blocked=!!config&&((scope==='database'||scope==='hybrid')&&(resolvedLocal||!modelReady)||config.mode==='model'&&!modelReady||!!config.connection_id&&!modelReady||config.mode==='auto'&&!config.connection_id&&items.length>1)
+ const changed=!!result&&!!config&&profile.default_scope!=='auto'&&(scope!==(config.query_scope||'sales')||(scope==='database'||scope==='hybrid')&&(cid??null)!==(config.database_connection_id??null))
+ const options=(preview?.scope_options||profile.scope_options||config?.scope_options||queryScopeOptions).filter((option:Obj)=>queryScopeOverride(option.id)&&(!profile.managed_public||option.id!=='sales'))
+ const count=preview?.document_count??(!scopeOverride?profile.document_count:undefined)
+ return <div className={'query-context'+(blocked?' needs-setup':'')} aria-label="当前提问范围"><div><strong>{result?'追问沿用':priorResult&&!inheritContext?'独立新问题':scopeOverride?'已选范围':preview?'推荐范围':'新问答'} · {scope==='auto'?'按问题自动匹配':scopeNames[scope]||'范围待确认'}</strong>{!result&&projectName&&<small className="query-project-name">当前项目 · {projectName}</small>}<span>{source}{!result&&Number.isInteger(count)?' · '+count+' 份文档':''} · {mode}</span>{result&&<small>来源与版本沿用本轮记录。</small>}{priorResult&&!inheritContext&&<small>已关闭保留上下文，本轮按项目重新选择资料。</small>}{!result&&onScopeChange&&<label className="query-scope-choice">本次范围<select aria-label="本次问答范围" value={scopeOverride} disabled={busy} onChange={event=>onScopeChange(event.target.value)}><option value="">自动匹配项目资料</option>{options.map((option:Obj)=><option key={option.id} value={option.id}>{option.label||scopeNames[option.id]}</option>)}</select></label>}{!result&&previewLoading&&<small role="status">正在核对项目资料范围…</small>}{!result&&!previewLoading&&preview?.reason&&<small className="query-route-reason">{preview.reason}</small>}{!result&&previewError&&<small role="status">范围预览暂不可用；提交时会重新核对所选范围。{previewError}</small>}{blocked&&<small>请先选择可用模型和数据源。</small>}{!result&&scope==='knowledge'&&resolvedLocal&&<small>当前仅返回检索原文，尚未启用综合回答。</small>}{changed&&<small>默认设置已改变；切换来源请新建问答。</small>}</div><button type="button" className="text-link" onClick={changed&&onNew?onNew:onSettings}>{changed&&onNew?'新建问答':'问答设置'}</button></div>
 }
 
 export function AgentConfigPanel({notify,updated,refreshKey=0}:Obj){

@@ -1,11 +1,12 @@
 import React,{useEffect,useState} from 'react'
 import {AlertCircle,BookOpen,CheckCircle2,Download,FileText,LoaderCircle,RefreshCw,ShieldCheck} from 'lucide-react'
 import {api,Obj,Modal,ListPagination} from './ui'
+import {sourcePosition} from './result-presentation'
 import './rag.css'
 import {ModelPackageStatus} from './agent'
 
 const indexNames:Record<string,string>={pending:'等待建立',indexing:'建立中',lexical_ready:'关键词就绪',ready:'混合检索就绪',degraded:'检索降级',failed:'建立失败',cancelled:'已取消',interrupted:'已中断'}
-const answerNames:Record<string,string>={supported:'已生成有依据的回答',partial:'仅回答有依据的部分',refused:'证据不足，未生成确定结论',needs_clarification:'需要确认问题范围'}
+const answerNames:Record<string,string>={supported:'已生成有依据的回答',partial:'仅回答有依据的部分',refused:'证据不足，未生成确定结论',insufficient_evidence:'现有资料不足以给出确定值',needs_clarification:'需要确认问题范围',failed:'本轮查询未完成'}
 export const isKnowledgeResult=(result?:Obj)=>!!result?.rag||['knowledge','hybrid'].includes(result?.query_spec?.query_scope)
 const notes=(values:unknown):string[]=>Array.isArray(values)?values.map(v=>typeof v==='string'?v:typeof v==='object'&&v!==null?String((v as Obj).detail||(v as Obj).requirement||(v as Obj).text||''):String(v)).filter(Boolean):[]
 
@@ -35,9 +36,9 @@ export function documentQuestionScope(mode:string,document:Obj,page:number,selec
 
 export function RagOutcome({result,onEvidence}:Obj){
  const status=result.answer_status==='supported'&&!result.claims?.length?'refused':result.answer_status||(!result.claims?.length?'refused':'supported'),missing=notes(result.missing_requirements),conflicts=notes(result.conflicts)
- const local=result.agent?.mode==='local',caution=status!=='supported'||local,text=result.refusal_reason||(status==='refused'?result.answer:!result.claims?.length?result.answer:'')
- const evidence:Obj[]=result.evidence||[],related=status==='refused'||status==='partial'||!result.claims?.length
- return <section className={'rag-outcome '+(caution?'is-caution':'')} aria-label="本轮证据回答状态" role="status"><div className="rag-outcome-heading">{caution?<AlertCircle size={18}/>:<CheckCircle2 size={18}/>}<strong>{local?'原文检索，未生成综合答案':answerNames[status]||'本轮回答状态待确认'}</strong></div>{text&&<p className="preserve-text">{text}</p>}{missing.length>0&&<div><h4>仍缺少的信息</h4><ul>{missing.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{conflicts.length>0&&<div><h4>资料中的冲突</h4><ul>{conflicts.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{related&&evidence.length>0&&<details><summary>可查看的相关原文 · {evidence.length} 处</summary><p className="muted">相关材料供核对，不能据此补出尚未获支持的结论。</p><div className="rag-related">{evidence.map(e=><button type="button" className="text-link" key={e.id} onClick={()=>onEvidence?.(e)}><FileText size={14}/>{e.source}{e.locator?.page?' · 第 '+e.locator.page+' 页':''}</button>)}</div></details>}<RetrievalStatus result={result}/></section>
+ const local=result.agent?.mode==='local',caution=status!=='supported'||local,text=result.refusal_reason||(['refused','failed','insufficient_evidence'].includes(status)?result.answer:!result.claims?.length?result.answer:'')
+ const evidence:Obj[]=result.evidence||[],related=['refused','partial','insufficient_evidence'].includes(status)||!result.claims?.length
+ return <section className={'rag-outcome '+(caution?'is-caution':'')} aria-label="本轮证据回答状态" role="status"><div className="rag-outcome-heading">{caution?<AlertCircle size={18}/>:<CheckCircle2 size={18}/>}<strong>{local?'原文检索，未生成综合答案':answerNames[status]||'本轮回答状态待确认'}</strong></div>{text&&<p className="preserve-text">{text}</p>}{missing.length>0&&<div><h4>仍缺少的信息</h4><ul>{missing.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{conflicts.length>0&&<div><h4>资料中的冲突</h4><ul>{conflicts.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{related&&evidence.length>0&&<details><summary>可查看的相关{evidence.some(e=>e.type!=='document')?'依据':'原文'} · {evidence.length} 处</summary><p className="muted">相关材料供核对，不能据此补出尚未获支持的结论。</p><div className="rag-related">{evidence.map(e=><button type="button" className="text-link" key={e.id} onClick={()=>onEvidence?.(e)}><FileText size={14}/>{e.source}{e.locator?.page?' · '+sourcePosition(e.locator):''}</button>)}</div></details>}<RetrievalStatus result={result}/></section>
 }
 
 export function RagScopeNote({result}:Obj){

@@ -1,0 +1,1064 @@
+{
+  "dataset_id": "evidenceflow-public-statistics-fresh-20261011",
+  "dataset_sha256": "2513698355fd3beb2918c413aae7b8d80c3be6544fcea48d3aee450fa6abe714",
+  "run_kind": "regression",
+  "frozen_at": "2026-10-11T10:27:14+08:00",
+  "started_at": "2026-10-11T07:53:41.467964+00:00",
+  "phase": "completed",
+  "model": "deepseek-v4.1-flash",
+  "source_sha256": {
+    "agent.py": "dbc6164349ba1810a059fbbb9a7d4201a3ea3dc6b303e3dd4e07470a5b003453",
+    "connections.py": "79ffb6266ed36bd1210ad0d6ebae17441ffd92f4707b2a63b0b76fb7c9b4c194",
+    "database_query.py": "9fadfe3021414b1baeeb459b993b22285a8d765b2c5d9e7611e7f74d16e30c04",
+    "sql_guard.py": "5949cd6bc81f66fe923f5d8b7498bc3e6c98612108432efbeee6cb1cad11e55e",
+    "rag_grounding.py": "6cabc886641d85a4f8679a675a1fb525e623c4351988b5dc1b79a484ebe8eb25",
+    "public_statistics.py": "ac5398aaba20b486e45480e38480230dd10b3e95e0a8c25ac3b9188841e8c43f",
+    "query_routing.py": "1539c72acfc96d26893e13bc5e26c68f5b55d0a5ef7520326aab443fefe59cc8"
+  },
+  "project_id": "public-statistics",
+  "workers": 2,
+  "human_review": "pending",
+  "selected_case_ids": [
+    "public-new-20"
+  ],
+  "no_post_retries": true,
+  "reference_answers_sent_to_model": false,
+  "boundary": "SQL严格行匹配与引用定位是自动诊断，不能替代答全、口径和引用语义的真人复核。",
+  "requests": {
+    "public-new-20": {
+      "started_at": "2026-10-11T07:53:41.469093+00:00",
+      "status": "returned",
+      "payload_fields": [
+        "question",
+        "project_id",
+        "scope_override"
+      ]
+    }
+  },
+  "results": [
+    {
+      "case_id": "public-new-20",
+      "category": "missing_year_no_extrapolation",
+      "scope": "database",
+      "question": "请报出淮南、新津和石景山2025年实际GDP，直接给官方数，不做预测。",
+      "http_status": 200,
+      "error": null,
+      "duration_ms": 7005.9,
+      "model_calls": 3,
+      "usage": {
+        "completion_tokens": 237,
+        "prompt_tokens": 19091,
+        "total_tokens": 19328
+      },
+      "nonempty_answer": true,
+      "expected_status": "insufficient_evidence",
+      "expected_state_match": true,
+      "strict_sql_rows_match": true,
+      "citation_location_checks": [],
+      "result": {
+        "run_id": "02518e2f-8514-4772-97be-05b12f3d6d37",
+        "question": "请报出淮南、新津和石景山2025年实际GDP，直接给官方数，不做预测。",
+        "workspace_id": "sales-demo",
+        "query_spec": {
+          "metric": "database",
+          "query_scope": "database",
+          "database_connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a",
+          "database_connection_revision": 2,
+          "routing": {
+            "query_scope": "database",
+            "recommended_scope": "hybrid",
+            "selected_scope": "database",
+            "reason": "本轮采用你明确选择的范围。统计数值需要数据库计算，并用原始公报核对单位、口径和出处。",
+            "source_label": "三地2024年官方统计公报与原文转换件",
+            "document_count": 5,
+            "project_id": "public-statistics",
+            "project_name": "公开统计分析",
+            "scope_options": [
+              {
+                "id": "database",
+                "label": "数据库"
+              },
+              {
+                "id": "knowledge",
+                "label": "文档"
+              },
+              {
+                "id": "hybrid",
+                "label": "数据库与文档"
+              }
+            ],
+            "database_connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a"
+          },
+          "database_source": {
+            "kind": "sqlite",
+            "connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a",
+            "revision": 2,
+            "name": "公开统计公报 只读",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34"
+          },
+          "schema_fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34",
+          "last_sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+          "last_params": [],
+          "question": "请报出淮南、新津和石景山2025年实际GDP，直接给官方数，不做预测。"
+        },
+        "status": "completed",
+        "answer": "这条SQL在本轮数据源与筛选条件下返回0行，未取得可用于回答的记录。这不表示所问数值为0，也不证明全库或外部资料不存在；请核对查询条件或补充资料。",
+        "headline": "当前查询没有取得可回答的记录",
+        "metrics": [],
+        "claims": [
+          {
+            "id": "claim-1",
+            "query_id": "database-1",
+            "text": "该只读查询返回0行；请核对查询条件与业务口径。",
+            "evidence_ids": [
+              "database-a7d40d31c385415f8144443b735ad585"
+            ],
+            "status": "supported",
+            "kind": "database_empty",
+            "value": null,
+            "unit": null,
+            "query_provenance": {
+              "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+              "params": [],
+              "source_fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34",
+              "result_sha256": "f288f4ff4c85a43d170cd2df255f35d71e9360090f31f44a3f237f473c86cdf1",
+              "columns": [
+                "地区",
+                "年份",
+                "GDP_亿元",
+                "单位",
+                "是否初步核算",
+                "审核状态",
+                "来源说明"
+              ],
+              "returned_row_count": 0,
+              "truncated": false
+            },
+            "fact_id": "database-1-empty"
+          }
+        ],
+        "evidence": [
+          {
+            "id": "database-a7d40d31c385415f8144443b735ad585",
+            "type": "sql_result",
+            "source": "公开统计公报 只读",
+            "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+            "status": "executed",
+            "locator": {
+              "query_scope": "database",
+              "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+              "params": [],
+              "columns": [
+                "地区",
+                "年份",
+                "GDP_亿元",
+                "单位",
+                "是否初步核算",
+                "审核状态",
+                "来源说明"
+              ],
+              "rows": [],
+              "row_count": 0,
+              "row_limit": 200,
+              "truncated": false,
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a",
+                "revision": 2,
+                "name": "公开统计公报 只读",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34"
+              },
+              "version": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34",
+              "result_sha256": "f288f4ff4c85a43d170cd2df255f35d71e9360090f31f44a3f237f473c86cdf1",
+              "dialect": "sqlite"
+            }
+          }
+        ],
+        "events": [
+          {
+            "step_id": "agent-1",
+            "tool": "model.plan",
+            "label": "规划任务",
+            "status": "completed",
+            "started_at": "2026-10-11T07:53:41.479+00:00",
+            "duration_ms": 2285.74,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 1,
+              "message_count": 2
+            },
+            "outputs": {
+              "tool": "database.schema",
+              "action": "tool",
+              "model": "deepseek-v4-1-flash-260910",
+              "usage": {
+                "completion_tokens": 19,
+                "prompt_tokens": 3877,
+                "total_tokens": 3896
+              }
+            },
+            "finished_at": "2026-10-11T07:53:43.765+00:00"
+          },
+          {
+            "step_id": "agent-2",
+            "tool": "database.schema",
+            "label": "读取问数数据库结构",
+            "status": "completed",
+            "started_at": "2026-10-11T07:53:43.765+00:00",
+            "duration_ms": 14.57,
+            "summary": "执行完成",
+            "inputs": {},
+            "outputs": {
+              "boundary": "字段与约束来自数据库；候选关联仅通过当前键唯一/值覆盖检查，未冒充声明外键。",
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a",
+                "revision": 2,
+                "name": "公开统计公报 只读",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34"
+              },
+              "truncated": false,
+              "tables": [
+                {
+                  "schema": "main",
+                  "name": "public_indicators",
+                  "qualified_name": "main.public_indicators",
+                  "columns": [
+                    {
+                      "name": "metric_id",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "metric_name",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "unit",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "definition",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "metric_id"
+                  ],
+                  "unique_keys": [
+                    {
+                      "name": "sqlite_autoindex_public_indicators_1",
+                      "columns": [
+                        "metric_id"
+                      ],
+                      "source": "database_constraint"
+                    }
+                  ],
+                  "foreign_keys": []
+                },
+                {
+                  "schema": "main",
+                  "name": "public_observations",
+                  "qualified_name": "main.public_observations",
+                  "columns": [
+                    {
+                      "name": "region_id",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "year",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "metric_id",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "value_decimal",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "value",
+                      "type": "REAL",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "unit",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "population_type",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "price_basis",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "statistical_scope",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "preliminary",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "source_id",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "anchor_id",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "review_status",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "source_note",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "region_id",
+                    "year",
+                    "metric_id"
+                  ],
+                  "unique_keys": [
+                    {
+                      "name": "sqlite_autoindex_public_observations_1",
+                      "columns": [
+                        "region_id",
+                        "year",
+                        "metric_id"
+                      ],
+                      "source": "database_constraint"
+                    }
+                  ],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "anchor_id"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "public_source_anchors",
+                      "referenced_columns": [
+                        "anchor_id"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    },
+                    {
+                      "id": "fk-1",
+                      "columns": [
+                        "source_id"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "public_sources",
+                      "referenced_columns": [
+                        "source_id"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    },
+                    {
+                      "id": "fk-2",
+                      "columns": [
+                        "metric_id"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "public_indicators",
+                      "referenced_columns": [
+                        "metric_id"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    },
+                    {
+                      "id": "fk-3",
+                      "columns": [
+                        "region_id"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "public_regions",
+                      "referenced_columns": [
+                        "region_id"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                },
+                {
+                  "schema": "main",
+                  "name": "public_regions",
+                  "qualified_name": "main.public_regions",
+                  "columns": [
+                    {
+                      "name": "region_id",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "region_name",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "region_id"
+                  ],
+                  "unique_keys": [
+                    {
+                      "name": "sqlite_autoindex_public_regions_2",
+                      "columns": [
+                        "region_name"
+                      ],
+                      "source": "database_constraint"
+                    },
+                    {
+                      "name": "sqlite_autoindex_public_regions_1",
+                      "columns": [
+                        "region_id"
+                      ],
+                      "source": "database_constraint"
+                    }
+                  ],
+                  "foreign_keys": []
+                },
+                {
+                  "schema": "main",
+                  "name": "public_source_anchors",
+                  "qualified_name": "main.public_source_anchors",
+                  "columns": [
+                    {
+                      "name": "anchor_id",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "source_id",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "source_pdf_page",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "source_quote",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "source_sha256",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "anchor_id"
+                  ],
+                  "unique_keys": [
+                    {
+                      "name": "sqlite_autoindex_public_source_anchors_1",
+                      "columns": [
+                        "anchor_id"
+                      ],
+                      "source": "database_constraint"
+                    }
+                  ],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "source_id"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "public_sources",
+                      "referenced_columns": [
+                        "source_id"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                },
+                {
+                  "schema": "main",
+                  "name": "public_sources",
+                  "qualified_name": "main.public_sources",
+                  "columns": [
+                    {
+                      "name": "source_id",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "title",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "institution",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "official_url",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "document_year",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "published_at",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "original_sha256",
+                      "type": "TEXT",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "page_count",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "source_note",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "source_id"
+                  ],
+                  "unique_keys": [
+                    {
+                      "name": "sqlite_autoindex_public_sources_1",
+                      "columns": [
+                        "source_id"
+                      ],
+                      "source": "database_constraint"
+                    }
+                  ],
+                  "foreign_keys": []
+                }
+              ],
+              "tables_count": 5
+            },
+            "finished_at": "2026-10-11T07:53:43.779+00:00"
+          },
+          {
+            "step_id": "agent-3",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T07:53:43.779+00:00",
+            "duration_ms": 2786.83,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 2,
+              "message_count": 4
+            },
+            "outputs": {
+              "tool": "database.query",
+              "action": "tool",
+              "model": "deepseek-v4-1-flash-260910",
+              "usage": {
+                "completion_tokens": 186,
+                "prompt_tokens": 6650,
+                "total_tokens": 6836
+              }
+            },
+            "finished_at": "2026-10-11T07:53:46.566+00:00"
+          },
+          {
+            "step_id": "agent-4",
+            "tool": "database.query",
+            "label": "校验并执行只读SQL",
+            "status": "completed",
+            "started_at": "2026-10-11T07:53:46.566+00:00",
+            "duration_ms": 66.81,
+            "summary": "执行完成",
+            "inputs": {
+              "sql": "SELECT r.region_name AS 地区, o.year AS 年份, o.value AS GDP_亿元, o.unit AS 单位, o.preliminary AS 是否初步核算, o.review_status AS 审核状态, o.source_note AS 来源说明 FROM public_observations o JOIN public_regions r ON o.region_id = r.region_id WHERE o.metric_id = 'gdp' AND o.year = 2025 AND o.region_id IN ('huainan','xinjin','shijingshan') ORDER BY r.region_name",
+              "params": [],
+              "explanation": "按地区、年份、指标筛选2025年淮南、新津、石景山的GDP公布值，关联地区表取地区名称，返回原值与单位及核算状态"
+            },
+            "outputs": {
+              "status": "executed",
+              "boundary": "返回行是实际SQL结果；未自动确认业务口径、单位或自然语言准确率。",
+              "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+              "params": [],
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a",
+                "revision": 2,
+                "name": "公开统计公报 只读",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34"
+              },
+              "validation": {
+                "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+                "tables": [
+                  "main.public_observations",
+                  "main.public_regions"
+                ],
+                "columns": [
+                  "main.public_observations.metric_id",
+                  "main.public_observations.preliminary",
+                  "main.public_observations.region_id",
+                  "main.public_observations.review_status",
+                  "main.public_observations.source_note",
+                  "main.public_observations.unit",
+                  "main.public_observations.value",
+                  "main.public_observations.year",
+                  "main.public_regions.region_id",
+                  "main.public_regions.region_name"
+                ],
+                "relations": [
+                  {
+                    "left_table": "main.public_observations",
+                    "left_columns": [
+                      "region_id"
+                    ],
+                    "right_table": "main.public_regions",
+                    "right_columns": [
+                      "region_id"
+                    ],
+                    "source": "foreign_key",
+                    "verified": true,
+                    "join_alias": "r",
+                    "join_type": "INNER"
+                  }
+                ],
+                "unit_origins": {
+                  "地区": "main.public_regions.region_name",
+                  "年份": "main.public_observations.year",
+                  "单位": "main.public_observations.unit",
+                  "是否初步核算": "main.public_observations.preliminary",
+                  "审核状态": "main.public_observations.review_status",
+                  "来源说明": "main.public_observations.source_note",
+                  "GDP_亿元": "main.public_observations.value"
+                },
+                "limit": 201,
+                "parameter_count": 0,
+                "parameter_style": "qmark",
+                "checks": [
+                  {
+                    "name": "单条只读查询及结构",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "表字段和作用域",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "声明或验证的关联键",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "返回行数预算",
+                    "status": "passed",
+                    "limit": 201
+                  }
+                ]
+              },
+              "row_limit": 200,
+              "truncated": false,
+              "facts": [
+                {
+                  "id": "database-1-empty",
+                  "query_id": "database-1",
+                  "text": "该只读查询返回0行；请核对查询条件与业务口径。",
+                  "evidence_ids": [
+                    "database-a7d40d31c385415f8144443b735ad585"
+                  ],
+                  "status": "supported",
+                  "kind": "database_empty",
+                  "value": null,
+                  "unit": null
+                }
+              ],
+              "facts_count": 1,
+              "rows": [],
+              "rows_count": 0,
+              "evidence": [
+                {
+                  "id": "database-a7d40d31c385415f8144443b735ad585",
+                  "type": "sql_result",
+                  "source": "公开统计公报 只读",
+                  "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+                  "page": null,
+                  "version": null
+                }
+              ],
+              "evidence_count": 1
+            },
+            "finished_at": "2026-10-11T07:53:46.633+00:00"
+          },
+          {
+            "step_id": "agent-5",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T07:53:46.633+00:00",
+            "duration_ms": 1830.93,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 3,
+              "message_count": 6
+            },
+            "outputs": {
+              "action": "answer",
+              "model": "deepseek-v4-1-flash-260910",
+              "usage": {
+                "completion_tokens": 32,
+                "prompt_tokens": 8564,
+                "total_tokens": 8596
+              }
+            },
+            "finished_at": "2026-10-11T07:53:48.464+00:00"
+          },
+          {
+            "step_id": "agent-6",
+            "tool": "answer.verify",
+            "label": "核验并组织答案",
+            "status": "completed",
+            "started_at": "2026-10-11T07:53:48.464+00:00",
+            "duration_ms": 0.25,
+            "summary": "执行完成",
+            "inputs": {
+              "claim_count": 1,
+              "claim_bindings": [
+                {
+                  "fact_id": "database-1-empty"
+                }
+              ]
+            },
+            "outputs": {
+              "status": "needs_evidence",
+              "checks": [
+                {
+                  "name": "同次真实SQL空结果及来源绑定",
+                  "status": "passed"
+                }
+              ]
+            },
+            "finished_at": "2026-10-11T07:53:48.464+00:00"
+          }
+        ],
+        "rows": [],
+        "columns": [
+          "地区",
+          "年份",
+          "GDP_亿元",
+          "单位",
+          "是否初步核算",
+          "审核状态",
+          "来源说明"
+        ],
+        "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+        "formulas": [],
+        "checks": [
+          {
+            "name": "单条只读查询及结构",
+            "status": "passed"
+          },
+          {
+            "name": "表字段和作用域",
+            "status": "passed"
+          },
+          {
+            "name": "声明或验证的关联键",
+            "status": "passed"
+          },
+          {
+            "name": "返回行数预算",
+            "status": "passed",
+            "limit": 201
+          }
+        ],
+        "features": {
+          "clarification": true,
+          "semantic_validation": true,
+          "evidence_binding": true,
+          "document_reparse": true,
+          "temporal_rules": true,
+          "unit_guard": true
+        },
+        "data_version": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34",
+        "created_at": "2026-10-11T07:53:41.479+00:00",
+        "agent": {
+          "mode": "model",
+          "connection_id": "03fc87bc-2307-4fd2-aab9-6dea4330a2cc",
+          "model": "deepseek-v4-1-flash-260910",
+          "plan": [
+            {
+              "id": "tool-1",
+              "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+              "tool": "database.schema",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            },
+            {
+              "id": "tool-2",
+              "label": "在已读取结构的数据库生成并执行受校验的只读SELECT，支持JOIN、聚合、CTE及子查询",
+              "tool": "database.query",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            }
+          ],
+          "calls": 3,
+          "usage": {
+            "completion_tokens": 237,
+            "prompt_tokens": 19091,
+            "total_tokens": 19328
+          },
+          "review": {
+            "status": "needs_evidence",
+            "detail": "实际空查询已绑定来源；只说明此查询范围内缺少记录，不确认业务数值或全库不存在。"
+          }
+        },
+        "database_query": {
+          "source": {
+            "kind": "sqlite",
+            "connection_id": "eebc6169-4cb9-47ff-a848-7de078ea0c0a",
+            "revision": 2,
+            "name": "公开统计公报 只读",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "9ff657c1c5076c05ffa41ecc5a0d9c5ad15823c94da44ebf6496f8ba5dc23f34"
+          },
+          "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+          "params": [],
+          "columns": [
+            "地区",
+            "年份",
+            "GDP_亿元",
+            "单位",
+            "是否初步核算",
+            "审核状态",
+            "来源说明"
+          ],
+          "rows": [],
+          "truncated": false,
+          "row_limit": 200,
+          "validation": {
+            "sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"year\" AS \"年份\", \"o\".\"value\" AS \"GDP_亿元\", \"o\".\"unit\" AS \"单位\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"review_status\" AS \"审核状态\", \"o\".\"source_note\" AS \"来源说明\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"metric_id\" = 'gdp' AND \"o\".\"year\" = 2025 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+            "tables": [
+              "main.public_observations",
+              "main.public_regions"
+            ],
+            "columns": [
+              "main.public_observations.metric_id",
+              "main.public_observations.preliminary",
+              "main.public_observations.region_id",
+              "main.public_observations.review_status",
+              "main.public_observations.source_note",
+              "main.public_observations.unit",
+              "main.public_observations.value",
+              "main.public_observations.year",
+              "main.public_regions.region_id",
+              "main.public_regions.region_name"
+            ],
+            "relations": [
+              {
+                "left_table": "main.public_observations",
+                "left_columns": [
+                  "region_id"
+                ],
+                "right_table": "main.public_regions",
+                "right_columns": [
+                  "region_id"
+                ],
+                "source": "foreign_key",
+                "verified": true,
+                "join_alias": "r",
+                "join_type": "INNER"
+              }
+            ],
+            "unit_origins": {
+              "地区": "main.public_regions.region_name",
+              "年份": "main.public_observations.year",
+              "单位": "main.public_observations.unit",
+              "是否初步核算": "main.public_observations.preliminary",
+              "审核状态": "main.public_observations.review_status",
+              "来源说明": "main.public_observations.source_note",
+              "GDP_亿元": "main.public_observations.value"
+            },
+            "limit": 201,
+            "parameter_count": 0,
+            "parameter_style": "qmark",
+            "checks": [
+              {
+                "name": "单条只读查询及结构",
+                "status": "passed"
+              },
+              {
+                "name": "表字段和作用域",
+                "status": "passed"
+              },
+              {
+                "name": "声明或验证的关联键",
+                "status": "passed"
+              },
+              {
+                "name": "返回行数预算",
+                "status": "passed",
+                "limit": 201
+              }
+            ]
+          },
+          "joins": [
+            {
+              "left_table": "main.public_observations",
+              "left_columns": [
+                "region_id"
+              ],
+              "right_table": "main.public_regions",
+              "right_columns": [
+                "region_id"
+              ],
+              "source": "foreign_key",
+              "verified": true,
+              "join_alias": "r",
+              "join_type": "INNER"
+            }
+          ],
+          "attempts": 1,
+          "explanation": "按地区、年份、指标筛选2025年淮南、新津、石景山的GDP公布值，关联地区表取地区名称，返回原值与单位及核算状态",
+          "query_id": "database-1",
+          "inspected_tables": [
+            "main.public_indicators",
+            "main.public_observations",
+            "main.public_regions",
+            "main.public_source_anchors",
+            "main.public_sources"
+          ]
+        },
+        "answer_status": "insufficient_evidence",
+        "missing_requirements": [
+          "当前SQL筛选范围内无匹配记录，尚不能给出所问确定数值。"
+        ],
+        "conflicts": [],
+        "conditions": [],
+        "coverage": {
+          "supported": 1,
+          "total": 1,
+          "percent": 100,
+          "meaning": "已绑定本轮工具来源的结论占比；不等于语义准确率"
+        },
+        "latency_ms": 6985.84,
+        "actions": [
+          {
+            "id": "save",
+            "label": "保存",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "copy",
+            "label": "复制",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "table",
+            "label": "结果表",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "recompute",
+            "label": "修改条件",
+            "enabled": false,
+            "reason": "请用自然语言追问"
+          }
+        ]
+      },
+      "human_review": "pending"
+    }
+  ],
+  "metrics": {
+    "executed_questions": 1,
+    "technical_failures": 0,
+    "nonempty_answers": 1,
+    "expected_state_matches": 1,
+    "strict_sql_rows": {
+      "matches": 1,
+      "denominator": 1
+    },
+    "citation_locations": {
+      "located": 0,
+      "denominator": 0
+    },
+    "latency_ms": {
+      "p50": 7005.9,
+      "p95": 7005.9
+    },
+    "model_calls": 3,
+    "semantic_accuracy": "human_pending"
+  },
+  "finished_at": "2026-10-11T07:53:48.477146+00:00"
+}

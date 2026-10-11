@@ -240,7 +240,7 @@ def _pack(ranked, by_id, scope, cancelled=None, deadline=None):
     return selected
 
 
-def search(query, scope, *, cancelled=None, trace=None, deadline=None):
+def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_ids=None):
     if not isinstance(query, str) or not query.strip() or len(query) > 2000:
         raise ValueError("文档检索问题需要 1–2000 个字符")
     started = time.monotonic()
@@ -249,6 +249,12 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None):
     index.initialize()
     stages, channels, errors = [], {}, []
     candidates = _stage(stages, "scope", lambda: index.chunks_for_scope(scope, cancelled=cancelled, deadline=deadline), cancelled, trace, deadline)
+    if document_ids is not None:
+        allowed_ids = {d['document_id'] for d in scope.get('documents', [])}
+        if (not isinstance(document_ids, list) or not 1 <= len(document_ids) <= 8
+                or not all(isinstance(d, str) and d in allowed_ids for d in document_ids)):
+            raise ValueError('检索文档筛选必须来自本轮固定范围，不能扩大范围')
+        candidates = [c for c in candidates if c['document_id'] in document_ids]
     by_id = {c["id"]: c for c in candidates}
     if not candidates:
         return {"status": "insufficient", "evidence": [], "count": 0, "stages": stages,
@@ -286,7 +292,21 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None):
         except Exception as exc:
             _guard(cancelled, deadline)
             errors.append({"stage": "rerank", "error": str(exc)[:500]})
-    evidence = _stage(stages, "evidence_pack", lambda: _pack(ranked, by_id, scope, cancelled, deadline), cancelled, trace, deadline)
+    # Preserve one independent lexical candidate within the existing budget:
+    # a semantic reranker can favor document titles over an exact body match.
+    # The candidate still requires original-source and factual-support review.
+    lexical = channels.get('bm25', [])
+    protected_id = lexical[0]['id'] if lexical else None
+    def pack_evidence():
+        selected = _pack(ranked, by_id, scope, cancelled, deadline)
+        if protected_id and not any(e['retrieval']['chunk_id']==protected_id for e in selected):
+            protected = next((row for row in ranked if row['id']==protected_id), None)
+            if protected is not None:
+                packing_ranked = [{**protected, 'packing_reason':'best_bm25_recall_preserved'}]+[
+                    row for row in ranked if row['id']!=protected_id]
+                selected = _pack(packing_ranked, by_id, scope, cancelled, deadline)
+        return selected
+    evidence = _stage(stages, "evidence_pack", pack_evidence, cancelled, trace, deadline)
     # Archival/revocation can happen while a model request is in flight.
     allowed = {d["document_id"] for d in index.validate_scope(scope, cancelled=cancelled, deadline=deadline)}
     evidence = [e for e in evidence if e["locator"]["document_id"] in allowed]
@@ -294,6 +314,8 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None):
     return {"status": "degraded" if errors and evidence else "retrieved" if evidence else "insufficient",
             "evidence": evidence, "count": len(evidence), "index_manifest": scope, "stages": stages,
             "retrieval": {"channels": channels, "candidate_count": len(candidates), "fusion": fused[:RERANK_LIMIT],
+                          "document_filter": list(document_ids) if document_ids is not None else None,
+                          "preserved_lexical_candidate": protected_id,
                           "reranked": reranked, "ranked": ranked[:RERANK_LIMIT], "errors": errors,
                           "lexical_generation": scope.get("lexical_generation"), "rrf_k": RRF_K,
                           "duration_ms": round((time.monotonic()-started)*1000, 2),

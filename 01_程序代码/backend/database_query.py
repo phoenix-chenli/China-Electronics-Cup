@@ -17,7 +17,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from contextlib import contextmanager
 from datetime import date, datetime, time as daytime
-from decimal import Decimal
+from decimal import Decimal, localcontext
 
 from . import connections as c, store as s
 
@@ -473,8 +473,386 @@ def _scalar(value):
     return value if value is None or isinstance(value, (str, int, float, bool)) else str(value)
 
 
+def validate_question_projection(sql, question, dialect="sqlite"):
+    """Honor explicit output counts/names before execution, never trim returned data.
+
+    Ordinary business wording is not a column contract. Quoted output names
+    apply only after an explicit '列名依次为' directive; inner CTEs are untouched.
+    """
+    if not question:
+        return None
+    import sqlglot
+    from sqlglot import exp
+    counts = {'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10}
+    matches = re.findall(r'(?:只|仅)(?:返回|输出|显示)\s*([1-9]\d?|[一二两三四五六七八九十])\s*(?:个)?列', question)
+    matches += re.findall(r'(?:返回|输出|显示|保留|列出)(?!了|过|的)[^。；;\n]{0,120}?[，,]\s*(?:共|总共)\s*([1-9]\d?|[一二两三四五六七八九十])\s*(?:个)?列',question)
+    count_values = {int(x) if x.isdigit() else counts[x] for x in matches}
+    if len(count_values) > 1:
+        raise ValueError('问题指定了不同的输出列数，请明确本轮需要几列')
+    names = None
+    directive = re.search(r'列名依次为\s*[:：]?\s*([^。；;\n]+)', question)
+    if directive:
+        raw = directive[1].strip()
+        quoted = re.findall(r'`([^`]+)`|「([^」]+)」|“([^”]+)”', raw)
+        remainder = re.sub(r'`[^`]+`|「[^」]+」|“[^”]+”', '', raw)
+        if quoted and re.fullmatch(r'[\s、,，和及与]*', remainder):
+            names = [next(value for value in group if value) for group in quoted]
+    count = next(iter(count_values)) if count_values else len(names) if names else None
+    if count is None:
+        return None
+    if names and (len(names) != count or len(names) != len(set(names))):
+        raise ValueError('指定列名与列数不一致或列名重复，请明确输出字段')
+    tree = sqlglot.parse_one(sql, read=dialect)
+    # The final branch determines UNION/INTERSECT output names; validation of
+    # compatible set-operation widths remains the database/SQL guard's job.
+    while isinstance(tree, exp.SetOperation):
+        tree = tree.this
+    if not isinstance(tree, exp.Select):
+        raise ValueError('未能确认最终SQL输出列，请使用明确的SELECT列表')
+    actual = tree.expressions
+    if any(isinstance(x, exp.Star) or isinstance(x, exp.Column) and x.is_star for x in actual):
+        raise ValueError('问题已明确输出列，不能使用未展开的SELECT *')
+    if len(actual) != count:
+        raise ValueError(f'问题明确只返回{count}列，SQL最终返回{len(actual)}列；请在SELECT中修正，不新增单位、年份或来源列，不改变原筛选和粒度')
+    actual_names = [x.alias_or_name for x in actual]
+    if names and actual_names != names:
+        raise ValueError('问题指定列名及顺序为'+json.dumps(names,ensure_ascii=False)+'，SQL最终列名为'+json.dumps(actual_names,ensure_ascii=False)+'；请按原要求设置SELECT别名及顺序')
+    return {'expected_count':count,'expected_names':names,'actual_count':len(actual),'actual_names':actual_names,'status':'passed'}
+
+
+def rounded_result_display(sql, columns, raw_rows, dialect="sqlite"):
+    """Preserve outer ROUND precision as a view, without rounding data again.
+
+    All set-operation branches must explicitly agree. Text identifiers, NULL,
+    unrounded columns and the original result/hash remain untouched.
+    """
+    import sqlglot
+    from sqlglot import exp
+    tree = sqlglot.parse_one(sql, read=dialect)
+    def branches(node):
+        if isinstance(node, exp.SetOperation):
+            return branches(node.this) + branches(node.expression)
+        return [node] if isinstance(node, exp.Select) else []
+    selects = branches(tree)
+    if not selects or any(len(node.expressions) != len(columns) for node in selects):
+        return {}
+    precision = {}
+    for index, column in enumerate(columns):
+        digits = []
+        for select in selects:
+            expression = select.expressions[index]
+            if isinstance(expression, exp.Alias):
+                expression = expression.this
+            if not isinstance(expression, exp.Round):
+                break
+            places = expression.args.get('decimals')
+            if places is None:
+                digits.append(0)
+            elif isinstance(places, exp.Literal) and not places.is_string and re.fullmatch(r'\d+', places.this):
+                digits.append(int(places.this))
+            else:
+                break
+        if len(digits) == len(selects) and len(set(digits)) == 1 and 0 <= digits[0] <= 12:
+            precision[column] = digits[0]
+    if not precision:
+        return {}
+    rows = []
+    for raw in raw_rows:
+        row = {}
+        for column, value in zip(columns, raw):
+            shown = _scalar(value)
+            if column in precision and (type(value) in (int, float) or isinstance(value, Decimal)):
+                decimal = Decimal(str(value))
+                # Formatting is bounded and may only pad zeros. A driver value
+                # that disagrees with ROUND is left exact, never silently changed.
+                if decimal.is_finite() and abs(decimal.adjusted()) <= 512:
+                    with localcontext() as context:
+                        context.prec = max(28, len(decimal.as_tuple().digits) + abs(decimal.adjusted()) + 16)
+                        padded = decimal.quantize(Decimal(1).scaleb(-precision[column]))
+                    if padded == decimal:
+                        shown = format(padded, 'f')
+            row[column] = shown
+        rows.append(row)
+    return {'display_rows': rows, 'display_decimals': precision,
+            'display_policy': 'SQL ROUND precision; zero padding only; raw rows and digest unchanged'}
+
+
+def validate_question_grain(sql, question, dialect="sqlite"):
+    """Reject a proven granularity mismatch, without guessing a business metric.
+
+    This runs after the SQL allowlist. A period filter ("March") is not a request
+    to split the answer by date. Internal CTE aggregates remain untouched.
+    """
+    if not question:
+        return
+    import sqlglot
+    from sqlglot import exp
+    tree = sqlglot.parse_one(sql, read=dialect)
+    group = tree.args.get("group") if isinstance(tree, exp.Select) else None
+    if group is None:
+        return
+    monthly = bool(re.search(r"按月|每月|逐月|月度|by\s+month|monthly", question, re.I))
+    breakdown = bool(re.search(r"分别|每[个台位种]|各[个台位种部地]|分组|按.{1,24}(?:统计|计数|计算|分组|汇总)|按(?:日|天|周|年|地区|区域|产品|站点)|排名|前\s*\d", question))
+    single_total = bool(re.search(r"只返回(?:一个|单个)?(?:总数|计数)|(?:总计|合计|总数|共有|有多少)", question))
+    if single_total and not monthly and not breakdown:
+        # An equality in the outer WHERE fixes this exact column to one value.
+        # Grouping by that column cannot split the answer into multiple rows.
+        # Do not infer this from OR, HAVING, ranges or a nested subquery, and
+        # never rewrite empty-group semantics into a manufactured zero row.
+        fixed=set()
+        def column_key(column):
+            return tuple(getattr(column,key).casefold() for key in ('catalog','db','table','name'))
+        def conjunctions(node):
+            while isinstance(node, exp.Paren):node=node.this
+            if isinstance(node, exp.And):
+                yield from conjunctions(node.this);yield from conjunctions(node.expression)
+            else:yield node
+        where=tree.args.get('where')
+        if where:
+            for predicate in conjunctions(where.this):
+                if not isinstance(predicate,exp.EQ):continue
+                for column,value in [(predicate.this,predicate.expression),(predicate.expression,predicate.this)]:
+                    if isinstance(column,exp.Column) and isinstance(value,(exp.Literal,exp.Placeholder)):
+                        fixed.add(column_key(column))
+        def resolved_group(item):
+            if isinstance(item,exp.Literal) and item.is_int:
+                position=int(item.this)-1
+                if 0<=position<len(tree.expressions):item=tree.expressions[position]
+            if isinstance(item,exp.Alias):item=item.this
+            if isinstance(item,exp.Column) and not item.table:
+                aliases=[x.this for x in tree.expressions if isinstance(x,exp.Alias) and x.alias.casefold()==item.name.casefold()]
+                if len(aliases)==1:item=aliases[0]
+            return item
+        keys=[resolved_group(item) for item in group.expressions]
+        if not keys or not all(isinstance(item,exp.Column) and
+                column_key(item) in fixed for item in keys):
+            raise ValueError("问题要求一个总计数或合计，SQL 却额外分组；仅允许WHERE已固定为单值的分组键，其余请去掉未请求的GROUP BY，保留原过滤条件")
+    if not monthly:
+        return
+    for item in group.expressions:
+        if isinstance(item, exp.Literal) and item.is_int:
+            position = int(item.this) - 1
+            if 0 <= position < len(tree.expressions):
+                item = tree.expressions[position]
+                if isinstance(item, exp.Alias):
+                    item = item.this
+        expression = item
+        rendered = expression.sql(dialect=dialect).casefold()
+        columns = list(item.find_all(exp.Column))
+        temporal_pattern = r"(?:date|time|_at$|_on$|(?:^|_)day$|日期|时间|年月|月份)"
+        temporal = any(re.search(temporal_pattern, col.name, re.I) for col in columns)
+        # GROUP BY can reference a SELECT alias or ordinal.
+        if isinstance(item, exp.Column) and not item.table:
+            aliases = [x.this for x in tree.expressions if isinstance(x, exp.Alias) and x.alias.casefold() == item.name.casefold()]
+            if aliases:
+                expression = aliases[0]
+                rendered = expression.sql(dialect=dialect).casefold()
+                temporal = any(re.search(temporal_pattern, col.name, re.I) for col in expression.find_all(exp.Column))
+        if not temporal:
+            continue
+        if not isinstance(expression, exp.Column):
+            # A source named day is not a daily output when STRFTIME extracts
+            # only year/month. Check function/format structure, not input names.
+            rendered = expression.copy().transform(lambda node:
+                exp.column('_temporal_input') if isinstance(node, exp.Column) else node).sql(dialect=dialect).casefold()
+        has_month = bool(re.search(r"%m|yyyy-mm|year_month|\bmonth\b|(?:substr|substring)\(.+,\s*1,\s*7\)", rendered))
+        has_day = bool(re.search(r"%d|yyyy-mm-dd|\bday\b", rendered))
+        if not has_month or has_day:
+            raise ValueError("问题要求按月汇总，SQL 却按原始日期或日分组；请使用年月粒度，保留原条件和其他明确维度")
+
+
+def entity_ambiguities(question, snapshot, connection_id=None, expected_revision=None, cancelled=None):
+    """Bounded exact-name lookups for explicitly singular entity questions.
+
+    Only names literally present in the question and their keys are returned.
+    This is neither a sample dump nor fuzzy entity guessing. A caller may show
+    these keys for clarification; no business query is run on an arbitrary match.
+    """
+    if not isinstance(question, str) or len(question) > 2000:
+        raise ValueError("实体消歧问题应为不超过2000字的文字")
+    singular = re.search(r"只(?:指|查|看|问).*(?:一[个台位]|其中)|其中一[个台位]|单个|哪[个台位].*(?:属于|对应)|(?:属于|对应)哪[个台位]|是哪[个台位]", question)
+    plural = re.search(r"所有|全部|每[个台位]|各[个台位]|分别|同名的?(?:都|全部)|两台|多台", question)
+    identifier = re.search(r"(?:编号|\bid\b|\b\w+_id)\s*(?:为|是|[:：=])?\s*[A-Za-z0-9_-]+", question, re.I)
+    if not singular or plural or identifier:
+        return []
+    if not isinstance(snapshot, dict) or snapshot.get("source", {}).get("connection_id") != connection_id:
+        raise ValueError("实体消歧缺少当前源的字段快照")
+    def operation(stop, deadline):
+        config = _configuration(connection_id)
+        if expected_revision is not None and config["revision"] != expected_revision:
+            raise ValueError("数据库连接版本已改变，请重新读取数据结构")
+        with _database(config, stop, deadline) as db:
+            names = [t["qualified_name"] for t in snapshot.get("tables", [])]
+            current = _inspect_on(db, config, names, stop, deadline)
+            if current["source"]["fingerprint"] != snapshot["source"]["fingerprint"]:
+                raise ValueError("数据库结构指纹已改变，请重新读取字段和关联")
+            findings, probes = [], 0
+            for table in current["tables"]:
+                keys = table.get("primary_key", [])
+                if not keys:
+                    continue
+                for field in table["columns"]:
+                    name = field["name"]
+                    if not re.search(r"(?:^name$|_name$|^title$|名称$|姓名$)", name, re.I) or name in keys:
+                        continue
+                    _guard(stop, deadline)
+                    probes += 1
+                    if probes > 12:
+                        return findings
+                    column = _quote(config, name)
+                    placeholder = "?" if config["kind"] == "sqlite" else "%s"
+                    containment = (f"INSTR({placeholder},{column})>0" if config["kind"] == "sqlite" else
+                                   f"STRPOS({placeholder},{column})>0" if config["kind"] == "postgresql" else
+                                   f"LOCATE({column},{placeholder})>0")
+                    columns = list(dict.fromkeys(keys + [name]))
+                    sql = "SELECT " + ",".join(_quote(config, k) for k in columns) + " FROM " + _qualified(config, table)
+                    sql += f" WHERE LENGTH({column})>=2 AND {containment} LIMIT 21"
+                    rows = _read(db, sql, [question], limit=21)
+                    grouped = {}
+                    for row in rows:
+                        value = row.get(name)
+                        if isinstance(value, str) and value in question:
+                            grouped.setdefault(value, []).append({k: _scalar(row[k]) for k in keys})
+                    for value, candidates in grouped.items():
+                        unique = {json.dumps(x, sort_keys=True, ensure_ascii=False): x for x in candidates}
+                        if len(unique) > 1:
+                            findings.append({"table": table["qualified_name"], "name_field": name,
+                                             "name": value, "key_fields": keys,
+                                             "candidates": list(unique.values())[:10], "truncated": len(rows) > 20 or len(unique) > 10})
+            return findings
+    return _bounded(operation, cancelled)
+
+
+def dimension_conditions(previous):
+    value = (previous or {}).get('semantic_conditions')
+    if not isinstance(value, dict):
+        return {}
+    out = {}
+    if type(value.get('year')) is int and 1000 <= value['year'] <= 9999:
+        out['year'] = value['year']
+    types = value.get('population_type')
+    if isinstance(types, list) and 1 <= len(types) <= 12 and all(isinstance(x, str) and 1 <= len(x) <= 80 for x in types):
+        out['population_type'] = list(dict.fromkeys(types))
+    return out
+
+
+def dimension_clarification(question, snapshot, connection_id=None, expected_revision=None, previous=None, cancelled=None):
+    """Ask about missing dimensions of time-indexed measures, not all records.
+
+    Only a time-keyed measurement table is considered. Distinct year/type values
+    are bounded metadata; definitions and deliberate all-period requests bypass
+    this guard. A model still owns schema linking and scope interpretation.
+    """
+    text = str(question or '')
+    previous = previous or {}
+    original = str(previous.get('original_question') or previous.get('question', ''))
+    if previous.get('clarification_question') and not re.search(r'只.*(?:解释|定义|含义|口径)|仅.*解释|不查数', text):
+        text = original + '；用户补充：' + text
+    unclear_ranking=bool(re.search(r'(?:发展|表现|综合实力|综合水平).{0,12}(?:最好|最优|排名)|(?:最好|最优).{0,8}(?:发展|表现)',text)) and not re.search(r'GDP|生产总值|增加值|人均|营收|收入|人口|浓度|revenue|population',text,re.I)
+    numeric = unclear_ranking or bool(re.search(r'多少|数值|人数|数量|金额|合计|总计|排名|排序|比较|对比|占比|比例|GDP|增加值|人口|浓度', text, re.I))
+    explanatory = bool(re.search(r'定义|含义|是什么|口径|计算方法|怎么算|如何计算|为什么|为何|能.*比较|可.*比较|历史|沿革|解释', text))
+    requests_values = bool(re.search(r'多少|(?:给出|列出).*(?:数值|金额|人数|数据)|排名|排序|合计|总计|人口(?:总量|数量)', text))
+    if not numeric or explanatory and not requests_values:
+        return None
+    if re.search(r'哪些.{0,12}(?:指标|年份|表|字段)|(?:指标|年份|表|字段).*(?:有哪些|清单|列表|种类|有多少)', text):
+        return None
+    statistical_request = bool(re.search(r'GDP|生产总值|增加值|人口|浓度|统计指标|年度指标|年度数据|观测值|营收|财政收入|居民收入|固定资产投资|revenue|population', text, re.I))
+    if not isinstance(snapshot, dict) or snapshot.get('source', {}).get('connection_id') != connection_id:
+        raise ValueError('统计口径检查缺少当前源的字段快照')
+    candidates = []
+    for table in snapshot.get('tables', []):
+        fields = {f['name'].casefold(): f for f in table['columns']}
+        if 'year' not in fields:
+            continue
+        measures = [f for name, f in fields.items() if name not in {'year', 'preliminary'}
+                    and not name.endswith('_id') and re.search(r'REAL|NUMERIC|DECIMAL|DOUBLE|FLOAT|INT', f.get('type', ''), re.I)]
+        # Birth/manufacture years in an ordinary entity table are not a missing
+        # statistical period. We need time in the grain or an indicator key.
+        named_measure = any(re.search(r'(?<![A-Za-z0-9_])' + re.escape(f['name']) + r'(?![A-Za-z0-9_])', text, re.I) for f in measures)
+        if measures and (statistical_request or named_measure or unclear_ranking) and ('year' in {k.casefold() for k in table.get('primary_key', [])}
+                         or {'metric_id', 'indicator_id'} & fields.keys()):
+            candidates.append(table)
+    if not candidates:
+        return None
+    if unclear_ranking:
+        return {'title':'请明确用于排名的指标、统计时期和评价规则；“发展或表现最好”没有统一比较口径，不能默认用某一项指标给出综合排名。',
+                'dimensions':{'comparison_metric':{'options':[],'truncated':False}},'specified':dimension_conditions(previous)}
+    inherited_text = str(previous.get('question', ''))
+    known = dimension_conditions(previous)
+    changed_year = bool(re.search(r'另.*年|其他年|换.*年', text))
+    year_requested = bool(re.search(r'(?:19|20)\d{2}|\d{4}\s*年|今年|去年|上年|本年|最新|历年|历史|所有年|全部年|各年|每年|逐年|按年|不限.*年', text))
+    if not year_requested and not changed_year:
+        year_requested = bool(known.get('year') or re.search(r'(?:19|20)\d{2}|最新|历年|每年|逐年|按年', inherited_text))
+        if not year_requested and previous.get('last_sql'):
+            import sqlglot
+            from sqlglot import exp
+            try:
+                old = sqlglot.parse_one(previous['last_sql'], read=snapshot.get('dialect', 'sqlite'))
+                year_requested = any(col.name.casefold() == 'year' for where in old.find_all(exp.Where) for col in where.find_all(exp.Column))
+            except (ValueError, sqlglot.errors.SqlglotError):
+                pass
+    wants_population = '人口' in text or 'population' in text.casefold()
+    # Published per-capita indicators can be compared while their population
+    # definition is explained. That does not request a population total or
+    # authorize recomputing the indicator using a different denominator.
+    definition_only=bool(re.search(r'(?:说明|注明|核对).{0,8}人口口径',text))
+    population_value=bool(re.search(r'人口.{0,5}(?:总量|数量|多少|合计|排名)|(?:合计|比较|对比).{0,6}人口',text))
+    if definition_only and not population_value:
+        wants_population=False
+    def operation(stop, deadline):
+        config = _configuration(connection_id)
+        if expected_revision is not None and config['revision'] != expected_revision:
+            raise ValueError('数据库连接版本已改变，请重新读取数据结构')
+        values = {'year': set(), 'population_type': set()}
+        truncated = set()
+        with _database(config, stop, deadline) as db:
+            for table in candidates[:12]:
+                fields = {f['name'].casefold(): f['name'] for f in table['columns']}
+                for dim in ('year', 'population_type'):
+                    if dim not in fields or dim == 'year' and year_requested or dim == 'population_type' and not wants_population:
+                        continue
+                    _guard(stop, deadline)
+                    column = _quote(config, fields[dim])
+                    rows = _read(db, 'SELECT DISTINCT ' + column + ' AS dimension_value FROM ' + _qualified(config, table)
+                        + ' WHERE ' + column + ' IS NOT NULL ORDER BY ' + column + ' LIMIT 13', limit=13)
+                    if len(rows) > 12:
+                        truncated.add(dim)
+                    for row in rows[:12]:
+                        value = row['dimension_value']
+                        if dim == 'year' and str(value).isdigit() and len(str(value)) == 4:
+                            values[dim].add(str(value))
+                        elif dim == 'population_type' and isinstance(value, str) and 1 <= len(value) <= 80:
+                            values[dim].add(value)
+        choices = {}
+        specified = dict(known)
+        explicit_year = re.findall(r'(?:19|20)\d{2}', text)
+        if len(set(explicit_year)) == 1:
+            specified['year'] = int(explicit_year[0])
+        if not year_requested and len(values['year']) > 1:
+            choices['year'] = {'options': sorted(values['year']), 'truncated': 'year' in truncated}
+        prior_type = known.get('population_type')
+        current_types = [value for value in values['population_type'] if value in text or
+                         value.removesuffix('人口') and value.removesuffix('人口') in text]
+        if current_types:
+            specified['population_type'] = sorted(current_types)
+        population_specified = bool(current_types or prior_type or re.search(r'常住|户籍|外来|全部口径|所有口径|分别.*口径', text + inherited_text))
+        if wants_population and not population_specified and len(values['population_type']) > 1:
+            choices['population_type'] = {'options': sorted(values['population_type']), 'truncated': 'population_type' in truncated}
+        if not choices:
+            return None
+        prompts = []
+        if 'year' in choices:
+            prompts.append('请选择统计年度（资料包含 ' + '、'.join(choices['year']['options']) + ' 年），或明确要求最新/历年数据')
+        if 'population_type' in choices:
+            prompts.append('请选择人口口径（' + '、'.join(choices['population_type']['options']) + '），或明确要求分别展示；不同口径不能混合比较')
+        if truncated:
+            prompts.append('候选较多，仅列部分选项，请补充明确范围')
+        return {'title': '；'.join(prompts) + '。', 'dimensions': choices, 'specified': specified}
+    return _bounded(operation, cancelled)
+
+
 def execute(sql, params=None, connection_id=None, expected_revision=None, expected_fingerprint=None,
-            cancelled=None, snapshot=None):
+            cancelled=None, snapshot=None, question=None):
     from . import sql_guard
     def operation(stop, deadline):
         config = _configuration(connection_id)
@@ -495,6 +873,11 @@ def execute(sql, params=None, connection_id=None, expected_revision=None, expect
             if expected is not None and expected != current["source"]["fingerprint"]:
                 raise ValueError("数据库结构指纹已改变，请重新读取字段和关联")
             guarded = sql_guard.validate(sql, guard_schema(current), dialect=current["dialect"], max_rows=MAX_ROWS + 1, max_nodes=500)
+            validate_question_grain(guarded["sql"], question, current["dialect"])
+            projection = validate_question_projection(guarded["sql"], question, current["dialect"])
+            if projection:
+                guarded['question_projection'] = projection
+                guarded['checks'].append({'name':'用户明确的输出列数、列名与顺序','status':'passed'})
             values = _parameters(params, guarded.get("parameter_count", 0))
             _guard(stop, deadline)
             if config["kind"] == "sqlite":
@@ -539,7 +922,8 @@ def execute(sql, params=None, connection_id=None, expected_revision=None, expect
             evidence = {"id": "database-" + uuid.uuid4().hex, "type": "sql_result", "source": source["name"],
                         "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
                         "status": "executed", "locator": locator}
-            return {"rows": rows, "columns": columns, "row_count": len(rows), "row_limit": MAX_ROWS,
+            display = rounded_result_display(guarded["sql"], columns, raw[:MAX_ROWS], current["dialect"])
+            return {"rows": rows, "columns": columns, "row_count": len(rows), "row_limit": MAX_ROWS, **display,
                     "truncated": len(raw) > MAX_ROWS, "sql": guarded["sql"], "params": values,
                     "dialect": current["dialect"], "source": source, "result_sha256": digest, "evidence": evidence,
                     "checks": guarded["checks"], "relations": guarded["relations"], "tables": guarded["tables"],

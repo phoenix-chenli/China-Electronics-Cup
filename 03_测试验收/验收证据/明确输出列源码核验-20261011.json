@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-11T06:52:26.343046+00:00",
+  "modified_code_and_test_files": 8,
+  "files_sha256": {
+    "01_程序代码/backend/agent.py": "2166954c4c161ba07bd62273f63229a8fd0f950a3266b632082870093f45aa30",
+    "01_程序代码/backend/database_query.py": "c24c84826da0c1a60fe16c894148e31e640c70eb506d8a426bde3f629cee3eb6",
+    "01_程序代码/backend/sql_guard.py": "5949cd6bc81f66fe923f5d8b7498bc3e6c98612108432efbeee6cb1cad11e55e",
+    "03_测试验收/自动测试/tests/test_database_query.py": "617c16d592a608a2afbcd50d5724e6e561ce4021525c05751178f81ba0f7243d",
+    "03_测试验收/自动测试/tests/test_database_agent.py": "a5dfef0c091b673413d95de08cbacf98ef5d389e709602b8057f471b6219130b",
+    "03_测试验收/自动测试/评估比赛基础任务.py": "bb39bb28522b20d1d8c655065aa7ee8d41cc20d51922b8cfbe5c0a6f03f8f26b",
+    "03_测试验收/自动测试/tests/test_basic_evaluation.py": "6394a07a477a121c498009f81e84560a486faea45bad16003ea18091274f1cd9",
+    "03_测试验收/自动测试/评估明确输出列问数.py": "6be4d673c50499af09fbd82d93d409e077d7d7d768a61912902ad828fe41bfb4"
+  },
+  "backend_modules": 26,
+  "backend_passed": 436,
+  "human_semantic_review": "pending",
+  "windows_native_acceptance": "pending",
+  "model": "deepseek-v4.1-flash",
+  "cost_comparison_performed": false,
+  "database_unchanged_in_both_runs": true,
+  "dataset_sha256": "d9e073d942c692197ddf02f64c0929d37488eceb527afe08b61963cae92faf29",
+  "first_run": "明确输出列问数DeepSeek首测-20261011.json",
+  "regression": "明确输出列问数DeepSeek完整修复回归-20261011.json",
+  "first_run_not_overwritten": true
+}

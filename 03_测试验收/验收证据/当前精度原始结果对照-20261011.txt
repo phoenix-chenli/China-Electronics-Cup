@@ -1,0 +1,169 @@
+- link "跳到主要内容":
+  - /url: "#workspace-main"
+- banner:
+  - button "收起或打开导航" [expanded]:
+  - button "证流首页":
+    - strong: 证流
+  - button "公开统计分析":
+    - generic: 公开统计分析
+  - button "搜索工作区":
+  - button "问小察"
+  - button "工作区选项":
+- main:
+  - text: 公开统计分析
+  - generic: /
+  - text: 分析
+  - heading "把淮南、新津、石景山2024年GDP合计，给出三个分项与总数，均保留两位小数、单位亿元。只作金额合计，不计算合并增速。" [level=2]
+  - button "保存":
+    - generic: 保存
+  - button "来源 2":
+    - generic: 来源
+    - generic: "2"
+  - button "会话更多操作":
+  - generic "问答结果阅读区":
+    - generic: 数据库与文档 · 第 1 轮
+    - generic: 你的问题
+    - heading "把淮南、新津、石景山2024年GDP合计，给出三个分项与总数，均保留两位小数、单位亿元。只作金额合计，不计算合并增速。" [level=1]
+    - status "本轮证据回答状态":
+      - strong: 已生成有依据的回答
+    - generic: 所选知识库文档 · 5 份文档
+    - generic "查询时的版本"
+    - navigation "结果阅读导航":
+      - button "01 结论概览":
+        - generic: "01"
+        - text: 结论概览
+      - button "02 数据与 SQL 4":
+        - generic: "02"
+        - text: 数据与 SQL
+        - generic: "4"
+      - button "03 来源 2":
+        - generic: "03"
+        - text: 来源
+        - generic: "2"
+    - region "结论概览":
+      - heading "结论概览" [level=3]
+      - button "4/4 条有来源":
+        - text: 4/4 条有来源
+      - article:
+        - generic: "01"
+        - paragraph: 返回结果第 1 行：地区 = "淮南市"；GDP_亿元 = 1716.00。
+        - generic: 模型支持检查：有支持
+        - generic: deepseek-v4-1-flash-260910
+        - paragraph: 服务端查询返回淮南市2024年GDP为1716.00亿元，单位与年份符合。
+        - generic: 这是模型对引用支持度的检查，原文定位另行核对。
+        - generic: 依据
+        - button "查看来源 2":
+          - text: 来源 2
+      - article:
+        - generic: "02"
+        - paragraph: 返回结果第 2 行：地区 = "石景山区"；GDP_亿元 = 1312.90。
+        - generic: 模型支持检查：有支持
+        - generic: deepseek-v4-1-flash-260910
+        - paragraph: 服务端查询返回石景山区2024年GDP为1312.90亿元，单位与年份符合。
+        - generic: 这是模型对引用支持度的检查，原文定位另行核对。
+        - generic: 依据
+        - button "查看来源 2":
+          - text: 来源 2
+      - article:
+        - generic: "03"
+        - paragraph: 返回结果第 3 行：地区 = "新津区"；GDP_亿元 = 534.94。
+        - generic: 模型支持检查：有支持
+        - generic: deepseek-v4-1-flash-260910
+        - paragraph: 服务端查询返回新津区2024年GDP为534.94亿元，单位与年份符合。
+        - generic: 这是模型对引用支持度的检查，原文定位另行核对。
+        - generic: 依据
+        - button "查看来源 2":
+          - text: 来源 2
+      - article:
+        - generic: "04"
+        - paragraph: 返回结果第 4 行：地区 = "合计"；GDP_亿元 = 3563.84。
+        - generic: 模型支持检查：有支持
+        - generic: deepseek-v4-1-flash-260910
+        - paragraph: 服务端查询返回三地区2024年GDP合计3563.84亿元，保留两位小数。
+        - generic: 这是模型对引用支持度的检查，原文定位另行核对。
+        - generic: 依据
+        - button "查看来源 2":
+          - text: 来源 2
+    - generic "数据与 SQL 4 行结果 · 点击收起，专注结论":
+      - text: 数据与 SQL
+      - generic: 4 行结果 · 点击收起，专注结论
+    - heading "数据库查询结果" [level=3]
+    - button "展开原始表格":
+      - text: 展开原始表格
+    - paragraph: 按查询指定的小数位显示；原始返回值可在展开表格中核对。
+    - generic "结果数据表":
+      - table:
+        - rowgroup:
+          - row "地区 GDP_亿元":
+            - columnheader "地区"
+            - columnheader "GDP_亿元"
+        - rowgroup:
+          - row "淮南市 1716.00":
+            - cell "淮南市"
+            - cell "1716.00"
+          - row "石景山区 1312.90":
+            - cell "石景山区"
+            - cell "1312.90"
+          - row "新津区 534.94":
+            - cell "新津区"
+            - cell "534.94"
+          - row "合计 3563.84":
+            - cell "合计"
+            - cell "3563.84"
+    - region "数据库查询详情":
+      - strong: 公开统计公报 只读
+      - generic: 实际返回 4 行 · 返回上限 200 行
+      - paragraph: 保留数据库原始列名和值。单位和业务口径需核对；只读与执行检查通过不等于业务语义已经核验。
+      - generic "查看实际 SQL 与参数"
+      - generic "查看关联规划"
+      - generic "查看查询核验记录"
+      - generic "查看查询尝试记录"
+    - text: 模型驱动
+    - generic: deepseek-v4-1-flash-260910
+    - generic: 7 次模型调用
+    - button "查看执行过程"
+    - generic: 结论与来源绑定情况请逐项核对。
+  - generic "当前提问范围":
+    - strong: 追问沿用 · 数据库与文档
+    - generic: 公开统计公报 只读 · deepseek-v4.1-flash
+    - generic: 来源与版本沿用本轮记录。
+    - button "问答设置"
+  - textbox "输入问题":
+    - /placeholder: 继续询问这份文档…
+  - button "添加资料":
+    - generic: 添加资料
+  - button "工具":
+    - generic: 工具
+  - button "发送问题" [disabled]:
+    - generic: 发送
+  - generic: Enter 发送 · Shift + Enter 换行
+- dialog "数据库查询结果 · 原始字段和值":
+  - heading "数据库查询结果 · 原始字段和值" [level=2]
+  - button "关闭窗口" [active]:
+  - generic "结果数据表":
+    - table:
+      - rowgroup:
+        - row "地区 GDP_亿元":
+          - columnheader "地区"
+          - columnheader "GDP_亿元"
+      - rowgroup:
+        - row "淮南市 1716":
+          - cell "淮南市"
+          - cell "1716"
+        - row "石景山区 1312.9":
+          - cell "石景山区"
+          - cell "1312.9"
+        - row "新津区 534.94":
+          - cell "新津区"
+          - cell "534.94"
+        - row "合计 3563.84":
+          - cell "合计"
+          - cell "3563.84"
+  - region "数据库查询详情":
+    - strong: 公开统计公报 只读
+    - generic: 实际返回 4 行 · 返回上限 200 行
+    - paragraph: 保留数据库原始列名和值。单位和业务口径需核对；只读与执行检查通过不等于业务语义已经核验。
+    - generic "查看实际 SQL 与参数"
+    - generic "查看关联规划"
+    - generic "查看查询核验记录"
+    - generic "查看查询尝试记录"

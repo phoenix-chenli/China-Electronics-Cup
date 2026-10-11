@@ -20,3 +20,6 @@
 **/*.key
 **/*.db-wal
 **/*.db-shm
+
+# Personal registration remains local.
+05_比赛与交接/杭州电子科技大学_赛题8_团队报名表.docx

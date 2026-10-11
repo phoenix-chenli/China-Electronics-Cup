@@ -1,6 +1,9 @@
 """Each module owns an isolated process, temporary database and task executor."""
 from pathlib import Path
 import os,subprocess,sys,unittest
+# Legacy regression modules own their fixtures. Public-source installation has
+# its own integration suite and must not silently replace their sales baseline.
+os.environ['EVIDENCEFLOW_SKIP_PUBLIC_DEMO']='1'
 root=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(root/'01_程序代码'),str(Path(__file__).resolve().parent),str(root/'01_程序代码/启动与打包')]
 from runtime_bootstrap import activate

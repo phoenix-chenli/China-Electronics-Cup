@@ -24,7 +24,7 @@ from . import store as s
 from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
 from . import documents as document_engine
 from . import rag_index, rag_providers
-from . import document_tasks, document_providers, document_review
+from . import document_tasks, document_providers, document_review, query_routing, public_statistics
 from .seed import seed_business, write_seed_docs
 
 app=FastAPI(title="证流",version="0.7.0")
@@ -57,6 +57,7 @@ def init_app():
 def startup():
     init_app()
     conversations.initialize()
+    if os.environ.get('EVIDENCEFLOW_SKIP_PUBLIC_DEMO') != '1': public_statistics.install()
     document_tasks.initialize()
 
 @app.middleware("http")
@@ -75,9 +76,9 @@ async def invalid_fields(request,exc):
 
 @app.exception_handler(ValueError)
 async def invalid(request, exc):
-    detail={"detail":str(exc)}
+    detail={"detail":str(exc), 'error_detail':agent.failure_detail(str(exc))}
     if isinstance(exc,agent.AgentFailure):
-        detail.update(run_id=exc.result['run_id'],events=exc.result['events'],agent=exc.result['agent'])
+        detail={**exc.result,**detail,'error_detail':exc.result.get('error_detail',detail['error_detail'])}
     return JSONResponse(detail,status_code=400)
 
 class DocumentContext(BaseModel):
@@ -95,6 +96,8 @@ class QueryRequest(BaseModel):
     previous_context: dict[str,Any]=Field(default_factory=dict)
     confirmed: dict[str,Any]=Field(default_factory=dict)
     workspace_id: str="sales-demo"
+    project_id: str | None=None
+    scope_override: Literal['sales','database','knowledge','hybrid'] | None=None
     session_id: str | None=None
     request_id: str | None=Field(default=None,max_length=100)
     parent_message_id: str | None=None
@@ -140,7 +143,8 @@ def run(req, cancelled=None, progress=None):
     if req.workspace_id!="sales-demo": raise ValueError("工作区不存在，未继承其他工作区条件")
     document_context=req.document_context.model_dump(exclude_none=True) if req.document_context else None
     previous={k:v for k,v in req.previous_context.items() if k!='rag_scope'}
-    context=agent.query_context(previous,document_context,req.rag_scope.model_dump(exclude_none=True) if req.rag_scope else None)
+    context=agent.query_context(previous,document_context,req.rag_scope.model_dump(exclude_none=True) if req.rag_scope else None,
+                                question=req.question,project_id=req.project_id,scope_override=req.scope_override)
     return agent.execute(req.question,previous,req.confirmed,cancelled=cancelled,progress=progress,document_context=document_context,database_context=context)
 
 @app.get("/api/health")
@@ -149,11 +153,14 @@ def health():
     return {"ok":True,"service":"evidenceflow","version":"0.7.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":bool(document_providers.describe().get('ready'))},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
 
 @app.get("/api/summary")
-def summary():
-    tables=s.tables(); docs=s.doc_list()
+def summary(project_id: str | None=None):
+    tables=query_routing.project_tables(project_id); docs=query_routing.project_docs(project_id)
+    if project_id and query_routing.profile(project_id).get('managed_public'):
+        bound=query_routing.profile(project_id)
+        return {"workspace_id":project_id,"workspace_name":bound['project_name'],"counts":{t['name']:t['row_count'] for t in tables},"tables":[t['name'] for t in tables],"documents":len(docs),"pages":sum(d['pages'] for d in docs),"data_version":s.data_version(),"data_source_note":bound['source_label']}
     return {"workspace_id":"sales-demo","workspace_name":"销售与项目经营","counts":{t["name"]:t["row_count"] for t in tables},"tables":[t["name"] for t in tables],"documents":len(docs),"pages":sum(d["pages"] for d in docs),"data_version":s.data_version(),"data_source_note":"合成示例数据"}
 @app.get("/api/tables")
-def tables(): return s.tables()
+def tables(project_id: str | None=None): return query_routing.project_tables(project_id)
 @app.get("/api/dashboard")
 def dashboard(project_id: str = "default"):
     with s.conn() as c:
@@ -175,17 +182,23 @@ def dashboard(project_id: str = "default"):
         session_count=c.execute("SELECT COUNT(*) FROM ef_sessions WHERE project_id=?", (project_id,)).fetchone()[0]
     today=datetime.now().date()
     trend=[{"day":str(today-timedelta(days=offset)),"count":trend_counts.get(str(today-timedelta(days=offset)),0)} for offset in range(29,-1,-1)]
-    sales,_=s.read("SELECT strftime('%Y',order_date) AS year, SUM(sales_amount-returned_amount) AS amount FROM orders GROUP BY year ORDER BY year")
+    bound=query_routing.profile(project_id)
+    sales=[] if bound.get('managed_public') else s.read("SELECT strftime('%Y',order_date) AS year, SUM(sales_amount-returned_amount) AS amount FROM orders GROUP BY year ORDER BY year")[0]
     return {"project_id":project_id,"recent":[dict(r) for r in rows],"session_count":session_count,
       "query_count":counts['total'],"today_count":counts['today'] or 0,"trend":trend,"sales":sales,
       "activity_scope":"当前项目的用户提交，含取消、失败与重试；不含系统检查",
-      "data_note":"各项目共用销售示例数据","timezone":str(datetime.now().astimezone().tzinfo)}
+      "data_note":bound['source_label'],"timezone":str(datetime.now().astimezone().tzinfo)}
 @app.get("/api/tables/{name}/rows")
-def table_rows(name: str, offset: int=0, limit: int=100):
-    t=next((t for t in s.tables() if t["name"]==name),None)
+def table_rows(name: str, offset: int=0, limit: int=100, project_id: str | None=None):
+    t=next((t for t in query_routing.project_tables(project_id) if t["name"]==name),None)
     if t is None: raise HTTPException(404,"数据表不存在")
     if not 1<=limit<=1000 or offset<0: raise ValueError("无效的分页参数")
-    rows,_=s.read(f"SELECT * FROM {s.quoted(name)} LIMIT ? OFFSET ?",[limit,offset])
+    if t.get('connection_id'):
+        config=connections.ready(t['connection_id'],connections.DB_KINDS)
+        with connections.database(config) as db:
+            rows=connections.rows(db,f"SELECT * FROM {connections.identifier(config,t.get('schema','main'),name)} LIMIT ? OFFSET ?",[limit,offset],limit=limit)['rows']
+    else:
+        rows,_=s.read(f"SELECT * FROM {s.quoted(name)} LIMIT ? OFFSET ?",[limit,offset])
     return {"rows":rows,"columns":[c["name"] for c in t["columns"]],"total":t["row_count"],"offset":offset}
 @app.post("/api/tables/{name}/archive")
 def archive_table(name: str):
@@ -202,7 +215,7 @@ def archived_tables():
     with s.conn() as c: return [dict(r) for r in c.execute("SELECT * FROM table_catalog WHERE archived=1")]
 
 @app.get("/api/documents")
-def documents(archived: bool=False): return s.doc_list(archived)
+def documents(archived: bool=False, project_id: str | None=None): return query_routing.project_docs(project_id,archived)
 
 _rag_previews={}
 _rag_preview_lock=threading.Lock()

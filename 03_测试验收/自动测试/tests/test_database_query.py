@@ -69,6 +69,50 @@ class DriverDatabase:
 
 
 class DatabaseQueryTests(unittest.TestCase):
+    def test_single_total_allows_only_proven_fixed_group_keys(self):
+        question='查客户编号1的收款金额合计。'
+        with sqlite3.connect(':memory:') as db:
+            db.executescript('CREATE TABLE payments(customer_id INTEGER,day TEXT,amount REAL);'
+                "INSERT INTO payments VALUES(1,'2025-02-01',30),(1,'2025-02-02',30),(2,'2025-02-01',9);")
+            sql='SELECT p.customer_id AS cid,SUM(p.amount) AS total FROM payments p WHERE p.customer_id=1 GROUP BY p.customer_id'
+            q.validate_question_grain(sql,question)
+            self.assertEqual(db.execute(sql).fetchall(),[(1,60.0)])
+            # It is an at-most-one-group proof, not an invented empty sum.
+            empty=sql.replace('customer_id=1','customer_id=99')
+            q.validate_question_grain(empty,question)
+            self.assertEqual(db.execute(empty).fetchall(),[])
+
+    def test_fixed_group_alias_ordinal_parameter_and_conjunction(self):
+        for sql in [
+            'SELECT p.id AS selected_id,SUM(p.amount) FROM payments p WHERE p.id=? GROUP BY selected_id',
+            'SELECT p.id,SUM(p.amount) FROM payments p WHERE 1=p.id GROUP BY 1',
+            "SELECT p.id,SUM(p.amount) FROM payments p WHERE (p.id=1) AND (p.day>='2025-02-01' OR p.day IS NULL) GROUP BY p.id",
+            'SELECT p.id,p.kind,SUM(p.amount) FROM payments p WHERE p.id=1 AND p.kind=\'actual\' GROUP BY p.id,p.kind']:
+            with self.subTest(sql=sql):q.validate_question_grain(sql,'收款金额合计')
+
+    def test_single_total_rejects_unfixed_date_or_unsafe_filter_proofs(self):
+        for sql in [
+            'SELECT p.id,SUM(p.amount) FROM payments p GROUP BY p.id',
+            'SELECT p.id,SUM(p.amount) FROM payments p WHERE p.id=1 OR p.id=2 GROUP BY p.id',
+            'SELECT p.id,SUM(p.amount) FROM payments p WHERE NOT(p.id=1) GROUP BY p.id',
+            'SELECT p.id,SUM(p.amount) FROM payments p WHERE p.id IN(1,2) GROUP BY p.id',
+            'SELECT p.id,SUM(p.amount) FROM payments p WHERE p.id>1 GROUP BY p.id',
+            'SELECT p.id,SUM(p.amount) FROM payments p GROUP BY p.id HAVING p.id=1',
+            'SELECT p.id,SUM(p.amount) FROM payments p WHERE EXISTS(SELECT 1 FROM others o WHERE p.id=1) GROUP BY p.id',
+            'SELECT p.id,SUM(p.amount) FROM payments p JOIN others o ON o.id=p.id WHERE o.id=1 GROUP BY p.id',
+            'SELECT other_db.payments.id,SUM(other_db.payments.amount) FROM this_db.payments JOIN other_db.payments ON this_db.payments.id=other_db.payments.id WHERE this_db.payments.id=1 GROUP BY other_db.payments.id',
+            'SELECT p.day,SUM(p.amount) FROM payments p WHERE p.id=1 GROUP BY p.day',
+            'SELECT p.id,p.day,SUM(p.amount) FROM payments p WHERE p.id=1 GROUP BY p.id,p.day']:
+            with self.subTest(sql=sql),self.assertRaisesRegex(ValueError,'额外分组'):
+                q.validate_question_grain(sql,'该月收款金额合计')
+
+    def test_monthly_check_remains_active_with_fixed_customer(self):
+        with self.assertRaisesRegex(ValueError,'按月汇总'):
+            q.validate_question_grain('SELECT p.day,SUM(p.amount) FROM payments p WHERE p.id=1 GROUP BY p.day',
+                                     '客户编号1每月收款金额合计')
+        q.validate_question_grain("SELECT STRFTIME('%Y-%m',p.day),SUM(p.amount) FROM payments p WHERE p.id=1 GROUP BY STRFTIME('%Y-%m',p.day)",
+                                 '客户编号1每月收款金额合计')
+
     @classmethod
     def setUpClass(cls):
         s.init()
@@ -110,6 +154,75 @@ class DatabaseQueryTests(unittest.TestCase):
 
     def execute_fixture(self, sql, params=None, **extra):
         return q.execute(sql, params, connection_id=self.connection["id"], **extra)
+
+    def test_explicit_projection_count_and_quoted_names_apply_to_final_select(self):
+        question='汇总金额，只返回一列，列名依次为「合计_元」。'
+        for sql in ('SELECT SUM(amount) AS 合计_元,COUNT(*) AS 行数 FROM orders',
+                    'SELECT SUM(amount) AS total FROM orders'):
+            with self.assertRaises(ValueError):
+                self.execute_fixture(sql,question=question)
+        result=self.execute_fixture('WITH parts AS (SELECT customer_id,SUM(amount) AS subtotal FROM orders GROUP BY customer_id) SELECT SUM(subtotal) AS 合计_元 FROM parts',question=question)
+        self.assertEqual(result['columns'],['合计_元'])
+        self.assertEqual(result['rows'],[{'合计_元':287.25}])
+        self.assertEqual(result['validation']['question_projection']['expected_names'],['合计_元'])
+
+    def test_projection_does_not_guess_contract_for_ordinary_business_wording(self):
+        self.assertIsNone(q.validate_question_projection('SELECT 12,2024','请查询2024年金额及对应年份'))
+        self.assertIsNone(q.validate_question_projection('SELECT 12','共有三列指标，可否比较？'))
+        self.assertIsNone(q.validate_question_projection('SELECT 12','只返回金额和单位'))
+        with self.assertRaisesRegex(ValueError,'不同的输出列数'):
+            q.validate_question_projection('SELECT 12','只返回一列；仅输出两列')
+    def test_total_output_columns_after_explicit_projection_are_enforced(self):
+        question='在SQL中保留两个原值和计算值，共3列。'
+        result=q.validate_question_projection('SELECT 1,2,3',question)
+        self.assertEqual(result['expected_count'],3)
+        with self.assertRaisesRegex(ValueError,'最终返回4列'):
+            q.validate_question_projection('SELECT 1,2,3,4',question)
+        self.assertIsNone(q.validate_question_projection('SELECT 1','表中共有3列指标，是否足以判断？'))
+        self.assertIsNone(q.validate_question_projection('SELECT 1','这份表，共3列，适用什么场景？'))
+
+    def test_list_columns_contract_is_enforced_without_treating_source_description_as_output(self):
+        for question in ['在一条SQL中列出金额、税额和合计，共3列；再核对原文。',
+                         '请列出项目和金额，总共两列。']:
+            with self.assertRaisesRegex(ValueError,'最终返回4列'):
+                q.validate_question_projection('SELECT 1,2,3,4',question)
+        self.assertIsNone(q.validate_question_projection('SELECT 1','原表列出了金额、税额，共3列。请解释口径。'))
+
+    def test_round_display_pads_only_explicit_numeric_projection_and_keeps_original_digest(self):
+        result=self.execute_fixture('SELECT order_id,ROUND(amount,2) AS amount,note FROM orders ORDER BY order_id')
+        self.assertEqual(result['display_decimals'],{'amount':2})
+        for raw,shown in zip(result['rows'],result['display_rows']):
+            self.assertEqual(Decimal(str(raw['amount'])),Decimal(shown['amount']))
+            self.assertRegex(shown['amount'],r'^-?\d+\.\d{2}$')
+            self.assertEqual(raw['order_id'],shown['order_id'])
+            self.assertEqual(raw['note'],shown['note'])
+        self.assertEqual(result['evidence']['locator']['rows'],result['rows'])
+        self.assertEqual(result['result_sha256'],q._hash({'columns':result['columns'],'rows':result['rows']}))
+
+    def test_round_display_requires_consistent_final_projection_and_never_rounds_raw_values(self):
+        raw=[('0007',None,Decimal('123456789012345678901234567890.1'),1.235)]
+        shown=q.rounded_result_display('SELECT ROUND(a,2),ROUND(b,2),ROUND(c,2),ROUND(d,2)',
+                                       ['id','missing','amount','driver_mismatch'],raw)
+        self.assertEqual(shown['display_rows'],[{'id':'0007','missing':None,
+                         'amount':'123456789012345678901234567890.10','driver_mismatch':1.235}])
+        self.assertEqual(q.rounded_result_display('SELECT ROUND(a,2) UNION ALL SELECT ROUND(a,1)',
+                                                ['amount'],[(1.2,)]),{})
+        self.assertEqual(q.rounded_result_display('WITH t AS (SELECT ROUND(a,2) AS v) SELECT v FROM t',
+                                                ['v'],[(1.2,)]),{})
+        self.assertEqual(q.rounded_result_display('SELECT ROUND(a,-1)',['v'],[(10,)]),{})
+        consistent=q.rounded_result_display('SELECT ROUND(a,2) UNION ALL SELECT ROUND(a,2)',
+                                            ['amount'],[(1.2,),(2.0,)])
+        self.assertEqual(consistent['display_rows'],[{'amount':'1.20'},{'amount':'2.00'}])
+
+    def test_projection_order_count_star_and_set_operation_contracts(self):
+        question='仅返回2列，列名依次为`year`、`value`。'
+        q.validate_question_projection('SELECT 2024 AS year,12 AS value UNION ALL SELECT 2025,13',question)
+        for sql in ('SELECT 12 AS value,2024 AS year','SELECT * FROM orders','SELECT 2024 AS year'):
+            with self.assertRaises(ValueError):
+                q.validate_question_projection(sql,question)
+        with self.assertRaisesRegex(ValueError,'列名与列数'):
+            q.validate_question_projection('SELECT 1 AS a','只返回两列，列名依次为「a」。')
+        q.validate_question_projection('SELECT COUNT(*) AS total FROM orders','只输出一列')
 
     def test_local_source_has_real_fields_keys_and_no_samples_credentials_or_paths(self):
         snapshot = q.inspect()

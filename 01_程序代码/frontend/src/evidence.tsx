@@ -1,6 +1,6 @@
 import {ActionMenu, MenuAction} from './controls'
 import {companionActivity} from './pet-state'
-import React, {useEffect,useMemo,useRef,useState} from 'react'
+import React, {useEffect,useMemo,useRef,useState,useId} from 'react'
 import {ArrowLeft,CheckCircle2,ChevronDown,ChevronLeft,ChevronRight,Database,ExternalLink,FileText,Folder,Hand,Image as ImageIcon,ListTree,MapPin,Maximize2,MessageCircle,MousePointer2,RefreshCw,Search,ShieldCheck,TextCursor,X} from 'lucide-react'
 import {api,DataTable,Empty,IconButton,Modal,Obj,QueryInput,Spinner,useMedia} from './ui'
 import {Process} from './workspace'
@@ -13,11 +13,21 @@ const cp=(text:string,start:number,end?:number)=>Array.from(text).slice(start,en
 const size=(n:number)=>n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB'
 const sourceKey=(e:Obj)=>[e?.id,e?.locator?.sha256,e?.locator?.parse_id,e?.locator?.text_range?.start].join(':')
 const position=(box:number[])=>({left:box[0]*100+'%',top:box[1]*100+'%',width:(box[2]-box[0])*100+'%',height:(box[3]-box[1])*100+'%'})
+export function originalPdfPage(meta:Obj|null,page:number):number|null{
+ const provenance=meta?.document?.provenance
+ if(meta?.document?.format!=='pdf'||!Number.isInteger(page)||page<1||page>meta.page_count)return null
+ if(provenance?.origin==='original_pdf_from_user_bundle')return page
+ const pages=provenance?.original_pdf_pages
+ return provenance?.origin==='original_scanned_pdf_page_excerpt'&&Array.isArray(pages)&&pages.length===meta.page_count&&Number.isInteger(pages[page-1])&&pages[page-1]>0?pages[page-1]:null
+}
 
+function OutlineItem({node,onSelect}:{node:Obj;onSelect:(node:Obj)=>void}){
+ const [open,setOpen]=useState(true),id=useId()
+ return <div className="outline-node">{node.children.length?<><div className="outline-heading"><button className="outline-toggle" aria-label={(open?'收起':'展开')+'：'+node.title} aria-expanded={open} aria-controls={id} onClick={()=>setOpen(value=>!value)}><ChevronRight size={12}/></button><button className="outline-title" onClick={()=>onSelect(node)}><Folder size={14}/><span>{node.title}</span></button></div><div id={id} className="outline-children" hidden={!open}>{node.children.map((child:Obj)=><OutlineItem key={child.key} node={child} onSelect={onSelect}/>)}</div></>:<button className="outline-leaf" onClick={()=>onSelect(node)}><FileText size={13}/><span>{node.title}</span><small>{node.page}</small></button>}</div>
+}
 function Outline({items,onSelect}:Obj){
  const tree=useMemo(()=>{const roots:Obj[]=[];const stack:Obj[]=[];items.forEach((h:Obj,i:number)=>{const node={...h,key:i,children:[]};while(stack.length&&stack[stack.length-1].level>=h.level)stack.pop();(stack.length?stack[stack.length-1].children:roots).push(node);stack.push(node)});return roots},[items])
- const branch=(nodes:Obj[])=>nodes.map(h=><div key={h.key} className="outline-node">{h.children.length?<details open><summary><ChevronRight size={12} className="outline-chevron"/><Folder size={14}/><button onClick={e=>{e.preventDefault();onSelect(h)}}>{h.title}</button></summary><div className="outline-children">{branch(h.children)}</div></details>:<button className="outline-leaf" onClick={()=>onSelect(h)}><FileText size={13}/><span>{h.title}</span><small>{h.page}</small></button>}</div>)
- return <div className="outline-tree">{branch(tree)}</div>
+ return <div className="outline-tree">{tree.map(node=><OutlineItem key={node.key} node={node} onSelect={onSelect}/>)}</div>
 }
 
 function MarkedText({block,ranges,onSource}:Obj){
@@ -26,7 +36,7 @@ function MarkedText({block,ranges,onSource}:Obj){
  const start=block.start+prefix,end=block.end
  const points=[...new Set([start,end,...ranges.flatMap((r:Obj)=>[Math.max(start,Math.min(end,r.start)),Math.max(start,Math.min(end,r.end))])])].sort((a,b)=>a-b)
  const children=points.slice(0,-1).map((a,i)=>{const z=points[i+1];const r=ranges.find((r:Obj)=>r.start<z&&r.end>a);const text=cp(block.text,a-block.start,z-block.start)
-   return <span key={a} data-start={a} data-end={z}>{r?<mark className={r.kind==='search'?'search-mark':'source-mark'} onClick={()=>{if(!window.getSelection()?.toString())onSource(r)}}>{text}</mark>:text}</span>})
+   return <span key={a} data-start={a} data-end={z}>{r?<mark className={r.kind==='search'?'search-mark':'source-mark'} role={r.kind==='search'?undefined:'button'} tabIndex={r.kind==='search'?undefined:0} aria-label={r.kind==='search'?undefined:'查看此处引用对应的来源'} onClick={e=>{if(r.kind!=='search')e.stopPropagation();if(!window.getSelection()?.toString())onSource(r)}} onKeyDown={r.kind==='search'?undefined:e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();if(!window.getSelection()?.toString())onSource(r)}}}>{text}</mark>:text}</span>})
  const className='source-text-block '+(block.kind==='table_row'?'source-table-row':'')
  return block.kind==='heading'?<h3 id={block.id} className={className} data-level={block.level}>{children}</h3>:<p id={block.id} className={className}>{children}</p>
 }
@@ -99,6 +109,9 @@ export function EvidencePage({result,docs,selected,onSelect,navigate,notify,stat
  const outline=meta?.outline?.length?meta.outline:Array.from({length:maxPage},(_,i)=>({title:documentPosition(fmt,i+1),level:1,page:i+1}))
  const sectionJump=(h:Obj)=>{setPage(h.page);setView('reader');setFocus(h.start!==undefined?{page:h.page,start:h.start,end:h.end}:null)}
  const sourceUrl=meta?.document?.source_url||loc.source_url
+ const officialUrl=meta?.document?.official_url
+ const provenance=meta?.document?.provenance
+ const officialPage=originalPdfPage(meta,page),officialPageUrl=officialUrl?(officialPage?officialUrl.split('#')[0]+'#page='+officialPage:officialUrl):undefined
  const locateStructure=(box:number[],text:string,mediaId?:string)=>{if(fmt==='docx'&&!mediaId){notify('此结构按原包身份记录，未提供可高亮的嵌图区域');return}if(validSourceBox(box)){setFocus({page,rects:[box],precision:'region',media_id:mediaId,coordinate_space:mediaId?'media':'page'});setSelection(null);notify('已高亮原件区域：'+text.slice(0,30))}}
  const processingCompleted=(r:Obj)=>{if(!r?.parse_id)return;setNewParse(r);setCurrent((old:Obj|null)=>old?{...old,locator:{...old.locator,parse_id:meta?.parse_id}}:old);setReload(n=>n+1);notify('新解析已保存，历史引用保留原版本')}
  const viewParse=(r:Obj)=>choose({id:did,type:'document',source:meta?.document?.name||current?.source,locator:{document_id:did,sha256:r.sha256||meta?.document?.sha256,parse_id:r.parse_id,page}})
@@ -114,7 +127,7 @@ export function EvidencePage({result,docs,selected,onSelect,navigate,notify,stat
 
     <IconButton label="搜索原文" aria-pressed={searchOpen} onClick={()=>setSearchOpen(!searchOpen)}><Search size={16}/></IconButton></>:<span className="truncate">{current?.source||'原文'}</span>}
     <IconButton label={full?'退出全屏阅读':'全屏阅读'} onClick={()=>setFull(!full)}>{full?<X size={16}/>:<Maximize2 size={16}/>}</IconButton>
-    {!isSQL&&!isDefinition&&current&&<ActionMenu label="阅读工具" iconOnly items={readerTools} footer={sourceUrl?<a role="menuitem" target="_blank" rel="noreferrer" href={sourceUrl}><ExternalLink size={16}/>打开同版本原文件</a>:undefined}/>}
+    {!isSQL&&!isDefinition&&current&&<ActionMenu label="阅读工具" iconOnly items={readerTools} footer={<>{sourceUrl&&<a role="menuitem" target="_blank" rel="noreferrer" href={sourceUrl}><ExternalLink size={16}/>打开同版本原文件</a>}{officialUrl&&<a role="menuitem" target="_blank" rel="noreferrer" href={officialPageUrl}><ExternalLink size={16}/>官方来源</a>}</>}/>}
     {(isSQL||isDefinition)&&sourceUrl&&<a className="icon-button" title="打开同版本原文件" aria-label="打开同版本原文件" target="_blank" rel="noreferrer" href={sourceUrl}><ExternalLink size={16}/></a>}
    </div>
    {pageError&&<div className="reader-warning" role="alert">{pageError}</div>}
@@ -150,6 +163,7 @@ export function EvidencePage({result,docs,selected,onSelect,navigate,notify,stat
  {full?<div className="reader-placeholder"/>:readerPanel}
  <aside id="workbench-details" className="evidence-detail" role={compact?'tabpanel':undefined} aria-labelledby={compact?'workbench-tab-details':undefined}>
   <section className="panel claim-panel"><div className="section-title"><h3><CheckCircle2 size={18}/>结论</h3>{activeClaim&&<span className={'badge '+(activeClaim.evidence_ids?.length?'green':'amber')}>{activeClaim.evidence_ids?.length||0} 处来源</span>}</div>{visibleClaims.length>1&&<select aria-label="选择核验结论" value={claimId} onChange={e=>{const c=visibleClaims.find(c=>c.id===e.target.value);const src=evidence.find(e=>e.id===c?.evidence_ids?.find((id:string)=>evidence.find(x=>x.id===id)?.type==='document'))||evidence.find(e=>c?.evidence_ids?.includes(e.id));if(src)choose(src);setClaimId(e.target.value)}}><option value="">查看原文</option>{visibleClaims.map((c,i)=><option key={c.id} value={c.id}>结论 {i+1} · {c.text.slice(0,28)}</option>)}</select>}{activeClaim?<><p className="bound-claim">{activeClaim.text}</p><SemanticReview claim={activeClaim}/></>:<p className="muted">当前仅查看原文。</p>}</section>
+  {provenance&&<section className="panel source-provenance"><h3>资料来源</h3><p>{provenance.institution}</p><p className="muted">{provenance.origin==='original_pdf_from_user_bundle'?'官方 PDF 原件':provenance.origin==='faithful_native_text_excerpt_docx'?'官方 PDF 原文转换的 Word 展示件':'官方扫描 PDF 原页摘录'} · {provenance.document_year} 年</p>{provenance.original_pdf_pages&&<p className="muted">原 PDF 页号 {provenance.original_pdf_pages.join('、')}</p>}{provenance.origin==='original_scanned_pdf_page_excerpt'&&officialPage&&<p className="muted">当前摘录第 {page} 页，对应官方原 PDF 第 {officialPage} 页。</p>}{provenance.note&&<p className="muted tiny">{provenance.note}</p>}{officialUrl&&<a className="text-link" href={officialPageUrl} target="_blank" rel="noreferrer"><ExternalLink size={14}/>打开官方来源</a>}</section>}
   <section className="panel source-location-panel"><div className="section-title"><h3>来源定位</h3><span className="badge">{related.length}</span></div>{related.map((e,i)=><button key={e.id} className={'location-row '+(e.id===current?.id?'selected':'')} onClick={()=>choose(e)}><span className="citation-number">{i+1}</span><span><strong>{e.source}</strong><small>{e.locator?.document_id?documentPosition(docs.find((d:Obj)=>d.id===e.locator.document_id)?.format||fmt,e.locator.page)+' · '+e.locator.sha256?.slice(0,10):'查询返回快照'}</small><p>{e.snippet?.slice(0,78)}</p></span><MapPin size={17}/></button>)}
    {did&&<><div className="source-location-state"><span className={'badge '+(bound?.status==='located'?'green':'')}>{bound?.status==='located'?'文字范围已定位':bound?.status==='ambiguous'?'多处相同文字，需确认':bound?.status==='unlocated'?'未匹配到引用文字':'原文浏览'}</span><small>{pageMethodLabel(data)}</small></div>{meta&&<><div className="key-value"><span>文件大小</span><strong>{size(meta.document.size_bytes)}</strong></div><details className="hash-detail"><summary>版本与摘要</summary><p>{meta.document.is_current?'当前版本':'历史版本，新版本已存在'}</p><code>{meta.document.sha256}</code><p>解析版本 {meta.parse_id}</p>{meta.parses?.length>0&&<label className="parse-version-choice">解析记录<select aria-label="选择解析版本" value={meta.parse_id} onChange={e=>viewParse({parse_id:e.target.value,sha256:meta.document.sha256})}>{meta.parses.map((p:Obj)=><option key={p.parse_id} value={p.parse_id}>{p.reason||'解析记录'} · {p.parse_id.slice(0,8)}{p.is_active?' · 当前':' · 历史'}</option>)}</select></label>}<select aria-label="选择文档版本" value={meta.document.sha256} onChange={e=>choose({id:did,type:'document',source:meta.document.name,locator:{document_id:did,sha256:e.target.value,page:1}})}>{meta.versions.map((v:Obj)=><option key={v.sha256} value={v.sha256}>{v.sha256.slice(0,10)}{v.sha256===meta.document.current_sha256?' · 当前':''}</option>)}</select></details></>}</>}
   </section>

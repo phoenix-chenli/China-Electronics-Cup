@@ -1,0 +1,108 @@
+Browser tab: 1, Title: "EvidenceFlow 证流", URL: "http://127.0.0.1:8765/".
+1 AXWebArea EvidenceFlow 证流, URL: 127.0.0.1:8765/
+	2 container root
+		3 link Description: 跳到主要内容, Value: 127.0.0.1:8765/#workspace-main
+		4 container
+			5 button (expanded) Description: 收起或打开导航, Secondary Actions: Collapse
+			6 button 证流首页
+				7 text 证流
+			8 button 公开统计分析, Help: 切换或管理项目
+			9 button Description: 搜索工作区, Help: 搜索工作区与操作
+			10 button 问小察
+			11 pop up button (collapsed) Description: 工作区选项, Secondary Actions: Expand
+		12 container
+			13 text 公开统计分析 / 分析
+			14 heading 2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？, Value: 2
+				15 text 2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？
+			16 button 保存
+			17 button 来源 11
+				18 text 来源
+				19 text 11
+			20 pop up button (collapsed) Description: 会话更多操作, Secondary Actions: Expand
+			21 container 问答结果阅读区
+				22 button (collapsed) 此前的对话 1 轮, Secondary Actions: Expand
+					23 text 此前的对话
+					24 container
+						25 text 1  轮
+				26 container 上次查询状态
+					27 heading 本轮查询已取消, Value: 2
+						28 text 本轮查询已取消
+					29 text 已停止继续执行本轮任务。
+					30 container
+						31 text 可以修改问题后发送，或重试这一轮。  下方保留的是此前查询的结果。
+					32 button 重试这一轮
+					33 button (collapsed) 查看失败或取消的执行过程, Secondary Actions: Expand
+						34 text 查看失败或取消的执行过程
+				35 text 数据库与文档
+				36 text  · 第 1 轮
+				37 text 你的问题
+				38 heading 2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？, Value: 1
+					39 text 2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？
+				40 container 本轮证据回答状态
+					41 text 已生成有依据的回答
+					42 container
+						43 text 本轮检索： 关键词与向量
+					44 container
+						45 text 候选重排： 实际完成
+				46 text 所选知识库文档
+				47 text  · 5 份文档
+				48 button (collapsed) 查询时的版本, Secondary Actions: Expand
+					49 text 查询时的版本
+				50 container 结果阅读导航
+					51 button 结论概览
+					52 button 数据与 SQL 1
+						53 text 数据与 SQL
+						54 text 1
+					55 button 来源 11
+						56 text 来源
+						57 text 11
+				58 container 结论概览
+					59 heading 结论概览, Value: 3
+						60 text 结论概览
+					61 button 3/3 条有来源
+						62 text 3
+						63 text /
+						64 text 3
+						65 text  条有来源
+					66 container
+						67 text 01 2024年新津区民营经济增加值为354.57亿元，地区生产总值为534.94亿元；数据库按354.57与534.94计算得到民营经济增加值占GDP比例为66.28%，公报公布值为66.3%。两者在公布精度（保留一位小数）下一致，即计算结果四舍五入到一位小数为66.3%。 模型支持检查： 有支持 deepseek-v4-1-flash-260910 354.57/534.94计算为66.28%，四舍五入到一位小数为66.3%，与公报公布值一致。 这是模型对引用支持度的检查，原文定位另行核对。 依据
+						68 button Description: 查看来源 2, Help: 新津区2024年统计公报原文摘录_转换展示件.docx
+							69 text 来源 
+							70 text 2
+						71 button Description: 查看来源 3, Help: 2024年新津区国民经济和社会发展统计公报.pdf
+							72 text 来源 
+							73 text 3
+						74 button Description: 查看来源 1, Help: 公开统计公报 只读
+							75 text 来源 
+							76 text 1
+					77 button (collapsed) 展开数据与原文依据 2 条明细 · 保留完整数值、引用和检查记录, Secondary Actions: Expand
+						78 text 展开数据与原文依据
+						79 container
+							80 text 2  条明细 · 保留完整数值、引用和检查记录
+				81 button (collapsed) 数据与 SQL 1 行结果 · 点击展开查看, Secondary Actions: Expand
+					82 text 数据与 SQL
+					83 container
+						84 text 1  行结果 ·  点击展开查看
+				85 text 模型驱动
+				86 text deepseek-v4-1-flash-260910
+				87 text 8
+				88 text  次模型调用
+				89 button 查看执行过程
+				90 text 结论与来源绑定情况请逐项核对。
+			91 container 当前提问范围
+				92 container
+					93 text 追问沿用  ·  数据库与文档
+				94 text 公开统计公报 只读  ·  deepseek-v4.1-flash
+				95 text 来源与版本沿用本轮记录。
+				96 button 问答设置
+			97 container
+				98 text 本轮查询已取消
+				99 button 重试
+			100 container
+				101 text entry area (settable) 输入问题
+				102 pop up button (collapsed) Description: 添加资料, Secondary Actions: Expand
+				103 pop up button (collapsed) Description: 工具, Secondary Actions: Expand
+				104 button (disabled) 发送问题
+			105 text Enter 发送  ·  Shift + Enter 换行
+
+The focused UI element is 1 AXWebArea EvidenceFlow 证流, URL: 127.0.0.1:8765/

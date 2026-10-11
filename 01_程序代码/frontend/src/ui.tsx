@@ -12,11 +12,21 @@ export const examples = [
  '2024 年华北有多少客户？',
  '增长率是多少？'
 ]
-export async function api(path:string, body?:unknown, method?:string):Promise<any>{
- const r=await fetch(path, body===undefined?undefined:{method:method||'POST',headers:body instanceof FormData?undefined:{'Content-Type':'application/json'},body:body instanceof FormData?body:JSON.stringify(body)}).catch(()=>{throw new Error('本地服务未连接，请启动证流后重试')})
- let data:any; try{data=await r.json()}catch{throw new Error('服务返回了无法读取的内容')}
- if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:'操作失败，请检查输入后重试')
- return data
+export async function api(path:string, body?:unknown, method?:string, options?:{timeoutMs?:number;signal?:AbortSignal}):Promise<any>{
+ const controller=options?.signal||options?.timeoutMs?new AbortController():null
+ let timer:ReturnType<typeof setTimeout>|undefined,timedOut=false
+ const abort=()=>controller?.abort()
+ if(options?.signal?.aborted)abort()
+ else options?.signal?.addEventListener('abort',abort,{once:true})
+ if(controller&&options?.timeoutMs&&Number.isFinite(options.timeoutMs)&&options.timeoutMs>0)timer=setTimeout(()=>{timedOut=true;controller.abort()},options.timeoutMs)
+ const interrupted=()=>timedOut?new Error('本地服务响应超时，可以重新读取查询状态；不会自动重复提交问题'):options?.signal?.aborted?new DOMException('状态读取已停止','AbortError'):null
+ try{
+  const init=body===undefined?undefined:{method:method||'POST',headers:body instanceof FormData?undefined:{'Content-Type':'application/json'},body:body instanceof FormData?body:JSON.stringify(body)}
+  const r=await fetch(path,controller?{...init,signal:controller.signal}:init).catch(()=>{throw interrupted()||new Error('本地服务未连接，请启动证流后重试')})
+  let data:any; try{data=await r.json()}catch{throw interrupted()||new Error('服务返回了无法读取的内容')}
+  if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:'操作失败，请检查输入后重试')
+  return data
+ }finally{if(timer!==undefined)clearTimeout(timer);options?.signal?.removeEventListener('abort',abort)}
 }
 export const num=(v:any)=>Number(v).toLocaleString('zh-CN',{maximumFractionDigits:2})
 export const money=(v:any)=>'¥'+num(v)
@@ -24,18 +34,49 @@ export const formatValue=(v:any,unit?:string)=>unit==='CNY'?money(v):unit==='rat
 export const timeLabel=(v:string)=>new Date(v).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})
 export const fieldNames:Obj={product_id:'产品编号',product_name:'产品',net_sales:'净销售额（元）',gross_sales:'销售额（元）',order_count:'订单数',customer_count:'客户数',region:'区域',year:'年份',amount:'金额',current_net_sales:'本期净销售额（元）',compare_net_sales:'对比期净销售额（元）',growth_rate:'增长率',order_id:'订单编号',order_date:'日期',sales_amount:'销售额',returned_amount:'退货金额',customer_name:'客户',count:'数量',current_value:'本期',previous_value:'对比期',quantity:'数量',currency:'币种'}
 const mascotPoses = {wave:'welcome', work:'think', reading:'read', pointing:'explain_right', success:'success'} as const
-export function Mascot({pose='wave',className='',...props}: {pose?:keyof typeof mascotPoses,className?:string}&Record<string,any>){return <PetBlob pose={mascotPoses[pose]} size={96} label="小察"/>}
+export function Mascot({pose='wave',className='',...props}: {pose?:keyof typeof mascotPoses,className?:string}&Record<string,any>){return <span className={"mascot "+className} {...props}><PetBlob pose={mascotPoses[pose]} size={96} label="小察"/></span>}
 export function useMedia(query:string){const [matches,setMatches]=useState(()=>matchMedia(query).matches);useEffect(()=>{const mq=matchMedia(query);const update=()=>setMatches(mq.matches);update();mq.addEventListener('change',update);return()=>mq.removeEventListener('change',update)},[query]);return matches}
 export function IconButton({label,children,...props}: {label:string}&React.ButtonHTMLAttributes<HTMLButtonElement>){return <button type="button" className="icon-button" aria-label={label} title={label} {...props}>{children}</button>}
 export function Spinner({text='正在查询'}:{text?:string}){return <div className="loading" role="status"><LoaderCircle className="spin" size={20}/>{text}</div>}
 export function Empty({title,children}:{title:string,children?:React.ReactNode}){return <div className="empty"><FileText size={32}/><strong>{title}</strong>{children}</div>}
 export function RichText({text}:{text:string}){return <>{text.split('**').map((v,i)=>i%2?<strong key={i}>{v}</strong>:v)}</>}
+let modalScrollLocks=0,modalBodyOverflow=''
+const modalFocusSelector='button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex="0"]'
+const isVisible=(el:HTMLElement|null):el is HTMLElement=>!!el?.isConnected&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden'&&!el.closest('[hidden],[inert],[aria-hidden="true"]')
+const modalFocusables=(root:HTMLElement|null,selector=modalFocusSelector)=>Array.from(root?.querySelectorAll<HTMLElement>(selector)||[]).filter(el=>el.tabIndex>=0&&isVisible(el))
 export function Modal({title,close,children,wide=false,className=''}:{title:string,close:()=>void,children:React.ReactNode,wide?:boolean,className?:string}){
- const ref=useRef<HTMLDivElement>(null)
- useEffect(()=>{const prev=document.activeElement as HTMLElement; const root=ref.current; const oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden'; if(!root?.contains(document.activeElement)){const visible=(selector:string)=>Array.from(root?.querySelectorAll<HTMLElement>(selector)||[]).find(el=>el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden');(visible('input:not([disabled]),textarea:not([disabled]),select:not([disabled])')||visible('button:not([disabled]),[tabindex="0"]'))?.focus();} const key=(e:KeyboardEvent)=>{if(root!==Array.from(document.querySelectorAll('.modal[role="dialog"]')).slice(-1)[0])return;if(e.key==='Escape'){e.stopPropagation();close()}if(e.key==='Tab'){const els=Array.from(root?.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex="0"]')||[]).filter(el=>el.getClientRects().length>0);if(!els.length)return;if(e.shiftKey&&document.activeElement===els[0]){e.preventDefault();els[els.length-1]?.focus()}else if(!e.shiftKey&&document.activeElement===els[els.length-1]){e.preventDefault();els[0].focus()}}};document.addEventListener('keydown',key);return()=>{document.removeEventListener('keydown',key);document.body.style.overflow=oldOverflow;requestAnimationFrame(()=>{const active=document.activeElement as HTMLElement;const visible=(el:HTMLElement|null)=>!!el?.isConnected&&!!el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden';if(active!==document.body&&visible(active)&&!root?.contains(active))return;const target=visible(prev)?prev:document.querySelector<HTMLElement>('[aria-label="搜索工作区"]');if(target&&!document.querySelector('.modal[role="dialog"]'))target.focus()})}},[])
- return createPortal(<div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}><div ref={ref} className={'modal '+className+' '+(wide?'wide':'')} role="dialog" aria-modal="true" aria-label={title}><div className="modal-title"><h2>{title}</h2><IconButton label="关闭窗口" onClick={close}><X size={18}/></IconButton></div>{children}</div></div>,document.body)
+ const ref=useRef<HTMLDivElement>(null),closeRef=useRef(close);closeRef.current=close
+ useEffect(()=>{
+  const prev=document.activeElement as HTMLElement,root=ref.current
+  if(modalScrollLocks++===0)modalBodyOverflow=document.body.style.overflow
+  document.body.style.overflow='hidden'
+  if(!root?.contains(document.activeElement))(modalFocusables(root,'input:not([disabled]),textarea:not([disabled]),select:not([disabled])')[0]||modalFocusables(root)[0]||root)?.focus()
+  const key=(e:KeyboardEvent)=>{
+   if(e.defaultPrevented||root!==Array.from(document.querySelectorAll('.modal[role="dialog"]')).slice(-1)[0])return
+   if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeRef.current()}
+   if(e.key==='Tab'){
+    const els=modalFocusables(root),active=document.activeElement
+    if(!els.length){e.preventDefault();root?.focus();return}
+    if(!root?.contains(active)){e.preventDefault();(e.shiftKey?els[els.length-1]:els[0])?.focus()}
+    else if(e.shiftKey&&active===els[0]){e.preventDefault();els[els.length-1]?.focus()}
+    else if(!e.shiftKey&&active===els[els.length-1]){e.preventDefault();els[0].focus()}
+   }
+  }
+  document.addEventListener('keydown',key)
+  return()=>{
+   document.removeEventListener('keydown',key)
+   if(--modalScrollLocks===0)document.body.style.overflow=modalBodyOverflow
+   requestAnimationFrame(()=>{
+    const active=document.activeElement as HTMLElement,top=Array.from(document.querySelectorAll<HTMLElement>('.modal[role="dialog"]')).slice(-1)[0]
+    if(active!==document.body&&isVisible(active)&&!root?.contains(active)&&(!top||top.contains(active)))return
+    const target=isVisible(prev)&&(!top||top.contains(prev))?prev:top?(modalFocusables(top)[0]||top):document.querySelector<HTMLElement>('[aria-label="搜索工作区"]')
+    if(isVisible(target))target.focus()
+   })
+  }
+ },[])
+ return createPortal(<div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}><div ref={ref} tabIndex={-1} className={'modal '+className+' '+(wide?'wide':'')} role="dialog" aria-modal="true" aria-label={title}><div className="modal-title"><h2>{title}</h2><IconButton label="关闭窗口" onClick={close}><X size={18}/></IconButton></div>{children}</div></div>,document.body)
 }
-export function QueryInput({value,onChange,onSend,busy=false,placeholder='输入你的问题',large=false,label='输入问题',actions}:{value:string,onChange:(v:string)=>void,onSend:()=>void,busy?:boolean,placeholder?:string,large?:boolean,label?:string,actions?:React.ReactNode}){
+export function QueryInput({value,onChange,onSend,busy=false,placeholder='输入你的问题',large=false,label='输入问题',actions,submitLabel='发送'}:{value:string,onChange:(v:string)=>void,onSend:()=>void,busy?:boolean,placeholder?:string,large?:boolean,label?:string,actions?:React.ReactNode,submitLabel?:string}){
  const input=useRef<HTMLTextAreaElement>(null)
  const fitHeight=()=>{const el=input.current;if(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,150)+'px'}}
  useEffect(fitHeight,[value])
@@ -51,7 +92,7 @@ export function QueryInput({value,onChange,onSend,busy=false,placeholder='输入
   document.fonts?.addEventListener('loadingdone',schedule)
   return()=>{cancelAnimationFrame(frame);resize.disconnect();appearance.disconnect();window.removeEventListener('resize',schedule);document.fonts?.removeEventListener('loadingdone',schedule)}
  },[])
- return <form className={'query-input focus-query '+(large?'large':'')} onSubmit={e=>{e.preventDefault();if(value.trim()&&!busy)onSend()}}><div className="query-field-row"><textarea ref={input} aria-label={label} disabled={busy} value={value} onChange={e=>onChange(e.target.value)} rows={1} placeholder={placeholder} maxLength={2000} onKeyDown={e=>{if(shouldSendKey(e.key,e.shiftKey,e.nativeEvent.isComposing,e.keyCode)){e.preventDefault();if(value.trim()&&!busy)onSend()}}}/><button className="send-button" type="submit" aria-label="发送问题" title="发送问题" disabled={!value.trim()||busy}>{busy?<LoaderCircle className="spin" size={20}/>:<Send size={19}/>}</button></div>{actions&&<div className="query-input-footer">{actions}</div>}</form>
+ return <form className={'query-input focus-query '+(large?'large':'')} aria-busy={busy} onSubmit={e=>{e.preventDefault();if(value.trim()&&!busy)onSend()}}><div className="query-field-row"><textarea ref={input} name="question" aria-label={label} disabled={busy} value={value} onChange={e=>onChange(e.target.value)} rows={1} placeholder={placeholder} maxLength={2000} onKeyDown={e=>{if(shouldSendKey(e.key,e.shiftKey,e.nativeEvent.isComposing,e.keyCode)){e.preventDefault();if(value.trim()&&!busy)onSend()}}}/></div><div className="query-input-footer"><div className="query-input-actions">{actions}</div><button className="send-button" type="submit" aria-label="发送问题" title={busy?'正在处理当前问题':submitLabel} disabled={!value.trim()||busy}>{busy?<LoaderCircle className="spin" size={18}/>:<Send size={17}/>}<span>{busy?'处理中':submitLabel}</span></button></div></form>
 }
 
 export type ChartProps = {labels:string[],values:(number|null)[],kind?:'bar'|'line',height?:number,label?:string,unit?:string,secondary?:number[],selectedIndex?:number|null,onSelect?:(index:number)=>void}

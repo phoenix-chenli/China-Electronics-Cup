@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "dataset_id": "answer-goals-new-20261011",
+  "project_id": "public-statistics",
+  "frozen_at": "2026-10-11T16:18:53.567290+08:00",
+  "frozen_before_model_execution": true,
+  "author_identity": "development_agent",
+  "human_review": "pending",
+  "novelty_boundary": "新提问未用于本批源码修改；仍是已知公开资料及开发者出题，不是独立真人留出或陌生企业库。",
+  "novelty_check": {
+    "existing_questions": 445,
+    "exact_duplicates": 0
+  },
+  "source_snapshot": {
+    "indicators_path": "02_数据资料/公开统计分析/指标核验.json",
+    "indicators_sha256": "dce0e5c2ab6f7cdafbca67ff3ccb57240e351cba16fa40202e378c9bbb6f5870",
+    "verified_observation_count": 73,
+    "original_pdfs": [
+      {
+        "source_id": "huainan_stats_2024",
+        "path": "02_数据资料/公开统计分析/原件/淮南市2024年国民经济和社会发展统计公报.pdf",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "page_count": 16
+      },
+      {
+        "source_id": "xinjin_stats_2024",
+        "path": "02_数据资料/公开统计分析/原件/2024年新津区国民经济和社会发展统计公报.pdf",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "page_count": 8
+      },
+      {
+        "source_id": "shijingshan_stats_2024",
+        "path": "02_数据资料/公开统计分析/原件/石景山区2024年国民经济和社会发展统计公报.pdf",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "page_count": 12
+      }
+    ]
+  },
+  "database": {
+    "path": "02_数据资料/运行数据/public-statistics.db",
+    "sha256": "1f6f179205f0d44634fb4066f96383f74346927cf6013a92c75c23909e56753b"
+  },
+  "reference_answers_sent_to_model": false,
+  "cases": [
+    {
+      "id": "goals-new-01",
+      "scope": "database",
+      "category": "fact_value",
+      "question": "淮南2024年末男性和女性常住人口分别多少，男性比女性多多少万人？只返回3列，列名依次为“男性_万人”“女性_万人”“男性多出_万人”。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "fact_value",
+        "must_cover": [
+          "154.45万人、147.45万人，差7万人，年份及常住口径"
+        ],
+        "human_review": "pending",
+        "sql": "SELECT MAX(CASE WHEN metric_id='population_male' THEN value END),MAX(CASE WHEN metric_id='population_female' THEN value END),ROUND(MAX(CASE WHEN metric_id='population_male' THEN value END)-MAX(CASE WHEN metric_id='population_female' THEN value END),2) FROM public_observations WHERE region_id='huainan' AND year=2024 AND metric_id IN ('population_male','population_female');",
+        "params": [],
+        "expected_rows": [
+          [
+            154.45,
+            147.45,
+            7.0
+          ]
+        ],
+        "expected_columns": [
+          "男性_万人",
+          "女性_万人",
+          "男性多出_万人"
+        ],
+        "order_matters": true
+      }
+    },
+    {
+      "id": "goals-new-02",
+      "scope": "database",
+      "category": "fact_value",
+      "question": "新津2024年三个产业的民营增加值各多少，分项合计与民营经济增加值总计相差多少？只返回6列，列名依次为“一产_亿元”“二产_亿元”“三产_亿元”“分项合计_亿元”“公布总计_亿元”“合计减总计_亿元”。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "fact_value",
+        "must_cover": [
+          "15.94、152.62、186.01；合计354.57，与354.57差0，不称差0证明每个原始值无限精确"
+        ],
+        "human_review": "pending",
+        "sql": "SELECT MAX(CASE WHEN metric_id='private_sector1_value' THEN value END),MAX(CASE WHEN metric_id='private_sector2_value' THEN value END),MAX(CASE WHEN metric_id='private_sector3_value' THEN value END),ROUND(SUM(CASE WHEN metric_id IN ('private_sector1_value','private_sector2_value','private_sector3_value') THEN value ELSE 0 END),2),MAX(CASE WHEN metric_id='private_value' THEN value END),ROUND(SUM(CASE WHEN metric_id IN ('private_sector1_value','private_sector2_value','private_sector3_value') THEN value ELSE 0 END)-MAX(CASE WHEN metric_id='private_value' THEN value END),2) FROM public_observations WHERE region_id='xinjin' AND year=2024 AND metric_id IN ('private_sector1_value','private_sector2_value','private_sector3_value','private_value');",
+        "params": [],
+        "expected_rows": [
+          [
+            15.94,
+            152.62,
+            186.01,
+            354.57,
+            354.57,
+            0.0
+          ]
+        ],
+        "expected_columns": [
+          "一产_亿元",
+          "二产_亿元",
+          "三产_亿元",
+          "分项合计_亿元",
+          "公布总计_亿元",
+          "合计减总计_亿元"
+        ],
+        "order_matters": true
+      }
+    },
+    {
+      "id": "goals-new-03",
+      "scope": "knowledge",
+      "category": "bounded_inference",
+      "question": "只依据石景山2024公报表1，核对交通运输、仓储和邮政业与GDP的增速和比重。能否因为该行业下降就断言GDP一定下降？依据表内构成作有限解释，不作因果归因，不计算贡献率。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "bounded_inference",
+        "must_cover": [
+          "交通行业4.6亿元、-16.4%、0.4%；GDP1312.9亿元、6.5%、100%；单个小比重行业下降不证明整体必然下降；禁止现价权重推算不变价贡献"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "goals-new-04",
+      "scope": "knowledge",
+      "category": "bounded_inference",
+      "question": "淮南2024公报人口表列出的60周岁及以上人口与65周岁及以上人口各多少？这两个数能直接相加作为60岁以上人口吗？依据表内年龄边界说明，不计算新的合计。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "bounded_inference",
+        "must_cover": [
+          "75.29万人和53.10万人；65周岁及以上包含于60周岁及以上，两项不可直接相加，否则重复；保留常住人口及年末口径"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "goals-new-05",
+      "scope": "knowledge",
+      "category": "identify_missing_inputs",
+      "question": "新津2024公报的人口段落列了城镇和乡村人口。仅据这个段落能给出常住人口城镇化率吗？请核对原句口径并说明完成这项计算还需要哪些人口数据，不用给出缺失数值。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "identify_missing_inputs",
+        "must_cover": [
+          "城镇18.75万人、乡村14.15万人属于户籍口径；不能称为常住人口城镇化率；需同年常住城镇人口及常住总人口；仅限所引段落不称全库不存在"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "goals-new-06",
+      "scope": "knowledge",
+      "category": "identify_missing_inputs",
+      "question": "淮南2024公报给出全年居民消费价格同比上涨0.5%。只依据所引公报内容，能否据此列出12个月各自的同比涨幅？请说明缺少什么信息，不编造每月数值。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "identify_missing_inputs",
+        "must_cover": [
+          "年度0.5%并不决定12个月同比各值；需要逐月同期比较数据或逐月已发布同比；不把0.5重复成每月值，也不声称整份公报或外部从未披露"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "goals-new-07",
+      "scope": "hybrid",
+      "category": "original_source_check",
+      "question": "淮南2024年末城镇人口194.54万人占常住人口301.90万人的比例是多少？在SQL中保留两项原值、计算百分比并四舍五入到2位小数，共3列；结合公报人口表核对这个结果与城镇人口公布比重是否同一显示精度一致，不认定原始值无限精确。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "original_source_check",
+        "must_cover": [
+          "SQL194.54、301.9、64.44；公报人口表64.44%；同年常住口径且显示精度相符"
+        ],
+        "human_review": "pending",
+        "sql": "SELECT MAX(CASE WHEN metric_id='population_urban' THEN value END),MAX(CASE WHEN metric_id='population_resident' THEN value END),ROUND(MAX(CASE WHEN metric_id='population_urban' THEN value END)*100.0/MAX(CASE WHEN metric_id='population_resident' THEN value END),2) FROM public_observations WHERE region_id='huainan' AND year=2024 AND population_type='常住人口' AND metric_id IN ('population_urban','population_resident');",
+        "params": [],
+        "expected_rows": [
+          [
+            194.54,
+            301.9,
+            64.44
+          ]
+        ],
+        "expected_columns": null,
+        "order_matters": true
+      }
+    },
+    {
+      "id": "goals-new-08",
+      "scope": "hybrid",
+      "category": "original_source_check",
+      "question": "计算石景山2024信息传输、软件和信息技术服务业增加值占GDP的比例，在同一条SQL中保留568.5、1312.9和按1位小数显示的百分比，共3列。结合公报表1核对是否与公布比重同一精度一致，只说明核对结果，不归因。",
+      "reference": {
+        "status": "supported",
+        "answer_kind": "original_source_check",
+        "must_cover": [
+          "568.5、1312.9、43.3%；表1公布43.3%；不假称精确原始比重或差异实际原因"
+        ],
+        "human_review": "pending",
+        "sql": "SELECT MAX(CASE WHEN metric_id='information_value' THEN value END),MAX(CASE WHEN metric_id='gdp' THEN value END),ROUND(MAX(CASE WHEN metric_id='information_value' THEN value END)*100.0/MAX(CASE WHEN metric_id='gdp' THEN value END),1) FROM public_observations WHERE region_id='shijingshan' AND year=2024 AND metric_id IN ('information_value','gdp');",
+        "params": [],
+        "expected_rows": [
+          [
+            568.5,
+            1312.9,
+            43.3
+          ]
+        ],
+        "expected_columns": null,
+        "order_matters": true
+      }
+    }
+  ]
+}

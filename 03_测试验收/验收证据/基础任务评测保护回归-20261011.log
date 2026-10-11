@@ -1,0 +1,11 @@
+test_completed_first_run_cannot_be_replayed (tests.test_basic_evaluation.BasicEvaluationTests.test_completed_first_run_cannot_be_replayed) ... ok
+test_existing_regression_output_prevents_any_api_request (tests.test_basic_evaluation.BasicEvaluationTests.test_existing_regression_output_prevents_any_api_request) ... ok
+test_failed_request_never_gets_a_pass_from_preserved_numbers (tests.test_basic_evaluation.BasicEvaluationTests.test_failed_request_never_gets_a_pass_from_preserved_numbers) ... ok
+test_frozen_references_execute_without_model_calls (tests.test_basic_evaluation.BasicEvaluationTests.test_frozen_references_execute_without_model_calls) ... ok
+test_single_table_contract_rejects_extra_joins_and_columns (tests.test_basic_evaluation.BasicEvaluationTests.test_single_table_contract_rejects_extra_joins_and_columns) ... ok
+test_supported_numbers_ignore_raw_evidence_and_failed_claims (tests.test_basic_evaluation.BasicEvaluationTests.test_supported_numbers_ignore_raw_evidence_and_failed_claims) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.012s
+
+OK

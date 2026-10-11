@@ -1,0 +1,33 @@
+{
+  "time": "2026-10-11T04:39:10.837+00:00",
+  "endpoint": "https://tokendance.space/gateway/v1",
+  "configured_model": "deepseek-v4.1-flash",
+  "reported_model": "deepseek-v4-1-flash-260910",
+  "request_settings": {
+    "thinking": {
+      "type": "disabled"
+    },
+    "response_format": {
+      "type": "json_object"
+    },
+    "max_tokens": 256
+  },
+  "duration_ms": 986.08,
+  "finish_reason": "stop",
+  "usage": {
+    "completion_tokens": 5,
+    "prompt_tokens": 54,
+    "total_tokens": 59
+  },
+  "json_parse_ok": true,
+  "arithmetic_ok": true,
+  "response": {
+    "answer": 43
+  },
+  "scope": "Synthetic connection/JSON compatibility only; not business accuracy or uninterrupted service guarantee",
+  "documentation": [
+    "https://api-docs.deepseek.com/guides/thinking_mode/",
+    "https://api-docs.deepseek.com/guides/json_mode/"
+  ],
+  "human_review": "deferred_by_user"
+}

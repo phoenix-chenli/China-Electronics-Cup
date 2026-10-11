@@ -140,7 +140,8 @@ def publish(did,req):
             if not current or current['sha256']!=req.version or current['status']=='archived' or not active or active['id']!=req.parse_id:raise ValueError('来源在提交期间变化，未保存修改')
             if db.execute("SELECT 1 FROM ef_document_processing_tasks WHERE document_id=? AND status IN ('queued','running')",(did,)).fetchone():raise ValueError('文档正在解析，请完成或取消后复核')
             after=documents.save_parse(db,did,req.version,body,'人工复核：'+req.operator.strip(),req.page)
-            quality=s.quality_for_parse(body)
+            current_document=db.execute('SELECT sha256,quality_json FROM documents WHERE id=?',(did,)).fetchone()
+            quality=s.retain_provenance(s.quality_for_parse(body),current_document)
             db.execute('UPDATE documents SET status=?,quality_json=?,updated_at=? WHERE id=?',('needs_review' if quality['quality_flags'] else 'ready',json.dumps(quality,ensure_ascii=False),s.now(),did))
             db.execute('DELETE FROM blocks WHERE document_id=?',(did,))
             for i,b in enumerate(s.extract(None,body)):

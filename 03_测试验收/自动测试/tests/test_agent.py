@@ -236,6 +236,35 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(result["claims"], [])
         self.assertEqual(result["agent"]["review"]["status"], "needs_evidence")
 
+    def test_excerpt_whitespace_is_restored_without_changing_source_text(self):
+        self.ready()
+        def whitespace_quote(payload):
+            evidence=tool_results(payload)[-1]['result']['evidence'][0]
+            return {'action':'answer','claims':[{'evidence_id':evidence['id'],
+                'quote':''.join(evidence['snippet'].split())}]}
+        self.script({'action':'tool','tool':'document.search','arguments':{'query':'2024年激励规则奖金公式','year':2024}},whitespace_quote)
+        result=agent.execute('查找2024年激励规则奖金公式')
+        claim=result['claims'][0]
+        evidence=next(e for e in result['evidence'] if e['id']==claim['evidence_ids'][0])
+        from backend import documents
+        located=documents.resolve(evidence['locator'],evidence['snippet'])
+        self.assertEqual('located',located['status'])
+        self.assertEqual(located['quote'],claim['text'])
+        self.assertEqual('excerpt',claim['kind'])
+
+    def test_delivered_span_reference_maps_to_exact_document_source(self):
+        self.ready()
+        def span_quote(payload):
+            source=tool_results(payload)[-1]['result']['evidence'][0]
+            return {'action':'answer','claims':[{'evidence_id':source['support_span_ids'][0],'quote':source['snippet'][:1000]}]}
+        self.script({'action':'tool','tool':'document.search','arguments':{'query':'2024年激励规则奖金公式','year':2024}},span_quote)
+        result=agent.execute('查找2024年激励规则奖金公式')
+        claim=result['claims'][0]
+        source=next(e for e in result['evidence'] if e['id']==claim['evidence_ids'][0])
+        from backend import documents
+        self.assertEqual(documents.resolve(source['locator'],source['snippet'])['status'],'located')
+        self.assertTrue(claim['support_span_ids'])
+
     def test_invented_fact_and_repeated_invalid_answer_fail_without_local_fallback(self):
         self.ready()
         wrong = {"action": "answer", "claims": [{"fact_id": "query-unknown-fact"}]}
@@ -250,7 +279,8 @@ class AgentTests(unittest.TestCase):
         self.assert_trace(failed, "failed")
         saved = s.get_run(failed["run_id"])
         self.assertEqual(saved["claims"], [])
-        self.assertEqual(saved["answer"], "")
+        self.assertTrue(saved["answer"].strip())
+        self.assertEqual(saved['error_detail']['code'], 'request_failed')
 
     def test_false_number_with_real_fact_id_is_rejected_then_can_be_repaired(self):
         self.ready()
@@ -587,7 +617,8 @@ class AgentTests(unittest.TestCase):
                                                       "request_id": str(uuid.uuid4())})
         failed = self.wait_task(failed.json()["id"])
         self.assertEqual(failed["status"], "failed")
-        self.assertIsNone(failed["result"])
+        self.assertTrue(failed['result']['answer'].strip())
+        self.assertEqual(failed['result']['answer_status'], 'failed')
         self.assertEqual(failed["agent"]["review"]["status"], "failed")
         self.assert_trace(failed, "failed")
 

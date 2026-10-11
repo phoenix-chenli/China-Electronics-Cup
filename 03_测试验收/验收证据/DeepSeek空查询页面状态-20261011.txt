@@ -1,0 +1,103 @@
+Browser tab: 1, Title: "EvidenceFlow 证流", URL: "http://127.0.0.1:8765/".
+0 AXWebArea EvidenceFlow 证流, URL: 127.0.0.1:8765/
+	1 container root
+		2 link Description: 跳到主要内容, Value: 127.0.0.1:8765/#workspace-main
+		3 container
+			4 button (expanded) Description: 收起或打开导航, Secondary Actions: Collapse
+			5 button 证流首页
+				6 text 证流
+			7 button 公开统计分析, Help: 切换或管理项目
+			8 button Description: 搜索工作区, Help: 搜索工作区与操作
+			9 button 问小察
+			10 pop up button (collapsed) Description: 工作区选项, Secondary Actions: Expand
+		11 container
+			12 text 公开统计分析 / 分析
+			13 heading 2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？, Value: 2
+				14 text 2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？
+			109 button 保存
+			16 button 来源 9
+				17 text 来源
+				110 text 9
+			19 pop up button (collapsed) Description: 会话更多操作, Secondary Actions: Expand
+			20 container 问答结果阅读区
+				21 button (collapsed) 此前的对话 2 轮, Secondary Actions: Expand
+					22 text 此前的对话
+					23 container
+						24 text 2  轮
+				34 text 数据库与文档
+				111 text  · 第 3 轮
+				36 text 你的问题
+				37 heading 请报出淮南、新津和石景山2025年实际GDP，直接给官方数，不做预测。, Value: 1
+					38 text 请报出淮南、新津和石景山2025年实际GDP，直接给官方数，不做预测。
+				112 container 本轮证据回答状态
+					113 text 现有资料不足以给出确定值
+					114 text 这条SQL在本轮数据源与筛选条件下返回0行，未取得可用于回答的记录。这不表示所问数值为0，也不证明全库或外部资料不存在；请核对查询条件或补充资料。
+					115 heading 仍缺少的信息, Value: 4
+						116 text 仍缺少的信息
+					117 content list
+						118 container
+							119 AXListMarker • 
+							120 text 当前SQL筛选范围内无匹配记录，尚不能给出所问确定数值。
+					121 button (collapsed) 可查看的相关依据 · 9 处, Secondary Actions: Expand
+						122 text 可查看的相关
+						123 text 依据
+						124 text  · 
+						125 text 9
+						126 text  处
+					127 container
+						128 text 本轮检索： 关键词与向量
+					129 container
+						130 text 候选重排： 实际完成
+				131 text 所选知识库文档
+				132 text  · 5 份文档
+				133 button (collapsed) 查询时的版本, Secondary Actions: Expand
+					134 text 查询时的版本
+				135 container 结果阅读导航
+					136 button 01 结论概览
+						137 text 01
+						138 text 结论概览
+					139 button 02 数据与 SQL 0
+						140 text 02
+						141 text 数据与 SQL
+						142 text 0
+					143 button 03 来源 9
+						144 text 03
+						145 text 来源
+						146 text 9
+				147 container 结论概览
+					148 heading 结论概览, Value: 3
+						149 text 结论概览
+					150 button 1/1 条有来源
+						151 text 1
+						152 text /
+						153 text 1
+						154 text  条有来源
+					155 container
+						156 text 01 该只读查询返回0行；请核对查询条件与业务口径。 依据
+						157 button Description: 查看来源 1, Help: 公开统计公报 只读
+							158 text 来源 
+							159 text 1
+				160 button (collapsed) 数据与 SQL 0 行结果 · 点击展开查看, Secondary Actions: Expand
+					161 text 数据与 SQL
+					162 container
+						163 text 0  行结果 ·  点击展开查看
+				164 text 模型驱动
+				165 text deepseek-v4-1-flash-260910
+				166 text 6
+				167 text  次模型调用
+				168 button 查看执行过程
+				169 text 结论与来源绑定情况请逐项核对。
+			94 container 当前提问范围
+				95 container
+					96 text 追问沿用  ·  数据库与文档
+				97 text 公开统计公报 只读  ·  deepseek-v4.1-flash
+				98 text 来源与版本沿用本轮记录。
+				99 button 问答设置
+			103 container
+				104 text entry area (settable) 输入问题
+				105 pop up button (collapsed) Description: 添加资料, Secondary Actions: Expand
+				106 pop up button (collapsed) Description: 工具, Secondary Actions: Expand
+				107 button (disabled) 发送问题
+			108 text Enter 发送  ·  Shift + Enter 换行
+
+The focused UI element is 0 AXWebArea EvidenceFlow 证流, URL: 127.0.0.1:8765/

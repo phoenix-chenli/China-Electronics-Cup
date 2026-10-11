@@ -1,0 +1,6 @@
+src/conversations.tsx(149,127): error TS2345: Argument of type 'Obj | null' is not assignable to parameter of type 'Obj'.
+  Type 'null' is not assignable to type 'Obj'.
+src/conversations.tsx(162,93): error TS2345: Argument of type 'Obj | null' is not assignable to parameter of type 'Obj'.
+  Type 'null' is not assignable to type 'Obj'.
+src/conversations.tsx(175,95): error TS2345: Argument of type 'Obj | null' is not assignable to parameter of type 'Obj'.
+  Type 'null' is not assignable to type 'Obj'.

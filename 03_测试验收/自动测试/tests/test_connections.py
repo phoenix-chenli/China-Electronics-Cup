@@ -92,6 +92,16 @@ class ConnectionsTests(unittest.TestCase):
   with patch.object(c,'request_json',return_value={'choices':[{'message':{'content':'{}'}}]}) as call:
    c.chat(d,[{'role':'user','content':'JSON'}],json_mode=True)
    self.assertNotIn('response_format',call.call_args.args[2]);self.assertNotIn('enable_thinking',call.call_args.args[2])
+ def test_tokendance_deepseek_keeps_visible_answer_budget_for_probe_and_json(self):
+  d={**c.get(self.create()['id'],True),'endpoint':'https://tokendance.space/gateway/v1','model':'deepseek-v4.1-flash'}
+  response={'model':d['model'],'choices':[{'finish_reason':'stop','message':{'content':'{"answer":8}'}}]}
+  with patch.object(c,'request_json',return_value=response) as call:
+   for json_mode in [False,True]:
+    result=c.chat(d,[{'role':'user','content':'返回 JSON: 3+5'}],max_tokens=1800,json_mode=json_mode)
+    body=call.call_args.args[2]
+    self.assertEqual(body['max_tokens'],1800);self.assertNotIn('max_completion_tokens',body)
+    self.assertEqual(body['thinking'],{'type':'disabled'});self.assertNotIn('enable_thinking',body)
+    self.assertEqual('response_format' in body,json_mode);self.assertEqual(result['finish_reason'],'stop')
  def test_connection_setup_retries_before_one_post(self):
   import httpcore
   from httpcore._backends.sync import SyncBackend

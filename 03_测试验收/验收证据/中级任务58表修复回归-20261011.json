@@ -1,0 +1,2176 @@
+{
+  "dataset_sha256": "ae259ddeead5b11e4472d2df375d891281c833d646d267b124d044ea6377e044",
+  "phase": "completed",
+  "human_review": "pending",
+  "reference_answers_sent_to_model": false,
+  "no_post_retries": true,
+  "results": [
+    {
+      "case_id": "schema-58-01",
+      "question": "按客户汇总2025年1月到2月的实际收款金额，只返回客户名称和实际收款总额；不要使用预算、预测或历史备份记录。",
+      "error": null,
+      "strict_sql_rows_match": true,
+      "duration_ms": 9442.27,
+      "model_calls": 5,
+      "required_tables": [
+        "客户",
+        "实际合同",
+        "实际收款"
+      ],
+      "selected_tables": [
+        "实际合同",
+        "实际收款",
+        "客户"
+      ],
+      "excluded_decoys": true,
+      "schema_stages": 3,
+      "result": {
+        "run_id": "8bed1111-bb57-4b35-9f29-8a2e42ef6c8c",
+        "question": "按客户汇总2025年1月到2月的实际收款金额，只返回客户名称和实际收款总额；不要使用预算、预测或历史备份记录。",
+        "workspace_id": "sales-demo",
+        "query_spec": {
+          "metric": "database",
+          "query_scope": "database",
+          "database_connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+          "database_connection_revision": 2,
+          "routing": {
+            "query_scope": "database",
+            "recommended_scope": "sales",
+            "selected_scope": "database",
+            "reason": "当前使用已固定的范围；可以在提问前切换。问题涉及本机销售示例指标。",
+            "source_label": "销售示例与本机文档",
+            "document_count": 27,
+            "project_id": null,
+            "project_name": "本机资料",
+            "scope_options": [
+              {
+                "id": "sales",
+                "label": "销售示例"
+              },
+              {
+                "id": "database",
+                "label": "数据库"
+              },
+              {
+                "id": "knowledge",
+                "label": "文档"
+              },
+              {
+                "id": "hybrid",
+                "label": "数据库与文档"
+              }
+            ],
+            "database_connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6"
+          },
+          "database_source": {
+            "kind": "sqlite",
+            "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+            "revision": 2,
+            "name": "隔离58表合成库",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca"
+          },
+          "schema_fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca",
+          "last_sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+          "last_params": [],
+          "question": "按客户汇总2025年1月到2月的实际收款金额，只返回客户名称和实际收款总额；不要使用预算、预测或历史备份记录。"
+        },
+        "status": "completed",
+        "answer": "返回结果第 1 行：客户名称 = \"青城\"；实际收款总额 = 110.0。",
+        "headline": "返回结果第 1 行：客户名称 = \"青城\"；实际收款总额 = 110.0。",
+        "metrics": [],
+        "claims": [
+          {
+            "id": "claim-1",
+            "query_id": "database-1",
+            "text": "返回结果第 1 行：客户名称 = \"青城\"；实际收款总额 = 110.0。",
+            "evidence_ids": [
+              "database-2ae88b82424c4315a34b304fa0cb43ba"
+            ],
+            "status": "supported",
+            "kind": "database_row",
+            "value": null,
+            "unit": null,
+            "query_provenance": {
+              "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+              "params": [],
+              "source_fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca",
+              "result_sha256": "d60a6688481ac67cc4d9efcbc84f693ef072fb3cda67aff820ada2842c792eb7",
+              "columns": [
+                "客户名称",
+                "实际收款总额"
+              ],
+              "returned_row_count": 1,
+              "truncated": false
+            },
+            "fact_id": "database-1-row-1"
+          }
+        ],
+        "evidence": [
+          {
+            "id": "database-2ae88b82424c4315a34b304fa0cb43ba",
+            "type": "sql_result",
+            "source": "隔离58表合成库",
+            "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+            "status": "executed",
+            "locator": {
+              "query_scope": "database",
+              "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+              "params": [],
+              "columns": [
+                "客户名称",
+                "实际收款总额"
+              ],
+              "rows": [
+                {
+                  "客户名称": "青城",
+                  "实际收款总额": 110.0
+                }
+              ],
+              "row_count": 1,
+              "row_limit": 200,
+              "truncated": false,
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca"
+              },
+              "version": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca",
+              "result_sha256": "d60a6688481ac67cc4d9efcbc84f693ef072fb3cda67aff820ada2842c792eb7",
+              "dialect": "sqlite"
+            }
+          }
+        ],
+        "events": [
+          {
+            "step_id": "agent-1",
+            "tool": "model.plan",
+            "label": "规划任务",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:05.699+00:00",
+            "duration_ms": 946.87,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 1,
+              "message_count": 2
+            },
+            "outputs": {
+              "tool": "database.schema",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 1918,
+                "total_tokens": 1932,
+                "completion_tokens": 14
+              }
+            },
+            "finished_at": "2026-10-11T03:11:06.646+00:00"
+          },
+          {
+            "step_id": "agent-2",
+            "tool": "database.schema",
+            "label": "读取问数数据库结构",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:06.646+00:00",
+            "duration_ms": 2.53,
+            "summary": "执行完成",
+            "inputs": {},
+            "outputs": {
+              "boundary": "源含超过 50 张表，请明确选择相关表后读取字段；未静默丢弃剩余表。",
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "0b35d1c22e1f2b566bade9e82d4ffe13a69047a76c4650b07b3d15ffb9390163"
+              },
+              "truncated": false,
+              "tables": [],
+              "tables_count": 0
+            },
+            "finished_at": "2026-10-11T03:11:06.649+00:00"
+          },
+          {
+            "step_id": "agent-3",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:06.649+00:00",
+            "duration_ms": 1356.8,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 2,
+              "message_count": 4
+            },
+            "outputs": {
+              "tool": "database.schema",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 3193,
+                "total_tokens": 3221,
+                "completion_tokens": 28
+              }
+            },
+            "finished_at": "2026-10-11T03:11:08.006+00:00"
+          },
+          {
+            "step_id": "agent-4",
+            "tool": "database.schema",
+            "label": "读取问数数据库结构",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:08.006+00:00",
+            "duration_ms": 7.61,
+            "summary": "执行完成",
+            "inputs": {
+              "table_names": [
+                "实际收款",
+                "客户"
+              ]
+            },
+            "outputs": {
+              "boundary": "字段与约束来自数据库；候选关联仅通过当前键唯一/值覆盖检查，未冒充声明外键。",
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "9a08beaea86dcde084d8a7ee3f3a11cf234912366d8cc756f13696be9bfdbdb2"
+              },
+              "truncated": false,
+              "tables": [
+                {
+                  "schema": "main",
+                  "name": "实际收款",
+                  "qualified_name": "main.实际收款",
+                  "columns": [
+                    {
+                      "name": "收款编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "合同编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "收款日期",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "金额",
+                      "type": "REAL",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "收款编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "合同编号"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "实际合同",
+                      "referenced_columns": [
+                        "合同编号"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                },
+                {
+                  "schema": "main",
+                  "name": "客户",
+                  "qualified_name": "main.客户",
+                  "columns": [
+                    {
+                      "name": "客户编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "客户名称",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "客户编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": []
+                }
+              ],
+              "tables_count": 2
+            },
+            "finished_at": "2026-10-11T03:11:08.013+00:00"
+          },
+          {
+            "step_id": "agent-5",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:08.013+00:00",
+            "duration_ms": 1718.42,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 3,
+              "message_count": 6
+            },
+            "outputs": {
+              "tool": "database.schema",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 4799,
+                "total_tokens": 4824,
+                "completion_tokens": 25
+              }
+            },
+            "finished_at": "2026-10-11T03:11:09.732+00:00"
+          },
+          {
+            "step_id": "agent-6",
+            "tool": "database.schema",
+            "label": "读取问数数据库结构",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:09.732+00:00",
+            "duration_ms": 2.79,
+            "summary": "执行完成",
+            "inputs": {
+              "table_names": [
+                "实际合同"
+              ]
+            },
+            "outputs": {
+              "boundary": "字段与约束来自数据库；候选关联仅通过当前键唯一/值覆盖检查，未冒充声明外键。",
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca"
+              },
+              "truncated": false,
+              "tables": [
+                {
+                  "schema": "main",
+                  "name": "实际收款",
+                  "qualified_name": "main.实际收款",
+                  "columns": [
+                    {
+                      "name": "收款编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "合同编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "收款日期",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "金额",
+                      "type": "REAL",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "收款编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "合同编号"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "实际合同",
+                      "referenced_columns": [
+                        "合同编号"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                },
+                {
+                  "schema": "main",
+                  "name": "客户",
+                  "qualified_name": "main.客户",
+                  "columns": [
+                    {
+                      "name": "客户编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "客户名称",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "客户编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": []
+                },
+                {
+                  "schema": "main",
+                  "name": "实际合同",
+                  "qualified_name": "main.实际合同",
+                  "columns": [
+                    {
+                      "name": "合同编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "客户编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "签约日期",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "合同编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "客户编号"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "客户",
+                      "referenced_columns": [
+                        "客户编号"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                }
+              ],
+              "tables_count": 3
+            },
+            "finished_at": "2026-10-11T03:11:09.735+00:00"
+          },
+          {
+            "step_id": "agent-7",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:09.735+00:00",
+            "duration_ms": 3777.78,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 4,
+              "message_count": 8
+            },
+            "outputs": {
+              "tool": "database.query",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 6899,
+                "total_tokens": 7076,
+                "completion_tokens": 177
+              }
+            },
+            "finished_at": "2026-10-11T03:11:13.513+00:00"
+          },
+          {
+            "step_id": "agent-8",
+            "tool": "database.query",
+            "label": "校验并执行只读SQL",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:13.513+00:00",
+            "duration_ms": 60.71,
+            "summary": "执行完成",
+            "inputs": {
+              "sql": "SELECT c.客户名称, SUM(r.金额) AS 实际收款总额 FROM main.实际收款 r JOIN main.实际合同 ct ON r.合同编号 = ct.合同编号 JOIN main.客户 c ON ct.客户编号 = c.客户编号 WHERE r.收款日期 >= '2025-01-01' AND r.收款日期 < '2025-03-01' GROUP BY c.客户名称",
+              "params": [],
+              "explanation": "从实际收款表出发，通过已验证外键关联实际合同和客户表，筛选收款日期在2025年1月至2月之间的记录，按客户名称分组汇总金额。未使用任何预算、预测或历史备份表。"
+            },
+            "outputs": {
+              "status": "executed",
+              "boundary": "返回行是实际SQL结果；未自动确认业务口径、单位或自然语言准确率。",
+              "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+              "params": [],
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca"
+              },
+              "validation": {
+                "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+                "tables": [
+                  "main.实际合同",
+                  "main.实际收款",
+                  "main.客户"
+                ],
+                "columns": [
+                  "main.实际合同.合同编号",
+                  "main.实际合同.客户编号",
+                  "main.实际收款.合同编号",
+                  "main.实际收款.收款日期",
+                  "main.实际收款.金额",
+                  "main.客户.客户名称",
+                  "main.客户.客户编号"
+                ],
+                "relations": [
+                  {
+                    "left_table": "main.实际收款",
+                    "left_columns": [
+                      "合同编号"
+                    ],
+                    "right_table": "main.实际合同",
+                    "right_columns": [
+                      "合同编号"
+                    ],
+                    "source": "foreign_key",
+                    "verified": true,
+                    "join_alias": "ct",
+                    "join_type": "INNER"
+                  },
+                  {
+                    "left_table": "main.实际合同",
+                    "left_columns": [
+                      "客户编号"
+                    ],
+                    "right_table": "main.客户",
+                    "right_columns": [
+                      "客户编号"
+                    ],
+                    "source": "foreign_key",
+                    "verified": true,
+                    "join_alias": "c",
+                    "join_type": "INNER"
+                  }
+                ],
+                "unit_origins": {
+                  "客户名称": "main.客户.客户名称",
+                  "实际收款总额": "main.实际收款.金额"
+                },
+                "limit": 201,
+                "parameter_count": 0,
+                "parameter_style": "qmark",
+                "checks": [
+                  {
+                    "name": "单条只读查询及结构",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "表字段和作用域",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "声明或验证的关联键",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "返回行数预算",
+                    "status": "passed",
+                    "limit": 201
+                  }
+                ]
+              },
+              "row_limit": 200,
+              "truncated": false,
+              "facts": [
+                {
+                  "id": "database-1-row-1",
+                  "query_id": "database-1",
+                  "text": "返回结果第 1 行：客户名称 = \"青城\"；实际收款总额 = 110.0。",
+                  "evidence_ids": [
+                    "database-2ae88b82424c4315a34b304fa0cb43ba"
+                  ],
+                  "status": "supported",
+                  "kind": "database_row",
+                  "value": null,
+                  "unit": null
+                },
+                {
+                  "id": "database-1-cell-1-1",
+                  "query_id": "database-1",
+                  "text": "返回结果第 1 行的 实际收款总额 为 110.0（未推断单位）。",
+                  "evidence_ids": [
+                    "database-2ae88b82424c4315a34b304fa0cb43ba"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 110.0,
+                  "unit": "untyped",
+                  "column": "实际收款总额",
+                  "unit_origin": "main.实际收款.金额"
+                }
+              ],
+              "facts_count": 2,
+              "rows": [
+                {
+                  "客户名称": "青城",
+                  "实际收款总额": 110.0
+                }
+              ],
+              "rows_count": 1,
+              "evidence": [
+                {
+                  "id": "database-2ae88b82424c4315a34b304fa0cb43ba",
+                  "type": "sql_result",
+                  "source": "隔离58表合成库",
+                  "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+                  "page": null,
+                  "version": null
+                }
+              ],
+              "evidence_count": 1
+            },
+            "finished_at": "2026-10-11T03:11:13.573+00:00"
+          },
+          {
+            "step_id": "agent-9",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:13.574+00:00",
+            "duration_ms": 1560.51,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 5,
+              "message_count": 10
+            },
+            "outputs": {
+              "action": "answer",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 8749,
+                "total_tokens": 8771,
+                "completion_tokens": 22
+              }
+            },
+            "finished_at": "2026-10-11T03:11:15.134+00:00"
+          },
+          {
+            "step_id": "agent-10",
+            "tool": "answer.verify",
+            "label": "核验并组织答案",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:15.134+00:00",
+            "duration_ms": 0.1,
+            "summary": "执行完成",
+            "inputs": {
+              "claim_count": 1,
+              "claim_bindings": [
+                {
+                  "fact_id": "database-1-row-1"
+                }
+              ]
+            },
+            "outputs": {
+              "status": "passed",
+              "checks": [
+                {
+                  "name": "事实及原文绑定",
+                  "status": "passed"
+                }
+              ]
+            },
+            "finished_at": "2026-10-11T03:11:15.134+00:00"
+          }
+        ],
+        "rows": [
+          {
+            "客户名称": "青城",
+            "实际收款总额": 110.0
+          }
+        ],
+        "columns": [
+          "客户名称",
+          "实际收款总额"
+        ],
+        "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+        "formulas": [],
+        "checks": [
+          {
+            "name": "单条只读查询及结构",
+            "status": "passed"
+          },
+          {
+            "name": "表字段和作用域",
+            "status": "passed"
+          },
+          {
+            "name": "声明或验证的关联键",
+            "status": "passed"
+          },
+          {
+            "name": "返回行数预算",
+            "status": "passed",
+            "limit": 201
+          }
+        ],
+        "features": {
+          "clarification": true,
+          "semantic_validation": true,
+          "evidence_binding": true,
+          "document_reparse": true,
+          "temporal_rules": true,
+          "unit_guard": true
+        },
+        "data_version": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca",
+        "created_at": "2026-10-11T03:11:05.699+00:00",
+        "agent": {
+          "mode": "model",
+          "connection_id": "ef0b3920-82ae-47a7-ad94-6284aff96dce",
+          "model": "qwen3.8-max",
+          "plan": [
+            {
+              "id": "tool-1",
+              "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+              "tool": "database.schema",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            },
+            {
+              "id": "tool-2",
+              "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+              "tool": "database.schema",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            },
+            {
+              "id": "tool-3",
+              "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+              "tool": "database.schema",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            },
+            {
+              "id": "tool-4",
+              "label": "在已读取结构的数据库生成并执行受校验的只读SELECT，支持JOIN、聚合、CTE及子查询",
+              "tool": "database.query",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            }
+          ],
+          "calls": 5,
+          "usage": {
+            "prompt_tokens": 25558,
+            "total_tokens": 25824,
+            "completion_tokens": 266
+          },
+          "review": {
+            "status": "passed",
+            "detail": "结论与本轮确定性事实或精确原文一致；不等于通用语义准确率。"
+          }
+        },
+        "database_query": {
+          "source": {
+            "kind": "sqlite",
+            "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+            "revision": 2,
+            "name": "隔离58表合成库",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "beb6792593ea79f691a4f72e0eb23f3b5992e0663ed4f3af536d4274523f0fca"
+          },
+          "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+          "params": [],
+          "columns": [
+            "客户名称",
+            "实际收款总额"
+          ],
+          "rows": [
+            {
+              "客户名称": "青城",
+              "实际收款总额": 110.0
+            }
+          ],
+          "truncated": false,
+          "row_limit": 200,
+          "validation": {
+            "sql": "SELECT \"c\".\"客户名称\" AS \"客户名称\", SUM(\"r\".\"金额\") AS \"实际收款总额\" FROM \"main\".\"实际收款\" AS \"r\" JOIN \"main\".\"实际合同\" AS \"ct\" ON \"r\".\"合同编号\" = \"ct\".\"合同编号\" JOIN \"main\".\"客户\" AS \"c\" ON \"ct\".\"客户编号\" = \"c\".\"客户编号\" WHERE \"r\".\"收款日期\" >= '2025-01-01' AND \"r\".\"收款日期\" < '2025-03-01' GROUP BY \"c\".\"客户名称\" LIMIT 201",
+            "tables": [
+              "main.实际合同",
+              "main.实际收款",
+              "main.客户"
+            ],
+            "columns": [
+              "main.实际合同.合同编号",
+              "main.实际合同.客户编号",
+              "main.实际收款.合同编号",
+              "main.实际收款.收款日期",
+              "main.实际收款.金额",
+              "main.客户.客户名称",
+              "main.客户.客户编号"
+            ],
+            "relations": [
+              {
+                "left_table": "main.实际收款",
+                "left_columns": [
+                  "合同编号"
+                ],
+                "right_table": "main.实际合同",
+                "right_columns": [
+                  "合同编号"
+                ],
+                "source": "foreign_key",
+                "verified": true,
+                "join_alias": "ct",
+                "join_type": "INNER"
+              },
+              {
+                "left_table": "main.实际合同",
+                "left_columns": [
+                  "客户编号"
+                ],
+                "right_table": "main.客户",
+                "right_columns": [
+                  "客户编号"
+                ],
+                "source": "foreign_key",
+                "verified": true,
+                "join_alias": "c",
+                "join_type": "INNER"
+              }
+            ],
+            "unit_origins": {
+              "客户名称": "main.客户.客户名称",
+              "实际收款总额": "main.实际收款.金额"
+            },
+            "limit": 201,
+            "parameter_count": 0,
+            "parameter_style": "qmark",
+            "checks": [
+              {
+                "name": "单条只读查询及结构",
+                "status": "passed"
+              },
+              {
+                "name": "表字段和作用域",
+                "status": "passed"
+              },
+              {
+                "name": "声明或验证的关联键",
+                "status": "passed"
+              },
+              {
+                "name": "返回行数预算",
+                "status": "passed",
+                "limit": 201
+              }
+            ]
+          },
+          "joins": [
+            {
+              "left_table": "main.实际收款",
+              "left_columns": [
+                "合同编号"
+              ],
+              "right_table": "main.实际合同",
+              "right_columns": [
+                "合同编号"
+              ],
+              "source": "foreign_key",
+              "verified": true,
+              "join_alias": "ct",
+              "join_type": "INNER"
+            },
+            {
+              "left_table": "main.实际合同",
+              "left_columns": [
+                "客户编号"
+              ],
+              "right_table": "main.客户",
+              "right_columns": [
+                "客户编号"
+              ],
+              "source": "foreign_key",
+              "verified": true,
+              "join_alias": "c",
+              "join_type": "INNER"
+            }
+          ],
+          "attempts": 1,
+          "explanation": "从实际收款表出发，通过已验证外键关联实际合同和客户表，筛选收款日期在2025年1月至2月之间的记录，按客户名称分组汇总金额。未使用任何预算、预测或历史备份表。",
+          "query_id": "database-1",
+          "inspected_tables": [
+            "main.实际收款",
+            "main.客户",
+            "main.实际合同"
+          ]
+        },
+        "answer_status": "supported",
+        "conditions": [],
+        "coverage": {
+          "supported": 1,
+          "total": 1,
+          "percent": 100,
+          "meaning": "已绑定本轮工具来源的结论占比；不等于语义准确率"
+        },
+        "latency_ms": 9434.91,
+        "actions": [
+          {
+            "id": "save",
+            "label": "保存",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "copy",
+            "label": "复制",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "table",
+            "label": "结果表",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "recompute",
+            "label": "修改条件",
+            "enabled": false,
+            "reason": "请用自然语言追问"
+          }
+        ]
+      },
+      "human_review": "pending"
+    },
+    {
+      "case_id": "join-58-02",
+      "question": "分别统计每位客户在2025年签约的合同数量、合同明细金额合计和截至2025年2月28日的实际收款合计，只返回客户名称和这三个汇总值。零收款保留0；合同可能有多条明细和多次收款，请按各自粒度统计。不要使用预算、预测或历史备份。",
+      "error": null,
+      "strict_sql_rows_match": true,
+      "duration_ms": 13858.64,
+      "model_calls": 4,
+      "required_tables": [
+        "客户",
+        "实际合同",
+        "合同明细",
+        "实际收款"
+      ],
+      "selected_tables": [
+        "合同明细",
+        "实际合同",
+        "实际收款",
+        "客户"
+      ],
+      "excluded_decoys": true,
+      "schema_stages": 2,
+      "result": {
+        "run_id": "e2495846-de54-4003-b4f7-48339a3198f7",
+        "question": "分别统计每位客户在2025年签约的合同数量、合同明细金额合计和截至2025年2月28日的实际收款合计，只返回客户名称和这三个汇总值。零收款保留0；合同可能有多条明细和多次收款，请按各自粒度统计。不要使用预算、预测或历史备份。",
+        "workspace_id": "sales-demo",
+        "query_spec": {
+          "metric": "database",
+          "query_scope": "database",
+          "database_connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+          "database_connection_revision": 2,
+          "routing": {
+            "query_scope": "database",
+            "recommended_scope": "sales",
+            "selected_scope": "database",
+            "reason": "当前使用已固定的范围；可以在提问前切换。问题涉及本机销售示例指标。",
+            "source_label": "销售示例与本机文档",
+            "document_count": 27,
+            "project_id": null,
+            "project_name": "本机资料",
+            "scope_options": [
+              {
+                "id": "sales",
+                "label": "销售示例"
+              },
+              {
+                "id": "database",
+                "label": "数据库"
+              },
+              {
+                "id": "knowledge",
+                "label": "文档"
+              },
+              {
+                "id": "hybrid",
+                "label": "数据库与文档"
+              }
+            ],
+            "database_connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6"
+          },
+          "database_source": {
+            "kind": "sqlite",
+            "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+            "revision": 2,
+            "name": "隔离58表合成库",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519"
+          },
+          "schema_fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519",
+          "last_sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+          "last_params": [],
+          "question": "分别统计每位客户在2025年签约的合同数量、合同明细金额合计和截至2025年2月28日的实际收款合计，只返回客户名称和这三个汇总值。零收款保留0；合同可能有多条明细和多次收款，请按各自粒度统计。不要使用预算、预测或历史备份。"
+        },
+        "status": "completed",
+        "answer": "返回结果第 1 行：客户名称 = \"青城\"；合同数量 = 2；合同明细金额合计 = 230.0；实际收款合计 = 110.0。\n\n返回结果第 2 行：客户名称 = \"远海\"；合同数量 = 1；合同明细金额合计 = 40.0；实际收款合计 = 0。",
+        "headline": "返回结果第 1 行：客户名称 = \"青城\"；合同数量 = 2；合同明细金额合计 = 230.0；实际收款合计 = 110.0。",
+        "metrics": [],
+        "claims": [
+          {
+            "id": "claim-1",
+            "query_id": "database-1",
+            "text": "返回结果第 1 行：客户名称 = \"青城\"；合同数量 = 2；合同明细金额合计 = 230.0；实际收款合计 = 110.0。",
+            "evidence_ids": [
+              "database-aff09a1dc51a4ba6989ffb9f34953e67"
+            ],
+            "status": "supported",
+            "kind": "database_row",
+            "value": null,
+            "unit": null,
+            "query_provenance": {
+              "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+              "params": [],
+              "source_fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519",
+              "result_sha256": "21670d26ca88c6f98579adccd4c3f98e00c09ce5bbd15edbe375f3de0c25907a",
+              "columns": [
+                "客户名称",
+                "合同数量",
+                "合同明细金额合计",
+                "实际收款合计"
+              ],
+              "returned_row_count": 2,
+              "truncated": false
+            },
+            "fact_id": "database-1-row-1"
+          },
+          {
+            "id": "claim-2",
+            "query_id": "database-1",
+            "text": "返回结果第 2 行：客户名称 = \"远海\"；合同数量 = 1；合同明细金额合计 = 40.0；实际收款合计 = 0。",
+            "evidence_ids": [
+              "database-aff09a1dc51a4ba6989ffb9f34953e67"
+            ],
+            "status": "supported",
+            "kind": "database_row",
+            "value": null,
+            "unit": null,
+            "query_provenance": {
+              "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+              "params": [],
+              "source_fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519",
+              "result_sha256": "21670d26ca88c6f98579adccd4c3f98e00c09ce5bbd15edbe375f3de0c25907a",
+              "columns": [
+                "客户名称",
+                "合同数量",
+                "合同明细金额合计",
+                "实际收款合计"
+              ],
+              "returned_row_count": 2,
+              "truncated": false
+            },
+            "fact_id": "database-1-row-2"
+          }
+        ],
+        "evidence": [
+          {
+            "id": "database-aff09a1dc51a4ba6989ffb9f34953e67",
+            "type": "sql_result",
+            "source": "隔离58表合成库",
+            "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+            "status": "executed",
+            "locator": {
+              "query_scope": "database",
+              "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+              "params": [],
+              "columns": [
+                "客户名称",
+                "合同数量",
+                "合同明细金额合计",
+                "实际收款合计"
+              ],
+              "rows": [
+                {
+                  "客户名称": "青城",
+                  "合同数量": 2,
+                  "合同明细金额合计": 230.0,
+                  "实际收款合计": 110.0
+                },
+                {
+                  "客户名称": "远海",
+                  "合同数量": 1,
+                  "合同明细金额合计": 40.0,
+                  "实际收款合计": 0
+                }
+              ],
+              "row_count": 2,
+              "row_limit": 200,
+              "truncated": false,
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519"
+              },
+              "version": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519",
+              "result_sha256": "21670d26ca88c6f98579adccd4c3f98e00c09ce5bbd15edbe375f3de0c25907a",
+              "dialect": "sqlite"
+            }
+          }
+        ],
+        "events": [
+          {
+            "step_id": "agent-1",
+            "tool": "model.plan",
+            "label": "规划任务",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:15.142+00:00",
+            "duration_ms": 1285.45,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 1,
+              "message_count": 2
+            },
+            "outputs": {
+              "tool": "database.schema",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 1954,
+                "total_tokens": 1968,
+                "completion_tokens": 14
+              }
+            },
+            "finished_at": "2026-10-11T03:11:16.428+00:00"
+          },
+          {
+            "step_id": "agent-2",
+            "tool": "database.schema",
+            "label": "读取问数数据库结构",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:16.428+00:00",
+            "duration_ms": 3.74,
+            "summary": "执行完成",
+            "inputs": {},
+            "outputs": {
+              "boundary": "源含超过 50 张表，请明确选择相关表后读取字段；未静默丢弃剩余表。",
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "0b35d1c22e1f2b566bade9e82d4ffe13a69047a76c4650b07b3d15ffb9390163"
+              },
+              "truncated": false,
+              "tables": [],
+              "tables_count": 0
+            },
+            "finished_at": "2026-10-11T03:11:16.431+00:00"
+          },
+          {
+            "step_id": "agent-3",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:16.432+00:00",
+            "duration_ms": 1942.23,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 2,
+              "message_count": 4
+            },
+            "outputs": {
+              "tool": "database.schema",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 3269,
+                "total_tokens": 3305,
+                "completion_tokens": 36
+              }
+            },
+            "finished_at": "2026-10-11T03:11:18.374+00:00"
+          },
+          {
+            "step_id": "agent-4",
+            "tool": "database.schema",
+            "label": "读取问数数据库结构",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:18.374+00:00",
+            "duration_ms": 3.59,
+            "summary": "执行完成",
+            "inputs": {
+              "table_names": [
+                "客户",
+                "实际合同",
+                "合同明细",
+                "实际收款"
+              ]
+            },
+            "outputs": {
+              "boundary": "字段与约束来自数据库；候选关联仅通过当前键唯一/值覆盖检查，未冒充声明外键。",
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519"
+              },
+              "truncated": false,
+              "tables": [
+                {
+                  "schema": "main",
+                  "name": "客户",
+                  "qualified_name": "main.客户",
+                  "columns": [
+                    {
+                      "name": "客户编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "客户名称",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "客户编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": []
+                },
+                {
+                  "schema": "main",
+                  "name": "实际合同",
+                  "qualified_name": "main.实际合同",
+                  "columns": [
+                    {
+                      "name": "合同编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "客户编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "签约日期",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "合同编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "客户编号"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "客户",
+                      "referenced_columns": [
+                        "客户编号"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                },
+                {
+                  "schema": "main",
+                  "name": "合同明细",
+                  "qualified_name": "main.合同明细",
+                  "columns": [
+                    {
+                      "name": "明细编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "合同编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "金额",
+                      "type": "REAL",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "明细编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "合同编号"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "实际合同",
+                      "referenced_columns": [
+                        "合同编号"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                },
+                {
+                  "schema": "main",
+                  "name": "实际收款",
+                  "qualified_name": "main.实际收款",
+                  "columns": [
+                    {
+                      "name": "收款编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": true
+                    },
+                    {
+                      "name": "合同编号",
+                      "type": "INTEGER",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "收款日期",
+                      "type": "TEXT",
+                      "nullable": true,
+                      "primary_key": false
+                    },
+                    {
+                      "name": "金额",
+                      "type": "REAL",
+                      "nullable": true,
+                      "primary_key": false
+                    }
+                  ],
+                  "primary_key": [
+                    "收款编号"
+                  ],
+                  "unique_keys": [],
+                  "foreign_keys": [
+                    {
+                      "id": "fk-0",
+                      "columns": [
+                        "合同编号"
+                      ],
+                      "referenced_schema": "main",
+                      "referenced_table": "实际合同",
+                      "referenced_columns": [
+                        "合同编号"
+                      ],
+                      "declared": true,
+                      "source": "database_constraint"
+                    }
+                  ]
+                }
+              ],
+              "tables_count": 4
+            },
+            "finished_at": "2026-10-11T03:11:18.377+00:00"
+          },
+          {
+            "step_id": "agent-5",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:18.378+00:00",
+            "duration_ms": 9044.82,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 3,
+              "message_count": 6
+            },
+            "outputs": {
+              "tool": "database.query",
+              "action": "tool",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 5767,
+                "total_tokens": 6226,
+                "completion_tokens": 459
+              }
+            },
+            "finished_at": "2026-10-11T03:11:27.422+00:00"
+          },
+          {
+            "step_id": "agent-6",
+            "tool": "database.query",
+            "label": "校验并执行只读SQL",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:27.422+00:00",
+            "duration_ms": 12.81,
+            "summary": "执行完成",
+            "inputs": {
+              "sql": "WITH contracts_2025 AS (\n  SELECT 合同编号, 客户编号\n  FROM main.实际合同\n  WHERE 签约日期 >= '2025-01-01' AND 签约日期 < '2026-01-01'\n),\ncontract_count AS (\n  SELECT 客户编号, COUNT(合同编号) AS 合同数量\n  FROM contracts_2025\n  GROUP BY 客户编号\n),\ndetail_amount AS (\n  SELECT c.客户编号, COALESCE(SUM(d.金额), 0) AS 合同明细金额合计\n  FROM contracts_2025 c\n  LEFT JOIN main.合同明细 d ON c.合同编号 = d.合同编号\n  GROUP BY c.客户编号\n),\nreceipt_amount AS (\n  SELECT c.客户编号, COALESCE(SUM(r.金额), 0) AS 实际收款合计\n  FROM contracts_2025 c\n  LEFT JOIN main.实际收款 r ON c.合同编号 = r.合同编号 AND r.收款日期 <= '2025-02-28'\n  GROUP BY c.客户编号\n)\nSELECT \n  cu.客户名称,\n  cc.合同数量,\n  da.合同明细金额合计,\n  ra.实际收款合计\nFROM contract_count cc\nJOIN main.客户 cu ON cc.客户编号 = cu.客户编号\nLEFT JOIN detail_amount da ON cc.客户编号 = da.客户编号\nLEFT JOIN receipt_amount ra ON cc.客户编号 = ra.客户编号",
+              "params": [],
+              "explanation": "先筛选2025年签约的实际合同，再分别按客户编号统计合同数量、关联合同明细的金额合计（子表粒度聚合避免放大）、以及截至2025-02-28的实际收款金额合计（同样先按子表聚合），最后与客户表关联返回客户名称和三个汇总值。未使用预算、预测或历史备份表。"
+            },
+            "outputs": {
+              "status": "executed",
+              "boundary": "返回行是实际SQL结果；未自动确认业务口径、单位或自然语言准确率。",
+              "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+              "params": [],
+              "source": {
+                "kind": "sqlite",
+                "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+                "revision": 2,
+                "name": "隔离58表合成库",
+                "fingerprint_scope": "schema_snapshot",
+                "fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519"
+              },
+              "validation": {
+                "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+                "tables": [
+                  "main.合同明细",
+                  "main.实际合同",
+                  "main.实际收款",
+                  "main.客户"
+                ],
+                "columns": [
+                  "main.合同明细.合同编号",
+                  "main.合同明细.金额",
+                  "main.实际合同.合同编号",
+                  "main.实际合同.客户编号",
+                  "main.实际合同.签约日期",
+                  "main.实际收款.合同编号",
+                  "main.实际收款.收款日期",
+                  "main.实际收款.金额",
+                  "main.客户.客户名称",
+                  "main.客户.客户编号"
+                ],
+                "relations": [
+                  {
+                    "left_table": "main.合同明细",
+                    "left_columns": [
+                      "合同编号"
+                    ],
+                    "right_table": "main.实际合同",
+                    "right_columns": [
+                      "合同编号"
+                    ],
+                    "source": "foreign_key",
+                    "verified": true,
+                    "join_alias": "d",
+                    "join_type": "LEFT"
+                  },
+                  {
+                    "left_table": "main.实际收款",
+                    "left_columns": [
+                      "合同编号"
+                    ],
+                    "right_table": "main.实际合同",
+                    "right_columns": [
+                      "合同编号"
+                    ],
+                    "source": "foreign_key",
+                    "verified": true,
+                    "join_alias": "r",
+                    "join_type": "LEFT"
+                  },
+                  {
+                    "left_table": "main.实际合同",
+                    "left_columns": [
+                      "客户编号"
+                    ],
+                    "right_table": "main.客户",
+                    "right_columns": [
+                      "客户编号"
+                    ],
+                    "source": "foreign_key",
+                    "verified": true,
+                    "join_alias": "cu",
+                    "join_type": "INNER"
+                  },
+                  {
+                    "left_table": "cc",
+                    "right_table": "da",
+                    "left_columns": [
+                      "客户编号"
+                    ],
+                    "right_columns": [
+                      "客户编号"
+                    ],
+                    "source": "derived_group_key",
+                    "verified": true,
+                    "basis": "两侧由同一已授权原始键直接投影，并按完整相同键分组；各自至多一行。",
+                    "join_alias": "da",
+                    "join_type": "LEFT"
+                  },
+                  {
+                    "left_table": "cc",
+                    "right_table": "ra",
+                    "left_columns": [
+                      "客户编号"
+                    ],
+                    "right_columns": [
+                      "客户编号"
+                    ],
+                    "source": "derived_group_key",
+                    "verified": true,
+                    "basis": "两侧由同一已授权原始键直接投影，并按完整相同键分组；各自至多一行。",
+                    "join_alias": "ra",
+                    "join_type": "LEFT"
+                  }
+                ],
+                "unit_origins": {
+                  "客户名称": "main.客户.客户名称"
+                },
+                "limit": 201,
+                "parameter_count": 0,
+                "parameter_style": "qmark",
+                "checks": [
+                  {
+                    "name": "单条只读查询及结构",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "表字段和作用域",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "声明或验证的关联键",
+                    "status": "passed"
+                  },
+                  {
+                    "name": "返回行数预算",
+                    "status": "passed",
+                    "limit": 201
+                  }
+                ]
+              },
+              "row_limit": 200,
+              "truncated": false,
+              "facts": [
+                {
+                  "id": "database-1-row-1",
+                  "query_id": "database-1",
+                  "text": "返回结果第 1 行：客户名称 = \"青城\"；合同数量 = 2；合同明细金额合计 = 230.0；实际收款合计 = 110.0。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_row",
+                  "value": null,
+                  "unit": null
+                },
+                {
+                  "id": "database-1-cell-1-1",
+                  "query_id": "database-1",
+                  "text": "返回结果第 1 行的 合同数量 为 2（未推断单位）。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 2,
+                  "unit": "untyped",
+                  "column": "合同数量",
+                  "unit_origin": null
+                },
+                {
+                  "id": "database-1-cell-1-2",
+                  "query_id": "database-1",
+                  "text": "返回结果第 1 行的 合同明细金额合计 为 230.0（未推断单位）。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 230.0,
+                  "unit": "untyped",
+                  "column": "合同明细金额合计",
+                  "unit_origin": null
+                },
+                {
+                  "id": "database-1-cell-1-3",
+                  "query_id": "database-1",
+                  "text": "返回结果第 1 行的 实际收款合计 为 110.0（未推断单位）。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 110.0,
+                  "unit": "untyped",
+                  "column": "实际收款合计",
+                  "unit_origin": null
+                },
+                {
+                  "id": "database-1-row-2",
+                  "query_id": "database-1",
+                  "text": "返回结果第 2 行：客户名称 = \"远海\"；合同数量 = 1；合同明细金额合计 = 40.0；实际收款合计 = 0。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_row",
+                  "value": null,
+                  "unit": null
+                },
+                {
+                  "id": "database-1-cell-2-1",
+                  "query_id": "database-1",
+                  "text": "返回结果第 2 行的 合同数量 为 1（未推断单位）。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 1,
+                  "unit": "untyped",
+                  "column": "合同数量",
+                  "unit_origin": null
+                },
+                {
+                  "id": "database-1-cell-2-2",
+                  "query_id": "database-1",
+                  "text": "返回结果第 2 行的 合同明细金额合计 为 40.0（未推断单位）。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 40.0,
+                  "unit": "untyped",
+                  "column": "合同明细金额合计",
+                  "unit_origin": null
+                },
+                {
+                  "id": "database-1-cell-2-3",
+                  "query_id": "database-1",
+                  "text": "返回结果第 2 行的 实际收款合计 为 0（未推断单位）。",
+                  "evidence_ids": [
+                    "database-aff09a1dc51a4ba6989ffb9f34953e67"
+                  ],
+                  "status": "supported",
+                  "kind": "database_value",
+                  "value": 0,
+                  "unit": "untyped",
+                  "column": "实际收款合计",
+                  "unit_origin": null
+                }
+              ],
+              "facts_count": 8,
+              "rows": [
+                {
+                  "客户名称": "青城",
+                  "合同数量": 2,
+                  "合同明细金额合计": 230.0,
+                  "实际收款合计": 110.0
+                },
+                {
+                  "客户名称": "远海",
+                  "合同数量": 1,
+                  "合同明细金额合计": 40.0,
+                  "实际收款合计": 0
+                }
+              ],
+              "rows_count": 2,
+              "evidence": [
+                {
+                  "id": "database-aff09a1dc51a4ba6989ffb9f34953e67",
+                  "type": "sql_result",
+                  "source": "隔离58表合成库",
+                  "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+                  "page": null,
+                  "version": null
+                }
+              ],
+              "evidence_count": 1
+            },
+            "finished_at": "2026-10-11T03:11:27.435+00:00"
+          },
+          {
+            "step_id": "agent-7",
+            "tool": "model.decide",
+            "label": "根据工具结果决定下一步",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:27.435+00:00",
+            "duration_ms": 1558.53,
+            "summary": "执行完成",
+            "inputs": {
+              "call": 4,
+              "message_count": 8
+            },
+            "outputs": {
+              "action": "answer",
+              "model": "qwen3.8-max",
+              "usage": {
+                "prompt_tokens": 10100,
+                "total_tokens": 10134,
+                "completion_tokens": 34
+              }
+            },
+            "finished_at": "2026-10-11T03:11:28.994+00:00"
+          },
+          {
+            "step_id": "agent-8",
+            "tool": "answer.verify",
+            "label": "核验并组织答案",
+            "status": "completed",
+            "started_at": "2026-10-11T03:11:28.994+00:00",
+            "duration_ms": 0.14,
+            "summary": "执行完成",
+            "inputs": {
+              "claim_count": 2,
+              "claim_bindings": [
+                {
+                  "fact_id": "database-1-row-1"
+                },
+                {
+                  "fact_id": "database-1-row-2"
+                }
+              ]
+            },
+            "outputs": {
+              "status": "passed",
+              "checks": [
+                {
+                  "name": "事实及原文绑定",
+                  "status": "passed"
+                }
+              ]
+            },
+            "finished_at": "2026-10-11T03:11:28.994+00:00"
+          }
+        ],
+        "rows": [
+          {
+            "客户名称": "青城",
+            "合同数量": 2,
+            "合同明细金额合计": 230.0,
+            "实际收款合计": 110.0
+          },
+          {
+            "客户名称": "远海",
+            "合同数量": 1,
+            "合同明细金额合计": 40.0,
+            "实际收款合计": 0
+          }
+        ],
+        "columns": [
+          "客户名称",
+          "合同数量",
+          "合同明细金额合计",
+          "实际收款合计"
+        ],
+        "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+        "formulas": [],
+        "checks": [
+          {
+            "name": "单条只读查询及结构",
+            "status": "passed"
+          },
+          {
+            "name": "表字段和作用域",
+            "status": "passed"
+          },
+          {
+            "name": "声明或验证的关联键",
+            "status": "passed"
+          },
+          {
+            "name": "返回行数预算",
+            "status": "passed",
+            "limit": 201
+          }
+        ],
+        "features": {
+          "clarification": true,
+          "semantic_validation": true,
+          "evidence_binding": true,
+          "document_reparse": true,
+          "temporal_rules": true,
+          "unit_guard": true
+        },
+        "data_version": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519",
+        "created_at": "2026-10-11T03:11:15.142+00:00",
+        "agent": {
+          "mode": "model",
+          "connection_id": "ef0b3920-82ae-47a7-ad94-6284aff96dce",
+          "model": "qwen3.8-max",
+          "plan": [
+            {
+              "id": "tool-1",
+              "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+              "tool": "database.schema",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            },
+            {
+              "id": "tool-2",
+              "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+              "tool": "database.schema",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            },
+            {
+              "id": "tool-3",
+              "label": "在已读取结构的数据库生成并执行受校验的只读SELECT，支持JOIN、聚合、CTE及子查询",
+              "tool": "database.query",
+              "status": "completed",
+              "origin": "model_tool_selection"
+            }
+          ],
+          "calls": 4,
+          "usage": {
+            "prompt_tokens": 21090,
+            "total_tokens": 21633,
+            "completion_tokens": 543
+          },
+          "review": {
+            "status": "passed",
+            "detail": "结论与本轮确定性事实或精确原文一致；不等于通用语义准确率。"
+          }
+        },
+        "database_query": {
+          "source": {
+            "kind": "sqlite",
+            "connection_id": "c3c31327-6c0b-4e2a-a3e6-1d04878b6ec6",
+            "revision": 2,
+            "name": "隔离58表合成库",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "a84c5e0464aced201ebb66e068812412e682d2768751651be9f0795129afe519"
+          },
+          "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+          "params": [],
+          "columns": [
+            "客户名称",
+            "合同数量",
+            "合同明细金额合计",
+            "实际收款合计"
+          ],
+          "rows": [
+            {
+              "客户名称": "青城",
+              "合同数量": 2,
+              "合同明细金额合计": 230.0,
+              "实际收款合计": 110.0
+            },
+            {
+              "客户名称": "远海",
+              "合同数量": 1,
+              "合同明细金额合计": 40.0,
+              "实际收款合计": 0
+            }
+          ],
+          "truncated": false,
+          "row_limit": 200,
+          "validation": {
+            "sql": "WITH \"contracts_2025\" AS (SELECT \"实际合同\".\"合同编号\" AS \"合同编号\", \"实际合同\".\"客户编号\" AS \"客户编号\" FROM \"main\".\"实际合同\" AS \"实际合同\" WHERE \"实际合同\".\"签约日期\" >= '2025-01-01' AND \"实际合同\".\"签约日期\" < '2026-01-01'), \"contract_count\" AS (SELECT \"contracts_2025\".\"客户编号\" AS \"客户编号\", COUNT(\"contracts_2025\".\"合同编号\") AS \"合同数量\" FROM \"contracts_2025\" AS \"contracts_2025\" GROUP BY \"contracts_2025\".\"客户编号\"), \"detail_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"d\".\"金额\"), 0) AS \"合同明细金额合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"合同明细\" AS \"d\" ON \"c\".\"合同编号\" = \"d\".\"合同编号\" GROUP BY \"c\".\"客户编号\"), \"receipt_amount\" AS (SELECT \"c\".\"客户编号\" AS \"客户编号\", COALESCE(SUM(\"r\".\"金额\"), 0) AS \"实际收款合计\" FROM \"contracts_2025\" AS \"c\" LEFT JOIN \"main\".\"实际收款\" AS \"r\" ON \"c\".\"合同编号\" = \"r\".\"合同编号\" AND \"r\".\"收款日期\" <= '2025-02-28' GROUP BY \"c\".\"客户编号\") SELECT \"cu\".\"客户名称\" AS \"客户名称\", \"cc\".\"合同数量\" AS \"合同数量\", \"da\".\"合同明细金额合计\" AS \"合同明细金额合计\", \"ra\".\"实际收款合计\" AS \"实际收款合计\" FROM \"contract_count\" AS \"cc\" JOIN \"main\".\"客户\" AS \"cu\" ON \"cc\".\"客户编号\" = \"cu\".\"客户编号\" LEFT JOIN \"detail_amount\" AS \"da\" ON \"cc\".\"客户编号\" = \"da\".\"客户编号\" LEFT JOIN \"receipt_amount\" AS \"ra\" ON \"cc\".\"客户编号\" = \"ra\".\"客户编号\" LIMIT 201",
+            "tables": [
+              "main.合同明细",
+              "main.实际合同",
+              "main.实际收款",
+              "main.客户"
+            ],
+            "columns": [
+              "main.合同明细.合同编号",
+              "main.合同明细.金额",
+              "main.实际合同.合同编号",
+              "main.实际合同.客户编号",
+              "main.实际合同.签约日期",
+              "main.实际收款.合同编号",
+              "main.实际收款.收款日期",
+              "main.实际收款.金额",
+              "main.客户.客户名称",
+              "main.客户.客户编号"
+            ],
+            "relations": [
+              {
+                "left_table": "main.合同明细",
+                "left_columns": [
+                  "合同编号"
+                ],
+                "right_table": "main.实际合同",
+                "right_columns": [
+                  "合同编号"
+                ],
+                "source": "foreign_key",
+                "verified": true,
+                "join_alias": "d",
+                "join_type": "LEFT"
+              },
+              {
+                "left_table": "main.实际收款",
+                "left_columns": [
+                  "合同编号"
+                ],
+                "right_table": "main.实际合同",
+                "right_columns": [
+                  "合同编号"
+                ],
+                "source": "foreign_key",
+                "verified": true,
+                "join_alias": "r",
+                "join_type": "LEFT"
+              },
+              {
+                "left_table": "main.实际合同",
+                "left_columns": [
+                  "客户编号"
+                ],
+                "right_table": "main.客户",
+                "right_columns": [
+                  "客户编号"
+                ],
+                "source": "foreign_key",
+                "verified": true,
+                "join_alias": "cu",
+                "join_type": "INNER"
+              },
+              {
+                "left_table": "cc",
+                "right_table": "da",
+                "left_columns": [
+                  "客户编号"
+                ],
+                "right_columns": [
+                  "客户编号"
+                ],
+                "source": "derived_group_key",
+                "verified": true,
+                "basis": "两侧由同一已授权原始键直接投影，并按完整相同键分组；各自至多一行。",
+                "join_alias": "da",
+                "join_type": "LEFT"
+              },
+              {
+                "left_table": "cc",
+                "right_table": "ra",
+                "left_columns": [
+                  "客户编号"
+                ],
+                "right_columns": [
+                  "客户编号"
+                ],
+                "source": "derived_group_key",
+                "verified": true,
+                "basis": "两侧由同一已授权原始键直接投影，并按完整相同键分组；各自至多一行。",
+                "join_alias": "ra",
+                "join_type": "LEFT"
+              }
+            ],
+            "unit_origins": {
+              "客户名称": "main.客户.客户名称"
+            },
+            "limit": 201,
+            "parameter_count": 0,
+            "parameter_style": "qmark",
+            "checks": [
+              {
+                "name": "单条只读查询及结构",
+                "status": "passed"
+              },
+              {
+                "name": "表字段和作用域",
+                "status": "passed"
+              },
+              {
+                "name": "声明或验证的关联键",
+                "status": "passed"
+              },
+              {
+                "name": "返回行数预算",
+                "status": "passed",
+                "limit": 201
+              }
+            ]
+          },
+          "joins": [
+            {
+              "left_table": "main.合同明细",
+              "left_columns": [
+                "合同编号"
+              ],
+              "right_table": "main.实际合同",
+              "right_columns": [
+                "合同编号"
+              ],
+              "source": "foreign_key",
+              "verified": true,
+              "join_alias": "d",
+              "join_type": "LEFT"
+            },
+            {
+              "left_table": "main.实际收款",
+              "left_columns": [
+                "合同编号"
+              ],
+              "right_table": "main.实际合同",
+              "right_columns": [
+                "合同编号"
+              ],
+              "source": "foreign_key",
+              "verified": true,
+              "join_alias": "r",
+              "join_type": "LEFT"
+            },
+            {
+              "left_table": "main.实际合同",
+              "left_columns": [
+                "客户编号"
+              ],
+              "right_table": "main.客户",
+              "right_columns": [
+                "客户编号"
+              ],
+              "source": "foreign_key",
+              "verified": true,
+              "join_alias": "cu",
+              "join_type": "INNER"
+            },
+            {
+              "left_table": "cc",
+              "right_table": "da",
+              "left_columns": [
+                "客户编号"
+              ],
+              "right_columns": [
+                "客户编号"
+              ],
+              "source": "derived_group_key",
+              "verified": true,
+              "basis": "两侧由同一已授权原始键直接投影，并按完整相同键分组；各自至多一行。",
+              "join_alias": "da",
+              "join_type": "LEFT"
+            },
+            {
+              "left_table": "cc",
+              "right_table": "ra",
+              "left_columns": [
+                "客户编号"
+              ],
+              "right_columns": [
+                "客户编号"
+              ],
+              "source": "derived_group_key",
+              "verified": true,
+              "basis": "两侧由同一已授权原始键直接投影，并按完整相同键分组；各自至多一行。",
+              "join_alias": "ra",
+              "join_type": "LEFT"
+            }
+          ],
+          "attempts": 1,
+          "explanation": "先筛选2025年签约的实际合同，再分别按客户编号统计合同数量、关联合同明细的金额合计（子表粒度聚合避免放大）、以及截至2025-02-28的实际收款金额合计（同样先按子表聚合），最后与客户表关联返回客户名称和三个汇总值。未使用预算、预测或历史备份表。",
+          "query_id": "database-1",
+          "inspected_tables": [
+            "main.客户",
+            "main.实际合同",
+            "main.合同明细",
+            "main.实际收款"
+          ]
+        },
+        "answer_status": "supported",
+        "conditions": [],
+        "coverage": {
+          "supported": 2,
+          "total": 2,
+          "percent": 100,
+          "meaning": "已绑定本轮工具来源的结论占比；不等于语义准确率"
+        },
+        "latency_ms": 13852.04,
+        "actions": [
+          {
+            "id": "save",
+            "label": "保存",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "copy",
+            "label": "复制",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "table",
+            "label": "结果表",
+            "enabled": true,
+            "reason": null
+          },
+          {
+            "id": "recompute",
+            "label": "修改条件",
+            "enabled": false,
+            "reason": "请用自然语言追问"
+          }
+        ]
+      },
+      "human_review": "pending"
+    }
+  ],
+  "started_at": "2026-10-11T03:11:02.671067+00:00",
+  "table_count": 58,
+  "decoy_table_count": 54,
+  "boundary": "受控合成困难案例，真实模型执行；不代表真实企业业务准确率，也不替代独立真人复核。",
+  "model": "qwen3.8-max",
+  "connection_probe_calls": 1,
+  "source_sha256": {
+    "agent.py": "f60822e82b57088d4ff1e59cdeda416e167c0e17bd0af43bd3d81a3d0c13c7fc",
+    "database_query.py": "8363e39d54d7fb5575435b39d407bc865eed718a704c1504e3b8d9db9749db5b",
+    "sql_guard.py": "317ef1ba8a3be850a3104c133b56bffa7aaa8c8da8a379c16948adde52977d07"
+  },
+  "finished_at": "2026-10-11T03:11:28.997075+00:00",
+  "database_unchanged": true
+}

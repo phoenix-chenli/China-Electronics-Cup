@@ -331,6 +331,8 @@ class Manager:
                     self._guard(body,stop,deadline,db)
                     after=documents.save_parse(db,body["document"]["id"],body["document"]["sha256"],parsed,"正式解析任务："+body["mode"])
                     quality=s.quality_for_parse(parsed)
+                    current_document=db.execute('SELECT sha256,quality_json FROM documents WHERE id=?',(body['document']['id'],)).fetchone()
+                    quality=s.retain_provenance(quality,current_document)
                     db.execute("UPDATE documents SET pages=?,status=?,quality_json=?,updated_at=? WHERE id=?",(len(parsed["pages"]),"needs_review" if quality["quality_flags"] else "ready",encode(quality),s.now(),body["document"]["id"]))
                     db.execute("DELETE FROM blocks WHERE document_id=?",(body["document"]["id"],))
                     for i,b in enumerate(s.extract(None,parsed)):

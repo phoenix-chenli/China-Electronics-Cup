@@ -39,6 +39,24 @@ test('each synthesis claim retains multiple citations and separates model review
  assert.ok(unknown.includes('未能判断'));assert.ok(unknown.includes('模型请求超时'));assert.ok(!unknown.includes('模型支持检查：有支持'))
 })
 
+test('a supported explanation comes before expandable facts without hiding evidence gaps',()=>{
+ const claims=[
+  {id:'raw',kind:'database_row',status:'supported',text:'查询原始数值 91.8',evidence_ids:['doc-1']},
+  {id:'gap',kind:'excerpt',status:'needs_evidence',text:'差异原因尚缺证据',evidence_ids:['doc-2']},
+  {id:'missing-source',kind:'excerpt',status:'supported',text:'该条还有一处未找到的引用',evidence_ids:['doc-1','missing-id']},
+  {id:'explanation',kind:'synthesis',status:'supported',text:'两项合计与第二产业不一致，原因待核实。',evidence_ids:['doc-1','doc-2']}
+ ]
+ const html=renderToStaticMarkup(<Claims result={{claims,evidence}} onEvidence={noop}/>)
+ const toggle=html.indexOf('<details class="claim-supporting"')
+ assert.ok(toggle>html.indexOf('两项合计与第二产业不一致'))
+ assert.ok(toggle>html.indexOf('差异原因尚缺证据'))
+ assert.ok(toggle>html.indexOf('该条还有一处未找到的引用'))
+ assert.ok(html.indexOf('查询原始数值 91.8')>toggle)
+ assert.ok(html.includes('查看来源 1'));assert.ok(html.includes('查看来源 2'));assert.ok(!html.includes(' open=""'))
+ const factsOnly=renderToStaticMarkup(<Claims result={{claims:claims.slice(0,1),evidence}} onEvidence={noop}/>)
+ assert.ok(!factsOnly.includes('claim-supporting'));assert.ok(factsOnly.includes('查询原始数值 91.8'))
+})
+
 test('index states reflect actual progress and degradation without claiming mixed readiness',()=>{
  const lexical=renderToStaticMarkup(<IndexStatus item={{status:'lexical_ready',processed:7,total:10,sha256:'a'.repeat(64)}}/>)
  assert.ok(lexical.includes('关键词就绪'));assert.ok(lexical.includes('7 / 10'));assert.ok(!lexical.includes('混合检索就绪'))

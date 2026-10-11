@@ -10,12 +10,12 @@ function readPins():string[]{try{const value=JSON.parse(localStorage.getItem(pin
 
 export function ActionMenu({label='更多',icon:Icon=MoreHorizontal,items,className='',iconOnly=false,pins,onPin,footer}:{label?:string;icon?:React.ElementType;items:MenuAction[];className?:string;iconOnly?:boolean;pins?:string[];onPin?:(id:string)=>void;footer?:React.ReactNode}){
  const [open,setOpen]=useState(false),[position,setPosition]=useState({top:0,left:0,maxHeight:400})
- const trigger=useRef<HTMLButtonElement>(null),menu=useRef<HTMLDivElement>(null),id=useId()
+ const trigger=useRef<HTMLButtonElement>(null),menu=useRef<HTMLDivElement>(null),initialFocus=useRef<'first'|'last'>('first'),id=useId()
  const close=(restore=false)=>{setOpen(false);if(restore)trigger.current?.focus()}
  useLayoutEffect(()=>{
   if(!open)return
   const place=()=>{const r=trigger.current?.getBoundingClientRect();if(!r)return;const width=Math.min(328,innerWidth-24),height=menu.current?.offsetHeight||350;const below=innerHeight-r.bottom-16,above=r.top-16;const up=below<Math.min(height,260)&&above>below;setPosition({left:Math.max(12,Math.min(r.left,innerWidth-width-12)),top:up?Math.max(12,r.top-Math.min(height,above)-8):r.bottom+8,maxHeight:Math.max(120,up?above:below)})}
-  place();const frame=requestAnimationFrame(()=>{place();menu.current?.querySelector<HTMLElement>('[role="menuitem"]:not(:disabled)')?.focus()})
+  place();const frame=requestAnimationFrame(()=>{place();const options=Array.from(menu.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)')||[]);(initialFocus.current==='last'?options[options.length-1]:options[0])?.focus()})
   const outside=(e:PointerEvent)=>{if(!trigger.current?.contains(e.target as Node)&&!menu.current?.contains(e.target as Node))close()}
   document.addEventListener('pointerdown',outside);window.addEventListener('resize',place);document.addEventListener('scroll',place,true)
   return()=>{cancelAnimationFrame(frame);document.removeEventListener('pointerdown',outside);window.removeEventListener('resize',place);document.removeEventListener('scroll',place,true)}
@@ -27,7 +27,7 @@ export function ActionMenu({label='更多',icon:Icon=MoreHorizontal,items,classN
   const next=e.key==='ArrowDown'?(index+1)%options.length:e.key==='ArrowUp'?(index-1+options.length)%options.length:e.key==='Home'?0:e.key==='End'?options.length-1:-1
   if(next>=0){e.preventDefault();options[next]?.focus()}
  }
- return <><button ref={trigger} type="button" className={'button action-menu-trigger '+(iconOnly?'icon-only ':'')+className} aria-label={label} title={label} aria-haspopup="menu" aria-expanded={open} aria-controls={open?id:undefined} onClick={()=>setOpen(!open)} onKeyDown={e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();setOpen(true)}}}><Icon size={17}/>{!iconOnly&&<span>{label}</span>}{!iconOnly&&Icon!==MoreHorizontal&&<ChevronDown size={12}/>}</button>
+ return <><button ref={trigger} type="button" className={'button action-menu-trigger '+(iconOnly?'icon-only ':'')+className} aria-label={label} title={label} aria-haspopup="menu" aria-expanded={open} aria-controls={open?id:undefined} onClick={()=>{initialFocus.current='first';setOpen(!open)}} onKeyDown={e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();initialFocus.current=e.key==='ArrowUp'?'last':'first';setOpen(true)}}}><Icon size={17}/>{!iconOnly&&<span>{label}</span>}{!iconOnly&&Icon!==MoreHorizontal&&<ChevronDown size={12}/>}</button>
  {open&&createPortal(<div ref={menu} id={id} role="menu" aria-label={label} className="action-menu-popover" style={position} onKeyDown={keys}>
   {items.map((item,i)=>{const ItemIcon=item.icon;return <React.Fragment key={item.id}>{item.group&&item.group!==items[i-1]?.group&&<div className="action-menu-group" role="presentation">{item.group}</div>}<div className="action-menu-row" role="presentation"><button type="button" role="menuitem" disabled={item.disabled} title={item.disabled?item.reason:undefined} onClick={()=>{close(true);item.onSelect()}}>{ItemIcon&&<ItemIcon size={17}/>}<span><strong>{item.label}</strong>{(item.detail||item.disabled&&item.reason)&&<small>{item.disabled&&item.reason||item.detail}</small>}</span></button>{onPin&&<button type="button" role="menuitem" className={'pin-control '+(pins?.includes(item.id)?'is-pinned':'')} aria-label={(pins?.includes(item.id)?'取消固定':'固定到常用')+'：'+item.label} title={pins?.includes(item.id)?'取消固定':'固定到常用'} onClick={()=>onPin(item.id)}><Star size={16} fill={pins?.includes(item.id)?'currentColor':'none'}/></button>}</div></React.Fragment>})}
   {footer&&<div className="action-menu-footer" onClick={()=>close(true)}>{footer}</div>}

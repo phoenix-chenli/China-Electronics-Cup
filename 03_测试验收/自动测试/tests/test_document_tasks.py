@@ -95,6 +95,22 @@ class DocumentTasksTest(unittest.TestCase):
         self.assertFalse(documents.get_page(doc["id"],1,parse_id=before["parse_id"])["text_available"])
         self.assertIn("收入：100万元。",s.blocks(doc["id"])[0]["text"])
 
+    def test_official_source_identity_survives_recognition_publication(self):
+        doc,_=self.source(fmt="png")
+        provenance={"file_sha256":doc["sha256"],"official_url":"https://example.org/bulletin.pdf",
+                    "original_page_map":[10],"derivation_type":"original_page_excerpt"}
+        with s.conn() as db:
+            quality=json.loads(db.execute("SELECT quality_json FROM documents WHERE id=?",(doc["id"],)).fetchone()[0])
+            quality["source_provenance"]=provenance
+            db.execute("UPDATE documents SET quality_json=? WHERE id=?",(json.dumps(quality),doc["id"]))
+        with patch.object(providers,"ocr",side_effect=self.recognition):
+            result=self.manager.submit(self.request(doc,mode="ocr"),synchronous=True)
+        self.assertEqual("completed",result["status"],result)
+        current=documents.view(doc["id"])["document"]
+        self.assertEqual(provenance,current["provenance"])
+        self.assertEqual(provenance["official_url"],current["official_url"])
+        self.assertTrue(documents.get_page(doc["id"],1)["text_available"])
+
     def test_docx_embedded_image_ocr_is_frozen_and_located_in_media_space(self):
         doc,raw=self.docx_image();req=self.request(doc,mode="ocr")
         before=documents.get_page(doc["id"],1);preview=tasks.preview(req)

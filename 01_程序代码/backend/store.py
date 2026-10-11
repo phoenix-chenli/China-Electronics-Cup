@@ -87,8 +87,21 @@ def docrow(r):
     d["quality"] = json.loads(d.pop("quality_json") or "{}")
     d.pop("path", None)
     d["source_url"] = f"/api/documents/{d['id']}/original?version={d['sha256']}"
+    provenance=d['quality'].get('source_provenance')
+    if provenance and provenance.get('file_sha256') == d['sha256']:
+        d['provenance']=provenance
+        d['official_url']=provenance.get('official_url')
     d["version"] = d["sha256"][:10]
     return d
+
+
+def retain_provenance(quality, row):
+    """Parsing can change recognition quality, never the matching file origin."""
+    old=json.loads(row['quality_json'] or '{}')
+    provenance=old.get('source_provenance')
+    if provenance and provenance.get('file_sha256') == row['sha256']:
+        quality={**quality,'source_provenance':provenance}
+    return quality
 
 def doc_list(archived=False):
     with conn() as c:

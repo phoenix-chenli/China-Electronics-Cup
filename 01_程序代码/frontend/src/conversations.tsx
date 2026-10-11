@@ -1,9 +1,26 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {FolderOpen, MessageCircle, Pencil, Plus, RotateCcw} from 'lucide-react'
 import {api, IconButton, Modal, Obj, timeLabel} from './ui'
+import {QueryScope,queryScopeOverride,taskFeedback} from './agent'
 
 const activeStates = ['queued', 'running', 'cancelling']
+const readTimeoutMs=12000,submitTimeoutMs=20000
+export function sessionPollDelay(failures:number):number{return failures>0?Math.min(8000,1000*2**Math.min(failures-1,3)):700}
+export function withSubmittedTask(session:Obj,task:Obj):Obj{
+  return {...session,tasks:[...(session.tasks||[]).filter((t:Obj)=>t.id!==task.id),task]}
+}
 function remembered(): Obj {try {return JSON.parse(localStorage.getItem('ef-active-conversation') || '{}')} catch {return {}}}
+export function initialProjectId(projects:Obj[],savedId?:string):string{
+ return projects.some(project=>project.id===savedId)?savedId!:projects.some(project=>project.id==='public-statistics')?'public-statistics':projects.some(project=>project.id==='default')?'default':projects[0]?.id||'public-statistics'
+}
+export function taskScopeFields(scopeOverride:unknown,follow=false,mode='query',documentContext:Obj|null=null,ragScope:Obj|null=null):Obj{
+ const override=!follow&&mode!=='recompute'&&!documentContext&&!ragScope?queryScopeOverride(scopeOverride):undefined
+ return override?{scope_override:override}:{}
+}
+export function taskRequestContext(parentMessageId:string|undefined,scopeOverride:unknown,follow=false,mode='query',documentContext:Obj|null=null,ragScope:Obj|null=null):Obj{
+ return {...taskScopeFields(scopeOverride,follow,mode,documentContext,ragScope),
+  parent_message_id:follow||mode==='recompute'?parentMessageId||null:null,inherit_context:follow}
+}
 function conditionChange(conditions: Obj) {
   const labels: Obj = {year:'年份', region:'区域', metric:'指标', rule_mode:'规则', scenario_pct:'情景调整', compare_year:'对比年份'}
   const values: Obj = {net_sales:'净销售额', gross_sales:'销售额（未扣退货）', count:'客户与订单数', growth_rate:'净销售额增长率', historical:'交易当时规则', current:'当前规则模拟'}
@@ -13,7 +30,7 @@ function conditionChange(conditions: Obj) {
 
 export function useConversations() {
   const [projects, setProjects] = useState<Obj[]>([])
-  const [projectId, setProjectId] = useState<string>(remembered().projectId || 'default')
+  const [projectId, setProjectId] = useState<string>(remembered().projectId || 'public-statistics')
   const [sessions, setSessions] = useState<Obj[]>([])
   const [session, setSession] = useState<Obj | null>(null)
   const [loading, setLoading] = useState(true)
@@ -29,17 +46,17 @@ export function useConversations() {
   const accept = (detail: Obj) => {
     if (active.current.sessionId === detail.id) setSession(detail)
   }
-  const refreshList = async (pid = active.current.projectId) => {
+  const refreshList = async (pid = active.current.projectId,signal?:AbortSignal) => {
     const serial = ++listRevision.current
-    const list = await api(`/api/projects/${pid}/sessions`)
+    const list = await api(`/api/projects/${pid}/sessions`,undefined,undefined,{timeoutMs:readTimeoutMs,signal})
     if (active.current.projectId === pid && serial === listRevision.current) setSessions(list)
   }
-  const refresh = async (sid = active.current.sessionId) => {
+  const refresh = async (sid = active.current.sessionId,signal?:AbortSignal) => {
     const serial = sid === active.current.sessionId ? ++revision.current : -1
     if (!sid) return
-    const detail = await api(`/api/sessions/${sid}`)
+    const detail = await api(`/api/sessions/${sid}`,undefined,undefined,{timeoutMs:readTimeoutMs,signal})
     if (serial === revision.current && active.current.sessionId === sid) {accept(detail); setError('')}
-    await refreshList(detail.project_id)
+    await refreshList(detail.project_id,signal)
   }
   const openSession = async (sid: string) => {
     ++revision.current
@@ -52,7 +69,7 @@ export function useConversations() {
     active.current = {projectId: pid, sessionId: ''}; remember(); ++revision.current
     setProjectId(pid); setSession(null); setSessions([]); setLoading(true); setError(''); setUndoId(null)
     try {
-      const list = await api(`/api/projects/${pid}/sessions`)
+      const list = await api(`/api/projects/${pid}/sessions`,undefined,undefined,{timeoutMs:readTimeoutMs})
       if (active.current.projectId !== pid) return
       setSessions(list)
       const sid = list.find((x: Obj) => x.id === preferred)?.id || list[0]?.id
@@ -63,9 +80,9 @@ export function useConversations() {
   const bootstrap = async () => {
     setLoading(true)
     try {
-      const list = await api('/api/projects'); setProjects(list)
+      const list = await api('/api/projects',undefined,undefined,{timeoutMs:readTimeoutMs}); setProjects(list)
       const saved = remembered()
-      await switchProject(list.some((x: Obj) => x.id === saved.projectId) ? saved.projectId : 'default', saved.sessionId)
+      await switchProject(initialProjectId(list,saved.projectId), saved.sessionId)
     } catch(e) {setError((e as Error).message); setLoading(false)}
   }
   useEffect(() => {void bootstrap()}, [])
@@ -73,18 +90,19 @@ export function useConversations() {
   const taskId = task?.id
   useEffect(() => {
     if (!taskId) return
-    let disposed = false, timer: number
+    let disposed = false, timer: number,failures=0
+    const reading=new AbortController()
     const poll = async () => {
-      try {if (!disposed) await refresh()}
-      catch(e) {if (!disposed) setError('连接暂时中断，正在重新连接。')}
-      if (!disposed) timer = window.setTimeout(poll, 700)
+      try {if (!disposed){await refresh(undefined,reading.signal);failures=0}}
+      catch(e) {if (!disposed){failures++;setError((e as Error).message+'；正在恢复已有查询状态，'+sessionPollDelay(failures)/1000+'秒后重新读取，不会再次发送问题。')}}
+      if (!disposed) timer = window.setTimeout(poll, sessionPollDelay(failures))
     }
     timer = window.setTimeout(poll, 200)
-    return () => {disposed = true; window.clearTimeout(timer)}
+    return () => {disposed = true; window.clearTimeout(timer);reading.abort()}
   }, [taskId, session?.id])
   // Other browser tabs may finish work while this one is inactive.
   useEffect(() => {
-    const focus = () => {if (active.current.sessionId) void refresh().catch(e => setError(e.message))}
+    const focus = () => {const sid=active.current.sessionId;if(sid)void refresh(sid).catch(e=>{if(active.current.sessionId===sid)setError(e.message)})}
     window.addEventListener('focus', focus)
     return () => window.removeEventListener('focus', focus)
   }, [])
@@ -106,7 +124,7 @@ export function useConversations() {
     const detail = await api(`/api/sessions/${sid}`, {selected_message_id: mid}, 'PATCH')
     if (active.current.sessionId === sid) {++revision.current; accept(detail)}
   }
-  const submit = async (text: string, confirmed: Obj = {}, follow = false, mode = 'query', fresh = false, documentContext: Obj | null = null, ragScope: Obj | null = null) => {
+  const submit = async (text: string, confirmed: Obj = {}, follow = false, mode = 'query', fresh = false, documentContext: Obj | null = null, ragScope: Obj | null = null, scopeOverride?:QueryScope) => {
     // The guard covers session creation too, so a double click cannot create two sessions.
     const guard = fresh ? active.current.projectId : active.current.sessionId || active.current.projectId
     if (sending.current.has(guard)) return
@@ -120,14 +138,15 @@ export function useConversations() {
         if (active.current.projectId !== pid || active.current.sessionId !== sid) return
       }
       const body = {question: text, confirmed, session_id: sid, request_id: crypto.randomUUID(), document_context: documentContext,rag_scope:ragScope,
-        parent_message_id: follow || mode === 'recompute' ? resultMessage?.id : null,
-        inherit_context: follow, mode,
+        ...taskRequestContext(resultMessage?.id,scopeOverride,follow,mode,documentContext,ragScope),mode,
         display_question: mode === 'recompute' ? conditionChange(confirmed) : text}
       if (mode === 'recompute') setUndoId(resultMessage?.id || null)
       else setUndoId(null)
       localStorage.setItem(`ef-pending-${sid}`, JSON.stringify(body))
-      const result = await api('/api/tasks', body)
+      const result = await api('/api/tasks', body,undefined,{timeoutMs:submitTimeoutMs})
       localStorage.removeItem(`ef-pending-${sid}`)
+      // An accepted task remains visible even if the following GET fails.
+      if(active.current.projectId===pid&&active.current.sessionId===sid)setSession(detail=>detail&&detail.id===sid?withSubmittedTask(detail,result):detail)
       await refresh(sid)
       return result
     } catch(e) {
@@ -139,10 +158,11 @@ export function useConversations() {
     const sid = active.current.sessionId
     const pending = localStorage.getItem(`ef-pending-${sid}`)
     if (!pending) {await refresh(); return}
-    await api('/api/tasks', JSON.parse(pending))
+    const result=await api('/api/tasks', JSON.parse(pending),undefined,{timeoutMs:submitTimeoutMs})
+    if(active.current.sessionId===sid)setSession(detail=>detail&&detail.id===sid?withSubmittedTask(detail,result):detail)
     localStorage.removeItem(`ef-pending-${sid}`); await refresh(sid)
   }
-  const cancel = async () => {if (task) {await api(`/api/tasks/${task.id}/cancel`, {}); await refresh()}}
+  const cancel = async () => {if (task) {await api(`/api/tasks/${task.id}/cancel`, {},undefined,{timeoutMs:submitTimeoutMs}); await refresh()}}
   const retry = async (tid: string) => {
     if (sending.current.has(tid)) return
     sending.current.add(tid)
@@ -151,7 +171,8 @@ export function useConversations() {
     const requestId = localStorage.getItem(key) || crypto.randomUUID()
     localStorage.setItem(key, requestId)
     try {
-      await api(`/api/tasks/${tid}/retry`, {request_id: requestId})
+      const result=await api(`/api/tasks/${tid}/retry`, {request_id: requestId},undefined,{timeoutMs:submitTimeoutMs})
+      if(active.current.sessionId===sid)setSession(detail=>detail&&detail.id===sid?withSubmittedTask(detail,result):detail)
       localStorage.removeItem(key); await refresh(sid)
     } finally {sending.current.delete(tid)}
   }
@@ -179,7 +200,7 @@ export function useConversations() {
 export function ProjectDialog({controller: c, close, notify}: Obj) {
   const [mode, setMode] = useState(''), [value, setValue] = useState(''), [busy, setBusy] = useState(false)
   return <Modal title="项目" close={close}>
-    <div className="project-list">{c.projects.map((p: Obj) => <button key={p.id} aria-current={p.id === c.projectId ? 'true' : undefined} disabled={busy} onClick={async () => {setBusy(true);try{await c.switchProject(p.id);close()}catch(e){notify((e as Error).message)}finally{setBusy(false)}}}><FolderOpen size={21}/><span><strong>{p.name}</strong><small>本机资料；新问答使用已保存来源</small></span>{p.id === c.projectId && <span className="badge">当前</span>}</button>)}</div>
+    <div className="project-list">{c.projects.map((p: Obj) => <button key={p.id} aria-current={p.id === c.projectId ? 'true' : undefined} disabled={busy} onClick={async () => {setBusy(true);try{await c.switchProject(p.id);close()}catch(e){notify((e as Error).message)}finally{setBusy(false)}}}><FolderOpen size={21}/><span><strong>{p.name}</strong><small>{p.source_label||p.profile?.source_label||'按当前项目资料匹配新问题的范围'}</small></span>{p.id === c.projectId && <span className="badge">当前</span>}</button>)}</div>
     <div className="inline-actions"><button className="button" onClick={() => {setMode('create'); setValue('')}}><Plus size={16}/>新建项目</button><button className="button" onClick={() => {setMode('edit'); setValue(c.project?.name || '')}}><Pencil size={15}/>重命名当前项目</button></div>
     {mode && <form className="project-form" onSubmit={async e => {e.preventDefault(); setBusy(true); try {await c.projectAction(value, mode === 'edit'); close()} catch(e) {notify((e as Error).message)} finally {setBusy(false)}}}><label htmlFor="project-name">{mode === 'edit' ? '项目名称' : '新项目名称'}</label><input id="project-name" autoFocus maxLength={120} value={value} onChange={e => setValue(e.target.value)}/><button className="button primary" disabled={busy || !value.trim()}>{busy ? '正在保存' : '保存'}</button></form>}
   </Modal>
@@ -193,7 +214,7 @@ export function ThreadHistory({session, selectedId, onSelect, onRetry, busy}: Ob
     const index = messages.indexOf(m)
     return <article className="thread-turn" key={m.id}>
       <div className="thread-question"><MessageCircle size={15}/><p>{messages[index - 1]?.text}</p><time>{timeLabel(m.created_at)}</time></div>
-      <div className={'thread-answer ' + m.status}><p>{m.text}</p>
+      <div className={'thread-answer ' + m.status}><p>{m.text||m.result?.answer||(['failed','cancelled'].includes(m.status)?taskFeedback({...m,...session.tasks?.find((t:Obj)=>t.id===m.task_id)}).detail:m.result?.claims?.length?'本轮已保存有来源的结论，可打开核对。':'本轮未返回可展示的答案，请查看执行记录。')}</p>
         {m.result ? <button className="text-link" onClick={() => onSelect(m.id)}>查看结果与来源</button> : <span>{m.status === 'cancelled' ? '已取消' : '未完成'}</span>}
         {['failed', 'cancelled'].includes(m.status) && <button className="button small" disabled={busy} onClick={() => onRetry(m.task_id)}><RotateCcw size={14}/>重试这轮</button>}
       </div>

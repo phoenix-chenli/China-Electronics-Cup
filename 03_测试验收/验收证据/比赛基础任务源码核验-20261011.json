@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-11T06:43:21.988654+00:00",
+  "modified_code_and_test_files": 7,
+  "files_sha256": {
+    "01_程序代码/backend/agent.py": "145ec4091544acaca29967e9b22789c63d8ed67f0f877a6b4fa1f957810054f5",
+    "01_程序代码/backend/rag_grounding.py": "03ba303605184dc72b92f9791bfa0e2005f8b08a89c38328b349935fa2aa2f7b",
+    "01_程序代码/backend/public_statistics.py": "ac5398aaba20b486e45480e38480230dd10b3e95e0a8c25ac3b9188841e8c43f",
+    "03_测试验收/自动测试/tests/test_project_sources.py": "e6f791efad6e26da1f5fb787ccca850714820cb8b103815ece8540372aa627a5",
+    "03_测试验收/自动测试/tests/test_rag_agent.py": "df3fa37ac4ac3ec1eec7f54d768ff06fa9f5e4f53a632b380c6e0d526d9de400",
+    "03_测试验收/自动测试/评估比赛基础任务.py": "c8ec7642b93dd2a18e9e3651b9c3f0a36d8d010b0e434fb6d9bd64fdf3ff09e9",
+    "03_测试验收/自动测试/tests/test_basic_evaluation.py": "e906ee15e1327422f896c27f9dbafe0298756e7637a692edd28b2c0f1402b09b"
+  },
+  "human_semantic_review": "pending",
+  "windows_native_acceptance": "pending",
+  "first_run_unchanged": true,
+  "model": "deepseek-v4.1-flash",
+  "cost_comparison_performed": false,
+  "reports": [
+    "比赛基础任务DeepSeek首测-20261011.json",
+    "比赛基础任务跨页与输出回归-20261011.json",
+    "比赛基础任务存款跨页修复回归-20261011.json"
+  ],
+  "reference_corrections": "比赛基础任务参考勘误-20261011.json",
+  "backend_verification": {
+    "modules": 26,
+    "passed": 429,
+    "log": "基础任务最终完整后端回归-20261011.log"
+  }
+}

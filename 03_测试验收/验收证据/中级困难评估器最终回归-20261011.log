@@ -1,0 +1,11 @@
+test_clarification_is_not_scored_as_sql_or_supported_answer (tests.test_intermediate_evaluation.IntermediateEvaluationTests.test_clarification_is_not_scored_as_sql_or_supported_answer) ... ok
+test_contract_rejects_wrong_layout_nonfinite_values_and_error (tests.test_intermediate_evaluation.IntermediateEvaluationTests.test_contract_rejects_wrong_layout_nonfinite_values_and_error) ... ok
+test_existing_output_and_sealed_first_run_never_read_secret (tests.test_intermediate_evaluation.IntermediateEvaluationTests.test_existing_output_and_sealed_first_run_never_read_secret) ... ok
+test_frozen_distinct_records_are_not_deduplicated_by_value (tests.test_intermediate_evaluation.IntermediateEvaluationTests.test_frozen_distinct_records_are_not_deduplicated_by_value) ... ok
+test_tampered_frozen_file_fails_before_execution (tests.test_intermediate_evaluation.IntermediateEvaluationTests.test_tampered_frozen_file_fails_before_execution) ... ok
+test_wrong_reference_or_alias_fails_even_with_matching_hash (tests.test_intermediate_evaluation.IntermediateEvaluationTests.test_wrong_reference_or_alias_fails_even_with_matching_hash) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.005s
+
+OK

@@ -3,7 +3,7 @@ import {test} from 'node:test'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
 import {Claims} from '../src/workspace'
-import {EventSummary,ModelPackageStatus,QueryContextBar} from '../src/agent'
+import {AgentSummary,EventSummary,ModelPackageStatus,QueryContextBar} from '../src/agent'
 
 const noop=()=>{}
 const config={mode:'model' as const,connection_id:'m-new',max_steps:8,available:true,query_scope:'database' as const,database_connection_id:'db-new',connections:[{id:'m-new',name:'新模型',model:'model-new',enabled:true,available:true}],databases:[{id:'db-new',name:'新数据库',kind:'sqlite',available:true}]}
@@ -27,11 +27,13 @@ test('source event summary preserves failure, cancellation and unknown duration'
  assert.ok(renderToStaticMarkup(<EventSummary event={{label:'读取资料',status:'completed',duration_ms:0}}/>).includes('0 ms'))
 })
 
-test('followup shows its frozen source and model after global config changes',()=>{
+test('followup freezes its source while historical execution and current model stay distinct',()=>{
  const result={query_spec:{query_scope:'database',database_connection_id:'db-old'},database_query:{source:{connection_id:'db-old',name:'旧库存库'}},agent:{mode:'model',model:'model-old'}}
  const html=renderToStaticMarkup(<QueryContextBar config={config} result={result} onSettings={noop} onNew={noop}/>)
- for(const text of ['追问沿用','旧库存库','model-old','默认设置已改变','新建问答'])assert.ok(html.includes(text),text)
- assert.ok(!html.includes('新数据库'));assert.ok(!html.includes('model-new'))
+ for(const text of ['追问沿用','旧库存库','model-new','默认设置已改变','新建问答'])assert.ok(html.includes(text),text)
+ assert.ok(!html.includes('新数据库'));assert.ok(!html.includes('model-old'))
+ const historical=renderToStaticMarkup(<AgentSummary agent={result.agent}/>)
+ assert.ok(historical.includes('model-old'));assert.ok(!historical.includes('model-new'))
 })
 
 test('new query explains unavailable model while local sales stays usable',()=>{

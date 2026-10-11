@@ -1,0 +1,254 @@
+{
+  "dataset_id": "intermediate-hard-58-20261011",
+  "frozen_at": "2026-10-11T07:08:51.358544+00:00",
+  "frozen_before_model_execution": true,
+  "synthetic": true,
+  "developer_generated": true,
+  "table_count": 58,
+  "decoy_table_count": 54,
+  "decoy_tables": [
+    "预算收款_01",
+    "预算收款_02",
+    "预算收款_03",
+    "预算收款_04",
+    "预算收款_05",
+    "预算收款_06",
+    "预算收款_07",
+    "预算收款_08",
+    "预算收款_09",
+    "预测收款_01",
+    "预测收款_02",
+    "预测收款_03",
+    "预测收款_04",
+    "预测收款_05",
+    "预测收款_06",
+    "预测收款_07",
+    "预测收款_08",
+    "预测收款_09",
+    "历史收款备份_01",
+    "历史收款备份_02",
+    "历史收款备份_03",
+    "历史收款备份_04",
+    "历史收款备份_05",
+    "历史收款备份_06",
+    "历史收款备份_07",
+    "历史收款备份_08",
+    "历史收款备份_09",
+    "合同预算_01",
+    "合同预算_02",
+    "合同预算_03",
+    "合同预算_04",
+    "合同预算_05",
+    "合同预算_06",
+    "合同预算_07",
+    "合同预算_08",
+    "合同预算_09",
+    "合同预测_01",
+    "合同预测_02",
+    "合同预测_03",
+    "合同预测_04",
+    "合同预测_05",
+    "合同预测_06",
+    "合同预测_07",
+    "合同预测_08",
+    "合同预测_09",
+    "历史合同备份_01",
+    "历史合同备份_02",
+    "历史合同备份_03",
+    "历史合同备份_04",
+    "历史合同备份_05",
+    "历史合同备份_06",
+    "历史合同备份_07",
+    "历史合同备份_08",
+    "历史合同备份_09"
+  ],
+  "seed_sql": "CREATE TABLE 客户(客户编号 INTEGER PRIMARY KEY,客户名称 TEXT);\nCREATE TABLE 实际合同(合同编号 INTEGER PRIMARY KEY,客户编号 INTEGER REFERENCES 客户(客户编号),签约日期 TEXT);\nCREATE TABLE 合同明细(明细编号 INTEGER PRIMARY KEY,合同编号 INTEGER REFERENCES 实际合同(合同编号),金额 REAL);\nCREATE TABLE 实际收款(收款编号 INTEGER PRIMARY KEY,合同编号 INTEGER REFERENCES 实际合同(合同编号),收款日期 TEXT,金额 REAL);\nINSERT INTO 客户 VALUES(1,'青城'),(2,'远海');\nINSERT INTO 实际合同 VALUES(10,1,'2025-01-01'),(11,1,'2025-02-01'),(20,2,'2025-01-03');\nINSERT INTO 合同明细 VALUES(1,10,100),(2,10,50),(3,11,80),(4,20,40);\nINSERT INTO 实际收款 VALUES(1,10,'2025-01-15',20),(2,10,'2025-02-15',30),(3,11,'2025-02-28',60),(4,20,'2025-03-01',40);\nCREATE TABLE \"预算收款_01\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_02\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_03\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_04\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_05\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_06\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_07\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_08\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预算收款_09\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_01\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_02\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_03\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_04\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_05\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_06\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_07\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_08\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"预测收款_09\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_01\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_02\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_03\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_04\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_05\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_06\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_07\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_08\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史收款备份_09\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_01\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_02\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_03\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_04\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_05\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_06\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_07\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_08\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预算_09\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_01\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_02\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_03\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_04\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_05\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_06\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_07\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_08\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"合同预测_09\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_01\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_02\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_03\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_04\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_05\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_06\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_07\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_08\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nCREATE TABLE \"历史合同备份_09\"(记录编号 INTEGER PRIMARY KEY,客户编号 INTEGER,合同编号 INTEGER,日期 TEXT,金额 REAL);\nINSERT INTO 客户 VALUES(3,'青城'),(4,'空港');\nINSERT INTO 实际合同 VALUES(12,1,'2024-12-20'),(21,2,'2025-04-02'),(30,3,'2025-01-10');\nINSERT INTO 合同明细 VALUES(5,12,70),(6,21,40),(7,30,9),(8,10,50);\nINSERT INTO 实际收款 VALUES(5,12,'2025-01-10',70),(6,10,'2025-02-20',30),(7,11,'2026-01-05',10),(8,30,'2025-02-07',9),(9,21,'2025-04-10',40);\n",
+  "seed_sha256": "16f2253b29bd09cfa00960f1c53aa52aa7883339c473026eb02ccf3f2183d767",
+  "first_run_path": "03_测试验收/验收证据/中级困难58表DeepSeek首测-20261011.json",
+  "cases": [
+    {
+      "id": "hard58-01",
+      "question": "按客户编号汇总2025年1月实际收款，只保留当月有收款的客户；签约年份不限制，2024年签约但2025年1月收款也包含。只返回2列，列名依次为`客户编号`、`收款合计`，按编号升序。不要使用预算、预测或备份表。",
+      "expected_status": "supported",
+      "reference_sql": "SELECT t.客户编号 AS 客户编号,SUM(p.金额) AS 收款合计 FROM 实际合同 t JOIN 实际收款 p ON p.合同编号=t.合同编号 WHERE p.收款日期>='2025-01-01' AND p.收款日期<'2025-02-01' GROUP BY t.客户编号 ORDER BY t.客户编号",
+      "expected_columns": [
+        "客户编号",
+        "收款合计"
+      ],
+      "expected_rows": [
+        [
+          1,
+          90.0
+        ]
+      ],
+      "required_tables": [
+        "实际合同",
+        "实际收款"
+      ]
+    },
+    {
+      "id": "hard58-02",
+      "question": "列出全部已登记客户，客户编号不同就分别统计，即使名称相同也不合并。统计各客户2025全年签约的合同数量、这些合同的明细金额合计、这些合同截至2025年2月28日的实际收款合计。没有2025合同或没有收款也保留为0。只返回5列，列名依次为`客户编号`、`客户名称`、`合同数量`、`明细合计`、`收款合计`，按编号升序。只用实际表。",
+      "expected_status": "supported",
+      "reference_sql": "WITH t AS (SELECT * FROM 实际合同 WHERE 签约日期>='2025-01-01' AND 签约日期<'2026-01-01'),l AS (SELECT 合同编号,SUM(金额) a FROM 合同明细 GROUP BY 合同编号),p AS (SELECT 合同编号,SUM(金额) a FROM 实际收款 WHERE 收款日期<'2025-03-01' GROUP BY 合同编号) SELECT c.客户编号 AS 客户编号,c.客户名称 AS 客户名称,COUNT(t.合同编号) AS 合同数量,COALESCE(SUM(l.a),0) AS 明细合计,COALESCE(SUM(p.a),0) AS 收款合计 FROM 客户 c LEFT JOIN t ON t.客户编号=c.客户编号 LEFT JOIN l ON l.合同编号=t.合同编号 LEFT JOIN p ON p.合同编号=t.合同编号 GROUP BY c.客户编号,c.客户名称 ORDER BY c.客户编号",
+      "expected_columns": [
+        "客户编号",
+        "客户名称",
+        "合同数量",
+        "明细合计",
+        "收款合计"
+      ],
+      "expected_rows": [
+        [
+          1,
+          "青城",
+          2,
+          280.0,
+          140.0
+        ],
+        [
+          2,
+          "远海",
+          2,
+          80.0,
+          0
+        ],
+        [
+          3,
+          "青城",
+          1,
+          9.0,
+          9.0
+        ],
+        [
+          4,
+          "空港",
+          0,
+          0,
+          0
+        ]
+      ],
+      "required_tables": [
+        "客户",
+        "实际合同",
+        "合同明细",
+        "实际收款"
+      ]
+    },
+    {
+      "id": "hard58-03",
+      "question": "查客户编号1在2025年2月的实际收款笔数和金额合计。以收款编号识别独立记录，金额相同的不同收款都要计入；签约日期不限制。只返回3列，列名依次为`客户编号`、`收款笔数`、`收款合计`。只用实际表。",
+      "expected_status": "supported",
+      "reference_sql": "SELECT t.客户编号 AS 客户编号,COUNT(p.收款编号) AS 收款笔数,SUM(p.金额) AS 收款合计 FROM 实际合同 t JOIN 实际收款 p ON p.合同编号=t.合同编号 WHERE t.客户编号=1 AND p.收款日期>='2025-02-01' AND p.收款日期<'2025-03-01' GROUP BY t.客户编号",
+      "expected_columns": [
+        "客户编号",
+        "收款笔数",
+        "收款合计"
+      ],
+      "expected_rows": [
+        [
+          1,
+          3,
+          120.0
+        ]
+      ],
+      "required_tables": [
+        "实际合同",
+        "实际收款"
+      ]
+    },
+    {
+      "id": "hard58-04",
+      "question": "按客户编号列出2025年2月有实际收款的客户、当月有收款的不同合同数量和实际收款笔数。同一合同多次收款只计一份合同，但每个收款编号各计一笔。只返回3列，列名依次为`客户编号`、`收款合同数`、`收款笔数`，按编号升序；只用实际表。",
+      "expected_status": "supported",
+      "reference_sql": "SELECT t.客户编号 AS 客户编号,COUNT(DISTINCT t.合同编号) AS 收款合同数,COUNT(p.收款编号) AS 收款笔数 FROM 实际合同 t JOIN 实际收款 p ON p.合同编号=t.合同编号 WHERE p.收款日期>='2025-02-01' AND p.收款日期<'2025-03-01' GROUP BY t.客户编号 ORDER BY t.客户编号",
+      "expected_columns": [
+        "客户编号",
+        "收款合同数",
+        "收款笔数"
+      ],
+      "expected_rows": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          3,
+          1,
+          1
+        ]
+      ],
+      "required_tables": [
+        "实际合同",
+        "实际收款"
+      ]
+    },
+    {
+      "id": "hard58-05",
+      "question": "查客户编号1的全部合同明细金额合计，包含所有签约日期。以明细编号识别独立记录，金额相同但编号不同的明细都计入，不按金额去重。只返回2列，列名依次为`客户编号`、`明细合计`。只用实际表。",
+      "expected_status": "supported",
+      "reference_sql": "SELECT t.客户编号 AS 客户编号,SUM(l.金额) AS 明细合计 FROM 实际合同 t JOIN 合同明细 l ON l.合同编号=t.合同编号 WHERE t.客户编号=1 GROUP BY t.客户编号",
+      "expected_columns": [
+        "客户编号",
+        "明细合计"
+      ],
+      "expected_rows": [
+        [
+          1,
+          350.0
+        ]
+      ],
+      "required_tables": [
+        "实际合同",
+        "合同明细"
+      ]
+    },
+    {
+      "id": "hard58-06",
+      "turns": [
+        {
+          "question": "只查其中一个青城客户在2025年2月的实际收款合计，签约日期不限制。只返回2列，列名依次为`客户编号`、`收款合计`。先确认具体客户，不能把同名客户加总。",
+          "expected_status": "needs_clarification",
+          "reference_sql": null,
+          "expected_rows": null,
+          "required_tables": [
+            "客户"
+          ],
+          "clarification_candidate_keys": [
+            1,
+            3
+          ]
+        },
+        {
+          "question": "客户编号1。",
+          "expected_status": "supported",
+          "reference_sql": "SELECT t.客户编号 AS 客户编号,SUM(p.金额) AS 收款合计 FROM 实际合同 t JOIN 实际收款 p ON p.合同编号=t.合同编号 WHERE t.客户编号=1 AND p.收款日期>='2025-02-01' AND p.收款日期<'2025-03-01' GROUP BY t.客户编号",
+          "expected_columns": [
+            "客户编号",
+            "收款合计"
+          ],
+          "expected_rows": [
+            [
+              1,
+              120.0
+            ]
+          ],
+          "required_tables": [
+            "实际合同",
+            "实际收款"
+          ],
+          "preserved_conditions": [
+            "2025年2月",
+            "签约日期不限制"
+          ]
+        }
+      ]
+    }
+  ],
+  "boundary": "开发代理新增并调用前冻结的合成困难案例；未进入旧题调试，但不是独立真人出题或陌生企业库。原题、失败和后续回归分开保留，不能外推业务准确率。",
+  "counterexample": {
+    "sum_distinct_amount_wrong": 300,
+    "actual_independent_detail_sum": 350
+  }
+}

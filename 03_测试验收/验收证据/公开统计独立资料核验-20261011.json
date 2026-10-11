@@ -1,0 +1,1886 @@
+{
+  "schema_version": "1.0",
+  "review_id": "public-statistics-independent-20261011",
+  "reviewer_identity": "independent_agent_visual_review",
+  "human_review": "pending",
+  "reviewed_at": "2026-10-11T00:07:30+08:00",
+  "method": {
+    "source_materials_only": true,
+    "tested_model_called": false,
+    "reference_answers_sent_to_tested_model": false,
+    "visual_pages_reviewed": 13,
+    "text_extraction_used_as_navigation_only": true,
+    "review_scope": "三份官方PDF的GDP、产业结构、人口类型、环境浓度、价格口径与2023修订数；仅列出实际目视检查的页面和字段。",
+    "limits": [
+      "并非全部36页逐页目视检查",
+      "未实访官方机构或确认发布日",
+      "本记录不是人工复核结论",
+      "核验了指标核验.json全部73观测；应用安装后的SQLite运行状态由主代理另行验证。"
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "huainan_stats_2024",
+      "file_path": "02_数据资料/公开统计分析/原件/淮南市2024年国民经济和社会发展统计公报.pdf",
+      "original_sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+      "matches_source_manifest": true,
+      "page_count": 16,
+      "metadata_title": null,
+      "title_basis": "original_page_1",
+      "visually_reviewed_pages": [
+        {
+          "pdf_page_1_based": 1,
+          "path": "02_数据资料/公开统计分析/核验材料/huainan_stats_2024_原页1.png",
+          "sha256": "2ab915277098903918b1db3fad53b0a13cd733607ca7532e17a6b7a36dd7b512",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 2,
+          "path": "02_数据资料/公开统计分析/核验材料/huainan_stats_2024_原页2.png",
+          "sha256": "bb67e11039a0b6c9ffc9e6a21a93238691b73113d691d7e8f8a33bb1fd941f97",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 3,
+          "path": "02_数据资料/公开统计分析/核验材料/huainan_stats_2024_原页3.png",
+          "sha256": "9d224206db6d63b7315c14b3ca0dee503c58d067dbcaab553b69e9d6e7521e4a",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 15,
+          "path": "02_数据资料/公开统计分析/核验材料/huainan_stats_2024_原页15.png",
+          "sha256": "5a29b0f09c2809384e0b70dea5d44a9580568013f8de879c08cee67c6d8342ed",
+          "visual_review": "completed"
+        }
+      ]
+    },
+    {
+      "source_id": "xinjin_stats_2024",
+      "file_path": "02_数据资料/公开统计分析/原件/2024年新津区国民经济和社会发展统计公报.pdf",
+      "original_sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+      "matches_source_manifest": true,
+      "page_count": 8,
+      "metadata_title": "关于申请购买帕萨特2",
+      "title_basis": "original_page_1",
+      "visually_reviewed_pages": [
+        {
+          "pdf_page_1_based": 1,
+          "path": "02_数据资料/公开统计分析/核验材料/xinjin_stats_2024_原页1.png",
+          "sha256": "8d41e8b3da087da0f8f1f7bdf1e782f71e48696182412327d9db7e012c850e2d",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 6,
+          "path": "02_数据资料/公开统计分析/核验材料/xinjin_stats_2024_原页6.png",
+          "sha256": "ed020e0a3c9c33ac4c41f4b690d8ee00ccf39b4a8c76fbeeb5a9a70882ce5ddc",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 7,
+          "path": "02_数据资料/公开统计分析/核验材料/xinjin_stats_2024_原页7.png",
+          "sha256": "d740fb98b57254471fdb304d6872822eb069a4a4c23421eec4ba213e0360c812",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 8,
+          "path": "02_数据资料/公开统计分析/核验材料/xinjin_stats_2024_原页8.png",
+          "sha256": "ddc281ae44cf5e43d402ec805a47144bcf3f749f27ee5d774955d6417d54adab",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 2,
+          "rendered_from_original_during_review": true,
+          "render_command": "pdftoppm -f 2 -l 2 -scale-to 1600 -png -singlefile ORIGINAL_PDF TEMP_OUTPUT",
+          "render_sha256": "c23896bd3756afb6ad76236cd174b5aafc500902306ebafb0de7e8834ace9443",
+          "visual_review": "completed"
+        }
+      ]
+    },
+    {
+      "source_id": "shijingshan_stats_2024",
+      "file_path": "02_数据资料/公开统计分析/原件/石景山区2024年国民经济和社会发展统计公报.pdf",
+      "original_sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "matches_source_manifest": true,
+      "page_count": 12,
+      "metadata_title": "石景山区2022年国民经济和社会发展",
+      "title_basis": "original_page_1",
+      "visually_reviewed_pages": [
+        {
+          "pdf_page_1_based": 1,
+          "path": "02_数据资料/公开统计分析/核验材料/shijingshan_stats_2024_原页1.png",
+          "sha256": "455f271fd0a04762ecec545e25e578db9878e46eace73274172a53034a847474",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 2,
+          "path": "02_数据资料/公开统计分析/核验材料/shijingshan_stats_2024_原页2.png",
+          "sha256": "77cddc6ce84e3fe6de7ae1a13d9df7d99747f77bff26c9c56e4be2987bb6aa18",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 3,
+          "path": "02_数据资料/公开统计分析/核验材料/shijingshan_stats_2024_原页3.png",
+          "sha256": "e58f8405494e57d466f822d055b9e3354b7501c1a0d11822ac691bfd1fe3c474",
+          "visual_review": "completed"
+        },
+        {
+          "pdf_page_1_based": 11,
+          "path": "02_数据资料/公开统计分析/核验材料/shijingshan_stats_2024_原页11.png",
+          "sha256": "e80f0e25866503e99b694f4849f1d9484150bd01daa3a457f3543432d31dcdfa",
+          "visual_review": "completed"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "H-GDP",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年地区生产总值",
+      "values": {
+        "gdp": "1716.0",
+        "growth_pct": "5.0"
+      },
+      "status": "visually_confirmed",
+      "unit": "亿元；增速%",
+      "boundary_note": "p15注释：绝对量按现价，增长速度按不变价格；初步统计数。"
+    },
+    {
+      "id": "H-SECTORS",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        1,
+        2
+      ],
+      "label": "2024年三次产业增加值、增速与构成",
+      "values": {
+        "primary": [
+          "153.0",
+          "2.6",
+          "8.9"
+        ],
+        "secondary": [
+          "681.6",
+          "5.4",
+          "39.7"
+        ],
+        "tertiary": [
+          "881.4",
+          "5.1",
+          "51.4"
+        ]
+      },
+      "status": "visually_confirmed",
+      "unit": "各数组依次为亿元、%、%"
+    },
+    {
+      "id": "H-INDUSTRY",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年工业和制造业增加值",
+      "values": {
+        "industry": [
+          "532.3",
+          "3.0"
+        ],
+        "manufacturing": [
+          "158.2",
+          "10.6"
+        ]
+      },
+      "status": "visually_confirmed",
+      "unit": "各数组依次为亿元、增速%"
+    },
+    {
+      "id": "H-GDP-HISTORY",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        2
+      ],
+      "label": "图1历年GDP",
+      "values": {
+        "2020": "1338.6",
+        "2021": "1463.5",
+        "2022": "1567.0",
+        "2023": "1659.0",
+        "2024": "1716.0"
+      },
+      "status": "visually_confirmed",
+      "unit": "亿元",
+      "boundary_note": "来自图形中的标注，逐页正文文本没有这些图内值；不得用现价差额替代不变价格增速。"
+    },
+    {
+      "id": "H-PER-CAPITA",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年人均GDP",
+      "values": {
+        "amount_cny": "56869",
+        "amount_usd": "7986",
+        "growth_pct": "5.1"
+      },
+      "status": "visually_confirmed",
+      "unit": "元；折合美元；%",
+      "boundary_note": "按常住人口计算，美元折合数不是人民币数。"
+    },
+    {
+      "id": "H-POPULATION",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        2,
+        3
+      ],
+      "label": "2024年末常住人口及构成",
+      "values": {
+        "total": "301.90",
+        "urban": "194.54",
+        "rural": "107.36",
+        "male": "154.45",
+        "female": "147.45",
+        "age_0_14": "49.51",
+        "age_15_59": "177.10",
+        "age_60_plus": "75.29",
+        "age_65_plus": "53.10"
+      },
+      "status": "visually_confirmed",
+      "unit": "万人",
+      "boundary_note": "65周岁及以上是60周岁及以上的其中项，不得重复相加。"
+    },
+    {
+      "id": "H-POPULATION-SHARES",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        3
+      ],
+      "label": "2024年末常住人口构成比重",
+      "values": {
+        "urban": "64.44",
+        "rural": "35.56",
+        "male": "51.16",
+        "female": "48.84",
+        "age_0_14": "16.40",
+        "age_15_59": "58.66",
+        "age_60_plus": "24.94",
+        "age_65_plus": "17.59"
+      },
+      "status": "visually_confirmed",
+      "unit": "%"
+    },
+    {
+      "id": "H-URBANIZATION-PRECISION",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        2,
+        3
+      ],
+      "label": "城镇化率精度",
+      "values": {
+        "page_2_narrative": "64.4",
+        "page_3_table": "64.44",
+        "annual_change_percentage_points": "1.2"
+      },
+      "status": "visually_confirmed",
+      "unit": "%；变动为百分点",
+      "boundary_note": "同一公报的不同显示精度，不机械替换；问题引用表1时用64.44%。"
+    },
+    {
+      "id": "H-POPULATION-HISTORY",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        3
+      ],
+      "label": "图3年末常住人口",
+      "values": {
+        "2020": "303.4",
+        "2021": "304.0",
+        "2022": "302.7",
+        "2023": "301.6",
+        "2024": "301.9"
+      },
+      "status": "visually_confirmed",
+      "unit": "万人"
+    },
+    {
+      "id": "H-AIR",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        15
+      ],
+      "label": "2024年环境空气数据",
+      "values": {
+        "pm25": "40",
+        "pm10": "65.2",
+        "good_days_ratio": "77.3"
+      },
+      "status": "visually_confirmed",
+      "unit": "PM浓度为微克/立方米；优良天数比例为%",
+      "boundary_note": "原文明确PM2.5、PM10为年均浓度。"
+    },
+    {
+      "id": "H-REVISION-NOTE",
+      "source_id": "huainan_stats_2024",
+      "pdf_pages_1_based": [
+        15
+      ],
+      "label": "核算和初步数据说明",
+      "values": {
+        "preliminary": true,
+        "absolute_values_price_basis": "现价",
+        "growth_price_basis": "不变价格",
+        "revision_bases": [
+          "第五次全国经济普查结果",
+          "同步实施城镇居民自有住房服务核算方法改革"
+        ]
+      },
+      "status": "visually_confirmed",
+      "boundary_note": "历史GDP、三次产业及相关行业增加值已修订；四舍五入可导致总计与分项不等。"
+    },
+    {
+      "id": "X-GDP",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年地区生产总值",
+      "values": {
+        "gdp": "534.94",
+        "growth_pct": "5.9"
+      },
+      "status": "visually_confirmed",
+      "unit": "亿元；增速%",
+      "boundary_note": "p8注释区分绝对数当年价格和增长速度不变价格。"
+    },
+    {
+      "id": "X-SECTORS",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年三次产业增加值、增速、比重与GDP贡献率",
+      "values": {
+        "primary": [
+          "17.46",
+          "2.6",
+          "3.3",
+          "2.1"
+        ],
+        "secondary": [
+          "224.83",
+          "8.7",
+          "42.0",
+          "61.5"
+        ],
+        "tertiary": [
+          "292.65",
+          "4.0",
+          "54.7",
+          "36.4"
+        ]
+      },
+      "status": "visually_confirmed",
+      "unit": "各数组依次为亿元、增速%、比重%、贡献率%",
+      "boundary_note": "比重和贡献率是两个指标，不可互换。"
+    },
+    {
+      "id": "X-PRIVATE",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年民营经济",
+      "values": {
+        "total": "354.57",
+        "growth_pct": "8.3",
+        "share_of_gdp_pct": "66.3",
+        "primary": "15.94",
+        "secondary": "152.62",
+        "tertiary": "186.01"
+      },
+      "status": "visually_confirmed",
+      "unit": "增加值亿元；增速与比重%"
+    },
+    {
+      "id": "X-REVISED-2023",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        8
+      ],
+      "label": "2023年修订数据",
+      "values": {
+        "gdp": "503.12",
+        "gdp_sector_structure_pct": [
+          "3.3",
+          "42.0",
+          "54.7"
+        ],
+        "private_value_added": "332.89",
+        "private_sector_structure_pct": [
+          "4.6",
+          "41.8",
+          "53.6"
+        ]
+      },
+      "status": "visually_confirmed",
+      "unit": "增加值亿元；构成%",
+      "boundary_note": "这组503.12与332.89属于2023年修订数，不是2024年；GDP与民营经济结构不可混用。"
+    },
+    {
+      "id": "X-PRICE-NOTE",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        8
+      ],
+      "label": "修订依据、价格和正式数据口径",
+      "values": {
+        "absolute_values_price_basis": "当年价格",
+        "growth_price_basis": "不变价格",
+        "gdp_revision_bases": [
+          "国民经济核算制度",
+          "第五次全国经济普查结果"
+        ],
+        "final_data_reference": "新津统计手册",
+        "preliminary": true
+      },
+      "status": "visually_confirmed",
+      "boundary_note": "2023与2024产业结构写成同一组3.3:42.0:54.7，独立目视确认原文如此，不擅自修正。"
+    },
+    {
+      "id": "X-POPULATION",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        7
+      ],
+      "label": "2024年户籍人口及构成",
+      "values": {
+        "total": "32.90",
+        "urban": "18.75",
+        "rural": "14.15",
+        "male": "16.10",
+        "female": "16.80"
+      },
+      "status": "visually_confirmed",
+      "unit": "万人",
+      "boundary_note": "原文明确为户籍人口，不能替代常住人口，也不能与淮南/石景山常住人口无差别汇总。"
+    },
+    {
+      "id": "X-VITAL",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        7
+      ],
+      "label": "2024年人口出生和死亡",
+      "values": {
+        "births": "1662",
+        "deaths": "2663",
+        "birth_rate": "4.4",
+        "death_rate": "7.1",
+        "natural_growth_rate": "-2.7"
+      },
+      "status": "visually_confirmed",
+      "unit": "人数为人；三项率为‰",
+      "boundary_note": "不能把‰写成%；不能用四舍五入的出生率倒推出权威常住人口。"
+    },
+    {
+      "id": "X-AIR",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        6,
+        7
+      ],
+      "label": "2024年空气质量指标跨页映射",
+      "values": {
+        "good_days": "283",
+        "composite_index": "3.72",
+        "pm25": "31",
+        "pm10": "49",
+        "no2": "26",
+        "pm25_improvement_pct": "18.4",
+        "pm10_improvement_pct": "16.9",
+        "no2_improvement_pct": "13.3"
+      },
+      "status": "visually_confirmed",
+      "unit": "天；综合指数无量纲；浓度微克每立方米；改善%",
+      "boundary_note": "p6末尾列PM2.5，p7续列PM10、NO2，三个值依次31、49、26；原句未显式写年均，保留原标签。"
+    },
+    {
+      "id": "X-WASTEWATER",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        7
+      ],
+      "label": "2024年污水处理",
+      "values": {
+        "capacity": "13.98",
+        "urban_treatment_rate": "95.5",
+        "township_treatment_rate": "86.6",
+        "restored_pipe_network": "20"
+      },
+      "status": "visually_confirmed",
+      "unit": "万吨/天；处理率%；公里",
+      "boundary_note": "城区与乡镇是不同范围；13.98是设施总体规模，不是全年实际处理量。"
+    },
+    {
+      "id": "X-SPORTS",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        6
+      ],
+      "label": "人均体育场地面积",
+      "values": {
+        "area": "3.68"
+      },
+      "status": "visually_confirmed",
+      "unit": "平方米"
+    },
+    {
+      "id": "S-GDP",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        1,
+        2
+      ],
+      "label": "2024年GDP与第二、第三产业",
+      "values": {
+        "gdp": [
+          "1312.9",
+          "6.5"
+        ],
+        "secondary": [
+          "90.8",
+          "-3.1",
+          "6.9"
+        ],
+        "tertiary": [
+          "1222.1",
+          "7.3",
+          "93.1"
+        ]
+      },
+      "status": "visually_confirmed",
+      "unit": "各数组依次为亿元、增速%、构成%",
+      "boundary_note": "总量初步核算；增速按不变价格；原文未列第一产业，不能填0。"
+    },
+    {
+      "id": "S-PER-CAPITA",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年人均GDP",
+      "values": {
+        "amount": "23.4",
+        "population_used": "56.1"
+      },
+      "status": "visually_confirmed",
+      "unit": "万元；万人",
+      "boundary_note": "人均值单位万元；按常住人口56.1万人计算，折成人民币元为234000元。"
+    },
+    {
+      "id": "S-POPULATION",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        3
+      ],
+      "label": "2024年末常住人口",
+      "values": {
+        "total": "56.1",
+        "annual_change": "-0.3",
+        "nonlocal_residents": "15.4",
+        "nonlocal_share_pct": "27.5"
+      },
+      "status": "visually_confirmed",
+      "unit": "人数万人；比重%"
+    },
+    {
+      "id": "S-VITAL",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        3
+      ],
+      "label": "人口出生率、死亡率、自然增长率",
+      "values": {
+        "birth_rate": "6.40",
+        "death_rate": "9.24",
+        "natural_growth_rate": "-2.84"
+      },
+      "status": "visually_confirmed",
+      "unit": "‰"
+    },
+    {
+      "id": "S-INDUSTRY",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        2,
+        3
+      ],
+      "label": "工业和建筑业增加值",
+      "values": {
+        "industry": [
+          "30.7",
+          "-7.2",
+          "2.3"
+        ],
+        "construction": [
+          "61.1",
+          "-0.8",
+          "4.7"
+        ]
+      },
+      "status": "visually_confirmed",
+      "unit": "各数组依次为亿元、增速%、比重%",
+      "boundary_note": "原文工业30.7+建筑业61.1=91.8，与同表第二产业90.8不一致；保留原值并单独标记异常。"
+    },
+    {
+      "id": "S-ICT",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        2
+      ],
+      "label": "信息传输、软件和信息技术服务业",
+      "values": {
+        "value_added": "568.5",
+        "growth_pct": "11.0",
+        "share_pct": "43.3"
+      },
+      "status": "visually_confirmed",
+      "unit": "亿元；%"
+    },
+    {
+      "id": "S-AIR",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        11
+      ],
+      "label": "2024年环境空气数据",
+      "values": {
+        "pm25": "31.1",
+        "pm25_decline_pct": "5.2",
+        "pm10": "60",
+        "pm10_decline_pct": "7.7",
+        "no2": "30",
+        "so2": "3"
+      },
+      "status": "visually_confirmed",
+      "unit": "浓度微克/立方米；同比下降%",
+      "boundary_note": "原文PM2.5、PM10、NO2、SO2均明确为年均浓度，NO2和SO2与去年持平。"
+    },
+    {
+      "id": "S-PRELIMINARY",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        11
+      ],
+      "label": "2024年数据和取舍说明",
+      "values": {
+        "preliminary": true,
+        "rounding_adjustment": "由于计量单位取舍不同产生的合计数或相对数计算误差，均未作机械调整"
+      },
+      "status": "visually_confirmed",
+      "boundary_note": "该一般注释不证明工业+建筑业相差1.0亿元一定由四舍五入引起。"
+    },
+    {
+      "id": "S-SIZE-THRESHOLDS",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        11
+      ],
+      "label": "规模以上工业及限额以上批零住餐单位",
+      "values": {
+        "industrial": "2000",
+        "wholesale": "2000",
+        "retail": "500",
+        "accommodation": "200",
+        "catering": "200"
+      },
+      "status": "visually_confirmed",
+      "unit": "年主营业务收入万元",
+      "boundary_note": "门槛为及以上；工业对象为全部工业法人单位；批零住餐含法人、产业活动单位、个体经营户。"
+    },
+    {
+      "id": "X-INDUSTRY",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        2
+      ],
+      "label": "2024年工业增加值与增速",
+      "values": {
+        "value_added": "154.31",
+        "growth_pct": "7.8"
+      },
+      "unit": "亿元；%",
+      "status": "visually_confirmed",
+      "boundary_note": "工业增加值7.8%不同于规模以上工业增加值7.6%。"
+    },
+    {
+      "id": "X-PRIVATE-INDUSTRY",
+      "source_id": "xinjin_stats_2024",
+      "pdf_pages_1_based": [
+        1
+      ],
+      "label": "2024年民营工业增加值与占全口径工业比重",
+      "values": {
+        "value_added": "126.58",
+        "share_pct": "82.0"
+      },
+      "unit": "亿元；%",
+      "status": "visually_confirmed"
+    },
+    {
+      "id": "S-FINANCE",
+      "source_id": "shijingshan_stats_2024",
+      "pdf_pages_1_based": [
+        2
+      ],
+      "label": "2024年金融业增加值及GDP比重",
+      "values": {
+        "value_added": "175.8",
+        "share_pct": "13.4"
+      },
+      "unit": "亿元；%",
+      "status": "visually_confirmed"
+    }
+  ],
+  "findings": [
+    {
+      "id": "population_scope_mismatch",
+      "severity": "high",
+      "source_ids": [
+        "huainan_stats_2024",
+        "xinjin_stats_2024",
+        "shijingshan_stats_2024"
+      ],
+      "pages": {
+        "huainan_stats_2024": [
+          2,
+          3
+        ],
+        "xinjin_stats_2024": [
+          7
+        ],
+        "shijingshan_stats_2024": [
+          3
+        ]
+      },
+      "finding": "两地是常住人口，新津是户籍人口。",
+      "required_handling": "显示人口类型；缺新津常住人口时留空或说明资料不足，不替换、不倒推。"
+    },
+    {
+      "id": "source_internal_inconsistency",
+      "severity": "high",
+      "source_ids": [
+        "shijingshan_stats_2024"
+      ],
+      "pages": {
+        "shijingshan_stats_2024": [
+          2
+        ]
+      },
+      "finding": "工业30.7+建筑业61.1=91.8，但第二产业列90.8，差1.0亿元。",
+      "required_handling": "原值照录且附异常说明，原因待人工/统计部门核实；不自动改值，不以一般舍入注释武断解释。"
+    },
+    {
+      "id": "unlisted_primary_sector",
+      "severity": "medium",
+      "source_ids": [
+        "shijingshan_stats_2024"
+      ],
+      "pages": {
+        "shijingshan_stats_2024": [
+          1,
+          2
+        ]
+      },
+      "finding": "石景山列第二和第三产业构成，第一产业未列。",
+      "required_handling": "未列不等于已确认0，禁止构造第一产业观测。"
+    },
+    {
+      "id": "xinjin_pm25_period_label",
+      "severity": "medium",
+      "source_ids": [
+        "xinjin_stats_2024"
+      ],
+      "pages": {
+        "xinjin_stats_2024": [
+          6,
+          7
+        ]
+      },
+      "finding": "年度公报写指标浓度，未显式使用年均措辞。",
+      "required_handling": "浓度31微克/立方米可引用，标签沿用原文；横比注明X表述与另外两份年均措辞不同。"
+    },
+    {
+      "id": "nominal_vs_constant_growth",
+      "severity": "high",
+      "source_ids": [
+        "huainan_stats_2024",
+        "xinjin_stats_2024"
+      ],
+      "pages": {
+        "huainan_stats_2024": [
+          1,
+          2,
+          15
+        ],
+        "xinjin_stats_2024": [
+          1,
+          8
+        ]
+      },
+      "finding": "绝对数现价/当年价格，官方增速按不变价格；直接金额比值不可替代官方增速。",
+      "required_handling": "可分别报告现价名义增幅和官方增速，并交代口径。"
+    },
+    {
+      "id": "pdf_metadata_title_mismatch",
+      "severity": "medium",
+      "source_ids": [
+        "xinjin_stats_2024",
+        "shijingshan_stats_2024"
+      ],
+      "pages": {
+        "xinjin_stats_2024": [
+          1
+        ],
+        "shijingshan_stats_2024": [
+          1
+        ]
+      },
+      "finding": "新津内部标题为关于申请购买帕萨特2；石景山内部标题为2022年，均与正文首页2024不符。",
+      "required_handling": "标题年份以原件首页正文为依据，不采用PDF元数据。"
+    },
+    {
+      "id": "huainan_urbanization_precision",
+      "severity": "low",
+      "source_ids": [
+        "huainan_stats_2024"
+      ],
+      "pages": {
+        "huainan_stats_2024": [
+          2,
+          3
+        ]
+      },
+      "finding": "正文64.4%，表164.44%，显示精度不同。",
+      "required_handling": "按所引位置保留精度，不把0.04个百分点当真实统计冲突。"
+    }
+  ],
+  "derived_checks": [
+    {
+      "expression": "153.0+681.6+881.4",
+      "value": "1716.0",
+      "unit": "亿元",
+      "source_id": "huainan_stats_2024",
+      "status": "agrees_with_gdp"
+    },
+    {
+      "expression": "17.46+224.83+292.65",
+      "value": "534.94",
+      "unit": "亿元",
+      "source_id": "xinjin_stats_2024",
+      "status": "agrees_with_gdp"
+    },
+    {
+      "expression": "90.8+1222.1",
+      "value": "1312.9",
+      "unit": "亿元",
+      "source_id": "shijingshan_stats_2024",
+      "status": "agrees_with_gdp"
+    },
+    {
+      "expression": "30.7+61.1-90.8",
+      "value": "1.0",
+      "unit": "亿元",
+      "source_id": "shijingshan_stats_2024",
+      "status": "source_internal_inconsistency"
+    },
+    {
+      "expression": "(534.94/503.12-1)*100",
+      "value": "6.324534902210208300206710100",
+      "unit": "%",
+      "source_id": "xinjin_stats_2024",
+      "status": "derived_nominal_change_not_official_growth"
+    }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "review_content_sha256": "7860a4ad5ec7fe47a40ab80a6ec4dee1909eaf6860c9b0652c3855e57cd82235",
+    "hash_scope": "canonical JSON of {sources,checks,findings}, ensure_ascii=false, sort_keys=true, separators=(comma,colon)",
+    "observation_comparisons_sha256": "8677c63985f33459d7ef26c17e3072b841126e734c1dc77b1c9879c61e071282"
+  },
+  "status": "verified",
+  "status_meaning": "73条整理观测与原PDF视觉确认值、单位、年、页号、人口类型和已声明口径一致；不消除官方原文内部异常，不代表真人复核。",
+  "indicators_sha256": "dce0e5c2ab6f7cdafbca67ff3ccb57240e351cba16fa40202e378c9bbb6f5870",
+  "checked_observation_count": 73,
+  "indicators_checked_at": "2026-10-11T10:28:39+08:00",
+  "observation_comparisons": [
+    {
+      "key": [
+        "huainan",
+        2024,
+        "gdp"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "1716.0",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "gdp_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "5.0",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector1_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "153.0",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector1_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "2.6",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector1_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "8.9",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector2_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "681.6",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector2_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "5.4",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector2_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "39.7",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector3_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "881.4",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector3_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "5.1",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "sector3_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "51.4",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "gdp"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "534.94",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "gdp_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "5.9",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector1_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "17.46",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector1_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "2.6",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector1_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "3.3",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector2_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "224.83",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector2_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "8.7",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector2_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "42.0",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector3_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "292.65",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector3_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "4.0",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "sector3_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "54.7",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "gdp"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "1312.9",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "gdp_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "6.5",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "sector2_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "90.8",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "sector2_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "-3.1",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "sector2_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "6.9",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "sector3_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "1222.1",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "sector3_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "7.3",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "sector3_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "93.1",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "industrial_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "532.3",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "industrial_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "3.0",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "industrial_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "154.31",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "industrial_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "7.8",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "industrial_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "30.7",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "industrial_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "-7.2",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "354.57",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_growth"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "8.3",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "66.3",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_sector1_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "15.94",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_sector2_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "152.62",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_sector3_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "186.01",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_industrial_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "126.58",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "private_industrial_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "82.0",
+      "reference_unit": "%",
+      "reference_pdf_page": 1,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2023,
+        "gdp"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "503.12",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 8,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2023,
+        "private_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "332.89",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 8,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "population_resident"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "301.90",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "population_urban"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "194.54",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "population_rural"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "107.36",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "population_male"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "154.45",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "population_female"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "147.45",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "population_age60plus"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "75.29",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "urbanization_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "64.44",
+      "reference_unit": "%",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "population_registered"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "32.90",
+      "reference_unit": "万人",
+      "reference_pdf_page": 7,
+      "population_type": "户籍人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "population_urban"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "18.75",
+      "reference_unit": "万人",
+      "reference_pdf_page": 7,
+      "population_type": "户籍人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "population_rural"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "14.15",
+      "reference_unit": "万人",
+      "reference_pdf_page": 7,
+      "population_type": "户籍人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "population_male"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "16.10",
+      "reference_unit": "万人",
+      "reference_pdf_page": 7,
+      "population_type": "户籍人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "population_female"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "16.80",
+      "reference_unit": "万人",
+      "reference_pdf_page": 7,
+      "population_type": "户籍人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "population_resident"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "56.1",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "population_nonlocal"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "15.4",
+      "reference_unit": "万人",
+      "reference_pdf_page": 3,
+      "population_type": "常住外来人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "population_nonlocal_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "27.5",
+      "reference_unit": "%",
+      "reference_pdf_page": 3,
+      "population_type": "常住人口",
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "pm25"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "40",
+      "reference_unit": "微克/立方米",
+      "reference_pdf_page": 15,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "huainan",
+        2024,
+        "pm10"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "65.2",
+      "reference_unit": "微克/立方米",
+      "reference_pdf_page": 15,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "pm25"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "31",
+      "reference_unit": "微克/立方米",
+      "reference_pdf_page": 7,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "xinjin",
+        2024,
+        "pm10"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "49",
+      "reference_unit": "微克/立方米",
+      "reference_pdf_page": 7,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "pm25"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "31.1",
+      "reference_unit": "微克/立方米",
+      "reference_pdf_page": 11,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "pm10"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "60",
+      "reference_unit": "微克/立方米",
+      "reference_pdf_page": 11,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "information_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "568.5",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "finance_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "175.8",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "construction_value"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "61.1",
+      "reference_unit": "亿元",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "information_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "43.3",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "finance_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "13.4",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    },
+    {
+      "key": [
+        "shijingshan",
+        2024,
+        "construction_share"
+      ],
+      "status": "verified_against_original",
+      "reference_value_decimal": "4.7",
+      "reference_unit": "%",
+      "reference_pdf_page": 2,
+      "population_type": null,
+      "errors": []
+    }
+  ],
+  "additional_anchor_review": {
+    "reviewed_at": "2026-10-11T10:28:39+08:00",
+    "source_id": "xinjin_stats_2024",
+    "metrics": [
+      "pm25",
+      "pm10"
+    ],
+    "source_pdf_page": 6,
+    "status": "verified_against_original",
+    "method": "p6已于此前目视核验；此次对照原PDF提取全文，两个additional_source_quotes逐字匹配（空白归一后）。",
+    "previous_indicators_sha256": "dce0e5c2ab6f7cdafbca67ff3ccb57240e351cba16fa40202e378c9bbb6f5870",
+    "new_indicators_sha256": "dce0e5c2ab6f7cdafbca67ff3ccb57240e351cba16fa40202e378c9bbb6f5870",
+    "all_73_observation_values_units_pages_population_types_unchanged": true
+  }
+}

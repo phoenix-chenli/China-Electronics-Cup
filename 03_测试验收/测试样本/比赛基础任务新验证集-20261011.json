@@ -1,0 +1,713 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "比赛基础任务新验证集-20261011",
+  "project_id": "public-statistics",
+  "synthetic": false,
+  "frozen_at": "2026-10-11T00:00:00+08:00",
+  "frozen_before_model_execution": true,
+  "author_identity": "Codex generated from user-provided public sources",
+  "human_review": "pending",
+  "description": "按官方评分表基础任务冻结：10个单事实表问数与10个单官方PDF问答；旧20题不混入本批成绩。",
+  "evaluation_policy": {
+    "model_input_excludes_references": true,
+    "post_retries": false,
+    "workers": 2,
+    "single_document_scope_required": true,
+    "semantic_accuracy": "human_pending"
+  },
+  "category_counts": {
+    "database": 10,
+    "single_document_rag": 10
+  },
+  "cases_sha256": "e94672db6ce7dbf8570d42f368cd4026970a9f96faf767ab370adc8628f133ec",
+  "hash_convention": "SHA-256 UTF-8 canonical JSON for cases",
+  "source_snapshot": {
+    "indicators_path": "02_数据资料/公开统计分析/指标核验.json",
+    "indicators_sha256": "dce0e5c2ab6f7cdafbca67ff3ccb57240e351cba16fa40202e378c9bbb6f5870",
+    "verified_observation_count": 73,
+    "original_pdfs": [
+      {
+        "source_id": "huainan_stats_2024",
+        "path": "02_数据资料/公开统计分析/原件/淮南市2024年国民经济和社会发展统计公报.pdf",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "page_count": 16
+      },
+      {
+        "source_id": "xinjin_stats_2024",
+        "path": "02_数据资料/公开统计分析/原件/2024年新津区国民经济和社会发展统计公报.pdf",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "page_count": 8
+      },
+      {
+        "source_id": "shijingshan_stats_2024",
+        "path": "02_数据资料/公开统计分析/原件/石景山区2024年国民经济和社会发展统计公报.pdf",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "page_count": 12
+      }
+    ]
+  },
+  "database": {
+    "path": "02_数据资料/运行数据/public-statistics.db",
+    "sha256": "1f6f179205f0d44634fb4066f96383f74346927cf6013a92c75c23909e56753b",
+    "read_only_reference_queries": true
+  },
+  "documents": [
+    {
+      "document_id": "c4111ee0abf302a4ed9b",
+      "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+      "source_id": "huainan_stats_2024",
+      "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+    },
+    {
+      "document_id": "925900bdb312cae1feed",
+      "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+      "source_id": "xinjin_stats_2024",
+      "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+    },
+    {
+      "document_id": "c4d861a981e905f1d180",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "source_id": "shijingshan_stats_2024",
+      "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+    }
+  ],
+  "novelty_check": {
+    "prior_dataset": "公开统计新验证集-20261011",
+    "known_question_ids_excluded": true,
+    "basis": "新主题与新问题结构，未复用旧题文本"
+  },
+  "reference_validation": {
+    "sql": "local read-only sqlite3 before any model request",
+    "document": "local PDF page/quote anchors; original hashes frozen"
+  },
+  "scoring_contract": {
+    "basic_nl2sql_cases": 10,
+    "basic_single_document_rag_cases": 10,
+    "official_score_boundary": "单项每题1分，自动诊断不替代官方人工评审"
+  },
+  "cases": [
+    {
+      "id": "basic-sql-01",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询淮南市2024年的GDP和GDP实际增长率，分别给出亿元和百分比。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'huainan' AND year = 2024 AND metric_id IN ('gdp','gdp_growth') ORDER BY CASE metric_id WHEN 'gdp' THEN 1 ELSE 2 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "gdp",
+            1716.0
+          ],
+          [
+            "gdp_growth",
+            5.0
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-02",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询新津区2024年的民营经济增加值和民营经济占GDP比重，给出原始数值。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'xinjin' AND year = 2024 AND metric_id IN ('private_value','private_share') ORDER BY CASE metric_id WHEN 'private_value' THEN 1 ELSE 2 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "private_value",
+            354.57
+          ],
+          [
+            "private_share",
+            66.3
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-03",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询石景山区2024年的第二产业和第三产业增加值，按第二产业、第三产业顺序列出。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'shijingshan' AND year = 2024 AND metric_id IN ('sector2_value','sector3_value') ORDER BY CASE metric_id WHEN 'sector2_value' THEN 1 ELSE 2 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "sector2_value",
+            90.8
+          ],
+          [
+            "sector3_value",
+            1222.1
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-04",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "列出2024年三地GDP，按GDP从高到低排序，并保留地区ID和GDP。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT region_id, value FROM public_observations WHERE year = 2024 AND metric_id = 'gdp' ORDER BY value DESC",
+        "params": [],
+        "expected_rows": [
+          [
+            "huainan",
+            1716.0
+          ],
+          [
+            "shijingshan",
+            1312.9
+          ],
+          [
+            "xinjin",
+            534.94
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-05",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询淮南市2024年第一、第二、第三产业增加值，按产业一到三列出。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'huainan' AND year = 2024 AND metric_id IN ('sector1_value','sector2_value','sector3_value') ORDER BY CASE metric_id WHEN 'sector1_value' THEN 1 WHEN 'sector2_value' THEN 2 ELSE 3 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "sector1_value",
+            153.0
+          ],
+          [
+            "sector2_value",
+            681.6
+          ],
+          [
+            "sector3_value",
+            881.4
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-06",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询新津区2024年第一、第二、第三产业占GDP比重，按产业一到三列出。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'xinjin' AND year = 2024 AND metric_id IN ('sector1_share','sector2_share','sector3_share') ORDER BY CASE metric_id WHEN 'sector1_share' THEN 1 WHEN 'sector2_share' THEN 2 ELSE 3 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "sector1_share",
+            3.3
+          ],
+          [
+            "sector2_share",
+            42.0
+          ],
+          [
+            "sector3_share",
+            54.7
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-07",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询石景山区2024年GDP和第三产业占GDP比重。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'shijingshan' AND year = 2024 AND metric_id IN ('gdp','sector3_share') ORDER BY CASE metric_id WHEN 'gdp' THEN 1 ELSE 2 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "gdp",
+            1312.9
+          ],
+          [
+            "sector3_share",
+            93.1
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-08",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询新津区2023年和2024年的GDP，按年份升序列出。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT year, value FROM public_observations WHERE region_id = 'xinjin' AND metric_id = 'gdp' AND year IN (2023,2024) ORDER BY year",
+        "params": [],
+        "expected_rows": [
+          [
+            2023,
+            503.12
+          ],
+          [
+            2024,
+            534.94
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-09",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询2024年三地PM2.5浓度，并按浓度从低到高排序。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT region_id, value FROM public_observations WHERE year = 2024 AND metric_id = 'pm25' ORDER BY value ASC",
+        "params": [],
+        "expected_rows": [
+          [
+            "xinjin",
+            31.0
+          ],
+          [
+            "shijingshan",
+            31.1
+          ],
+          [
+            "huainan",
+            40.0
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-sql-10",
+      "split": "first_exposure",
+      "scope": "database",
+      "category": "database",
+      "question": "查询新津区2024年的工业增加值和工业增加值实际增长率。",
+      "source_references": [],
+      "reference": {
+        "status": "supported",
+        "sql": "SELECT metric_id, value FROM public_observations WHERE region_id = 'xinjin' AND year = 2024 AND metric_id IN ('industrial_value','industrial_growth') ORDER BY CASE metric_id WHEN 'industrial_value' THEN 1 ELSE 2 END",
+        "params": [],
+        "expected_rows": [
+          [
+            "industrial_value",
+            154.31
+          ],
+          [
+            "industrial_growth",
+            7.8
+          ]
+        ],
+        "order_matters": true,
+        "numeric_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "basic-rag-01",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区2024年接待游客多少人次？旅游收入多少亿元？分别给出同比增速。",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "1360.3",
+          "6.8",
+          "53.43",
+          "19.6"
+        ],
+        "expected_pages": [
+          4
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-02",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区年末幼儿园、普通小学、普通中学和中等职业教育学校各有多少所？对应在校或在园学生人数是多少？",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "41",
+          "8722",
+          "17",
+          "22676",
+          "18",
+          "16684",
+          "1",
+          "1351"
+        ],
+        "expected_pages": [
+          5
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-03",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区年末金融机构人民币存款余额和贷款余额分别是多少？各自同比增长多少？",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "620.42",
+          "4.5",
+          "743.02",
+          "19.6"
+        ],
+        "expected_pages": [
+          5
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-04",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "淮南市2024年粮食产量及同比增速是多少？蔬菜及食用菌产量及同比增速是多少？",
+      "document": {
+        "document_id": "c4111ee0abf302a4ed9b",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "source_id": "huainan_stats_2024",
+        "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "huainan_stats_2024",
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "326.2",
+          "1.2",
+          "99.1",
+          "3.4"
+        ],
+        "expected_pages": [
+          4
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-05",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "淮南市2024年一般公共预算收入、同比增速、一般公共预算支出和同比增速分别是多少？",
+      "document": {
+        "document_id": "c4111ee0abf302a4ed9b",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "source_id": "huainan_stats_2024",
+        "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "huainan_stats_2024",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "135.8",
+          "4.1",
+          "339.6",
+          "7.4"
+        ],
+        "expected_pages": [
+          10
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-06",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "淮南市年末参加城镇职工基本养老保险、城乡居民基本养老保险、失业保险和城乡居民基本医疗保险的人数分别是多少？",
+      "document": {
+        "document_id": "c4111ee0abf302a4ed9b",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "source_id": "huainan_stats_2024",
+        "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "huainan_stats_2024",
+          "pages": [
+            12
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "43.7",
+          "149.3",
+          "29.7",
+          "244.5"
+        ],
+        "expected_pages": [
+          12
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-07",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "石景山区2024年社会消费品零售总额及增速是多少？限额以上超级市场和汽车新车零售业零售额及增速分别是多少？",
+      "document": {
+        "document_id": "c4d861a981e905f1d180",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "source_id": "shijingshan_stats_2024",
+        "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "shijingshan_stats_2024",
+          "pages": [
+            7
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "341.5",
+          "5.0",
+          "57.3",
+          "26.2",
+          "87.1",
+          "29.9"
+        ],
+        "expected_pages": [
+          7
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-08",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "石景山区2024年接待旅游总人数和旅游总收入分别是多少？同比增速分别是多少？",
+      "document": {
+        "document_id": "c4d861a981e905f1d180",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "source_id": "shijingshan_stats_2024",
+        "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "shijingshan_stats_2024",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "877.3",
+          "2.4",
+          "110.5",
+          "12.6"
+        ],
+        "expected_pages": [
+          10
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-09",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "石景山区2024年普通高中、普通初中、普通小学和幼儿园的招生人数、在校或在园人数、毕业人数分别是多少？",
+      "document": {
+        "document_id": "c4d861a981e905f1d180",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "source_id": "shijingshan_stats_2024",
+        "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "shijingshan_stats_2024",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "1840",
+          "5352",
+          "1445",
+          "3843",
+          "10012",
+          "2807",
+          "4455",
+          "27504",
+          "4155",
+          "3963",
+          "13524"
+        ],
+        "expected_pages": [
+          10
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "basic-rag-10",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区2024年高新技术企业、科技型中小企业数量，技术合同成交额，以及专利申请和授权数量分别是多少？",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "136",
+          "127",
+          "5.5",
+          "515",
+          "180",
+          "750",
+          "167"
+        ],
+        "expected_pages": [
+          5
+        ],
+        "human_review": "pending"
+      }
+    }
+  ],
+  "pre_execution_source_confirmation": "all source and database hashes checked before model calls"
+}

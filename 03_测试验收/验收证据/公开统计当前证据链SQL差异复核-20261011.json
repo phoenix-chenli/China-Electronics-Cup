@@ -1,0 +1,552 @@
+{
+  "observed_at": "2026-10-11T12:16:17.357381+00:00",
+  "input_report": "03_测试验收/验收证据/公开统计模型自主规划证据链完整回归-20261011.json",
+  "input_report_sha256": "8108368e9f8dae9bfbf46c7a9cda28af828f605aa41faf154d7d99a89ba07594",
+  "dataset_sha256": "2513698355fd3beb2918c413aae7b8d80c3be6544fcea48d3aee450fa6abe714",
+  "database_sha256_before_after": "1f6f179205f0d44634fb4066f96383f74346927cf6013a92c75c23909e56753b",
+  "model_calls": 0,
+  "evaluation_metrics_modified": false,
+  "original_metrics_unchanged": {
+    "executed_questions": 20,
+    "technical_failures": 1,
+    "nonempty_answers": 20,
+    "expected_state_matches": 18,
+    "strict_sql_rows": {
+      "matches": 6,
+      "denominator": 13
+    },
+    "citation_locations": {
+      "located": 131,
+      "denominator": 131
+    },
+    "latency_ms": {
+      "p50": 11751.88,
+      "p95": 28611.04
+    },
+    "model_calls": 103,
+    "semantic_accuracy": "human_pending"
+  },
+  "reference_sql_revalidated_count": 13,
+  "actual_saved_sql_reproduced_count": 12,
+  "boundary": "开发代理按题干、真实只读SQL结果与原参考作差异诊断，不是独立真人语义评分；保持原6/13及全部失败记录。",
+  "cases": [
+    {
+      "case_id": "public-new-01",
+      "question": "请把2024年GDP超过1000亿元的地区筛出来，按GDP从高到低列出地区名、GDP和公报报告的同比增速。",
+      "original_strict_sql_rows_match": true,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "strict_match",
+      "developer_diagnosis_note": "原严格结果已匹配；本复核没有重新作答或判定语义。",
+      "reference_sql": "SELECT r.region_name,g.value,y.value FROM public_observations g JOIN public_regions r ON r.region_id=g.region_id JOIN public_observations y ON y.region_id=g.region_id AND y.year=g.year AND y.metric_id='gdp_growth' WHERE g.year=2024 AND g.metric_id='gdp' AND g.value>1000 ORDER BY g.value DESC,r.region_id;",
+      "reference_rows_revalidated": [
+        [
+          "淮南市",
+          1716.0,
+          5.0
+        ],
+        [
+          "石景山区",
+          1312.9,
+          6.5
+        ]
+      ],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区名\", MAX(CASE WHEN \"o\".\"metric_id\" = 'gdp' THEN \"o\".\"value\" END) AS \"GDP亿元\", MAX(CASE WHEN \"o\".\"metric_id\" = 'gdp_growth' THEN \"o\".\"value\" END) AS \"同比增速百分比\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"r\".\"region_id\" = \"o\".\"region_id\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"metric_id\" IN ('gdp', 'gdp_growth') GROUP BY \"o\".\"region_id\", \"r\".\"region_name\" HAVING MAX(CASE WHEN \"o\".\"metric_id\" = 'gdp' THEN \"o\".\"value\" END) > 1000 ORDER BY \"gdp亿元\" DESC LIMIT 201",
+      "actual_columns": [
+        "地区名",
+        "GDP亿元",
+        "同比增速百分比"
+      ],
+      "actual_rows_reproduced": [
+        [
+          "淮南市",
+          1716.0,
+          5.0
+        ],
+        [
+          "石景山区",
+          1312.9,
+          6.5
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-02",
+      "question": "用淮南2024年的三次产业数据，算出第二、第三产业增加值合计，以及第三产业比第二产业多多少。两个结果都用亿元。",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "extra_operand_columns",
+      "developer_diagnosis_note": "合计1563.0及差额199.8与参考一致，实际另给两个分项原值；题干没有要求只返回两列，保留严格False。",
+      "reference_sql": "SELECT ROUND(SUM(value),2),ROUND(MAX(CASE WHEN metric_id='sector3_value' THEN value END)-MAX(CASE WHEN metric_id='sector2_value' THEN value END),2) FROM public_observations WHERE region_id='huainan' AND year=2024 AND metric_id IN ('sector2_value','sector3_value');",
+      "reference_rows_revalidated": [
+        [
+          1563.0,
+          199.8
+        ]
+      ],
+      "actual_sql": "SELECT MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END) AS \"第二产业增加值(亿元)\", MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_value' THEN \"public_observations\".\"value\" END) AS \"第三产业增加值(亿元)\", ROUND(MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END) + MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_value' THEN \"public_observations\".\"value\" END), 2) AS \"第二、三产业增加值合计(亿元)\", ROUND(MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_value' THEN \"public_observations\".\"value\" END) - MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END), 2) AS \"第三产业比第二产业多(亿元)\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'huainan' AND \"public_observations\".\"year\" = 2024 AND \"public_observations\".\"metric_id\" IN ('sector2_value', 'sector3_value') LIMIT 201",
+      "actual_columns": [
+        "第二产业增加值(亿元)",
+        "第三产业增加值(亿元)",
+        "第二、三产业增加值合计(亿元)",
+        "第三产业比第二产业多(亿元)"
+      ],
+      "actual_rows_reproduced": [
+        [
+          681.6,
+          881.4,
+          1563.0,
+          199.8
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-03",
+      "question": "新津2024年第三产业占GDP的比重，比第二产业高几个百分点？请同时列出两个原始比重。",
+      "original_strict_sql_rows_match": true,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "strict_match",
+      "developer_diagnosis_note": "原严格结果已匹配；本复核没有重新作答或判定语义。",
+      "reference_sql": "SELECT MAX(CASE WHEN metric_id='sector3_share' THEN value END),MAX(CASE WHEN metric_id='sector2_share' THEN value END),ROUND(MAX(CASE WHEN metric_id='sector3_share' THEN value END)-MAX(CASE WHEN metric_id='sector2_share' THEN value END),2) FROM public_observations WHERE region_id='xinjin' AND year=2024 AND metric_id IN ('sector2_share','sector3_share');",
+      "reference_rows_revalidated": [
+        [
+          54.7,
+          42.0,
+          12.7
+        ]
+      ],
+      "actual_sql": "SELECT MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_share' THEN \"public_observations\".\"value\" END) AS \"第三产业占GDP比重(%)\", MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_share' THEN \"public_observations\".\"value\" END) AS \"第二产业占GDP比重(%)\", ROUND(MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_share' THEN \"public_observations\".\"value\" END) - MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_share' THEN \"public_observations\".\"value\" END), 2) AS \"第三产业比重减第二产业比重(百分点)\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"year\" = 2024 AND \"public_observations\".\"metric_id\" IN ('sector3_share', 'sector2_share') LIMIT 201",
+      "actual_columns": [
+        "第三产业占GDP比重(%)",
+        "第二产业占GDP比重(%)",
+        "第三产业比重减第二产业比重(百分点)"
+      ],
+      "actual_rows_reproduced": [
+        [
+          54.7,
+          42.0,
+          12.7
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-04",
+      "question": "石景山2024年第三产业增加值是第二产业的多少倍？保留两位小数，并列出用于计算的两项增加值。",
+      "original_strict_sql_rows_match": true,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "strict_match",
+      "developer_diagnosis_note": "原严格结果已匹配；本复核没有重新作答或判定语义。",
+      "reference_sql": "SELECT MAX(CASE WHEN metric_id='sector3_value' THEN value END),MAX(CASE WHEN metric_id='sector2_value' THEN value END),ROUND(MAX(CASE WHEN metric_id='sector3_value' THEN value END)/NULLIF(MAX(CASE WHEN metric_id='sector2_value' THEN value END),0),2) FROM public_observations WHERE region_id='shijingshan' AND year=2024 AND metric_id IN ('sector2_value','sector3_value');",
+      "reference_rows_revalidated": [
+        [
+          1222.1,
+          90.8,
+          13.46
+        ]
+      ],
+      "actual_sql": "SELECT MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_value' THEN \"public_observations\".\"value\" END) AS \"第三产业增加值(亿元)\", MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END) AS \"第二产业增加值(亿元)\", ROUND(MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector3_value' THEN \"public_observations\".\"value\" END) / MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END), 2) AS \"第三产业增加值是第二产业的倍数\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'shijingshan' AND \"public_observations\".\"year\" = 2024 AND \"public_observations\".\"metric_id\" IN ('sector3_value', 'sector2_value') LIMIT 201",
+      "actual_columns": [
+        "第三产业增加值(亿元)",
+        "第二产业增加值(亿元)",
+        "第三产业增加值是第二产业的倍数"
+      ],
+      "actual_rows_reproduced": [
+        [
+          1222.1,
+          90.8,
+          13.46
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-05",
+      "question": "只合计淮南和石景山的2024年末常住人口，不纳入新津。请列两地原值及合计，单位统一为万人。",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "vertical_vs_horizontal_layout",
+      "developer_diagnosis_note": "两地常住人口301.9与56.1、合计358一致；实际按地区三行展示，参考用一行三列。",
+      "reference_sql": "SELECT MAX(CASE WHEN region_id='huainan' THEN value END),MAX(CASE WHEN region_id='shijingshan' THEN value END),ROUND(SUM(value),2) FROM public_observations WHERE year=2024 AND metric_id='population_resident' AND population_type='常住人口' AND region_id IN ('huainan','shijingshan');",
+      "reference_rows_revalidated": [
+        [
+          301.9,
+          56.1,
+          358.0
+        ]
+      ],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"value\" AS \"2024年末常住人口(万人)\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"r\".\"region_id\" = \"o\".\"region_id\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"metric_id\" = 'population_resident' AND \"o\".\"region_id\" IN ('huainan', 'shijingshan') UNION ALL SELECT '合计' AS \"合计\", SUM(\"o\".\"value\") AS \"_col_1\" FROM \"main\".\"public_observations\" AS \"o\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"metric_id\" = 'population_resident' AND \"o\".\"region_id\" IN ('huainan', 'shijingshan') LIMIT 201",
+      "actual_columns": [
+        "地区",
+        "2024年末常住人口(万人)"
+      ],
+      "actual_rows_reproduced": [
+        [
+          "淮南市",
+          301.9
+        ],
+        [
+          "石景山区",
+          56.1
+        ],
+        [
+          "合计",
+          358.0
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-06",
+      "question": "把淮南、新津、石景山2024年GDP合计，给出三个分项与总数，均保留两位小数、单位亿元。只作金额合计，不计算合并增速。",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "vertical_layout_and_display_precision",
+      "developer_diagnosis_note": "GDP三个原值及3563.84合计一致，横纵布局不同；JSON浮点和答案文字未显示每值固定两位小数，仍有展示合同缺口。",
+      "reference_sql": "SELECT MAX(CASE WHEN region_id='huainan' THEN value END),MAX(CASE WHEN region_id='xinjin' THEN value END),MAX(CASE WHEN region_id='shijingshan' THEN value END),ROUND(SUM(value),2) FROM public_observations WHERE year=2024 AND metric_id='gdp' AND region_id IN ('huainan','xinjin','shijingshan');",
+      "reference_rows_revalidated": [
+        [
+          1716.0,
+          534.94,
+          1312.9,
+          3563.84
+        ]
+      ],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区\", ROUND(\"o\".\"value\", 2) AS \"GDP_亿元\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"r\".\"region_id\" = \"o\".\"region_id\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"metric_id\" = 'gdp' AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') UNION ALL SELECT '合计' AS \"合计\", ROUND(SUM(\"o\".\"value\"), 2) AS \"_col_1\" FROM \"main\".\"public_observations\" AS \"o\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"metric_id\" = 'gdp' AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') LIMIT 201",
+      "actual_columns": [
+        "地区",
+        "GDP_亿元"
+      ],
+      "actual_rows_reproduced": [
+        [
+          "淮南市",
+          1716.0
+        ],
+        [
+          "石景山区",
+          1312.9
+        ],
+        [
+          "新津区",
+          534.94
+        ],
+        [
+          "合计",
+          3563.84
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-12",
+      "question": "把三地2024年第二产业增速并排比较，并指出哪个地区该产业下降但GDP仍增长；结合该地公报的第三产业增速和产业构成解释为什么这两个现象并不矛盾，不声称已完成因果归因。",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": false,
+      "original_answer_status": "failed",
+      "diagnosis_kind": "extra_requested_context_and_citation_failure",
+      "developer_diagnosis_note": "地区对应增速与参考一致，额外GDP/第三产业/构成列服务题干其他子问；但最终引用编号错误导致整题失败，不能当作已答全。",
+      "reference_sql": "SELECT r.region_name,o.value FROM public_observations o JOIN public_regions r USING(region_id) WHERE o.year=2024 AND o.metric_id='sector2_growth' AND o.region_id IN ('huainan','xinjin','shijingshan') ORDER BY r.region_id;",
+      "reference_rows_revalidated": [
+        [
+          "淮南市",
+          5.4
+        ],
+        [
+          "石景山区",
+          -3.1
+        ],
+        [
+          "新津区",
+          8.7
+        ]
+      ],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区\", MAX(CASE WHEN \"o\".\"metric_id\" = 'sector2_growth' THEN \"o\".\"value\" END) AS \"第二产业增速_百分比\", MAX(CASE WHEN \"o\".\"metric_id\" = 'gdp_growth' THEN \"o\".\"value\" END) AS \"GDP增速_百分比\", MAX(CASE WHEN \"o\".\"metric_id\" = 'sector3_growth' THEN \"o\".\"value\" END) AS \"第三产业增速_百分比\", MAX(CASE WHEN \"o\".\"metric_id\" = 'sector2_share' THEN \"o\".\"value\" END) AS \"第二产业占比_百分比\", MAX(CASE WHEN \"o\".\"metric_id\" = 'sector3_share' THEN \"o\".\"value\" END) AS \"第三产业占比_百分比\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') AND \"o\".\"metric_id\" IN ('sector2_growth', 'gdp_growth', 'sector3_growth', 'sector2_share', 'sector3_share') GROUP BY \"r\".\"region_name\" ORDER BY \"地区\" LIMIT 201",
+      "actual_columns": [
+        "地区",
+        "第二产业增速_百分比",
+        "GDP增速_百分比",
+        "第三产业增速_百分比",
+        "第二产业占比_百分比",
+        "第三产业占比_百分比"
+      ],
+      "actual_rows_reproduced": [
+        [
+          "新津区",
+          8.7,
+          5.9,
+          4.0,
+          42.0,
+          54.7
+        ],
+        [
+          "淮南市",
+          5.4,
+          5.0,
+          5.1,
+          39.7,
+          51.4
+        ],
+        [
+          "石景山区",
+          -3.1,
+          6.5,
+          7.3,
+          6.9,
+          93.1
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-13",
+      "question": "查出这三份2024公报的人口总量，结合原文注明每个数是常住还是户籍人口。可否把三项直接相加称作“三地常住人口总数”？请说明缺少什么。",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "extra_provenance_columns",
+      "developer_diagnosis_note": "地区、人口和常住/户籍口径一致；实际增加指标ID、名称、单位及年份。原句与缺口结论仍需独立语义核验。",
+      "reference_sql": "SELECT r.region_name,o.value,o.population_type FROM public_observations o JOIN public_regions r USING(region_id) WHERE o.year=2024 AND ((o.region_id IN ('huainan','shijingshan') AND o.metric_id='population_resident') OR (o.region_id='xinjin' AND o.metric_id='population_registered')) ORDER BY r.region_id;",
+      "reference_rows_revalidated": [
+        [
+          "淮南市",
+          301.9,
+          "常住人口"
+        ],
+        [
+          "石景山区",
+          56.1,
+          "常住人口"
+        ],
+        [
+          "新津区",
+          32.9,
+          "户籍人口"
+        ]
+      ],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"metric_id\" AS \"指标ID\", \"i\".\"metric_name\" AS \"指标名称\", \"o\".\"value\" AS \"数值\", \"o\".\"unit\" AS \"单位\", \"o\".\"population_type\" AS \"人口口径\", \"o\".\"year\" AS \"年份\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" JOIN \"main\".\"public_indicators\" AS \"i\" ON \"o\".\"metric_id\" = \"i\".\"metric_id\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') AND \"o\".\"metric_id\" IN ('population_resident', 'population_registered') ORDER BY \"r\".\"region_name\", \"o\".\"metric_id\" LIMIT 201",
+      "actual_columns": [
+        "地区",
+        "指标ID",
+        "指标名称",
+        "数值",
+        "单位",
+        "人口口径",
+        "年份"
+      ],
+      "actual_rows_reproduced": [
+        [
+          "新津区",
+          "population_registered",
+          "户籍人口",
+          32.9,
+          "万人",
+          "户籍人口",
+          2024
+        ],
+        [
+          "淮南市",
+          "population_resident",
+          "年末常住人口",
+          301.9,
+          "万人",
+          "常住人口",
+          2024
+        ],
+        [
+          "石景山区",
+          "population_resident",
+          "年末常住人口",
+          56.1,
+          "万人",
+          "常住人口",
+          2024
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-14",
+      "question": "按GDP总量和公报报告的人均GDP分别比较石景山与淮南，两个排序是否一致？人均GDP先统一成元并算差额，引用原文说明人口口径，不用年末人口重算替换公报人均数。",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": false,
+      "original_answer_status": "needs_clarification",
+      "diagnosis_kind": "year_ambiguity_and_reference_conflict",
+      "developer_diagnosis_note": "题干未指定年份，系统提出年份澄清；原参考固定2024，保持原标签与失配，不擅自按2024执行替换。",
+      "reference_sql": "SELECT r.region_name,o.value FROM public_observations o JOIN public_regions r USING(region_id) WHERE o.year=2024 AND o.metric_id='gdp' AND o.region_id IN ('shijingshan','huainan') ORDER BY o.value DESC;",
+      "reference_rows_revalidated": [
+        [
+          "淮南市",
+          1716.0
+        ],
+        [
+          "石景山区",
+          1312.9
+        ]
+      ],
+      "actual_sql": null,
+      "actual_columns": [],
+      "actual_rows_reproduced": null,
+      "actual_saved_rows_match_replay": null,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-15",
+      "question": "用新津2024年GDP与公报附注中的2023年修订GDP算名义金额增幅，保留两位小数；再与2024年报告的增长率对照，解释两者为何不能直接判为矛盾。",
+      "original_strict_sql_rows_match": true,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "strict_match",
+      "developer_diagnosis_note": "原严格结果已匹配；本复核没有重新作答或判定语义。",
+      "reference_sql": "SELECT MAX(CASE WHEN year=2024 AND metric_id='gdp' THEN value END),MAX(CASE WHEN year=2023 AND metric_id='gdp' THEN value END),ROUND((MAX(CASE WHEN year=2024 AND metric_id='gdp' THEN value END)/NULLIF(MAX(CASE WHEN year=2023 AND metric_id='gdp' THEN value END),0)-1)*100,2),MAX(CASE WHEN year=2024 AND metric_id='gdp_growth' THEN value END) FROM public_observations WHERE region_id='xinjin' AND ((year IN (2023,2024) AND metric_id='gdp') OR (year=2024 AND metric_id='gdp_growth'));",
+      "reference_rows_revalidated": [
+        [
+          534.94,
+          503.12,
+          6.32,
+          5.9
+        ]
+      ],
+      "actual_sql": "SELECT (SELECT \"public_observations\".\"value\" AS \"value\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"metric_id\" = 'gdp' AND \"public_observations\".\"year\" = 2024) AS \"gdp_2024_亿元\", (SELECT \"public_observations\".\"value\" AS \"value\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"metric_id\" = 'gdp' AND \"public_observations\".\"year\" = 2023) AS \"gdp_2023修订_亿元\", ROUND(((SELECT \"public_observations\".\"value\" AS \"value\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"metric_id\" = 'gdp' AND \"public_observations\".\"year\" = 2024) - (SELECT \"public_observations\".\"value\" AS \"value\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"metric_id\" = 'gdp' AND \"public_observations\".\"year\" = 2023)) / (SELECT \"public_observations\".\"value\" AS \"value\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"metric_id\" = 'gdp' AND \"public_observations\".\"year\" = 2023) * 100, 2) AS \"名义增幅_百分比\", (SELECT \"public_observations\".\"value\" AS \"value\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'xinjin' AND \"public_observations\".\"metric_id\" = 'gdp_growth' AND \"public_observations\".\"year\" = 2024) AS \"报告实际增长率_百分比\" LIMIT 201",
+      "actual_columns": [
+        "gdp_2024_亿元",
+        "gdp_2023修订_亿元",
+        "名义增幅_百分比",
+        "报告实际增长率_百分比"
+      ],
+      "actual_rows_reproduced": [
+        [
+          534.94,
+          503.12,
+          6.32,
+          5.9
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-16",
+      "question": "核对石景山2024年工业、建筑业、第二产业三项增加值：前两项相加与第二产业是否一致，差多少？请回到公报表1确认并保留原值，不替官方改数，也不把差异原因说成已查明。",
+      "original_strict_sql_rows_match": true,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "strict_match",
+      "developer_diagnosis_note": "原严格结果已匹配；本复核没有重新作答或判定语义。",
+      "reference_sql": "SELECT MAX(CASE WHEN metric_id='industrial_value' THEN value END),MAX(CASE WHEN metric_id='construction_value' THEN value END),MAX(CASE WHEN metric_id='sector2_value' THEN value END),ROUND(SUM(CASE WHEN metric_id IN ('industrial_value','construction_value') THEN value ELSE 0 END),2),ROUND(SUM(CASE WHEN metric_id IN ('industrial_value','construction_value') THEN value ELSE -value END),2) FROM public_observations WHERE region_id='shijingshan' AND year=2024 AND metric_id IN ('industrial_value','construction_value','sector2_value');",
+      "reference_rows_revalidated": [
+        [
+          30.7,
+          61.1,
+          90.8,
+          91.8,
+          1.0
+        ]
+      ],
+      "actual_sql": "SELECT MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'industrial_value' THEN \"public_observations\".\"value\" END) AS \"工业增加值_亿元\", MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'construction_value' THEN \"public_observations\".\"value\" END) AS \"建筑业增加值_亿元\", MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END) AS \"第二产业增加值_亿元\", ROUND(MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'industrial_value' THEN \"public_observations\".\"value\" END) + MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'construction_value' THEN \"public_observations\".\"value\" END), 1) AS \"工业加建筑业_亿元\", ROUND(MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'industrial_value' THEN \"public_observations\".\"value\" END) + MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'construction_value' THEN \"public_observations\".\"value\" END) - MAX(CASE WHEN \"public_observations\".\"metric_id\" = 'sector2_value' THEN \"public_observations\".\"value\" END), 1) AS \"与第二产业差额_亿元\" FROM \"main\".\"public_observations\" AS \"public_observations\" WHERE \"public_observations\".\"region_id\" = 'shijingshan' AND \"public_observations\".\"year\" = 2024 AND \"public_observations\".\"metric_id\" IN ('industrial_value', 'construction_value', 'sector2_value') LIMIT 201",
+      "actual_columns": [
+        "工业增加值_亿元",
+        "建筑业增加值_亿元",
+        "第二产业增加值_亿元",
+        "工业加建筑业_亿元",
+        "与第二产业差额_亿元"
+      ],
+      "actual_rows_reproduced": [
+        [
+          30.7,
+          61.1,
+          90.8,
+          91.8,
+          1.0
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-17",
+      "question": "按三份2024公报公布的PM2.5浓度从低到高排列，并算最高与最低的差值。再核对原句：哪些明确写“年均”，新津跨页文字应如何对应污染物与数值？",
+      "original_strict_sql_rows_match": false,
+      "original_expected_state_match": true,
+      "original_answer_status": "supported",
+      "diagnosis_kind": "requested_derived_column_not_in_reference",
+      "developer_diagnosis_note": "污染物对应浓度及排序一致；实际增加题干要求的最高最低差9，但原参考结果表只有地区与浓度两列。",
+      "reference_sql": "SELECT r.region_name,o.value FROM public_observations o JOIN public_regions r USING(region_id) WHERE o.year=2024 AND o.metric_id='pm25' AND o.unit='微克/立方米' ORDER BY o.value ASC,r.region_id;",
+      "reference_rows_revalidated": [
+        [
+          "新津区",
+          31.0
+        ],
+        [
+          "石景山区",
+          31.1
+        ],
+        [
+          "淮南市",
+          40.0
+        ]
+      ],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"value\" AS \"PM2_5浓度_微克每立方米\", ROUND(MAX(\"o\".\"value\") OVER () - MIN(\"o\".\"value\") OVER (), 1) AS \"最高与最低差值_微克每立方米\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"year\" = 2024 AND \"o\".\"metric_id\" = 'pm25' ORDER BY \"o\".\"value\" ASC LIMIT 201",
+      "actual_columns": [
+        "地区",
+        "PM2_5浓度_微克每立方米",
+        "最高与最低差值_微克每立方米"
+      ],
+      "actual_rows_reproduced": [
+        [
+          "新津区",
+          31.0,
+          9.0
+        ],
+        [
+          "石景山区",
+          31.1,
+          9.0
+        ],
+        [
+          "淮南市",
+          40.0,
+          9.0
+        ]
+      ],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    },
+    {
+      "case_id": "public-new-20",
+      "question": "请报出淮南、新津和石景山2025年实际GDP，直接给官方数，不做预测。",
+      "original_strict_sql_rows_match": true,
+      "original_expected_state_match": true,
+      "original_answer_status": "insufficient_evidence",
+      "diagnosis_kind": "strict_match",
+      "developer_diagnosis_note": "原严格结果已匹配；本复核没有重新作答或判定语义。",
+      "reference_sql": "SELECT r.region_name,o.value FROM public_observations o JOIN public_regions r USING(region_id) WHERE o.year=2025 AND o.metric_id='gdp' AND o.region_id IN ('huainan','xinjin','shijingshan') ORDER BY r.region_id;",
+      "reference_rows_revalidated": [],
+      "actual_sql": "SELECT \"r\".\"region_name\" AS \"地区\", \"o\".\"value\" AS \"实际GDP_亿元\", \"o\".\"price_basis\" AS \"价格基准\", \"o\".\"preliminary\" AS \"是否初步核算\", \"o\".\"unit\" AS \"单位\" FROM \"main\".\"public_observations\" AS \"o\" JOIN \"main\".\"public_regions\" AS \"r\" ON \"o\".\"region_id\" = \"r\".\"region_id\" WHERE \"o\".\"year\" = 2025 AND \"o\".\"metric_id\" = 'gdp' AND \"o\".\"region_id\" IN ('huainan', 'xinjin', 'shijingshan') ORDER BY \"r\".\"region_name\" LIMIT 201",
+      "actual_columns": [
+        "地区",
+        "实际GDP_亿元",
+        "价格基准",
+        "是否初步核算",
+        "单位"
+      ],
+      "actual_rows_reproduced": [],
+      "actual_saved_rows_match_replay": true,
+      "semantic_support": "human_pending"
+    }
+  ]
+}

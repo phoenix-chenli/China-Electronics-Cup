@@ -82,6 +82,10 @@ def version(did, sha=None):
     d.update(current_sha256=current["sha256"], is_current=sha==current["sha256"],
              archived=current["status"]=="archived", size_bytes=path.stat().st_size,
              source_url=f"/api/documents/{did}/original?version={sha}")
+    quality=json.loads(current.get('quality_json') or '{}')
+    provenance=quality.get('source_provenance')
+    if provenance and provenance.get('file_sha256') == sha:
+        d.update(provenance=provenance,official_url=provenance.get('official_url'))
     return d, path
 
 
@@ -329,12 +333,12 @@ def reparse(did, number, sha=None, parse_id=None):
     body["parser"]=PARSER
     if d["format"]=="md": body["outline"]=fresh["headings"]
     with s.conn() as c:
-        current=c.execute("SELECT status FROM documents WHERE id=?",(did,)).fetchone()
+        current=c.execute("SELECT status,sha256,quality_json FROM documents WHERE id=?",(did,)).fetchone()
         active=active_parse(c,did,d["sha256"])
         if not current or current["status"]=="archived" or not active or active["id"]!=before["parse_id"]: raise ValueError("文档已归档或基础解析已改变，请重新读取")
         after=save_parse(c,did,d["sha256"],body,"用户重读指定页面",number)
         if d["is_current"]:
-            quality=s.quality_for_parse(body)
+            quality=s.retain_provenance(s.quality_for_parse(body),current)
             c.execute("UPDATE documents SET quality_json=?,status=?,updated_at=? WHERE id=? AND sha256=? AND status!='archived'",(json.dumps(quality,ensure_ascii=False),"needs_review" if quality["quality_flags"] else "ready",s.now(),did,d["sha256"]))
     record={"id":str(uuid.uuid4()),"page":number,"sha256":d["sha256"],"before_parse_id":before["parse_id"],"after_parse_id":after["parse_id"],"before":old["text"],"after":fresh["text"],"changed":old["text"]!=fresh["text"],"method":"本机原始文字提取；未调用 OCR 或视觉模型","created_at":s.now(),"duration_ms":round((time.perf_counter()-t)*1000,2)}
     with s.conn() as c:c.execute("INSERT INTO reparses VALUES (?,?,?,?,?)",(record["id"],did,number,record["created_at"],json.dumps(record,ensure_ascii=False)))

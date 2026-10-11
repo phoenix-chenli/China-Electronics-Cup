@@ -19,5 +19,7 @@ export function DatabaseQueryDetails({query}: {query?:Obj}){
 export function DatabaseResultData({result}: {result:Obj}){
  const [expanded,setExpanded]=useState(false)
  const query=result.database_query,rows=result.rows||query?.rows||[],columns=result.columns||query?.columns||[]
- return <section className="analysis-result-block database-result-block"><div className="section-title"><h3>数据库查询结果</h3><button className="text-link" onClick={()=>setExpanded(true)}><Maximize2 size={14}/>展开表格</button></div><DataTable rows={rows} columns={columns} limit={10} raw/><DatabaseQueryDetails query={query}/>{expanded&&<Modal title="数据库查询结果 · 原始字段和值" wide close={()=>setExpanded(false)}><DataTable rows={rows} columns={columns} limit={20} raw/><DatabaseQueryDetails query={query}/></Modal>}</section>
+ const displayRows=Array.isArray(query?.display_rows)&&query.display_rows.length===rows.length?query.display_rows:rows
+ const formatted=displayRows!==rows
+ return <section className="analysis-result-block database-result-block"><div className="section-title"><h3>数据库查询结果</h3><button className="text-link" onClick={()=>setExpanded(true)}><Maximize2 size={14}/>{formatted?'展开原始表格':'展开表格'}</button></div>{formatted&&<p className="muted">按查询指定的小数位显示；原始返回值可在展开表格中核对。</p>}<DataTable rows={displayRows} columns={columns} limit={10} raw/><DatabaseQueryDetails query={query}/>{expanded&&<Modal title="数据库查询结果 · 原始字段和值" wide close={()=>setExpanded(false)}><DataTable rows={rows} columns={columns} limit={20} raw/><DatabaseQueryDetails query={query}/></Modal>}</section>
 }

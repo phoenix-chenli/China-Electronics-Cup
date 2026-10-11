@@ -17,6 +17,59 @@ def catalog(namespace="main"):
 
 
 class SQLGuardTests(unittest.TestCase):
+    def test_sqlite_final_alias_case_is_preserved_without_changing_catalog_scope(self):
+        result=validate('SELECT product_id AS "产品ID",amount AS "Amount_CNY" FROM orders ORDER BY "Amount_CNY" DESC',catalog())
+        self.assertEqual(result['unit_origins'],{'产品ID':'main.orders.product_id','Amount_CNY':'main.orders.amount'})
+        self.assertEqual(result['tables'],['main.orders'])
+        with sqlite3.connect(':memory:') as db:
+            db.execute('CREATE TABLE orders(id INTEGER,product_id INTEGER,amount REAL,year INTEGER,region TEXT)')
+            db.executemany('INSERT INTO orders VALUES (?,?,?,?,?)',[(1,2,3,2024,'东'),(2,1,7,2024,'西')])
+            cursor=db.execute(result['sql'])
+            self.assertEqual([x[0] for x in cursor.description],['产品ID','Amount_CNY'])
+            self.assertEqual(cursor.fetchall(),[(1,7),(2,3)])
+        self.rejected('SELECT product_id AS ID,amount AS id FROM orders')
+
+    def test_outer_alias_case_does_not_rename_inner_cte_keys(self):
+        result=validate('WITH totals AS (SELECT product_id,SUM(amount) AS Sum_CNY FROM orders GROUP BY product_id) SELECT product_id AS "产品ID", Sum_CNY AS "SUM_CNY" FROM totals ORDER BY SUM_CNY DESC',catalog())
+        self.assertEqual(result['unit_origins']['SUM_CNY'],'main.orders.amount')
+        with sqlite3.connect(':memory:') as db:
+            db.execute('CREATE TABLE orders(id INTEGER,product_id INTEGER,amount REAL,year INTEGER,region TEXT)')
+            db.executemany('INSERT INTO orders VALUES (?,?,?,?,?)',[(1,2,3,2024,'东'),(2,1,7,2024,'西')])
+            cursor=db.execute(result['sql'])
+            self.assertEqual([x[0] for x in cursor.description],['产品ID','SUM_CNY'])
+            self.assertEqual(cursor.fetchall(),[(1,7),(2,3)])
+
+    def test_complete_same_origin_group_keys_allow_safe_aggregate_join(self):
+        sql='WITH a AS (SELECT product_id,SUM(amount) AS total FROM orders GROUP BY product_id), '
+        sql+='b AS (SELECT product_id,COUNT(*) AS count FROM orders GROUP BY product_id) '
+        sql+='SELECT a.product_id,a.total,b.count FROM a JOIN b ON a.product_id=b.product_id'
+        result=validate(sql,catalog())
+        self.assertEqual(result['relations'][0]['source'],'derived_group_key')
+        self.assertTrue(result['relations'][0]['verified'])
+
+    def test_partial_composite_or_computed_group_keys_do_not_authorize_join(self):
+        prefix='WITH a AS (SELECT product_id,year,SUM(amount) AS total FROM orders GROUP BY product_id,year), '
+        with self.assertRaisesRegex(ValueError,'完整'):
+            validate(prefix+'b AS (SELECT product_id,COUNT(*) AS count FROM orders GROUP BY product_id) '
+                'SELECT a.total,b.count FROM a JOIN b ON a.product_id=b.product_id',catalog())
+        with self.assertRaises(ValueError):
+            validate('WITH a AS (SELECT product_id+0 AS key,SUM(amount) AS total FROM orders GROUP BY product_id+0), '
+                'b AS (SELECT product_id AS key,COUNT(*) AS count FROM orders GROUP BY product_id) '
+                'SELECT a.total,b.count FROM a JOIN b ON a.key=b.key',catalog())
+        with self.assertRaises(ValueError):
+            validate('SELECT a.id FROM orders a JOIN orders b ON a.product_id=b.product_id',catalog())
+
+    def test_raw_projection_can_lookup_complete_same_origin_group_without_fanout(self):
+        prefix='WITH actual AS (SELECT id,product_id,amount FROM orders WHERE year=2024), totals AS (SELECT product_id,SUM(amount) AS total FROM actual GROUP BY product_id) '
+        sql=prefix+'SELECT a.id,a.product_id,t.total FROM actual a LEFT JOIN totals t ON a.product_id=t.product_id ORDER BY a.id'
+        result=validate(sql,catalog())
+        self.assertEqual(result['relations'][0]['cardinality'],'many_to_one')
+        with sqlite3.connect(':memory:') as db:
+            db.execute('CREATE TABLE orders(id INTEGER,product_id INTEGER,amount REAL,year INTEGER,region TEXT)')
+            db.executemany('INSERT INTO orders VALUES (?,?,?,?,?)',[(1,1,4,2024,'东'),(2,1,5,2024,'东'),(3,2,7,2024,'西')])
+            self.assertEqual(db.execute(result['sql']).fetchall(),[(1,1,9.0),(2,1,9.0),(3,2,7.0)])
+        self.rejected(prefix+'SELECT t.total,a.id FROM totals t LEFT JOIN actual a ON a.product_id=t.product_id')
+
     def setUp(self):
         self.schema = catalog()
 

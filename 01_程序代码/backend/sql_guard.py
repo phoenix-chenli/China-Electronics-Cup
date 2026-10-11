@@ -34,6 +34,8 @@ SQLITE_FUNCTIONS = frozenset({
     "datetime", "strftime", "julianday", "unixepoch", "ceil", "ceiling",
     "floor", "concat", "concat_ws", "group_concat", "string_agg", "row_number",
     "rank", "dense_rank", "lag", "lead", "first_value", "last_value", "nth_value",
+    # SQLite invokes these builtins for the already permitted SQL operators.
+    "like", "glob",
 })
 SAFE_FUNCTIONS = frozenset({
     "ABS", "AVG", "COUNT", "SUM", "MIN", "MAX", "ROUND", "COALESCE", "NULLIF",
@@ -281,6 +283,19 @@ def _matching_relation(pairs, relations):
     return None
 
 
+def _group_unique(scope,alias,origins,tables,dialect):
+    """Prove a derived row is unique on the complete, directly projected key."""
+    selected=scope.selected_sources.get(alias)
+    source=selected[1] if selected else None
+    if not isinstance(source,Scope) or not isinstance(source.expression,exp.Select):
+        return False
+    group=source.expression.args.get('group')
+    if not group or set(group.args)-{'expressions'}:
+        return False
+    keys=[_origin(source,node,tables,dialect) for node in group.expressions]
+    return bool(keys) and all(keys) and set(keys)==origins
+
+
 def _joins(scopes, tables, relations, dialect):
     used = []
     for scope in scopes:
@@ -296,7 +311,7 @@ def _joins(scopes, tables, relations, dialect):
             # qualify_columns expands USING into qualified equality predicates.
             if condition is None:
                 _error("关联键无法解析到已授权字段")
-            grouped = defaultdict(set)
+            grouped,identical = defaultdict(set),defaultdict(set)
             for predicate in _conjuncts(condition):
                 if not isinstance(predicate, exp.EQ) or not isinstance(predicate.left, exp.Column) or not isinstance(predicate.right, exp.Column):
                     continue
@@ -310,9 +325,30 @@ def _joins(scopes, tables, relations, dialect):
                 x, y = _origin(scope, a, tables, dialect), _origin(scope, b, tables, dialect)
                 if x and y and x != y:
                     grouped[other].add(frozenset((x, y)))
+                elif x and x==y:
+                    identical[other].add(x)
             matched = next((relation for pairs in grouped.values() if (relation := _matching_relation(pairs, relations))), None)
             if matched is None:
-                _error("关联未使用声明外键或服务端验证关系的完整键")
+                for other,origins in identical.items():
+                    right_unique=_group_unique(scope,alias,origins,tables,dialect)
+                    left_unique=_group_unique(scope,other,origins,tables,dialect)
+                    def grouped_source(name):
+                        source=scope.selected_sources[name][1]
+                        return isinstance(source,Scope) and bool(source.expression.args.get('group'))
+                    side=join.side or 'INNER'
+                    # A non-grouped projection may safely look up one complete
+                    # grouped key on the same original fields. Preserve the
+                    # stricter complete-key rule when both sides are grouped.
+                    lookup=(right_unique and not grouped_source(other) and side in {'INNER','LEFT'}) or (left_unique and not grouped_source(alias) and side in {'INNER','RIGHT'})
+                    if (right_unique and left_unique) or lookup:
+                        ordered=sorted(origins)
+                        matched={'left_table':other,'right_table':alias,'left_columns':[x[1] for x in ordered],
+                                 'right_columns':[x[1] for x in ordered],'source':'derived_group_key','verified':True,
+                                 'cardinality':'one_to_one' if right_unique and left_unique else 'many_to_one' if right_unique else 'one_to_many',
+                                 'basis':'直接投影同一已授权原始键；分组侧使用完整键且每键至多一行，双侧分组时键须完整相同。'}
+                        break
+            if matched is None:
+                _error("关联未使用声明外键或服务端验证关系的完整键；同表不同指标请用条件聚合，分组结果必须使用完整同源键")
             used.append({**matched, "join_alias": alias, "join_type": join.side or join.kind or "INNER"})
             prior.add(alias)
     return used
@@ -448,6 +484,11 @@ def validate(sql, schema, *, dialect="sqlite", max_rows=200, max_nodes=500):
         if len(statements) != 1 or statements[0] is None:
             _error("只允许单条 SELECT 或 WITH 查询")
         tree = statements[0]
+        # SQLite qualification folds identifiers for catalog lookup. Explicit
+        # final-output aliases are display labels; preserve their original case
+        # after scope/relationship checks without changing physical identifiers.
+        output_aliases = {item.alias.casefold(): item.alias for item in tree.selects
+                          if isinstance(item, exp.Alias)} if dialect == 'sqlite' else {}
         _budget(tree, max_nodes)
         _structural(tree)
         scopes = list(traverse_scope(tree))
@@ -484,6 +525,14 @@ def validate(sql, schema, *, dialect="sqlite", max_rows=200, max_nodes=500):
                 origin = _origin(scope, column, tables, dialect)
                 if origin:
                     columns.add(origin[0] + "." + origin[1])
+        for projection in tree.selects:
+            previous_name = projection.alias_or_name
+            original_name = output_aliases.get(previous_name.casefold())
+            if original_name and original_name != previous_name:
+                projection.set('alias', exp.to_identifier(original_name, quoted=True))
+                if previous_name in unit_origins:
+                    unit_origins[original_name] = unit_origins.pop(previous_name)
+        _output_names(tree)
         limit = _row_budget(tree, max_rows)
         # No provider text/comments should be retained in executable SQL.
         for node in tree.walk():

@@ -1,4 +1,12 @@
 .agent-config {margin-bottom:24px}
+.query-context .query-project-name{color:var(--muted);font-weight:500}
+.query-context .query-scope-choice{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:8px;font-size:11px;color:var(--muted)}
+.query-scope-choice select{max-width:100%;min-height:32px;padding:5px 28px 5px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel-solid);color:var(--ink);font-size:11px}
+.query-context .query-route-reason{max-width:640px;line-height:1.7;color:var(--muted)}
+.task-stage-detail{display:flex;flex-direction:column;gap:5px;min-width:0}
+.task-stage-detail>strong{font-size:12px;font-weight:600;color:var(--accent)}
+.task-stage-detail>span{font-size:14px;font-weight:550;line-height:1.75;color:var(--ink);overflow-wrap:anywhere}
+.task-stage-detail>small{font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
 .agent-mode-options.agent-scope-options {grid-template-columns:repeat(2,minmax(0,1fr))}
 .agent-mode-options>label:has(input:disabled) {opacity:.6;cursor:default}
 .database-result-source-note {display:flex;flex-wrap:wrap;gap:5px 12px;padding:10px 0;font-size:12px;line-height:1.7;color:var(--muted)}

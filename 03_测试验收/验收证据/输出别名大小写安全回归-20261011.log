@@ -1,0 +1,35 @@
+test_binding_conversion_preserves_literal_percent_and_comment_content (tests.test_sql_guard.SQLGuardTests.test_binding_conversion_preserves_literal_percent_and_comment_content) ... ok
+test_complete_same_origin_group_keys_allow_safe_aggregate_join (tests.test_sql_guard.SQLGuardTests.test_complete_same_origin_group_keys_allow_safe_aggregate_join) ... ok
+test_composite_keys_cannot_be_split_or_bypassed (tests.test_sql_guard.SQLGuardTests.test_composite_keys_cannot_be_split_or_bypassed) ... ok
+test_composite_relationship_requires_all_columns (tests.test_sql_guard.SQLGuardTests.test_composite_relationship_requires_all_columns) ... ok
+test_correlated_scope_and_trusted_relationship (tests.test_sql_guard.SQLGuardTests.test_correlated_scope_and_trusted_relationship) ... ok
+test_cte_and_derived_key_lineage (tests.test_sql_guard.SQLGuardTests.test_cte_and_derived_key_lineage) ... ok
+test_custom_operators_and_type_conversions_are_execution_entries (tests.test_sql_guard.SQLGuardTests.test_custom_operators_and_type_conversions_are_execution_entries) ... ok
+test_dialect_schema_and_quoted_names (tests.test_sql_guard.SQLGuardTests.test_dialect_schema_and_quoted_names) ... ok
+test_external_functions_files_and_sql_controls_fail_closed (tests.test_sql_guard.SQLGuardTests.test_external_functions_files_and_sql_controls_fail_closed) ... ok
+test_fields_aliases_ctes_and_unknown_sources (tests.test_sql_guard.SQLGuardTests.test_fields_aliases_ctes_and_unknown_sources) ... ok
+test_functions_and_recursion_are_restricted (tests.test_sql_guard.SQLGuardTests.test_functions_and_recursion_are_restricted) ... ok
+test_join_requires_real_relationship (tests.test_sql_guard.SQLGuardTests.test_join_requires_real_relationship) ... ok
+test_limits_offsets_literals_and_complexity (tests.test_sql_guard.SQLGuardTests.test_limits_offsets_literals_and_complexity) ... ok
+test_malformed_sql_and_duplicate_outputs_fail_closed (tests.test_sql_guard.SQLGuardTests.test_malformed_sql_and_duplicate_outputs_fail_closed) ... ok
+test_no_cartesian_or_weakened_join (tests.test_sql_guard.SQLGuardTests.test_no_cartesian_or_weakened_join) ... ok
+test_no_write_ddl_system_or_multiple_statements (tests.test_sql_guard.SQLGuardTests.test_no_write_ddl_system_or_multiple_statements) ... ok
+test_outer_alias_case_does_not_rename_inner_cte_keys (tests.test_sql_guard.SQLGuardTests.test_outer_alias_case_does_not_rename_inner_cte_keys) ... ok
+test_partial_composite_or_computed_group_keys_do_not_authorize_join (tests.test_sql_guard.SQLGuardTests.test_partial_composite_or_computed_group_keys_do_not_authorize_join) ... ok
+test_percent_bindings_are_lexical_and_literals_remain_literals (tests.test_sql_guard.SQLGuardTests.test_percent_bindings_are_lexical_and_literals_remain_literals) ... ok
+test_raw_projection_can_lookup_complete_same_origin_group_without_fanout (tests.test_sql_guard.SQLGuardTests.test_raw_projection_can_lookup_complete_same_origin_group_without_fanout) ... ok
+test_scope_shadowing_and_ancestor_correlation (tests.test_sql_guard.SQLGuardTests.test_scope_shadowing_and_ancestor_correlation) ... ok
+test_select_aggregate_and_bound_parameters_execute_on_sqlite (tests.test_sql_guard.SQLGuardTests.test_select_aggregate_and_bound_parameters_execute_on_sqlite) ... ok
+test_sqlite_final_alias_case_is_preserved_without_changing_catalog_scope (tests.test_sql_guard.SQLGuardTests.test_sqlite_final_alias_case_is_preserved_without_changing_catalog_scope) ... ok
+test_subquery_and_scalar_key_escape_attempts (tests.test_sql_guard.SQLGuardTests.test_subquery_and_scalar_key_escape_attempts) ... ok
+test_subquery_arithmetic_cannot_hide_an_unverified_key_path (tests.test_sql_guard.SQLGuardTests.test_subquery_arithmetic_cannot_hide_an_unverified_key_path) ... ok
+test_subquery_keys_and_aggregate_comparison (tests.test_sql_guard.SQLGuardTests.test_subquery_keys_and_aggregate_comparison) ... ok
+test_union_top_and_fetch_cannot_remove_row_cap (tests.test_sql_guard.SQLGuardTests.test_union_top_and_fetch_cannot_remove_row_cap) ... ok
+test_unit_origins_follow_only_direct_columns_and_preserving_aggregates (tests.test_sql_guard.SQLGuardTests.test_unit_origins_follow_only_direct_columns_and_preserving_aggregates) ... ok
+test_unverified_or_model_relationships_are_not_accepted (tests.test_sql_guard.SQLGuardTests.test_unverified_or_model_relationships_are_not_accepted) ... ok
+test_using_join_and_left_join (tests.test_sql_guard.SQLGuardTests.test_using_join_and_left_join) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.122s
+
+OK

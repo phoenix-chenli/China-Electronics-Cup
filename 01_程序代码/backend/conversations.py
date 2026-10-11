@@ -1,6 +1,6 @@
 """Durable local conversations and cancellable query jobs.
 
-Projects organise conversations; all currently use the same sales-demo data source.
+Projects organise conversations and retain their explicit source bindings.
 No task result is published until its terminal transaction wins against cancellation.
 """
 from __future__ import annotations
@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from . import store as s, engine, agent
+from . import store as s, engine, agent, query_routing
 
 router = APIRouter(prefix="/api")
 ACTIVE = ("queued", "running", "cancelling")
@@ -143,6 +143,7 @@ def initialize():
             terminalize_trace(c, row["id"], "failed", stamp, error, interrupted=True)
         c.execute("UPDATE ef_messages SET status='failed',text=? WHERE role='assistant' AND task_id IN (SELECT id FROM ef_tasks WHERE status IN ('queued','running','cancelling'))", (error,))
         c.execute("UPDATE ef_tasks SET status='failed',stage='查询中断',error=?,updated_at=? WHERE status IN ('queued','running','cancelling')", (error, stamp))
+    query_routing.initialize()
 
 
 def require_session(c, sid):
@@ -169,7 +170,24 @@ def name(value):
 @router.get("/projects")
 def projects():
     with s.conn() as c:
-        return [dict(r) for r in c.execute("SELECT p.*, (SELECT COUNT(*) FROM ef_sessions s WHERE s.project_id=p.id) AS session_count FROM ef_projects p ORDER BY p.created_at")]
+        rows = [dict(r) for r in c.execute("SELECT p.*, (SELECT COUNT(*) FROM ef_sessions s WHERE s.project_id=p.id) AS session_count FROM ef_projects p ORDER BY p.created_at")]
+    return [{**row, **{k: v for k, v in query_routing.profile(row['id']).items() if k in {'source_label', 'default_scope', 'managed_public'}}} for row in rows]
+
+
+@router.get('/projects/{pid}/query-context')
+def query_profile(pid: str):
+    return query_routing.query_profile(pid)
+
+
+class RoutePreview(BaseModel):
+    question: str = Field(default='', max_length=2000)
+    project_id: str | None = None
+    scope_override: str | None = None
+
+
+@router.post('/query/route-preview')
+def route_preview(req: RoutePreview):
+    return query_routing.preview(req.question, req.project_id, req.scope_override)
 
 
 @router.post("/projects")
@@ -268,6 +286,8 @@ def task_row(row):
     with s.conn() as c:
         trace=c.execute("SELECT body FROM ef_task_traces WHERE task_id=?",(d['id'],)).fetchone()
     d.update(json.loads(trace[0]) if trace else {"events":[],"agent":None})
+    if d.get('error'):
+        d['error_detail'] = agent.failure_detail(d['error'])
     return d
 
 
@@ -291,7 +311,7 @@ class TaskManager:
         # Freeze outside the task writer transaction to avoid nested write locks.
         with s.conn() as c:
             if sid:
-                require_session(c,sid)
+                prepared_session = require_session(c,sid)
                 existing=c.execute('SELECT * FROM ef_tasks WHERE session_id=? AND request_id=?',(sid,reqid)).fetchone()
                 if existing:return task_row(existing)
                 parent_id=req.get('parent_message_id')
@@ -299,13 +319,17 @@ class TaskManager:
                 prepared_previous=parent['query_spec'] if parent and req.get('inherit_context',True) else {}
             else:
                 prepared_previous={k:v for k,v in req.get('previous_context',{}).items() if k!='rag_scope'}
+                prepared_session = None
+        prepared_project = prepared_session['project_id'] if prepared_session else req.get('project_id')
         if not attempt_of or not req.get('database_context'):
             req['database_context']=({'query_scope':'sales','database_connection_id':None} if req.get('mode')=='recompute' else
-                agent.query_context(prepared_previous,req.get('document_context'),req.get('rag_scope')))
+                agent.query_context(prepared_previous,req.get('document_context'),req.get('rag_scope'),
+                                    question=req.get('question'), project_id=prepared_project, scope_override=req.get('scope_override')))
         with s.conn() as c:
             c.execute("BEGIN IMMEDIATE")
             if sid:
                 conversation = require_session(c, sid)
+                if conversation['project_id'] != prepared_project: raise HTTPException(409, '会话项目已改变，请重新提交')
                 existing = c.execute("SELECT * FROM ef_tasks WHERE session_id=? AND request_id=?", (sid, reqid)).fetchone()
                 if existing: return task_row(existing)
                 if c.execute("SELECT 1 FROM ef_tasks WHERE session_id=? AND status IN ('queued','running','cancelling')", (sid,)).fetchone(): raise HTTPException(409, "这个会话仍在查询，可以等待或取消")
@@ -366,7 +390,7 @@ class TaskManager:
         except InterruptedError:
             self.finish(tid, "cancelled")
         except Exception as exc:
-            self.finish(tid, "failed", error=str(exc)[:500])
+            self.finish(tid, "failed", result=getattr(exc, 'result', None), error=str(exc)[:500])
         finally:
             with self.lock: self.stops.pop(tid, None)
 
@@ -377,7 +401,7 @@ class TaskManager:
             task = c.execute("SELECT * FROM ef_tasks WHERE id=?", (tid,)).fetchone()
             if not task or task["status"] not in ACTIVE: return
             if task["status"] == "cancelling": status = "cancelled"
-            if status != "completed": result = None
+            if status == 'cancelled': result = None
             terminalize_trace(c, tid, status, stamp, error)
             text = ((result.get("answer") or result.get("clarification", {}).get("title") or result.get("headline", "")) if result else "查询已取消" if status == "cancelled" else error or "查询未完成")
             c.execute("UPDATE ef_tasks SET status=?,stage=?,error=?,result_json=?,updated_at=? WHERE id=?", (status, {"completed": "查询完成", "cancelled": "已取消", "failed": "查询失败"}[status], error if status == "failed" else None, encode(result) if result else None, stamp, tid))

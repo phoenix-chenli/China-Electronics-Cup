@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-11T03:03:01.453939+00:00",
+  "method": "native Chrome browser interaction",
+  "run_id": "4ecec1f0-1bd8-433e-ab1b-bc04653cc81b",
+  "checks": [
+    {
+      "item": "SQL calculation and documented published percentage",
+      "status": "passed",
+      "detail": "Actual SQL returned 66.3 rounded to one decimal, alongside original values 354.57 and 534.94 and published 66.3."
+    },
+    {
+      "item": "answer citation",
+      "status": "passed",
+      "detail": "Clicked DOCX quote then all-source list; selected original PDF evidence returned by the same run."
+    },
+    {
+      "item": "original page",
+      "status": "passed",
+      "detail": "Workstation displayed native PDF page 1/8 and highlighted returned text."
+    },
+    {
+      "item": "official external link",
+      "status": "passed",
+      "detail": "Official xinjin.gov.cn PDF opened at #page=1; observed GDP/private-GDP paragraph and 8 pages."
+    }
+  ],
+  "screenshot": "03_测试验收/验收证据/公开统计原件定位-20261011.png",
+  "screenshot_sha256": "a9200908237db54f76b4322fefb2ef406ab159014b3a99bb27c5cd01ccb94dc4",
+  "human_review": "pending",
+  "boundary": "Browser navigation and displayed content verified by Codex; does not substitute independent human scoring. PDF metadata title on official server is unrelated to actual bulletin content."
+}

@@ -211,7 +211,13 @@ def _request_json_transport(d,url,body,headers,deadline,cancelled):
 def chat(d,messages,max_tokens=1200,cancelled=None,json_mode=False):
     headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
     body={'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens}
-    if json_mode and urlsplit(d['endpoint']).hostname=='tokendance.space':
+    tokendance=urlsplit(d['endpoint']).hostname=='tokendance.space'
+    if tokendance and d['model'].startswith('deepseek-'):
+        # DeepSeek shares the output budget with thinking by default. Our tools
+        # and independent evidence checks handle this workflow without it.
+        body.pop('max_completion_tokens')
+        body.update(max_tokens=max_tokens,thinking={'type':'disabled'})
+    if json_mode and tokendance:
         body.update(response_format={'type':'json_object'},temperature=0)
         if d['model'].startswith('qwen3.8-'):body['enable_thinking']=False
     r=request_json(d,d['endpoint']+'/chat/completions',body,headers,cancelled=cancelled)
@@ -220,7 +226,8 @@ def chat(d,messages,max_tokens=1200,cancelled=None,json_mode=False):
     if not isinstance(text,str) or not text.strip():
         if r['choices'][0].get('finish_reason')=='length':raise ValueError('模型在输出预算内未生成回答，请换用其他模型或缩短问题')
         raise ValueError('服务返回空回答，请检查模型状态或换用其他模型')
-    return {'text':text[:30000],'model':str(r.get('model',d['model']))[:150],'usage':{k:v for k,v in (r.get('usage') or {}).items() if k in {'prompt_tokens','completion_tokens','total_tokens'} and isinstance(v,int)}}
+    return {'text':text[:30000],'model':str(r.get('model',d['model']))[:150],'finish_reason':str(r['choices'][0].get('finish_reason',''))[:40],
+        'usage':{k:v for k,v in (r.get('usage') or {}).items() if k in {'prompt_tokens','completion_tokens','total_tokens'} and isinstance(v,int)}}
 
 def _bounded_texts(texts, maximum=32):
     if not isinstance(texts,list) or not 1<=len(texts)<=maximum:raise ValueError('文本批次大小超出限制')
