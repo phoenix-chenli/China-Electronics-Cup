@@ -136,12 +136,18 @@ def quality_for_parse(body, errors=()):
     if errors: flags.append("解析失败")
     if missing: flags.append("需要文字识别")
     if issues or pending or pending_media or pending_lines: flags.append("结构或识别待复核")
-    return {"parser_version":PARSE_VERSION,"parser":body.get("parser"),"block_count":sum(len(p.get("blocks",[])) for p in pages),
+    result={"parser_version":PARSE_VERSION,"parser":body.get("parser"),"block_count":sum(len(p.get("blocks",[])) for p in pages),
             "visual_blocks":sum(len(p.get("images",[])) for p in pages),"quality_flags":flags,"errors":list(errors),
             "structure":body.get("structure","按页"),"missing_pages":missing,"issues":issues,"pending_structures":pending,"pending_media":pending_media,
             "confirmed":not bool(missing or issues or pending or pending_media or pending_lines or errors),"pending_text_lines":pending_lines,"human_reviewed":False,
             "confirmed_blocks":sum(1 for p in pages for b in p.get("blocks",[]) if b.get("status","confirmed")=="confirmed"),
             "methods":sorted({p.get("provenance",{}).get("method",p.get("method","native_text")) for p in pages}|{b["source_method"] for p in pages for b in p.get("blocks",[]) if b.get("source_method")}),"location_precision":"mixed"}
+    # A failed parse has no pages to measure, so it carries no complexity figure
+    # rather than a zero that would read as "simple".
+    if pages:
+        from . import document_quality
+        result["complexity"]=document_quality.assess(pages,body.get("outline"))
+    return result
 
 
 def extract(path, body=None):
