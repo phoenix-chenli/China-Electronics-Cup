@@ -1,0 +1,631 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "chinook验证集-20261012",
+  "project_id": "chinook-benchmark",
+  "synthetic": false,
+  "frozen_at": "2026-10-12",
+  "author_identity": "证流项目按官方推荐的开源数据集自行出题",
+  "human_review": "pending",
+  "description": "基于官方推荐的 Chinook 开源示例库冻结的客观问数用例；参考 SQL 与期望行由只读 SQLite 独立执行得到，参考答案不进入模型输入。",
+  "source": {
+    "file": "02_数据资料/公开基准/Chinook/Chinook_Sqlite.sqlite",
+    "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+    "license": "MIT",
+    "upstream": "lerocha/chinook-database"
+  },
+  "evaluation_policy": {
+    "model_input_excludes_references": true,
+    "post_retries": false,
+    "scope": "single_database",
+    "semantic_accuracy": "human_pending"
+  },
+  "reference_validation": {
+    "method": "本地只读 sqlite3 先行执行，未调用模型",
+    "order_matters": true,
+    "numeric_tolerance": 1e-06
+  },
+  "novelty_check": {
+    "basis": "官方推荐数据集；题目与本项目其他题集不重叠",
+    "prior_datasets": [
+      "公开统计新验证集-20261011",
+      "比赛基础任务新验证集-20261011"
+    ]
+  },
+  "category_counts": {
+    "single_table": 4,
+    "aggregate": 1,
+    "join_group": 6,
+    "join_topn": 1,
+    "multi_hop_join": 2,
+    "self_join": 1,
+    "subquery": 2,
+    "derived_table": 1,
+    "cte": 1,
+    "edge_empty": 1
+  },
+  "cases": [
+    {
+      "id": "chinook-artist-count",
+      "category": "single_table",
+      "question": "数据库中有多少位艺术家？",
+      "reference_sql": "SELECT COUNT(*) AS artist_count FROM Artist",
+      "columns": [
+        "artist_count"
+      ],
+      "expected_rows": [
+        [
+          275
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-max-unit-price",
+      "category": "single_table",
+      "question": "曲目表中单价最高的单价是多少？",
+      "reference_sql": "SELECT MAX(UnitPrice) AS max_unit_price FROM Track",
+      "columns": [
+        "max_unit_price"
+      ],
+      "expected_rows": [
+        [
+          1.99
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-invoices-2021",
+      "category": "single_table",
+      "question": "2021 年有多少张发票？",
+      "reference_sql": "SELECT COUNT(*) AS invoice_count FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2021'",
+      "columns": [
+        "invoice_count"
+      ],
+      "expected_rows": [
+        [
+          83
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-customer-cities",
+      "category": "single_table",
+      "question": "客户来自多少个不同的城市？",
+      "reference_sql": "SELECT COUNT(DISTINCT City) AS city_count FROM Customer",
+      "columns": [
+        "city_count"
+      ],
+      "expected_rows": [
+        [
+          53
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-invoice-totals",
+      "category": "aggregate",
+      "question": "全部发票的金额合计和平均金额分别是多少（保留两位小数）？",
+      "reference_sql": "SELECT ROUND(SUM(Total), 2) AS total_amount, ROUND(AVG(Total), 2) AS average_amount FROM Invoice",
+      "columns": [
+        "total_amount",
+        "average_amount"
+      ],
+      "expected_rows": [
+        [
+          2328.6,
+          5.65
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-genre-top",
+      "category": "join_group",
+      "question": "曲目数量最多的前五个流派分别是哪些，各有多少首曲目？",
+      "reference_sql": "SELECT g.Name AS genre_name, COUNT(*) AS track_count FROM Track t JOIN Genre g ON g.GenreId = t.GenreId GROUP BY g.GenreId, g.Name ORDER BY track_count DESC, genre_name LIMIT 5",
+      "columns": [
+        "genre_name",
+        "track_count"
+      ],
+      "expected_rows": [
+        [
+          "Rock",
+          1297
+        ],
+        [
+          "Latin",
+          579
+        ],
+        [
+          "Metal",
+          374
+        ],
+        [
+          "Alternative & Punk",
+          332
+        ],
+        [
+          "Jazz",
+          130
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-media-type-tracks",
+      "category": "join_group",
+      "question": "每种媒体类型各有多少首曲目？",
+      "reference_sql": "SELECT m.Name AS media_type, COUNT(*) AS track_count FROM Track t JOIN MediaType m ON m.MediaTypeId = t.MediaTypeId GROUP BY m.MediaTypeId, m.Name ORDER BY track_count DESC, media_type",
+      "columns": [
+        "media_type",
+        "track_count"
+      ],
+      "expected_rows": [
+        [
+          "MPEG audio file",
+          3034
+        ],
+        [
+          "Protected AAC audio file",
+          237
+        ],
+        [
+          "Protected MPEG-4 video file",
+          214
+        ],
+        [
+          "AAC audio file",
+          11
+        ],
+        [
+          "Purchased AAC audio file",
+          7
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-playlist-size",
+      "category": "join_group",
+      "question": "曲目数最多的前十个播放列表及其曲目数？",
+      "reference_sql": "SELECT p.Name AS playlist_name, COUNT(*) AS track_count FROM PlaylistTrack pt JOIN Playlist p ON p.PlaylistId = pt.PlaylistId GROUP BY p.PlaylistId, p.Name ORDER BY track_count DESC, playlist_name LIMIT 10",
+      "columns": [
+        "playlist_name",
+        "track_count"
+      ],
+      "expected_rows": [
+        [
+          "Music",
+          3290
+        ],
+        [
+          "Music",
+          3290
+        ],
+        [
+          "90’s Music",
+          1477
+        ],
+        [
+          "TV Shows",
+          213
+        ],
+        [
+          "TV Shows",
+          213
+        ],
+        [
+          "Classical",
+          75
+        ],
+        [
+          "Brazilian Music",
+          39
+        ],
+        [
+          "Heavy Metal Classic",
+          26
+        ],
+        [
+          "Classical 101 - Deep Cuts",
+          25
+        ],
+        [
+          "Classical 101 - Next Steps",
+          25
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-invoice-lines-top",
+      "category": "join_group",
+      "question": "明细行数最多的前五张发票及其明细行数？",
+      "reference_sql": "SELECT i.InvoiceId AS invoice_id, COUNT(*) AS line_count FROM InvoiceLine il JOIN Invoice i ON i.InvoiceId = il.InvoiceId GROUP BY i.InvoiceId ORDER BY line_count DESC, invoice_id LIMIT 5",
+      "columns": [
+        "invoice_id",
+        "line_count"
+      ],
+      "expected_rows": [
+        [
+          5,
+          14
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          19,
+          14
+        ],
+        [
+          26,
+          14
+        ],
+        [
+          33,
+          14
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-country-revenue",
+      "category": "join_group",
+      "question": "按账单国家统计的销售额，从高到低前五位？",
+      "reference_sql": "SELECT i.BillingCountry AS country, ROUND(SUM(i.Total), 2) AS amount FROM Invoice i GROUP BY i.BillingCountry ORDER BY amount DESC, country LIMIT 5",
+      "columns": [
+        "country",
+        "amount"
+      ],
+      "expected_rows": [
+        [
+          "USA",
+          523.06
+        ],
+        [
+          "Canada",
+          303.96
+        ],
+        [
+          "France",
+          195.1
+        ],
+        [
+          "Brazil",
+          190.1
+        ],
+        [
+          "Germany",
+          156.48
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-customer-top",
+      "category": "join_topn",
+      "question": "消费金额最高的前五位客户姓名与各自金额？",
+      "reference_sql": "SELECT c.FirstName || ' ' || c.LastName AS customer_name, ROUND(SUM(i.Total), 2) AS total_amount FROM Customer c JOIN Invoice i ON i.CustomerId = c.CustomerId GROUP BY c.CustomerId, c.FirstName, c.LastName ORDER BY total_amount DESC, customer_name LIMIT 5",
+      "columns": [
+        "customer_name",
+        "total_amount"
+      ],
+      "expected_rows": [
+        [
+          "Helena Holý",
+          49.62
+        ],
+        [
+          "Richard Cunningham",
+          47.62
+        ],
+        [
+          "Luis Rojas",
+          46.62
+        ],
+        [
+          "Hugh O'Reilly",
+          45.62
+        ],
+        [
+          "Ladislav Kovács",
+          45.62
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-employee-customers",
+      "category": "join_group",
+      "question": "每位销售代表负责多少位客户？",
+      "reference_sql": "SELECT e.EmployeeId AS employee_id, e.FirstName || ' ' || e.LastName AS employee_name, COUNT(c.CustomerId) AS customer_count FROM Employee e LEFT JOIN Customer c ON c.SupportRepId = e.EmployeeId GROUP BY e.EmployeeId, e.FirstName, e.LastName ORDER BY customer_count DESC, employee_id",
+      "columns": [
+        "employee_id",
+        "employee_name",
+        "customer_count"
+      ],
+      "expected_rows": [
+        [
+          3,
+          "Jane Peacock",
+          21
+        ],
+        [
+          4,
+          "Margaret Park",
+          20
+        ],
+        [
+          5,
+          "Steve Johnson",
+          18
+        ],
+        [
+          1,
+          "Andrew Adams",
+          0
+        ],
+        [
+          2,
+          "Nancy Edwards",
+          0
+        ],
+        [
+          6,
+          "Michael Mitchell",
+          0
+        ],
+        [
+          7,
+          "Robert King",
+          0
+        ],
+        [
+          8,
+          "Laura Callahan",
+          0
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-artist-track-top",
+      "category": "multi_hop_join",
+      "question": "曲目总数最多的前五位艺术家及其曲目数？",
+      "reference_sql": "SELECT ar.Name AS artist_name, COUNT(*) AS track_count FROM Track t JOIN Album al ON al.AlbumId = t.AlbumId JOIN Artist ar ON ar.ArtistId = al.ArtistId GROUP BY ar.ArtistId, ar.Name ORDER BY track_count DESC, artist_name LIMIT 5",
+      "columns": [
+        "artist_name",
+        "track_count"
+      ],
+      "expected_rows": [
+        [
+          "Iron Maiden",
+          213
+        ],
+        [
+          "U2",
+          135
+        ],
+        [
+          "Led Zeppelin",
+          114
+        ],
+        [
+          "Metallica",
+          112
+        ],
+        [
+          "Deep Purple",
+          92
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-longest-tracks",
+      "category": "multi_hop_join",
+      "question": "播放时长最长的前五首曲目及其专辑和艺术家？",
+      "reference_sql": "SELECT t.Name AS track_name, al.Title AS album_title, ar.Name AS artist_name, t.Milliseconds AS milliseconds FROM Track t JOIN Album al ON al.AlbumId = t.AlbumId JOIN Artist ar ON ar.ArtistId = al.ArtistId ORDER BY milliseconds DESC, track_name LIMIT 5",
+      "columns": [
+        "track_name",
+        "album_title",
+        "artist_name",
+        "milliseconds"
+      ],
+      "expected_rows": [
+        [
+          "Occupation / Precipice",
+          "Battlestar Galactica, Season 3",
+          "Battlestar Galactica",
+          5286953
+        ],
+        [
+          "Through a Looking Glass",
+          "Lost, Season 3",
+          "Lost",
+          5088838
+        ],
+        [
+          "Greetings from Earth, Pt. 1",
+          "Battlestar Galactica (Classic), Season 1",
+          "Battlestar Galactica (Classic)",
+          2960293
+        ],
+        [
+          "The Man With Nine Lives",
+          "Battlestar Galactica (Classic), Season 1",
+          "Battlestar Galactica (Classic)",
+          2956998
+        ],
+        [
+          "Battlestar Galactica, Pt. 2",
+          "Battlestar Galactica (Classic), Season 1",
+          "Battlestar Galactica (Classic)",
+          2956081
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-employee-manager",
+      "category": "self_join",
+      "question": "每位员工的姓名及其直属上级的姓名？",
+      "reference_sql": "SELECT e.FirstName || ' ' || e.LastName AS employee_name, m.FirstName || ' ' || m.LastName AS manager_name FROM Employee e JOIN Employee m ON m.EmployeeId = e.ReportsTo ORDER BY employee_name",
+      "columns": [
+        "employee_name",
+        "manager_name"
+      ],
+      "expected_rows": [
+        [
+          "Jane Peacock",
+          "Nancy Edwards"
+        ],
+        [
+          "Laura Callahan",
+          "Michael Mitchell"
+        ],
+        [
+          "Margaret Park",
+          "Nancy Edwards"
+        ],
+        [
+          "Michael Mitchell",
+          "Andrew Adams"
+        ],
+        [
+          "Nancy Edwards",
+          "Andrew Adams"
+        ],
+        [
+          "Robert King",
+          "Michael Mitchell"
+        ],
+        [
+          "Steve Johnson",
+          "Nancy Edwards"
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-above-average-invoices",
+      "category": "subquery",
+      "question": "金额高于全部发票平均金额的发票有多少张？",
+      "reference_sql": "SELECT COUNT(*) AS invoice_count FROM Invoice WHERE Total > (SELECT AVG(Total) FROM Invoice)",
+      "columns": [
+        "invoice_count"
+      ],
+      "expected_rows": [
+        [
+          179
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-customers-without-invoice",
+      "category": "subquery",
+      "question": "没有任何发票的客户有多少位？",
+      "reference_sql": "SELECT COUNT(*) AS customer_count FROM Customer c WHERE NOT EXISTS (SELECT 1 FROM Invoice i WHERE i.CustomerId = c.CustomerId)",
+      "columns": [
+        "customer_count"
+      ],
+      "expected_rows": [
+        [
+          0
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-album-avg-tracks",
+      "category": "derived_table",
+      "question": "每张专辑的曲目数的平均值是多少（保留两位小数）？",
+      "reference_sql": "SELECT ROUND(AVG(track_count), 2) AS average_tracks FROM (SELECT COUNT(*) AS track_count FROM Track GROUP BY AlbumId)",
+      "columns": [
+        "average_tracks"
+      ],
+      "expected_rows": [
+        [
+          10.1
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-invoice-yearly",
+      "category": "cte",
+      "question": "按年份列出发票张数与金额合计，按年份升序？",
+      "reference_sql": "WITH yearly AS (SELECT strftime('%Y', InvoiceDate) AS year, COUNT(*) AS invoice_count, SUM(Total) AS amount FROM Invoice GROUP BY year) SELECT year, invoice_count, ROUND(amount, 2) AS amount FROM yearly ORDER BY year",
+      "columns": [
+        "year",
+        "invoice_count",
+        "amount"
+      ],
+      "expected_rows": [
+        [
+          "2021",
+          83,
+          449.46
+        ],
+        [
+          "2022",
+          83,
+          481.45
+        ],
+        [
+          "2023",
+          83,
+          469.58
+        ],
+        [
+          "2024",
+          83,
+          477.53
+        ],
+        [
+          "2025",
+          80,
+          450.58
+        ]
+      ],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    },
+    {
+      "id": "chinook-absent-genre",
+      "category": "edge_empty",
+      "question": "流派名称为「不存在的流派」的曲目有哪些？",
+      "reference_sql": "SELECT t.Name AS track_name FROM Track t JOIN Genre g ON g.GenreId = t.GenreId WHERE g.Name = '不存在的流派'",
+      "columns": [
+        "track_name"
+      ],
+      "expected_rows": [],
+      "order_matters": true,
+      "numeric_tolerance": 1e-06
+    }
+  ]
+}

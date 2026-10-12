@@ -378,12 +378,33 @@ def zero_inference_boundaries(text, question):
     return re.sub(pattern, replace, text), mentions
 
 
-def synthesis(item, spans, delivered, selected_facts=None, *, question=None):
-    text, ids = item.get('text'), item.get('support_span_ids')
+def synthesis(item, spans, delivered, selected_facts=None, *, question=None, available_facts=None):
+    """A checkable sentence: cited original spans, or declared server-owned facts.
+
+    A database answer has no document span to cite, so the same gate also accepts
+    a sentence that declares which returned fact ids it rests on. Every number in
+    it must still match one of those facts' actual returned values, and declaring
+    facts narrows the gate instead of widening it: a number that only appears in
+    a fact the sentence did not declare is refused.
+    """
+    text, ids = item.get('text'), item.get('support_span_ids') or []
     if not isinstance(text, str) or not 2 <= len(text.strip()) <= 1500:
         raise ValueError('综合陈述需要2至1500字的可核对文字')
-    if not isinstance(ids, list) or not 1 <= len(ids) <= 8 or not all(isinstance(x, str) and x in spans and x in delivered for x in ids):
+    if not isinstance(ids, list) or len(ids) > 8 or not all(isinstance(x, str) and x in spans and x in delivered for x in ids):
         raise ValueError('综合陈述引用了未实际发送或不存在的原文位置')
+    declared = item.get('support_fact_ids') or []
+    if not isinstance(declared, list) or len(declared) > 8 or not all(isinstance(x, str) for x in declared):
+        raise ValueError('综合陈述的数据库事实编号格式不正确')
+    declared = list(dict.fromkeys(declared))
+    pool = dict(selected_facts or {})
+    if declared:
+        known = available_facts if isinstance(available_facts, dict) else pool
+        unknown = [x for x in declared if x not in known]
+        if unknown:
+            raise ValueError('综合陈述引用了本轮不存在的数据库事实')
+        pool.update({x: known[x] for x in declared})
+    elif not ids:
+        raise ValueError('综合陈述必须有文档原文位置或数据库事实作为依据')
     ids = list(dict.fromkeys(ids))
     cited = [spans[x] for x in ids]
     for span in cited:
@@ -456,7 +477,7 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None):
     # A calculation repeated in a cross-source explanation must retain the
     # exact server fact that the answer already selected. No free arithmetic,
     # no unselected-query lookup, and no implicit unit proof is introduced.
-    for fid,fact in (selected_facts or {}).items():
+    for fid,fact in ({x: pool[x] for x in declared} if declared else pool).items():
         values=list(fact.get('row_values',{}).values()) if fact.get('kind')=='database_row' else [fact.get('value')]
         exact={Decimal(str(v)) for v in values if type(v) in (int,float) and Decimal(str(v)).is_finite()}
         found={(n,p) for n,p in missing if n in exact}
@@ -469,7 +490,7 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None):
             'inference_boundary_mentions': boundary_mentions,
             'question_scope_mentions':scope_mentions,'table_unit_bindings':table_units,
             'evidence_ids': list(dict.fromkeys([x['evidence_id'] for x in cited]+
-                [eid for fid in bindings for eid in selected_facts[fid].get('evidence_ids',[])])),
+                [eid for fid in bindings for eid in pool[fid].get('evidence_ids',[])])),
             'kind': 'synthesis', 'status': 'pending_review', 'value': None, 'unit': None}
 
 

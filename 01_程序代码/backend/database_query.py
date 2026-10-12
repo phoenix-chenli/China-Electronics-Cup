@@ -882,11 +882,17 @@ def execute(sql, params=None, connection_id=None, expected_revision=None, expect
             _guard(stop, deadline)
             if config["kind"] == "sqlite":
                 allowed = {sqlite3.SQLITE_SELECT, sqlite3.SQLITE_READ, sqlite3.SQLITE_FUNCTION, sqlite3.SQLITE_RECURSIVE}
-                table_names = {t["name"] for t in current["tables"]}
+                # SQLite reports a column read with the table name from its own
+                # catalog but a table-level read (COUNT(*), and any read with no
+                # column) with the name as written in the statement. The guard
+                # normalises identifiers for SQLite, so an un-normalised catalog
+                # comparison would reject a legal table whose name has capitals.
+                # The catalog already rejects names that differ only by case.
+                table_names = {str(t["name"]).casefold() for t in current["tables"]}
                 def authorize(action, a, b, database, source):
                     if action not in allowed:
                         return sqlite3.SQLITE_DENY
-                    if action == sqlite3.SQLITE_READ and (database != "main" or a not in table_names):
+                    if action == sqlite3.SQLITE_READ and (database != "main" or str(a or "").casefold() not in table_names):
                         return sqlite3.SQLITE_DENY
                     if action == sqlite3.SQLITE_FUNCTION and not sql_guard.allowed_sqlite_function(b or a or ""):
                         return sqlite3.SQLITE_DENY

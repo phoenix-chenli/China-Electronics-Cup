@@ -85,7 +85,7 @@ def choose(question, context, configured='auto', override=None):
     elif configured in SCOPES and configured != recommended:
         reason = '当前使用已固定的范围；可以在提问前切换。' + reason
     if public and selected == 'sales':
-        raise ValueError('公开统计项目没有销售示例数据，请选择数据库、文档或跨源范围')
+        raise ValueError('该项目没有销售示例数据，请选择数据库、文档或跨源范围')
     return {'query_scope': selected, 'recommended_scope': recommended, 'selected_scope': selected,
             'reason': reason, 'source_label': context['source_label'], 'document_count': context['document_count'],
             'project_id': context.get('project_id'), 'project_name': context.get('project_name'),
@@ -125,7 +125,7 @@ def resolve_context(question=None, project_id=None, previous=None, document_cont
         if not bound['document_ids']:
             raise ValueError('当前项目没有可用文档，请先导入资料或选择数据库范围')
     if bound.get('managed_public') and scope == 'sales':
-        raise ValueError('公开统计项目没有销售示例数据，请选择数据库、文档或跨源范围')
+        raise ValueError('该项目没有销售示例数据，请选择数据库、文档或跨源范围')
     routing['database_connection_id'] = cid if scope in {'database', 'hybrid'} else None
     return {'query_scope': scope, 'database_connection_id': routing['database_connection_id'],
             'source_vocabulary':bound.get('source_vocabulary') if cid==bound.get('database_connection_id') else None,

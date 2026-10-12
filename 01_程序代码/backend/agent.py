@@ -65,6 +65,7 @@ schema.inspect参数为空，或table_names字符串数组。
 database.schema参数为空，或table_names字符串数组。先读取结构，再生成SQL；表太多时按返回表清单选择相关表。
 database.query参数sql、params位置参数列表（SQL用?占位）、explanation中文关联/汇总说明。仅返回用户要求的列及粒度。
 用户明确只返回N列或用引号指定“列名依次为”时，最终SELECT必须严格保留这些列、别名与顺序；单位写进要求的别名，不附加单位列。不得在工具结果后删除列伪装满足要求；输出约束由执行前校验。
+用户未指定列名时，SELECT 的输出别名一律写成简短中文（如 艺术家数量、发票总金额_元、增长率_百分比），不要保留英文别名；单位写进别名。别名只影响显示，不得改变表、字段、筛选、关联或计算。
 只问计算结果时只投影计算列；要求分项与合计时在同一条SQL中一起返回。原文摘录通过document.search取得，不把source_quote等整页文字加入数值结果。仅查原值不算用户明确要求的差额、合计或比值时，问题尚未回答完整。
 source_vocabulary是当前公开资料的真实维度取值与定义，不是示例答案。优先按真实取值筛选；未给词表时，可用小型维度表的有限取值查询确认名称。不要把用户简称直接用于等号；必要时用LIKE匹配独特名称片段，空结果先核对取值。
 词表已明确region_id与地区名的映射时，用该region_id直接筛选事实表；已给metric_id和指标名时直接使用该metric_id。仅为解析名称不再JOIN维度表。只有用户需要名称列或维度表另有必要条件时才关联；保持用户实际要求的输出列，不返回固定年份、来源注释等无关列。
@@ -90,6 +91,7 @@ evidence.verify参数evidence_ids（可选）；这是确定性来源检查，�
 完成时返回{action:"answer",claims:[{fact_id:"工具返回的事实id"},{evidence_id:"文档来源id",quote:"该来源的精确连续原文"}]}。数据库结论使用fact_id，不能把SQL来源id当作evidence_id配合改写quote。引用fact时只填fact_id，不附加text/value/unit或其它改写。
 数值查询返回0行时，先核对对象、年份和筛选条件；确认当前查询没有取得所需记录后，可使用工具返回的empty_result_answer，选择真实database_empty事实并给empty_query_fact_id；系统据此返回资料不足状态。普通文档缺口继续按文档评审处理，不使用这个SQL专用入口。这只说明该SQL筛选范围内没有匹配记录，不表示数值为0或全库/外部不存在。覆盖年份等诊断保留在执行记录，不与另一条SQL的空查询事实混成所问数值表；不能用SQL来源id伪装文档support_span_ids。若问题还要求其他可答分项，继续取得同一查询范围的部分答案，不用空结果入口隐藏分项。
 文档综合结论可用{kind:"synthesis",text:"可单独核对的结论",support_span_ids:["实际返回的原文位置id"]}；每条都要有直接支持，不自造引用。
+数据库问数的结论也可用{kind:"synthesis",text:"用中文说明查得结果的结论",support_fact_ids:["本轮工具返回的事实id"]}；句中每个数字都必须等于所列事实的实际返回值，服务端逐个核对，出现未列出的数字即拒绝发布；没有文档依据时不要填写support_span_ids。只按事实陈述，不推断单位、口径或原因。
 用户问能否由现有披露推断另一量时，用synthesis明确解释披露单位、对象及推断边界；仅贴原文不能替代这项回答。所引片段未提供的值只能说无法据此确定，不能填零，也不能把检索未命中说成全库不存在。不额外命名原文未写的“设计能力”等口径。并列标签可以说明对象不同，无需补造具体行政边界。假设条件下的解释不需要另外验证该条件实际发生。
 knowledge范围只使用文档；hybrid范围结合当前指定数据库与文档规则。hybrid中的数值查询/比较/比例计算先database.schema再database.query，随后用document.search核对口径和出处；纯定义解释问题可仅检索文档。比例可在同一条SQL里取分子、分母、计算结果和公布值，返回列名注明单位。数据库数值及计算只用fact_id，不在综合文字中自行计算。
 文档工具返回充分性检查；缺事实时按missing_requirements最多补一次检索，保留原问题对象、日期与条件。多份原文逐一核对时，补检索应聚焦尚缺依据的对象与原句；不能用一份资料已命中替代其余资料已查证。未检索到某对象的相关原句时明确保留该子问缺口，不宣称完整核对。独立子问已有直接依据时保留其fact或引用，缺失的原因等另列缺口；只有不能独立回答或完全无依据时返回空claims，不能凭常识补齐。
@@ -328,6 +330,34 @@ def _base(question, previous, confirmed, generic=False):
             "answer": "", "headline": "", "metrics": [], "claims": [], "evidence": [],
             "events": [], "rows": [], "columns": [], "sql": "", "formulas": [], "checks": [],
             "features": dict(engine.FEATURES), "data_version": s.data_version(), "created_at": s.now()}
+
+
+def bind_database_synthesis(claims):
+    """A database-only round runs no document review, so a sentence the server
+    already bound to its declared facts counts as supported for coverage.
+
+    This never claims semantic review: the sentence's numbers were checked
+    against the returned values, its wording was not judged.
+    """
+    for claim in claims:
+        if claim.get('kind') == 'synthesis' and claim.get('status') == 'pending_review' and claim.get('evidence_ids'):
+            claim['status'] = 'supported'
+    return claims
+
+
+def row_fact_text(index, row, columns, display_row=None, single=False):
+    """Server-owned wording for one returned row; a model may only select it.
+
+    A single-row result reads as a plain statement, because there is no other row
+    to distinguish it from. With several rows the row number is kept: "第 N 行" is
+    what makes a selected fact traceable back to the returned result.
+    """
+    display_row = display_row if isinstance(display_row, dict) else row or {}
+    def shown(column):
+        item = display_row.get(column)
+        return item if isinstance(item, str) and item != (row or {}).get(column) else c.encode((row or {}).get(column))
+    pairs = '；'.join(str(column) + (' 为 ' if single else ' = ') + shown(column) for column in columns)
+    return ('' if single else '返回结果第 ' + str(index + 1) + ' 行：') + pairs + '。'
 
 
 class Run:
@@ -858,15 +888,13 @@ class Run:
         # A fixed eight-row preview forces repeated queries even when a whole
         # small result would easily fit. Larger text rows keep the old bound.
         visible_rows=rows[:24] if len(c.encode(rows[:24]))<=6000 else rows[:8]
+        single = len(visible_rows) == 1
         for index, row in enumerate(visible_rows):
             display_row = (value.get('display_rows') or rows)[index]
-            def shown(col):
-                item = display_row.get(col)
-                return item if isinstance(item,str) and item != row.get(col) else c.encode(row.get(col))
-            text = '；'.join(str(col) + ' = ' + shown(col) for col in columns)
+            text = row_fact_text(index, row, columns, display_row, single)
             if len(text) <= 1600:
                 facts.append(self.add_fact({'id': 'row-' + str(index + 1), 'query_id': query_id,
-                    'text': '返回结果第 ' + str(index + 1) + ' 行：' + text + '。',
+                    'text': text,
                     'evidence_ids': [eid], 'status': 'supported', 'kind': 'database_row', 'value': None, 'unit': None,
                     'row_values':copy.deepcopy(row),
                     'display_decimals':copy.deepcopy(value.get('display_decimals',{})),
@@ -1150,7 +1178,7 @@ class Run:
                 raise ValueError("答案结论格式不正确")
             if item.get('kind') == 'synthesis':
                 claims.append(rag_grounding.synthesis(item, self.spans, self.delivered_spans,selected_facts,
-                                                     question=self.result['question']))
+                                                     question=self.result['question'],available_facts=self.facts))
                 continue
             fact = self.facts.get(item.get("fact_id"))
             if item.get("fact_id") and not fact:
@@ -1265,6 +1293,7 @@ class Run:
                 return {'status': 'refused', 'checks': [{'name': '综合证据检查', 'status': 'unavailable'}]}
         else:
             self.result['answer_status'] = 'supported' if claims else 'refused'
+            bind_database_synthesis(claims)
         self.result["claims"] = claims
         self.result["answer"] = "\n\n".join(f["text"] for f in claims) or "本轮没有取得足够依据，未生成业务结论。"
         if self.result.get('answer_status') == 'partial':

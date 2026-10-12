@@ -24,7 +24,7 @@ from . import store as s
 from . import engine, conversations, scenarios, settings, connections, extensions, sharing, agent, database_query
 from . import documents as document_engine
 from . import rag_index, rag_providers
-from . import document_tasks, document_providers, document_review, query_routing, public_statistics
+from . import document_tasks, document_providers, document_review, query_routing, public_statistics, chinook_benchmark
 from .seed import seed_business, write_seed_docs
 
 app=FastAPI(title="证流",version="0.7.0")
@@ -57,7 +57,10 @@ def init_app():
 def startup():
     init_app()
     conversations.initialize()
-    if os.environ.get('EVIDENCEFLOW_SKIP_PUBLIC_DEMO') != '1': public_statistics.install()
+    if os.environ.get('EVIDENCEFLOW_SKIP_PUBLIC_DEMO') != '1':
+        public_statistics.install()
+        # A benchmark that cannot be bound reports a reason; it never stops the service.
+        chinook_benchmark.install()
     document_tasks.initialize()
 
 @app.middleware("http")
