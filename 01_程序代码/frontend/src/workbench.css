@@ -275,3 +275,11 @@
  .conversation-composer .query-field-row{padding:11px 13px 7px}.conversation-composer .query-input-footer{padding:0 10px 10px}
  .conversation-composer .send-button{height:32px;font-size:11px;min-width:70px}
 }
+
+.question-normalization{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 13px;margin:0 0 14px;border-radius:8px;background:var(--soft);font-size:11.5px;color:var(--muted)}
+.question-normalization .normalization-label{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--text)}
+.question-normalization .normalization-label>svg{color:var(--accent)}
+.question-normalization .normalization-change{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;background:var(--panel-solid,#fff);border:1px solid var(--line)}
+.question-normalization .normalization-change>span{text-decoration:line-through;opacity:.6}
+.question-normalization .normalization-change>strong{color:var(--accent);font-weight:600}
+.question-normalization>small{flex-basis:100%;font-size:10.5px;color:var(--muted)}

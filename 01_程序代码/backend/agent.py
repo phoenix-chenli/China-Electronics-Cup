@@ -196,10 +196,16 @@ def query_context(previous=None, document_context=None, requested_scope=None, qu
     elif requested_scope:
         scope = 'hybrid' if scope == 'hybrid' else 'knowledge'
     cid = previous.get('database_connection_id') if inherited else cfg.get('database_connection_id')
-    routing, vocabulary = None, None
+    routing, vocabulary, normalization = None, None, None
     if question is not None or scope == 'auto' or scope_override:
-        from . import query_routing
-        resolved = query_routing.resolve_context(question, project_id, previous, document_context, requested_scope, scope_override)
+        from . import query_normalize, query_routing
+        # Input normalization used to reach only the deterministic sales path.
+        # Planning and routing now see the recorded normalization for every
+        # scope, while the stored question stays exactly as the user typed it.
+        if isinstance(question, str) and question.strip():
+            normalization = query_normalize.normalize(question, project_id=project_id)
+        planning_question = normalization['normalized'] if normalization and normalization['applied'] else question
+        resolved = query_routing.resolve_context(planning_question, project_id, previous, document_context, requested_scope, scope_override)
         scope, cid = resolved['query_scope'], resolved.get('database_connection_id')
         routing = resolved.get('routing')
         requested_scope = requested_scope or resolved.get('requested_rag_scope')
@@ -217,6 +223,8 @@ def query_context(previous=None, document_context=None, requested_scope=None, qu
                 raise ValueError('原问数数据库连接配置已变化，请新建问答并重新确认数据源')
     context = {'query_scope': scope, 'database_connection_id': cid if scope in {'database', 'hybrid'} else None,
                'database_connection_revision': revision}
+    if normalization and normalization['applied']:
+        context['question_normalization'] = copy.deepcopy(normalization)
     if routing:
         context['routing'] = copy.deepcopy(routing)
     if vocabulary and scope in {'database','hybrid'}:
@@ -383,8 +391,15 @@ class Run:
         first_tool='business.query' if scope=='sales' else 'document.search' if scope=='knowledge' else 'database.schema'
         first_args={'question':'完整业务问题'} if scope=='sales' else {'query':'当前问题关键词'} if scope=='knowledge' else {}
         guidance+='每次直接返回一个合法action。answer和clarify是action，不是tool。首次格式示例：'+c.encode({'action':'tool','tool':first_tool,'arguments':first_args})+'；示例文字需替换成实际用户问题。'
+        normalization = self.database_context.get('question_normalization') or {}
+        if normalization.get('applied'):
+            self.result['question_normalization'] = copy.deepcopy(normalization)
+        normalized_view = ({'normalized_text': normalization['normalized'], 'changes': normalization['changes'],
+                            'boundary': normalization['boundary'] + ' 原问题保持不变，仍以原问题的对象与条件作答。'}
+                           if normalization.get('applied') else None)
         self.messages = [{"role": "system", "content": SYSTEM + '\n'+guidance+"\n本轮可用工具：" + c.encode({k:v for k,v in TOOLS.items() if k in self.allowed_tools})},
                          {"role": "user", "content": c.encode({"question": question,
+                          "question_normalization": normalized_view,
                           "previous_conditions": _limited_context(previous),
                           "previous_question":str((previous or {}).get('original_question') or (previous or {}).get('question',''))[:2000],
                           "previous_clarification":str((previous or {}).get('clarification_question',''))[:600],

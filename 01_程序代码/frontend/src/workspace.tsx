@@ -46,6 +46,18 @@ function QuestionHeading({text = ''}: {text?: string}) {
   return <div className="analysis-question"><span className="analysis-eyebrow">你的问题</span><h1>{long && !expanded ? text.slice(0, 140) + '…' : text}</h1>{long && <button className="text-link question-toggle" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? '收起问题' : '展开完整问题'}<ChevronDown size={13}/></button>}</div>
 }
 
+function QuestionNormalization({data}: Obj) {
+  const changes = data?.changes
+  if (!data?.applied || !Array.isArray(changes) || !changes.length) return null
+  return <div className="question-normalization" title={data.boundary || undefined}>
+    <span className="normalization-label"><FileCheck2 size={13}/>已按项目词表规范化</span>
+    {changes.map((c: Obj, i: number) => <span className="normalization-change" key={i} title={c.source}>
+      <span>{c.from}</span><ArrowRight size={11}/><strong>{c.to}</strong>
+    </span>)}
+    <small>原问题保持不变，结论仍按原问题的对象、时间与条件核对。</small>
+  </div>
+}
+
 export function AnalysisPage({result, inheritContext=true, question, setQuestion, run, busy, stage, recompute, undo, onUndo, onSave, onCopy, onEvidence, navigate, choose, session, projectName, loading, selectedMessageId, onSelectMessage, onRetry, onCancel, task, onRename, onShare, tools,onAgentSettings,agentConfig,onNew,routePreview,scopeOverride,onScopeChange,previewLoading,previewError}: Obj) {
   const [sourceId, setSourceId] = useState<string | null>(null), [showProcess, setShowProcess] = useState(false), [sourceOpen, setSourceOpen] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false), [dataOpen, setDataOpen] = useState(false)
@@ -91,6 +103,7 @@ export function AnalysisPage({result, inheritContext=true, question, setQuestion
             <QuestionHeading text={busy ? session?.messages?.filter((m: Obj) => m.role === 'user').at(-1)?.text : result?.question || question}/>
             {busy && <><div className="task-feedback" role="status"><div className="analysis-task-orbit" aria-hidden="true"><span/><span/><span/></div><div><TaskProgress task={task} stage={stage}/><p>结果与来源将在这里呈现。</p></div>{task && <button className="button small" disabled={task.status === 'cancelling'} onClick={onCancel}>{task.status === 'cancelling' ? '正在取消' : '取消查询'}</button>}</div><div className="agent-live"><AgentSummary agent={task?.agent}/>{(task?.events?.length>0||task?.agent?.plan?.length>0)&&<details className="agent-live-toggle" open><summary>计划与执行状态</summary><AgentTrace agent={task?.agent} events={task?.events||[]} compact/></details>}</div></>}
             {result && !busy && <div key={result.run_id} className="answer-reveal">
+              <QuestionNormalization data={result.question_normalization} />
               {result.status === 'needs_clarification' ? <Clarify result={result} choose={choose} busy={busy} onReply={(text:string)=>run(text,{},true)}/> : isKnowledge||result.answer_status?<RagOutcome result={renderedResult} onEvidence={peek}/>:<div className={'answer-status ' + (gaps||!result.claims?.length ? 'analysis-status-gap' : '')}>{gaps||!result.claims?.length ? <AlertCircle size={15}/> : <CheckCircle2 size={15}/>}<span>{!result.claims?.length?renderedResult.answer||'未取得可核验结论':gaps ? '部分结论仍需补充来源' : '分析已完成'}</span><small>{isDocument ? '文档原文' : '本轮查询'}{result.latency_ms != null ? ' · ' + num(result.latency_ms) + ' ms' : ''}</small></div>}
               {isKnowledge&&<RagScopeNote result={result}/>}
               {isDocument ? documentScope && <div className="document-scope-note"><FileText size={15}/><span>当前文档 · 第 {documentScope.page} 页 · 版本 {documentScope.sha256?.slice(0, 10)}{documentScope.text_range ? ' · 已选片段' : ''}</span></div> : isDatabase?<div className="database-result-source-note"><span>本轮来源 · {result.database_query?.source?.name||'所选数据库'}</span><small>追问沿用本轮来源。切换问数来源后，请新建问答。</small></div>:<Conditions result={result} recompute={recompute} busy={busy}/>}
