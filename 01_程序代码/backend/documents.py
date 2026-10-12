@@ -104,7 +104,7 @@ def parse_page(path, page_number):
         pages=parse_docx(path)['pages']
         if not 1<=page_number<=len(pages):raise ValueError('逻辑节超出范围')
         return pages[page_number-1]
-    text=""; blocks=[]; images=[]; headings=[]; width,height=595,842
+    text=""; blocks=[]; images=[]; headings=[]; width,height=595,842; raster=None
     if fmt == "pdf":
         import pymupdf
         with pymupdf.open(path) as doc:
@@ -135,6 +135,11 @@ def parse_page(path, page_number):
                 text+="\n"
             images=[{"box":_box(i["bbox"],p)} for i in p.get_image_info()]
             rotation=p.rotation
+            # A page with no text layer is exactly where orientation and
+            # sharpness have to be judged from pixels rather than metadata.
+            if not text.strip():
+                scale=min(2,1600/max(width,height))
+                raster=p.get_pixmap(matrix=pymupdf.Matrix(scale,scale),alpha=False).tobytes("png")
     elif fmt in {"png","jpg","jpeg","webp"}:
         from PIL import Image
         if page_number!=1: raise ValueError("页码超出范围")
@@ -160,6 +165,12 @@ def parse_page(path, page_number):
         from .document_native import enhance_pdf_page
         result=enhance_pdf_page(path,page_number,result)
     from . import document_quality
+    if fmt in {"png","jpg","jpeg","webp"}:
+        # Advisory raster measurements for the quality alarms. They never block
+        # a parse, and a page that cannot be measured reports nothing.
+        result["quality_signals"]=document_quality.page_signals(path.read_bytes())
+    elif raster is not None:
+        result["quality_signals"]=document_quality.page_signals(raster)
     return document_quality.inspect(result)
 
 
