@@ -21,12 +21,29 @@ class DocumentReviewTests(unittest.TestCase):
         return self.client.post('/api/documents/'+d['id']+'/review',json={
             'version':d['sha256'],'parse_id':data['parse_id'],'page':1,'target':target,
             'operator':'公开夹具验收者','accepted':True,**values})
+    def test_label_cell_correction_updates_original_line_and_clears_pending(self):
+        from backend import document_native as native
+        for status in ['pending','confirmed']:
+            d,_,body=self.source('')
+            lines=[{'text':'BlurLabel','box':[.1,.1,.3,.2],'confidence':.95,'status':status},{'text':'10','box':[.4,.1,.5,.2],'confidence':.95,'status':'confirmed'}]
+            tables=[{'id':'t','rows':1,'columns':2,'status':status,'box':[.1,.1,.5,.2],'cells':[{'id':'a','row':0,'column':0,'text':'BlurLabel','box':lines[0]['box'],'role':'row_header','status':status,'evidence_lines':[0],'label_review':status},{'id':'b','row':0,'column':1,'text':'10','role':'data','status':'confirmed'}]}]
+            parsed={k:copy.deepcopy(v) for k,v in body.items() if k not in {'document','parse_id'}}
+            parsed['pages'][0]=native.apply_ocr_page(parsed['pages'][0],{'lines':lines,'tables':tables,'label_reviews':[{'observation_id':0,'candidates':['ClearLabel','OtherLabel']}]})
+            with s.conn() as db:documents.save_parse(db,d['id'],d['sha256'],parsed,'public label fixture')
+            before=documents.layout(d['id']);target=next(t for t in document_review.targets(before['pages'][0]) if t.get('ocr_candidates'))
+            self.assertEqual(target['ocr_candidates'],['ClearLabel','OtherLabel'])
+            with patch.object(rag_index,'submit_index',return_value={'id':'job'}):response=self.correct(d,before,target['id'],text='ClearLabel')
+            self.assertEqual(response.status_code,200,response.text)
+            page=documents.layout(d['id'])['pages'][0]
+            self.assertFalse(page['recognition_pending']);self.assertNotIn('BlurLabel',page['text'])
+            self.assertEqual(page['ocr_lines'][0]['text'],'ClearLabel')
+            self.assertEqual(documents.layout(d['id'],d['sha256'],before['parse_id'])['pages'][0]['ocr_lines'][0]['text'],'BlurLabel')
     def test_docx_formula_paragraph_review_supersedes_old_observations(self):
         from tests.test_document_native import docx
         from backend import document_native as native
         path=s.UPLOADS/(uuid.uuid4().hex+'.docx')
         ns=native.NS['m']
-        docx(path,f'<w:p><m:oMath xmlns:m="{ns}"><m:d><m:e><m:r><m:t>x</m:t></m:r></m:e></m:d></m:oMath></w:p>')
+        docx(path,f'<w:p><m:oMath xmlns:m="{ns}"><m:unsupported><m:e><m:r><m:t>x</m:t></m:r></m:e></m:unsupported></m:oMath></w:p>')
         d=s.index_document(path);before=documents.layout(d['id'])
         target=next(t for t in document_review.targets(before['pages'][0]) if t['kind']=='formula')
         with patch.object(rag_index,'submit_index',return_value={'id':'one-document-job'}):

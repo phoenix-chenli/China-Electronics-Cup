@@ -36,7 +36,9 @@ def targets(page):
         items.append({'id':'pending:'+str(i),'kind':'text','text':b.get('text',''),'box':b.get('box'),'media_id':b.get('media_id'),'status':'pending'})
     for t in page.get('tables',[]):
         for c in t.get('cells',[]):
+            candidates=list(dict.fromkeys(text for r in page.get('label_reviews',[]) if r.get('media_id')==t.get('media_id') and r.get('observation_id') in c.get('evidence_lines',[]) for text in r.get('candidates',[]) if isinstance(text,str) and text.strip()))
             items.append({'id':'cell:'+t['id']+':'+c['id'],'kind':'cell','text':c.get('text',''),
+                          'ocr_candidates':candidates,
                           'label':f"{t.get('title') or '表格'} · 第 {c['row']+1} 行 {c['column']+1} 列",'box':c.get('box') or t.get('box'),'media_id':t.get('media_id'),'status':c.get('status','pending')})
     for chart in page.get('charts',[]):
         for si,series in enumerate(chart.get('series',[])):
@@ -113,6 +115,15 @@ def publish(did,req):
             table=next(t for t in page['tables'] if req.target.startswith('cell:'+t['id']+':'))
             cell=next(c for c in table['cells'] if req.target=='cell:'+table['id']+':'+c['id'])
             cell.update(text=req.text,**mark)
+            if cell.get('label_review'):
+                indices=cell.get('evidence_lines',[]);media_id=table.get('media_id')
+                affected=[b for b in page['blocks'] if b.get('source_method')=='ocr' and b.get('media_id')==media_id and b.get('observation_id') in indices]
+                _rewrite(page,[(b['start'],b['end'],req.text) for b in affected])
+                for b in affected:b.update(**mark,source_method='human_review')
+                for observation in page.get('ocr_lines',[]):
+                    if observation.get('media_id')==media_id and observation.get('observation_id') in indices:
+                        observation.update(before_human_text=observation['text'],text=req.text,**mark)
+                page['recognition_pending']=[l for l in page.get('recognition_pending',[]) if not (l.get('media_id')==media_id and l.get('observation_id') in indices)]
             table['status']='confirmed' if all(c.get('status')=='confirmed' for c in table['cells']) else 'pending'
             _drop(page,lambda b:b.get('table_id')==table['id'])
             table['text_ranges']=[];native._table_rows(page,table,'human_review')

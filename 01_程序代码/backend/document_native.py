@@ -111,8 +111,9 @@ def _append(page,text,kind='text',box=None,**metadata):
 def _table_rows(page,table,method):
     title=table.get('title') if table.get('title_status','confirmed')=='confirmed' else None
     title=title or '表格结构视图'
-    if table.get('status')=='pending':return
+    if table.get('status')=='pending' and not any(c.get('label_review') for c in table.get('cells',[])):return
     headers=[cell for cell in table.get('cells',[]) if cell.get('role') in {'header','column_header'} and cell.get('text')]
+    if any(h.get('status','confirmed')!='confirmed' for h in headers):return
     for row in range(table['rows']):
         cells=[c for c in table['cells'] if c['row']<=row<c['row']+c.get('rowspan',1)]
         if not cells or any(c.get('status','confirmed')!='confirmed' for c in cells):continue
@@ -502,6 +503,7 @@ def apply_ocr_page(base_page,result,media_id=None):
     page.setdefault('formulas',[])
     if media_id is None:page['formulas']=[]
     else:page['formulas']=[f for f in page['formulas'] if f.get('media_id')!=media_id]
+    page['label_reviews']=([] if media_id is None else [r for r in page.get('label_reviews',[]) if r.get('media_id')!=media_id])+[{**copy.deepcopy(r),'media_id':media_id} for r in result.get('label_reviews',[])]
     formula_lines={i for f in result.get('formulas',[]) for i in f.get('evidence_lines',[])}
     if media_id is None:page['ocr_lines']=[];page['recognition_pending']=[]
     for index,line in enumerate(result.get('lines',[])):

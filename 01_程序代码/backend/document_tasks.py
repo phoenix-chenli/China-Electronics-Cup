@@ -287,12 +287,17 @@ class Manager:
                         if not result['tables']:
                             result['tables']=spatial['tables']
                         result['formulas']=spatial['formulas']
+                        ocr_structure.reread_labels(raw,result,providers.ocr,stop,deadline,body['rotation'])
+                        for review in result.get('label_reviews',[]):
+                            for call in review['calls']:
+                                body['events'].append({'id':uuid.uuid4().hex,'page':number,'media_id':media_id,'method':'label_crop_ocr','observation_id':review['observation_id'],**call})
                         if result['formulas']:
                             ocr_structure.reread_formulas(raw,result,providers.ocr,stop,deadline,body['rotation'])
                             for formula in result['formulas']:
-                                call=formula.get('crop_call',{})
-                                body['events'].append({'id':uuid.uuid4().hex,'page':number,'media_id':media_id,
-                                    'method':'formula_crop_ocr','formula_id':formula['id'],**call})
+                                for call_key in ('crop_call','secondary_crop_call'):
+                                    call=formula.get(call_key,{})
+                                    if call:body['events'].append({'id':uuid.uuid4().hex,'page':number,'media_id':media_id,
+                                        'method':'formula_crop_ocr','variant':call_key,'formula_id':formula['id'],**call})
                         fresh=native.apply_ocr_page(base,result,media_id=media_id)
                     else:
                         lines=[{"text":b["text"],"box":b.get("box"),"status":b.get("status","confirmed")} for b in base.get("blocks",[]) if b.get("text","").strip() and b.get("media_id")==media_id]

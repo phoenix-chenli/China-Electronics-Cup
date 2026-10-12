@@ -1,3 +1,4 @@
+import {OcrCandidates} from '../src/document-review'
 import assert from 'node:assert/strict'
 import {test} from 'node:test'
 import React from 'react'
@@ -90,4 +91,11 @@ test('a selection across DOCX images preserves separate media coordinates and re
  assert.equal(regions.length,2);assert.equal(regions[0].media_id,'one');assert.equal(regions[1].media_id,'two')
  assert.deepEqual(regions[0].rects,[[.1,.2,.3,.4]]);assert.deepEqual(regions[1].rects,[[.4,.5,.6,.7]])
  assert.deepEqual(sourceHighlightRegions({media_id:'one',coordinate_space:'media',rects:[[0,0,1,1]]})[0].rects,[[0,0,1,1]])
+})
+
+test('label reread candidates remain reference text and do not claim verified corrections',()=>{
+ const html=renderToStaticMarkup(<OcrCandidates candidates={['Candidate A','<script>unsafe</script>']}/>)
+ assert.ok(html.includes('候选文字可能仍有误'));assert.ok(html.includes('Candidate A'))
+ assert.ok(!html.includes('<script>'));assert.ok(!html.includes('已确认'))
+ assert.equal(renderToStaticMarkup(<OcrCandidates/>),'')
 })
