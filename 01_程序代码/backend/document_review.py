@@ -62,9 +62,12 @@ def _rewrite(page, changes):
     for b in page['blocks']:
         found=next((e for e in edits if e[0]==b['start'] and e[1]==b['end']),None)
         if found:
+            b.pop('formula_ranges',None)
             start=offset(b['start']);b.update(start=start,end=start+len(found[2]),text=found[2],chars=[])
         else:
             b['start']=offset(b['start']);b['end']=offset(b['end'])
+            for interval in b.get('formula_ranges',[]):
+                interval['start']=offset(interval['start']);interval['end']=offset(interval['end'])
             for c in b.get('chars',[]):c['start']=offset(c['start']);c['end']=offset(c['end'])
     for h in page.get('headings',[]):
         h['start']=offset(h['start']);h['end']=offset(h['end'])

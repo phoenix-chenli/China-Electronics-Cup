@@ -76,9 +76,11 @@ def _source_gaps(scope, cancelled=None, deadline=None, document_ids=None):
                 if not p['text_available']:missing.append({'page':p['number'],'reason':'没有可用文字或结构待复核'})
                 elif any(obj.get('status')=='pending' for kind in ('formulas','tables','charts') for obj in p.get(kind,[])):
                     missing.append({'page':p['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending'})
+                if scope.get('scope_type')!='selection' and any(len(b['text'])>index.CHUNK_TOKENS for b in index._formula_blocks(p)):
+                    missing.append({'page':p['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long'})
         for page in missing:
-            gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],'action':'reparse_original','reason_code':page.get('reason_code','source_text_missing'),
-                         'instruction':('本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据' if page.get('reason_code')=='source_structure_pending' else '请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据')})
+            gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],'action':'inspect_original_formula' if page.get('reason_code')=='source_formula_too_long' else 'reparse_original','reason_code':page.get('reason_code','source_text_missing'),
+                         'instruction':('请打开该固定版本的完整公式原文进行核验' if page.get('reason_code')=='source_formula_too_long' else '本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据' if page.get('reason_code')=='source_structure_pending' else '请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据')})
     return gaps
 
 

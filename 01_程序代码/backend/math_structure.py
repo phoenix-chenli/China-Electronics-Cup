@@ -3,6 +3,7 @@ M = '{http://schemas.openxmlformats.org/officeDocument/2006/math}'
 
 
 def latex(node, depth=0):
+    if depth==0:audit(node)
     if depth > 32:
         raise ValueError('公式层级超过限制')
     name = node.tag.removeprefix(M)
@@ -87,3 +88,44 @@ def latex(node, depth=0):
     if name in {'oMath', 'oMathPara', 'r', 'num', 'den', 'e', 'sub', 'sup', 'deg','fName','lim'}:
         return ''.join(latex(child, depth+1) for child in node if child.tag.startswith(M))
     raise ValueError('不支持的公式节点 '+name)
+
+
+def audit(root):
+    """Every supported operand must be visited; no unknown child is flattened."""
+    import hashlib
+    from collections import Counter
+    from xml.etree import ElementTree as ET
+    expressions={'r','f','sSub','sSup','sSubSup','rad','nary','d','func','limLow','limUpp','bar','acc','m','eqArr'}
+    containers={'oMath','oMathPara','num','den','e','sub','sup','deg','fName','lim'}
+    operands={'f':{'num','den'},'sSub':{'e','sub'},'sSup':{'e','sup'},'sSubSup':{'e','sub','sup'},
+              'rad':{'deg','e'},'nary':{'sub','sup','e'},'d':{'e'},'func':{'fName','e'},
+              'limLow':{'e','lim'},'limUpp':{'e','lim'},'bar':{'e'},'acc':{'e'},'m':{'mr'},'mr':{'e'},'eqArr':{'e'},'r':{'t'}}
+    counts=Counter();stack=[(root,0)];total=0
+    while stack:
+        node,depth=stack.pop();total+=1
+        if depth>32 or total>4096:raise ValueError('公式结构超过层级或节点限制')
+        stack.extend((child,depth+1) for child in node)
+    stack=[root]
+    while stack:
+        node=stack.pop()
+        if not node.tag.startswith(M):raise ValueError('公式正文含未知命名空间')
+        name=node.tag[len(M):];counts[name]+=1
+        if name not in expressions|containers|{'mr','t'}:raise ValueError('不支持的公式节点 '+name)
+        if name=='t':
+            if list(node):raise ValueError('公式文字节点含嵌套结构')
+            continue
+        permitted={'oMath'} if name=='oMathPara' else expressions if name in containers else operands.get(name,set())
+        seen=set()
+        repeatable=permitted if name in containers else {'d':{'e'},'m':{'mr'},'mr':{'e'},'eqArr':{'e'},'r':{'t'}}.get(name,set())
+        for child in node:
+            cname=child.tag.removeprefix(M)
+            if cname in seen and cname not in repeatable:raise ValueError('公式 '+name+' 有重复操作数 '+cname)
+            seen.add(cname)
+            if child.tag==M+name+'Pr' or (name=='r' and child.tag=='{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rPr'):
+                if any(desc.tag==M+'t' for desc in child.iter()):raise ValueError('公式样式属性含正文，不能忽略')
+                continue
+            if not child.tag.startswith(M) or cname not in permitted:
+                raise ValueError('公式 '+name+' 含未处理子节点 '+cname)
+            stack.append(child)
+    return {'validation':'passed','node_count':total,'structure_counts':dict(sorted(counts.items())),
+            'source_xml_sha256':hashlib.sha256(ET.tostring(root,encoding='utf-8')).hexdigest()}

@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-12",
+  "reference_repository": "https://github.com/haohao6666666/HNZ-JATSCraft-Studio-2",
+  "reference_commit": "ac62cb7435fb8089db3f311e3b6a33839f3394b4",
+  "reference_sources": {
+    "mathml.py": "https://github.com/haohao6666666/HNZ-JATSCraft-Studio-2/blob/ac62cb7435fb8089db3f311e3b6a33839f3394b4/02_%E7%A8%8B%E5%BA%8F%E4%BB%A3%E7%A0%81/jatscraft/mathml.py",
+    "latex_formulas.py": "https://github.com/haohao6666666/HNZ-JATSCraft-Studio-2/blob/ac62cb7435fb8089db3f311e3b6a33839f3394b4/02_%E7%A8%8B%E5%BA%8F%E4%BB%A3%E7%A0%81/jatscraft/latex_formulas.py",
+    "accuracy.py": "https://github.com/haohao6666666/HNZ-JATSCraft-Studio-2/blob/ac62cb7435fb8089db3f311e3b6a33839f3394b4/02_%E7%A8%8B%E5%BA%8F%E4%BB%A3%E7%A0%81/jatscraft/accuracy.py"
+  },
+  "reference_hashes": {
+    "mathml.py": "1db4340f28f0de02cbefe084633985a83e8fe088e3e19ab60cbbfc5403bcbbdc",
+    "latex_formulas.py": "fb114803c926f51d19bcb7d99286563fe0e694a184af53298656ab9599f2f18d",
+    "accuracy.py": "30f7a7c29f859ba5dc652a5845c2abfe7d454e8ad6ebc04ebfe31ce37ca351f1"
+  },
+  "comparison": {
+    "unknown_operand_before": "\\frac{1}{N}",
+    "unknown_operand_after": {
+      "status": "pending",
+      "reason": "公式 f 含未处理子节点 unknown"
+    },
+    "chunks_before": [
+      "prefix information: \\frac{12345678901234",
+      "567890}{N} tail"
+    ],
+    "chunks_after": [
+      "prefix information:",
+      "\\frac{12345678901234567890}{N}",
+      "tail"
+    ],
+    "reference_corpus": {
+      "formulas": 150,
+      "tags": {
+        "math": 150,
+        "mrow": 150,
+        "mi": 711,
+        "mo": 711,
+        "mn": 711
+      }
+    }
+  },
+  "tests": {
+    "math_labels": 20,
+    "rag_retrieval": 46,
+    "document_native": 10,
+    "ocr_structure": 15,
+    "rag_agent": 46,
+    "document_review": 9,
+    "backend_passed": 146,
+    "frontend_passed": 64
+  },
+  "source_hashes": {
+    "01_程序代码/backend/math_structure.py": "f6cfe37217de18d3490b426b7c6ab68736040ef099615cb8b80913f09ccfd599",
+    "01_程序代码/backend/document_native.py": "6474500ef93a5c46f810cbffa8977e7c561c742925af993c3ea9dd5ce882ddf1",
+    "01_程序代码/backend/document_review.py": "03d54d6de11edcf4eeb42225a02aba99bf9fa3f01fbad4cce78194c4dc4d4fd3",
+    "01_程序代码/backend/rag_index.py": "6d701d7a66441edee165e5b06668ef2dc0c22ab3af58a1e028e7175f3017cdac",
+    "01_程序代码/backend/rag_retrieval.py": "53e7665c7625a303c30dc26b91c9ecd94c371e4043471bd9543ae80e80e60bbe",
+    "01_程序代码/backend/rag_grounding.py": "b2e1bdc205daa5445832b83cc0997bb5af1b952d9c0c9a0c37c6926527eaa9ae",
+    "03_测试验收/自动测试/tests/test_math_labels.py": "84108412afbb823e5d8b6abe6fbc0255e4b8515c1735e7177a433cc6c59511bc",
+    "03_测试验收/自动测试/tests/test_rag_retrieval.py": "334a9664631b638952a9d526b605c4a16db03aa17896a201447f6b5d1ea3d1a7",
+    "03_测试验收/自动测试/tests/test_document_review.py": "3442b713dbeb8fd00f3ab99966c511e003bcc3c97c8567c6dde77b2002015b1f"
+  },
+  "limitations": [
+    "Reference provides native MathML conversion, not a scanned-formula OCR model",
+    "Reference formula evidence includes label/anchor consistency; not a scanned expression accuracy metric",
+    "No XeLaTeX compilation or reference app execution performed",
+    "No new scan OCR quality score or real external text-model answer score measured",
+    "Old document parses and index generations retained; reparse/reindex required for new behavior",
+    "Full Windows launcher/UI remains unverified"
+  ]
+}

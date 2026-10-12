@@ -32,6 +32,60 @@ class MathLabelsTest(unittest.TestCase):
         self.assertIn(formula['id'],page['blocks'][0]['formula_ids'])
         self.assertTrue(formula['source_part'].startswith('word/document.xml'))
         self.assertIn('oMath',formula['original_xml'])
+    def test_unknown_children_are_not_silently_dropped(self):
+        for xml in ['<m:f><m:num><m:r><m:t>1</m:t></m:r></m:num><m:den><m:r><m:t>N</m:t></m:r></m:den><m:unknown/></m:f>', '<m:m><m:mr>'+self.term('1')+'<m:unknown/></m:mr></m:m>']:
+            with self.assertRaises(ValueError):math.latex(self.node(xml))
+    def test_duplicate_fraction_operand_rejected(self):
+        xml='<m:f><m:num><m:r><m:t>1</m:t></m:r></m:num><m:num><m:r><m:t>2</m:t></m:r></m:num><m:den><m:r><m:t>N</m:t></m:r></m:den></m:f>'
+        with self.assertRaises(ValueError):math.latex(self.node(xml))
+    def test_formula_source_audit_has_stable_structure_counts(self):
+        node=self.node('<m:f><m:num><m:r><m:t>1</m:t></m:r></m:num><m:den><m:r><m:t>N</m:t></m:r></m:den></m:f>')
+        record=math.audit(node)
+        self.assertEqual(record['structure_counts']['f'],1);self.assertEqual(record['structure_counts']['num'],1)
+        self.assertEqual(record['source_xml_sha256'],math.audit(node)['source_xml_sha256'])
+        paragraph=ET.Element(math.M+'oMathPara');paragraph.append(node)
+        self.assertEqual(math.latex(paragraph),math.latex(node))
+    def test_formula_chunk_is_whole_and_oversize_formula_is_not_split(self):
+        from backend import rag_index
+        formula=r'\frac{123456}{N}'
+        page={'text':'prefix '+formula+' tail','blocks':[{'id':'f','start':7,'end':7+len(formula),'text':formula,'status':'confirmed','formula_ids':['f1']}]}
+        spans=list(rag_index._source_spans(page,len,20))
+        self.assertIn((7,7+len(formula),False),spans)
+        self.assertTrue(rag_index._extraction_quality(page,7,7+len(formula))['formula_complete'])
+        self.assertFalse(rag_index._extraction_quality(page,7,9)['formula_complete'])
+        tiny=list(rag_index._source_spans(page,len,5))
+        self.assertFalse(any(a<7+len(formula) and b>7 for a,b,_ in tiny))
+    def test_inline_formula_offsets_preserve_surrounding_long_prose(self):
+        import tempfile
+        from pathlib import Path
+        from tests.test_document_native import docx
+        from backend import rag_index
+        prefix='Useful prose. '*50
+        xml=ET.tostring(self.node('<m:d>'+self.term('x')+'</m:d>'),encoding='unicode')
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'inline.docx';docx(path,'<w:p><w:r><w:t>'+prefix+'</w:t></w:r>'+xml+'<w:r><w:t>tail</w:t></w:r></w:p>')
+            page=native.parse_docx(path)['pages'][0]
+        interval=page['blocks'][0]['formula_ranges'][0]
+        self.assertEqual(page['text'][interval['start']:interval['end']],r' $\left(x\right)$ ')
+        chunks=[page['text'][a:b] for a,b,_ in rag_index._source_spans(page,len,40)]
+        self.assertTrue(any('Useful prose.' in chunk for chunk in chunks));self.assertIn(r' $\left(x\right)$ ',chunks)
+    def test_deleted_formula_is_not_an_active_source(self):
+        import tempfile
+        from pathlib import Path
+        from tests.test_document_native import docx
+        xml=ET.tostring(self.node('<m:unsupported/>'),encoding='unicode')
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'deleted.docx';docx(path,'<w:p><w:r><w:t>Visible</w:t></w:r><w:del>'+xml+'</w:del></w:p>')
+            page=native.parse_docx(path)['pages'][0]
+        self.assertFalse(page.get('formulas'));self.assertEqual(page['blocks'][0]['status'],'confirmed')
+    def test_media_reparse_updates_unrelated_formula_range(self):
+        page=native._page(1)
+        native._append(page,'Old crop','text',status='confirmed',media_id='media-one',source_method='ocr')
+        block=native._append(page,' $x$ ','text',status='confirmed',source_method='docx_native',formula_ids=['f1'])
+        block['formula_ranges']=[{'formula_id':'f1','start':block['start'],'end':block['end']}]
+        native._remove_derived(page,'media-one')
+        interval=page['blocks'][0]['formula_ranges'][0]
+        self.assertEqual(page['text'][interval['start']:interval['end']],' $x$ ')
     def test_ragged_matrix_rejected(self):
         xml='<m:m><m:mr>'+self.term('1')+'</m:mr><m:mr>'+self.term('2')+self.term('3')+'</m:mr></m:m>'
         with self.assertRaises(ValueError):math.latex(self.node(xml))

@@ -181,7 +181,7 @@ def packet(spans, facts=()):
               'origin': {k: x['locator'].get(k) for k in ('document_id', 'sha256', 'parse_id', 'page', 'text_range')},
               'extraction': {k:v for k,v in x.get('quality',{}).items() if k in
                   {'source_methods','method','location_precision','location_precisions','human_reviewed',
-                   'confirmed','derived_view','structure','min_ocr_confidence','table_id','cell_ids','chart_id','point_id','source_part','media_id'}}} for x in values],
+                   'confirmed','derived_view','structure','min_ocr_confidence','formula_ids','formula_id','formula_complete','table_id','cell_ids','chart_id','point_id','source_part','media_id'}}} for x in values],
             'page_continuation_candidates': page_continuation_candidates(values),
             'queries': queries,
             'facts': [{'id': f['id'], 'text': f['text'], 'query_id': f.get('query_id'),

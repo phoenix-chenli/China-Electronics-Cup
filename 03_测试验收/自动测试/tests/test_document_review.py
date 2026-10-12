@@ -38,6 +38,17 @@ class DocumentReviewTests(unittest.TestCase):
             self.assertFalse(page['recognition_pending']);self.assertNotIn('BlurLabel',page['text'])
             self.assertEqual(page['ocr_lines'][0]['text'],'ClearLabel')
             self.assertEqual(documents.layout(d['id'],d['sha256'],before['parse_id'])['pages'][0]['ocr_lines'][0]['text'],'BlurLabel')
+    def test_unrelated_edit_keeps_inline_formula_offsets_pinned(self):
+        from tests.test_document_native import docx
+        from backend import document_native as native
+        path=s.UPLOADS/(uuid.uuid4().hex+'.docx')
+        ns=native.NS['m'];xml=f'<m:oMath xmlns:m="{ns}"><m:r><m:t>x</m:t></m:r></m:oMath>'
+        docx(path,'<w:p><w:r><w:t>Before</w:t></w:r></w:p><w:p>'+xml+'</w:p>')
+        d=s.index_document(path);before=documents.layout(d['id']);target='block:'+before['pages'][0]['blocks'][0]['id']
+        with patch.object(rag_index,'submit_index',return_value={'id':'job'}):response=self.correct(d,before,target,text='A much longer introduction')
+        self.assertEqual(response.status_code,200,response.text)
+        page=documents.layout(d['id'])['pages'][0];interval=page['blocks'][1]['formula_ranges'][0]
+        self.assertEqual(page['text'][interval['start']:interval['end']],' $x$ ')
     def test_docx_formula_paragraph_review_supersedes_old_observations(self):
         from tests.test_document_native import docx
         from backend import document_native as native

@@ -126,6 +126,26 @@ class RagRetrievalTest(unittest.TestCase):
         self.assertEqual(result['status'],'degraded')
         self.assertEqual(result['source_gaps'][0]['reason_code'],'source_structure_pending')
         self.assertEqual(result['source_gaps'][0]['structures'][0]['id'],'formula-one')
+    def test_oversized_formula_reports_source_review_without_partial_chunks(self):
+        from backend import document_native as native
+        doc,_=self.source('')
+        original=documents.layout(doc['id'])
+        body={k:copy.deepcopy(v) for k,v in original.items() if k not in {'document','parse_id'}}
+        page=body['pages'][0]
+        native._append(page,'Supporting introduction about the formula.','text',status='confirmed')
+        native._append(page,'x+'*500,'formula',status='confirmed',formula_id='long-formula')
+        with s.conn() as db:documents.save_parse(db,doc['id'],doc['sha256'],body,'public long formula')
+        index.submit_index([doc['id']],synchronous=True)
+        scope=self.scope([doc['id']]);result=retrieval.search('Supporting introduction',scope)
+        self.assertEqual(result['source_gaps'][0]['reason_code'],'source_formula_too_long')
+        self.assertEqual(result['source_gaps'][0]['action'],'inspect_original_formula')
+        self.assertFalse(any('x+x+' in e['snippet'] for e in result['evidence']))
+        bound=documents.resolve({'document_id':doc['id'],'sha256':doc['sha256'],'page':1},'x+'*500)
+        selected=index.freeze_scope(document_context={**bound['locator'],'quote':bound['quote']})
+        exact=retrieval.search('解释完整公式',selected)
+        self.assertFalse(exact['source_gaps'])
+        self.assertEqual(exact['evidence'][0]['snippet'],'x+'*500)
+        self.assertTrue(exact['evidence'][0]['quality']['formula_complete'])
     def test_empty_source_reports_gap_instead_of_complete_retrieval(self):
         good,_=self.source('DailyDialog scores have printed values.')
         empty,_=self.source('',suffix='txt')

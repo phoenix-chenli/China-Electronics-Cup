@@ -20,7 +20,7 @@ from pathlib import Path
 
 from . import documents, store as s
 
-CHUNKER_VERSION = "source-spans-v3-partial-structure"
+CHUNKER_VERSION = "source-spans-v4-atomic-formulas"
 CHUNK_TOKENS = 384
 OVERLAP_TOKENS = 48
 LOCK = threading.RLock()
@@ -215,6 +215,34 @@ def _confirmed_ranges(page):
     if cursor<len(text):yield cursor,len(text)
 
 
+
+def _formula_blocks(page):
+    out=[]
+    for block in page.get('blocks',[]):
+        if block.get('status','confirmed')!='confirmed':continue
+        if block.get('formula_ranges'):
+            for interval in block['formula_ranges']:
+                start,end=interval['start'],interval['end']
+                out.append({**block,'id':block['id']+'-'+interval['formula_id'],'start':start,'end':end,
+                            'text':page['text'][start:end],'formula_ids':[interval['formula_id']]})
+        elif block.get('formula_ids') or block.get('formula_id') or block.get('kind')=='formula':out.append(block)
+    return sorted(out,key=lambda b:b['start'])
+
+
+def _source_spans(page,count,budget):
+    """Formula-bearing blocks are whole evidence; oversized ones need source review."""
+    protected=_formula_blocks(page)
+    for offset,limit in _confirmed_ranges(page):
+        cursor=offset
+        for block in protected:
+            start,end=block['start'],block['end']
+            if start<cursor or end>limit:continue
+            for a,b,hard in _split(page['text'][cursor:start],count,budget):yield cursor+a,cursor+b,hard
+            if count(page['text'][start:end])<=budget:yield start,end,False
+            cursor=end
+        for a,b,hard in _split(page['text'][cursor:limit],count,budget):yield cursor+a,cursor+b,hard
+
+
 def _extraction_quality(page,start,end):
     blocks=[b for b in page.get("blocks",[]) if b.get("end",0)>start and b.get("start",0)<end]
     provenance=page.get("provenance",{})
@@ -231,6 +259,10 @@ def _extraction_quality(page,start,end):
                 for item in value if isinstance(value,list) else [value]:
                     if item not in values:values.append(item)
         if values:quality[field]=values
+    formula_blocks=[b for b in _formula_blocks(page) if b['end']>start and b['start']<end]
+    if formula_blocks:
+        quality['formula_complete']=all(start<=b['start'] and end>=b['end'] for b in formula_blocks)
+        quality['formula_ids']=list(dict.fromkeys(fid for b in formula_blocks for fid in b.get('formula_ids',[b.get('formula_id')]) if fid))
     confidence=[b["confidence"] for b in blocks if isinstance(b.get("confidence"),(float,int))]
     if confidence:quality["min_ocr_confidence"]=min(confidence)
     for key in ("model","fingerprint","input_image_sha256","semantic_accuracy"):
@@ -268,8 +300,9 @@ def _build_document(document_id, cancelled=None):
             continue
         pending=[{'kind':kind,'id':obj.get('id')} for kind in ('formulas','tables','charts') for obj in page.get(kind,[]) if obj.get('status')=='pending']
         if pending:missing.append({'page':page['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending','structures':pending})
-        spans = [(offset+start,offset+end,hard) for offset,limit in _confirmed_ranges(page)
-                 for start,end,hard in _split(page["text"][offset:limit],count,budget)]
+        oversized=[b for b in _formula_blocks(page) if count(b['text'])>budget]
+        if oversized:missing.append({'page':page['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long','formula_block_ids':[b['id'] for b in oversized]})
+        spans = list(_source_spans(page,count,budget))
         for start, end, hard_split in spans:
             text = page["text"][start:end]
             source_span = {"page": page["number"], "start": start, "end": end,
@@ -692,8 +725,7 @@ def chunks_for_scope(scope, *, cancelled=None, deadline=None):
             start, end = selection["start"], selection["end"]
             candidates = [(start, end, False)]
         else:
-            candidates = [(offset+start,offset+end,hard) for offset,limit in _confirmed_ranges(page)
-                          for start,end,hard in _split(page["text"][offset:limit],len,CHUNK_TOKENS)]
+            candidates = list(_source_spans(page,len,CHUNK_TOKENS))
         out = []
         for start, end, hard_split in candidates:
             _guard(cancelled, deadline)

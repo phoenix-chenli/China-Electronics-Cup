@@ -71,7 +71,7 @@ def _relations(archive,part):
     return out
 
 
-def _paragraph(node):
+def _paragraph(node, math_ranges=None):
     text=[]
     def visible(parent):
         if parent.tag in {W+'del',W+'moveFrom',W+'drawing',W+'pict',W+'object',W+'tbl',W+'instrText'}:return
@@ -81,8 +81,11 @@ def _paragraph(node):
     for child in visible(node):
         if child.tag=='{'+NS['m']+'}oMath':
             from .math_structure import latex
-            try:text.append(' $'+latex(child)+'$ ')
-            except ValueError:text.append(' [公式结构需复核] ')
+            start=sum(len(part) for part in text)
+            try:fragment=' $'+latex(child)+'$ '
+            except ValueError:fragment=' [公式结构需复核] '
+            text.append(fragment)
+            if math_ranges is not None:math_ranges[id(child)]={'start':start,'end':start+len(fragment)}
         elif child.tag in {W+'t',W+'delText'}:
             if child.tag==W+'t':text.append(child.text or '')
         elif child.tag==W+'tab':text.append('\t')
@@ -301,7 +304,7 @@ def parse_docx(path):
             for suffix,node in _ordered_children(part):
                 page=pages[-1];location=source+suffix
                 if node.tag==W+'p':
-                    text=_paragraph(node);style=node.find('w:pPr/w:pStyle',NS);outline=node.find('w:pPr/w:outlineLvl',NS)
+                    math_ranges={};text=_paragraph(node,math_ranges);style=node.find('w:pPr/w:pStyle',NS);outline=node.find('w:pPr/w:outlineLvl',NS)
                     level=min(6,int(outline.get(W+'val'))+1) if outline is not None and outline.get(W+'val','').isdigit() and int(outline.get(W+'val'))<9 else levels.get(style.get(W+'val')) if style is not None else None
                     if level==1 and page['text'] and source=='word/document.xml':pages.append(_page(len(pages)+1));page=pages[-1]
                     if level:titles=titles[:max(0,level-1)]+[text.strip()]
@@ -310,17 +313,23 @@ def parse_docx(path):
                         title_path=' / '.join(titles),status='confirmed',location_precision='package_structure')
                     formula_ids=[]
                     for fi, math_node in enumerate(node.findall('.//m:oMath',NS)):
-                        from .math_structure import latex
+                        if id(math_node) not in math_ranges:continue
+                        from .math_structure import latex,audit
+                        structure_audit=None
                         try:
-                            math_text=latex(math_node);math_status='confirmed';reason=None
+                            math_text=latex(math_node);structure_audit=audit(math_node);math_status='confirmed';reason=None
                         except ValueError as exc:
                             math_text='';math_status='pending';reason=str(exc)
                             if block:block.update(status='pending',source_pending_reason='unsupported_office_math')
                         page.setdefault('formulas',[]).append({'id':f"docx-math-{page['number']}-{len(page.get('formulas',[]))}",
                             'text':math_text,'latex':math_text,'status':math_status,'method':'docx_omml',
+                            'structure_audit':structure_audit or {'validation':'unsupported'},
                             'source_part':location+f'/math[{fi}]','original_xml':ET.tostring(math_node,encoding='unicode'),
                             'reason':reason,'location_precision':'package_structure'})
                         formula_ids.append(page['formulas'][-1]['id'])
+                        if block and math_status=='confirmed':
+                            interval=math_ranges[id(math_node)]
+                            block.setdefault('formula_ranges',[]).append({'formula_id':formula_ids[-1],'start':block['start']+interval['start'],'end':block['start']+interval['end']})
                     if block and formula_ids:block['formula_ids']=formula_ids
                     if level and block:page['headings'].append({'title':text.strip(),'level':level,'page':page['number'],'start':block['start'],'end':block['end'],'block_id':block['id']})
                     for image in node.findall('.//a:blip',NS):
@@ -482,6 +491,7 @@ def _remove_derived(page,media_id,visual_only=False):
         if remove(block):continue
         block['start']=offset(block['start']);block['end']=offset(block['end'])
         for char in block.get('chars',[]):char['start']=offset(char['start']);char['end']=offset(char['end'])
+        for interval in block.get('formula_ranges',[]):interval['start']=offset(interval['start']);interval['end']=offset(interval['end'])
         kept.append(block)
     page['blocks']=kept
     for heading in page.get('headings',[]):
