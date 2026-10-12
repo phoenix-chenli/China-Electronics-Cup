@@ -591,6 +591,91 @@ def _recognition_issues(page,result,method,media_id,reset=False):
                           'source_method':method,'media_id':media_id} for issue in result.get('issues',[]))
 
 
+def _heading_text(value):
+    """A heading laid out over two lines still reads as one line.
+
+    The block text keeps its real line breaks, because offsets must stay exact;
+    only the heading label collapses them. Pure CJK joins without a space, a
+    label that carries Latin or digits keeps single spaces.
+    """
+    collapsed=re.sub(r"\s+"," ",str(value or "")).strip()
+    if collapsed and not re.search(r"[A-Za-z0-9]",collapsed):
+        return collapsed.replace(" ","")
+    return collapsed
+
+
+PDF_NUMBERING = (
+    (re.compile(r"^\s*[一二三四五六七八九十百]+、"), 1),
+    (re.compile(r"^\s*第[一二三四五六七八九十百]+[章节篇部分]"), 1),
+    (re.compile(r"^\s*[（(][一二三四五六七八九十]+[）)]"), 2),
+    (re.compile(r"^\s*\d+[.．、]\s*[一-鿿]"), 3),
+    (re.compile(r"^\s*[（(]\d+[）)]"), 4),
+)
+
+
+def infer_pdf_outline(pages):
+    """Recover a heading hierarchy when a PDF declares no bookmark outline.
+
+    Two signals are taken from the document itself: a type size or font family
+    distinct from the body (Chinese bulletins set section headings in 黑体 at
+    the same size as the 仿宋 body), and the numbering an official document
+    gives its own sections (一、/（一）/1.). Every level is reported as
+    inferred, never as structure the file declared. Returns the outline and
+    fills each block's ``title_path`` so a chunk carries the heading it sits
+    under; blocks that are not headings stay exactly as they were parsed.
+    """
+    from collections import Counter
+    weight=Counter(); faces=Counter()
+    for page in pages:
+        for block in page.get("blocks",[]):
+            size=block.get("font_size")
+            if not isinstance(size,float) or size<=0 or block.get("kind")!="text" or block.get("table_id"):
+                continue
+            length=max(1,len(str(block.get("text") or "").strip()))
+            weight[round(size,1)]+=length
+            if block.get("font"):faces[block["font"]]+=length
+    # A single size with a single family offers nothing to separate a heading
+    # from body text, so no outline is invented at all.
+    if len(weight)<2 and len(faces)<2:return []
+    body=weight.most_common(1)[0][0]
+    body_face=faces.most_common(1)[0][0] if faces else None
+    ranks={size:index for index,size in enumerate(sorted(weight,reverse=True))}
+    candidates={}
+    for page in pages:
+        for block in page.get("blocks",[]):
+            size=block.get("font_size");text=_heading_text(block.get("text"))
+            if not isinstance(size,float) or size<=0 or not text:continue
+            if len(text)>60:continue
+            if text[-1] in "。．.；;，,、：:！!？?":continue
+            larger=size>=body*1.12
+            heavier=bool(block.get("bold")) and size>=body
+            # A different family at (near) the body size is how 黑体 headings sit
+            # beside a 仿宋 body; anything smaller than the body is table matter.
+            other_face=bool(body_face) and bool(block.get("font")) and block["font"]!=body_face and size>=body*.98
+            if not (larger or heavier or other_face):continue
+            candidates[id(block)]=(round(size,1),text)
+    if not candidates:return []
+    titles=[];outline=[]
+    for page in pages:
+        for block in page.get("blocks",[]):
+            found=candidates.get(id(block))
+            if found:
+                size,text=found
+                numbering=next((level for pattern,level in PDF_NUMBERING if pattern.match(text)),None)
+                # The document's own numbering is a stronger statement of depth
+                # than a type size; without it, distinct sizes rank largest first.
+                level=numbering if numbering else min(6,ranks[size]+1)
+                source="numbering_inferred" if numbering else "font_size_inferred"
+                titles=titles[:max(0,level-1)]+[text]
+                block.update(kind="heading",level=level,title_path=" / ".join(titles),heading_source=source)
+                entry={"title":text,"level":level,"page":page["number"],"start":block["start"],"end":block["end"],
+                       "block_id":block["id"],"source":source}
+                outline.append(entry);page.setdefault("headings",[]).append(entry)
+            else:
+                block["title_path"]=" / ".join(titles)
+    return outline
+
+
 def link_continuations(pages):
     """Only adjacent structurally matching tables with explicit repeat headers."""
     links=[]

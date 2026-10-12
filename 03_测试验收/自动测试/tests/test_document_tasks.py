@@ -80,7 +80,7 @@ class DocumentTasksTest(unittest.TestCase):
         self.assertEqual(before["pages"],documents.layout(doc["id"],parse_id=before["parse_id"])["pages"])
         self.assertEqual("document-processing-v1",documents.view(doc["id"])["parser"])
         catalog=next(d for d in s.doc_list() if d["id"]==doc["id"])
-        self.assertEqual(3,catalog["quality"]["parser_version"])
+        self.assertEqual(s.PARSE_VERSION,catalog["quality"]["parser_version"])
         self.assertEqual("fixture-index",result["index_job_id"])
         self.assertIsNotNone(result["events"][0]["duration_ms"])
 

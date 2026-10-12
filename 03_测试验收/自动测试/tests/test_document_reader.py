@@ -97,6 +97,63 @@ class DocumentReaderTest(unittest.TestCase):
             boxes=r['locator']['rects'];union=[min(b[0] for b in boxes),min(b[1] for b in boxes),max(b[2] for b in boxes),max(b[3] for b in boxes)]
             for a,b in zip(expected,union):self.assertAlmostEqual(a,b,places=4)
             self.assertEqual([x['level'] for x in self.get(d,'/view').json()['outline']],[1,2])
+    def test_pdf_without_bookmarks_recovers_numbered_heading_levels(self):
+        pdf=pymupdf.open()
+        p=pdf.new_page(width=600,height=800)
+        # The default font cannot encode CJK; the built-in fonts can, so the
+        # fixture exercises the same text path a real Chinese PDF uses.
+        p.insert_text((60,60),'年度经营报告',fontsize=24,fontname='china-s')
+        p.insert_text((60,100),'一、总体情况',fontsize=18,fontname='china-s')
+        p.insert_text((60,140),'营业收入为 100 万元，比上年增长 5%，本段属于正文说明。',fontsize=12,fontname='china-s')
+        p.insert_text((60,180),'（一）收入构成',fontsize=18,fontname='china-s')
+        p.insert_text((60,220),'各地区收入情况如上所述，本段同样属于正文，不应被识别为标题。',fontsize=12,fontname='china-s')
+        blob=pdf.tobytes();pdf.close()
+        d,_=self.source(blob,'pdf')
+        meta=self.get(d,'/view').json()
+        self.assertEqual('PDF 字体层级（推定）',meta['structure'])
+        self.assertEqual(['年度经营报告','一、总体情况','（一）收入构成'],[h['title'] for h in meta['outline']])
+        # The document's own numbering states the depth; the title only has size.
+        self.assertEqual([1,1,2],[h['level'] for h in meta['outline']])
+        self.assertEqual(['font_size_inferred','numbering_inferred','numbering_inferred'],[h['source'] for h in meta['outline']])
+        blocks=self.get(d,'/pages/1').json()['blocks']
+        heading=next(b for b in blocks if b['text'].strip()=='（一）收入构成')
+        self.assertEqual('heading',heading['kind'])
+        self.assertEqual('一、总体情况 / （一）收入构成',heading['title_path'])
+        body=next(b for b in blocks if b['text'].strip().startswith('营业收入为'))
+        self.assertNotEqual('heading',body['kind'])
+        self.assertEqual('一、总体情况',body['title_path'])
+
+    def test_heiti_section_heading_at_body_size_is_found_by_font_family(self):
+        """The real bulletins set 黑体 section headings at the 仿宋 body size."""
+        pdf=pymupdf.open()
+        p=pdf.new_page(width=600,height=800)
+        p.insert_text((60,60),'一、综合',fontsize=12,fontname='china-s')
+        p.insert_text((60,90),'年末全市常住人口301.9 万人，比上年末增加0.3 万人，常住人口城镇化率为64.4%。',fontsize=12,fontname='china-t')
+        p.insert_text((60,120),'全年城镇新增就业2.7 万人，失业人员再就业1.1 万人，各项数据均来自本报告。',fontsize=12,fontname='china-t')
+        p.insert_text((60,150),'二、农业',fontsize=12,fontname='china-s')
+        p.insert_text((60,180),'全年粮食产量326.2 万吨，比上年增产1.2%，蔬菜及食用菌产量99.1 万吨。',fontsize=12,fontname='china-t')
+        blob=pdf.tobytes();pdf.close()
+        d,_=self.source(blob,'pdf')
+        meta=self.get(d,'/view').json()
+        self.assertEqual('PDF 字体层级（推定）',meta['structure'])
+        self.assertEqual(['一、综合','二、农业'],[h['title'] for h in meta['outline']])
+        self.assertEqual([1,1],[h['level'] for h in meta['outline']])
+        blocks=self.get(d,'/pages/1').json()['blocks']
+        body=next(b for b in blocks if b['text'].strip().startswith('年末全市常住人口'))
+        self.assertEqual('一、综合',body['title_path'])
+
+    def test_declared_bookmark_outline_wins_over_font_inference(self):
+        pdf=pymupdf.open()
+        p=pdf.new_page(width=600,height=800)
+        p.insert_text((60,60),'大标题',fontsize=24,fontname='china-s')
+        p.insert_text((60,120),'正文内容说明。',fontsize=12,fontname='china-s')
+        pdf.set_toc([[1,'声明目录',1]])
+        blob=pdf.tobytes();pdf.close()
+        d,_=self.source(blob,'pdf')
+        meta=self.get(d,'/view').json()
+        self.assertEqual('原文件书签',meta['structure'])
+        self.assertEqual(['声明目录'],[h['title'] for h in meta['outline']])
+
     def test_render_aspect_ratio_and_page_validation(self):
         d,_=self.source(pdf_bytes(90),'pdf')
         with urllib.request.urlopen(self.client.url+'/api/documents/'+d['id']+'/pages/1/image?version='+d['sha256']) as response:

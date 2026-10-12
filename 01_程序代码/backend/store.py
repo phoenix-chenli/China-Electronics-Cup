@@ -19,6 +19,9 @@ DATA = Path(os.environ.get("EVIDENCEFLOW_DATA_DIR", str(PROJECT_ROOT / "02_数�
 DOCS, UPLOADS, VERSIONS = (DATA / n for n in ("docs", "uploads", "versions"))
 APP_DB, BUSINESS_DB = DATA / "app.db", DATA / "business.db"
 BASE_TABLES = {"orders", "products", "customers", "projects", "targets", "business_rules"}
+# Bumped whenever the stored shape of a parse changes, so an existing install
+# re-parses instead of keeping older metadata. Historical parses stay readable.
+PARSE_VERSION = 4
 _query_state = threading.local()
 
 @contextmanager
@@ -133,7 +136,7 @@ def quality_for_parse(body, errors=()):
     if errors: flags.append("解析失败")
     if missing: flags.append("需要文字识别")
     if issues or pending or pending_media or pending_lines: flags.append("结构或识别待复核")
-    return {"parser_version":3,"parser":body.get("parser"),"block_count":sum(len(p.get("blocks",[])) for p in pages),
+    return {"parser_version":PARSE_VERSION,"parser":body.get("parser"),"block_count":sum(len(p.get("blocks",[])) for p in pages),
             "visual_blocks":sum(len(p.get("images",[])) for p in pages),"quality_flags":flags,"errors":list(errors),
             "structure":body.get("structure","按页"),"missing_pages":missing,"issues":issues,"pending_structures":pending,"pending_media":pending_media,
             "confirmed":not bool(missing or issues or pending or pending_media or pending_lines or errors),"pending_text_lines":pending_lines,"human_reviewed":False,
@@ -168,7 +171,7 @@ def index_document(path, name=None):
         if old:
             documents.register(c,old);did=old["id"]
             if old["status"]=="archived": return docrow(old)
-            if old["sha256"]==sha and json.loads(old["quality_json"] or "{}").get("parser_version")==3: return docrow(old)
+            if old["sha256"]==sha and json.loads(old["quality_json"] or "{}").get("parser_version")==PARSE_VERSION: return docrow(old)
     # Parsing is deliberately outside catalog transactions and does not run OCR/network calls.
     body=None
     try:
@@ -184,7 +187,7 @@ def index_document(path, name=None):
     with conn() as c:
         current=c.execute("SELECT * FROM documents WHERE path IN (?,?)",(str(path),relative)).fetchone()
         if current and current["status"]=="archived": return docrow(current)
-        if current and current["sha256"]==sha and json.loads(current["quality_json"] or "{}").get("parser_version")==3: return docrow(current)
+        if current and current["sha256"]==sha and json.loads(current["quality_json"] or "{}").get("parser_version")==PARSE_VERSION: return docrow(current)
         if current and old and current["sha256"]!=old["sha256"]: raise ValueError("文档已被另一导入更新，请重试")
         c.execute("INSERT OR REPLACE INTO documents VALUES (?,?,?,?,?,?,?,?,?,?)",(did,name or (old["name"] if old else path.name),relative,sha,path.suffix.lower().lstrip("."),len(body["pages"]) if body else 1,status,json.dumps(quality,ensure_ascii=False),old["created_at"] if old else stamp,stamp))
         documents.register(c,c.execute("SELECT * FROM documents WHERE id=?",(did,)).fetchone())

@@ -113,16 +113,25 @@ def parse_page(path, page_number):
             raw=p.get_text("rawdict",sort=True,flags=pymupdf.TEXTFLAGS_RAWDICT & ~pymupdf.TEXT_PRESERVE_IMAGES)
             for bi,b in enumerate(raw["blocks"]):
                 if b["type"] != 0: continue
-                start=len(text); chars=[]
+                start=len(text); chars=[]; sizes=[]; fonts={}; bold=False
                 for line in b["lines"]:
                     for span in line["spans"]:
+                        # Size, weight and family are recorded so a heading hierarchy
+                        # can be inferred later for PDFs without bookmarks. Chinese
+                        # bulletins set section headings in 黑体 at the same size as
+                        # the 仿宋 body, so the family matters as much as the size.
+                        sizes.append(float(span.get("size") or 0))
+                        if int(span.get("flags") or 0) & 16 or "bold" in str(span.get("font", "")).lower():
+                            bold=True
+                        name=str(span.get("font") or "")
+                        fonts[name]=fonts.get(name,0)+len(span["chars"])
                         for char in span["chars"]:
                             chars.append({"start":len(text),"end":len(text)+len(char["c"]),"text":char["c"],"box":_box(char["bbox"],p)})
                             text+=char["c"]
                     text+="\n"
                 end=len(text)
                 if text[start:end].strip():
-                    blocks.append({"id":f"p{page_number}-b{bi}","start":start,"end":end,"text":text[start:end],"kind":"text","box":_box(b["bbox"],p),"chars":chars})
+                    blocks.append({"id":f"p{page_number}-b{bi}","start":start,"end":end,"text":text[start:end],"kind":"text","box":_box(b["bbox"],p),"chars":chars,"font_size":max(sizes) if sizes else None,"font":max(fonts,key=fonts.get) if fonts else None,"bold":bold})
                 text+="\n"
             images=[{"box":_box(i["bbox"],p)} for i in p.get_image_info()]
             rotation=p.rotation
@@ -168,9 +177,18 @@ def _parse_file(path):
             toc=[{"level":x[0],"title":x[1],"page":x[2]} for x in doc.get_toc() if 1<=x[2]<=count]
     else: count=1; toc=[]
     pages=[parse_page(path,n) for n in range(1,count+1)]
-    from .document_native import link_continuations
+    from .document_native import infer_pdf_outline, link_continuations
+    # A PDF without a bookmark outline still has font sizes; they are the only
+    # signal left when the file's own directory is missing or unusable. The
+    # result is reported as inferred, never as declared structure.
+    inferred=[] if toc else infer_pdf_outline(pages)
     link_continuations(pages)
-    return {"pages":pages,"outline":toc or [h for p in pages for h in p["headings"]],"structure":"原文件书签" if toc else "Markdown 标题" if path.suffix.lower()==".md" else "按页","parser":PARSER}
+    if toc: structure="原文件书签"
+    elif path.suffix.lower()==".md": structure="Markdown 标题"
+    elif path.suffix.lower()==".docx": structure="Word 标题与表格"
+    elif inferred: structure="PDF 字体层级（推定）"
+    else: structure="按页"
+    return {"pages":pages,"outline":toc or [h for p in pages for h in p["headings"]],"structure":structure,"parser":PARSER}
 
 
 def save_parse(c, did, sha, body, reason, page=None, *, activate=True):
