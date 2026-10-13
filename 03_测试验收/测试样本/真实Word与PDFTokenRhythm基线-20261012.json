@@ -1,0 +1,525 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "真实Word与PDFTokenRhythm基线-20261012",
+  "frozen_at": "2026-10-12T15:30:29.993896+00:00",
+  "project_id": "public-statistics",
+  "author_identity": "证流项目自行编制；真人独立复核待办",
+  "human_review": "pending",
+  "reference_answers_sent_to_model": false,
+  "description": "10题官方统计PDF的换服务回归和4题机构原生Word的新样例；数值、词项和原文定位为自动诊断，不冒充独立语义正确率。",
+  "cases": [
+    {
+      "id": "basic-rag-01",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区2024年接待游客多少人次？旅游收入多少亿元？分别给出同比增速。",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "1360.3",
+          "6.8",
+          "53.43",
+          "19.6"
+        ],
+        "expected_pages": [
+          4
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-02",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区年末幼儿园、普通小学、普通中学和中等职业教育学校各有多少所？对应在校或在园学生人数是多少？",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "41",
+          "8722",
+          "17",
+          "22676",
+          "18",
+          "16684",
+          "1",
+          "1351"
+        ],
+        "expected_pages": [
+          5
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-03",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区年末金融机构人民币存款余额和贷款余额分别是多少？各自同比增长多少？",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "620.42",
+          "4.5",
+          "743.02",
+          "19.6"
+        ],
+        "expected_pages": [
+          5
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-04",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "淮南市2024年粮食产量及同比增速是多少？蔬菜及食用菌产量及同比增速是多少？",
+      "document": {
+        "document_id": "c4111ee0abf302a4ed9b",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "source_id": "huainan_stats_2024",
+        "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "huainan_stats_2024",
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "326.2",
+          "1.2",
+          "99.1",
+          "3.4"
+        ],
+        "expected_pages": [
+          4
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-05",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "淮南市2024年一般公共预算收入、同比增速、一般公共预算支出和同比增速分别是多少？",
+      "document": {
+        "document_id": "c4111ee0abf302a4ed9b",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "source_id": "huainan_stats_2024",
+        "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "huainan_stats_2024",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "135.8",
+          "4.1",
+          "339.6",
+          "7.4"
+        ],
+        "expected_pages": [
+          10
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-06",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "淮南市年末参加城镇职工基本养老保险、城乡居民基本养老保险、失业保险和城乡居民基本医疗保险的人数分别是多少？",
+      "document": {
+        "document_id": "c4111ee0abf302a4ed9b",
+        "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+        "source_id": "huainan_stats_2024",
+        "name": "淮南市2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "huainan_stats_2024",
+          "pages": [
+            12
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "43.7",
+          "149.3",
+          "29.7",
+          "244.5"
+        ],
+        "expected_pages": [
+          12
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-07",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "石景山区2024年社会消费品零售总额及增速是多少？限额以上超级市场和汽车新车零售业零售额及增速分别是多少？",
+      "document": {
+        "document_id": "c4d861a981e905f1d180",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "source_id": "shijingshan_stats_2024",
+        "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "shijingshan_stats_2024",
+          "pages": [
+            7
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "341.5",
+          "5.0",
+          "57.3",
+          "26.2",
+          "87.1",
+          "29.9"
+        ],
+        "expected_pages": [
+          7
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-08",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "石景山区2024年接待旅游总人数和旅游总收入分别是多少？同比增速分别是多少？",
+      "document": {
+        "document_id": "c4d861a981e905f1d180",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "source_id": "shijingshan_stats_2024",
+        "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "shijingshan_stats_2024",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "877.3",
+          "2.4",
+          "110.5",
+          "12.6"
+        ],
+        "expected_pages": [
+          10
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-09",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "石景山区2024年普通高中、普通初中、普通小学和幼儿园的招生人数、在校或在园人数、毕业人数分别是多少？",
+      "document": {
+        "document_id": "c4d861a981e905f1d180",
+        "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+        "source_id": "shijingshan_stats_2024",
+        "name": "石景山区2024年国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "shijingshan_stats_2024",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "1840",
+          "5352",
+          "1445",
+          "3843",
+          "10012",
+          "2807",
+          "4455",
+          "27504",
+          "4155",
+          "3963",
+          "13524"
+        ],
+        "expected_pages": [
+          10
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "basic-rag-10",
+      "split": "first_exposure",
+      "scope": "knowledge",
+      "category": "single_document_rag",
+      "question": "新津区2024年高新技术企业、科技型中小企业数量，技术合同成交额，以及专利申请和授权数量分别是多少？",
+      "document": {
+        "document_id": "925900bdb312cae1feed",
+        "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+        "source_id": "xinjin_stats_2024",
+        "name": "2024年新津区国民经济和社会发展统计公报.pdf"
+      },
+      "source_references": [
+        {
+          "source_id": "xinjin_stats_2024",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "reference": {
+        "status": "supported",
+        "expected_values": [
+          "136",
+          "127",
+          "5.5",
+          "515",
+          "180",
+          "750",
+          "167"
+        ],
+        "expected_pages": [
+          5
+        ],
+        "human_review": "pending"
+      },
+      "prior_exposure": "previous_provider_regression"
+    },
+    {
+      "id": "word-explanation-structure",
+      "scope": "knowledge",
+      "category": "native_word_rag",
+      "question": "根据官方起草说明，这份人形机器人实施方案分为哪两部分？重点任务包括哪五个方面、共多少项任务？",
+      "prior_exposure": "new_case_same_author",
+      "document": {
+        "document_id": "956008731a980adf28f9",
+        "sha256": "c2e73986fe4bfc5ceaed0525b4be04f052230fce5e31228e1d0c0002153ec975",
+        "name": "石景山区人形机器人产业发展实施方案2024年_起草说明_官方原件.docx"
+      },
+      "reference": {
+        "status": "supported",
+        "required_terms": [
+          "重点任务",
+          "保障措施",
+          "加强技术攻关和成果转化",
+          "强化创新平台支撑",
+          "推进产业集群发展",
+          "探索应用场景试点",
+          "优化产业发展生态"
+        ],
+        "required_alternatives": [
+          [
+            "5",
+            "五"
+          ],
+          [
+            "21",
+            "二十一"
+          ]
+        ],
+        "expected_pages": [
+          1
+        ],
+        "reference_quotes": [
+          "《实施方案》共分为重点任务和保障措施两部分。",
+          "优化产业发展生态5个方面，共计21项任务"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "word-application-responsibility",
+      "scope": "knowledge",
+      "category": "native_word_rag",
+      "question": "根据石景山区人形机器人产业发展实施方案2024年征求意见稿，医疗服务和养老领域各提出什么应用需求？分别由哪个部门牵头，哪个部门配合？",
+      "prior_exposure": "new_case_same_author",
+      "document": {
+        "document_id": "9b7a8a953a6dc578e090",
+        "sha256": "702065300f18f4df269631ae63c182e769574ed7f5f21bd735c358f2975666e8",
+        "name": "石景山区人形机器人产业发展实施方案2024年_征求意见稿_官方原件.docx"
+      },
+      "reference": {
+        "status": "supported",
+        "required_terms": [
+          "康复",
+          "配送",
+          "陪伴",
+          "护理",
+          "卫生健康委",
+          "民政局",
+          "石景山园管委会",
+          "区科委"
+        ],
+        "required_alternatives": [],
+        "expected_pages": [
+          4,
+          5
+        ],
+        "reference_quotes": [
+          "围绕康复、配送等医疗服务场景",
+          "满足陪伴、护理等养老需求"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "word-industry-base",
+      "scope": "knowledge",
+      "category": "native_word_rag",
+      "question": "根据这份人形机器人征求意见稿，产业基地以哪些地点为核心，重点加强哪些部件的验证？牵头和配合单位分别是谁？",
+      "prior_exposure": "new_case_same_author",
+      "document": {
+        "document_id": "9b7a8a953a6dc578e090",
+        "sha256": "702065300f18f4df269631ae63c182e769574ed7f5f21bd735c358f2975666e8",
+        "name": "石景山区人形机器人产业发展实施方案2024年_征求意见稿_官方原件.docx"
+      },
+      "reference": {
+        "status": "supported",
+        "required_terms": [
+          "首钢冬奥广场",
+          "特钢园",
+          "智能传感器",
+          "机械臂",
+          "灵巧手",
+          "石景山园管委会",
+          "区科委",
+          "住建委",
+          "经济和信息化局",
+          "投促中心"
+        ],
+        "required_alternatives": [],
+        "expected_pages": [
+          4,
+          5
+        ],
+        "reference_quotes": [
+          "以首钢冬奥广场和特钢园为核心",
+          "重点加强智能传感器、机械臂、灵巧手等验证"
+        ],
+        "human_review": "pending"
+      }
+    },
+    {
+      "id": "word-guarantee",
+      "scope": "knowledge",
+      "category": "native_word_rag",
+      "question": "根据石景山区人形机器人征求意见稿，保障措施包括哪三方面？请分别说明组织协调、任务落实和宣传方面的安排。",
+      "prior_exposure": "new_case_same_author",
+      "document": {
+        "document_id": "9b7a8a953a6dc578e090",
+        "sha256": "702065300f18f4df269631ae63c182e769574ed7f5f21bd735c358f2975666e8",
+        "name": "石景山区人形机器人产业发展实施方案2024年_征求意见稿_官方原件.docx"
+      },
+      "reference": {
+        "status": "supported",
+        "required_terms": [
+          "加强组织领导",
+          "推进任务落实",
+          "营造浓厚氛围",
+          "人工智能专班",
+          "责任单位",
+          "宣传"
+        ],
+        "required_alternatives": [],
+        "expected_pages": [
+          5
+        ],
+        "reference_quotes": [
+          "（一）加强组织领导",
+          "（二）推进任务落实",
+          "（三）营造浓厚氛围"
+        ],
+        "human_review": "pending"
+      }
+    }
+  ]
+}

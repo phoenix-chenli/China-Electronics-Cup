@@ -1,5 +1,6 @@
 """Frozen single-table / single-document checks; reference answers stay local."""
 from __future__ import annotations
+from contextlib import closing
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -41,7 +42,7 @@ def load():
     database = ROOT / data['database']['path']
     if digest(database) != data['database']['sha256']:
         raise ValueError('只读数据库偏离冻结版本')
-    with sqlite3.connect(database.resolve().as_uri() + '?mode=ro', uri=True) as db:
+    with closing(sqlite3.connect(database.resolve().as_uri() + '?mode=ro', uri=True)) as db:
         for case in data['cases']:
             reference = case['reference']
             if reference.get('sql'):

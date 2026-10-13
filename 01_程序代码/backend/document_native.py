@@ -299,7 +299,11 @@ def parse_docx(path):
                         if note.get(W+'id','0').lstrip('-').isdigit() and int(note.get(W+'id','0'))>0:parts.append((name+'/note['+note.get(W+'id')+']',note))
                 else:parts.append((name,value))
         for source,part in parts:
-            if source!='word/document.xml':pages.append(_page(len(pages)+1))
+            if source!='word/document.xml':
+                children=list(_ordered_children(part))
+                if not any(_paragraph(node).strip() or node.tag==W+'tbl' or node.findall('.//a:blip',NS) or node.findall('.//m:oMath',NS) for suffix,node in children):
+                    continue
+                pages.append(_page(len(pages)+1))
             rels=_relations(archive,source.split('/note[')[0])
             for suffix,node in _ordered_children(part):
                 page=pages[-1];location=source+suffix
@@ -653,6 +657,11 @@ def infer_pdf_outline(pages):
             # beside a 仿宋 body; anything smaller than the body is table matter.
             other_face=bool(body_face) and bool(block.get("font")) and block["font"]!=body_face and size>=body*.98
             if not (larger or heavier or other_face):continue
+            numbered=any(pattern.match(text) for pattern,level in PDF_NUMBERING)
+            attribution=(not numbered and len(text)<=45 and re.search(r'(?:统计局|调查队|人民政府|管理委员会|科学技术委员会|编制|编印|发布)$',text))
+            if attribution:
+                block['structure_role']='attribution_candidate'
+                continue
             candidates[id(block)]=(round(size,1),text)
     if not candidates:return []
     titles=[];outline=[]

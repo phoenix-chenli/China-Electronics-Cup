@@ -1,3 +1,4 @@
+from contextlib import closing
 """Evaluate fresh developer-authored questions without sending their references."""
 import argparse
 import hashlib
@@ -24,7 +25,7 @@ def validate():
     path = evaluator.ROOT / data['database']['path']
     if hashlib.sha256(path.read_bytes()).hexdigest() != data['database']['sha256']:
         raise ValueError('公开库偏离冻结版本')
-    with sqlite3.connect(path.resolve().as_uri() + '?mode=ro', uri=True) as db:
+    with closing(sqlite3.connect(path.resolve().as_uri() + '?mode=ro', uri=True)) as db:
         for case in data['cases']:
             reference = case['reference']
             if reference.get('sql'):

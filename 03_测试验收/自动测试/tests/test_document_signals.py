@@ -59,7 +59,7 @@ class DocumentSignalsTest(unittest.TestCase):
         self.assertEqual("needs_review",next(c for c in flipped["quality_checks"] if c["name"]=="页面颠倒")["status"])
         upright=dq.inspect(page())
         self.assertNotIn("page_rotated",codes(upright))
-        self.assertEqual("observed",next(c for c in upright["quality_checks"] if c["name"]=="页面颠倒")["status"])
+        self.assertEqual("not_checked",next(c for c in upright["quality_checks"] if c["name"]=="页面颠倒")["status"])
 
     def test_skew_is_alarmed_from_text_geometry_and_reports_the_correction(self):
         result=dq.inspect(page(blocks=[{"status":"confirmed","text":"x","chars":sloping_chars(degrees=5.0)}]))
@@ -99,9 +99,25 @@ class DocumentSignalsTest(unittest.TestCase):
         self.assertEqual(codes(once),codes(twice))
         self.assertEqual(sorted(codes(once)),sorted(set(codes(once))))
 
+    def test_multiline_blocks_cannot_create_a_fake_diagonal_baseline(self):
+        block={'text':'第一行\n第二行','chars':sloping_chars(degrees=10.0)}
+        self.assertIsNone(dq.text_skew(page(blocks=[block])))
+        block['baseline_angles']=[0.0,0.0]
+        self.assertEqual(dq.text_skew(page(blocks=[block])),0.0)
+
+    def test_blank_and_different_density_pages_are_not_blur_reference_peers(self):
+        from PIL import Image
+        buffer=io.BytesIO();Image.new('L',(400,400),255).save(buffer,format='PNG')
+        signal=dq.page_signals(buffer.getvalue())
+        self.assertTrue(signal['blank'])
+        self.assertNotIn('low_image_sharpness',codes(dq.inspect(page(quality_signals=signal))))
+        pages=[page(number=n,quality_signals={'sharpness':v,'ink_ratio':density}) for n,v,density in
+               [(1,5000,.4),(2,5000,.4),(3,100,.02)]]
+        self.assertEqual(dq.assess(pages)['blurry_pages'],[])
+
     def test_blur_is_judged_against_the_document_not_a_fixed_number(self):
         def measured(number,sharpness):
-            return page(number=number,quality_signals={"sharpness":sharpness})
+            return page(number=number,quality_signals={"sharpness":sharpness,"ink_ratio":.1})
         result=dq.assess([measured(1,5000.0),measured(2,5000.0),measured(3,100.0)],outline=[{"title":"x","level":1}])
         self.assertEqual([3],result["blurry_pages"])
         self.assertEqual(3,result["sharpness_measured_pages"])

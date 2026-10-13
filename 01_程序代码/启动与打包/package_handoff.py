@@ -6,7 +6,7 @@ from pathlib import Path
 import ast,hashlib,io,json,os,shutil,subprocess,sys,tempfile,zipfile
 ROOT=Path(__file__).resolve().parents[2]
 FOLDERS=['01_程序代码','02_数据资料','03_测试验收','04_设计素材','05_比赛与交接','06_运行环境']
-FILES=['启动证流_Windows.bat','停止证流_Windows.bat','启动证流_Mac.command','停止证流_Mac.command','使用说明.md','README.md','提升需求.md','AGENTS.md','.gitignore']
+FILES=['启动证流_Windows.bat','停止证流_Windows.bat','启动证流_Mac.command','停止证流_Mac.command','使用说明.md','README.md','提升需求.md','AGENTS.md','.gitignore','.gitattributes']
 REPORT='05_比赛与交接/文件清单与许可证/交接包校验.json'
 MANIFEST='05_比赛与交接/文件清单与许可证/文件摘要.sha256'
 def sha(path):
@@ -57,12 +57,15 @@ def main():
     rar=Path(sys.argv[2]).resolve() if kind=='.rar' else None
     with tempfile.TemporaryDirectory(prefix='evidenceflow-release-') as tmp:
         base=Path(tmp);stage=base/'证流_赛题八';stage.mkdir()
+        source_hashes={}
         for name in FILES:
+            source_hashes[name]=sha(ROOT/name)
             shutil.copy2(ROOT/name,stage/name)
         for name in FOLDERS:
             for p in (ROOT/name).rglob('*'):
                 relative=p.relative_to(ROOT)
                 if p.is_file() and include(relative):
+                    source_hashes[relative.as_posix()]=sha(p)
                     if p.is_symlink():raise ValueError('Unexpected symlink: '+str(relative))
                     dest=stage/relative;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,dest)
         receipt=stage/'05_比赛与交接/文件清单与许可证/整理清单.json'
@@ -99,6 +102,8 @@ def main():
             with zipfile.ZipFile(archive) as z:z.extractall(extracted)
         verify_tree(extracted/'证流_赛题八',manifest)
         assert (extracted/'证流_赛题八'/MANIFEST).read_bytes()==(stage/MANIFEST).read_bytes()
+        changed=[name for name,value in source_hashes.items() if not (ROOT/name).is_file() or sha(ROOT/name)!=value]
+        if changed:raise ValueError('Source changed while packaging; archive was not published: '+', '.join(changed))
         data={'archive_name':output.name,'bytes':archive.stat().st_size,'sha256':sha(archive),
               'archive_format':kind[1:],'archive_integrity':'passed',
               **({'rar_integrity':'passed'} if kind=='.rar' else {'zip_integrity':'passed'}),
@@ -110,6 +115,7 @@ def main():
               'windows_runtime_tested_scope':'Startup of this freshly extracted archive has not been executed; current-machine OCR/RAG tests are recorded separately.',
               'personal_runtime_data_included':False,'mac_environment_included':False,
               'node_modules_included':False,'top_folder':'证流_赛题八'}
+        data['source_freshness']={'status':'passed','files_checked':len(source_hashes)}
         output.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(archive,output)
         # Keep the workspace index tied to this verified archive, not an older release.

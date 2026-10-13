@@ -8,6 +8,9 @@ root=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(root/'01_程序代码'),str(Path(__file__).resolve().parent),str(root/'01_程序代码/启动与打包')]
 from runtime_bootstrap import activate
 activate()
+# All acceptance modules use simulated models; real external calls are forbidden.
+from tests.offline_network import install
+install()
 if len(sys.argv)==3 and sys.argv[1]=='--module':
     suite=unittest.defaultTestLoader.loadTestsFromName(sys.argv[2])
     result=unittest.TextTestRunner(verbosity=2).run(suite)

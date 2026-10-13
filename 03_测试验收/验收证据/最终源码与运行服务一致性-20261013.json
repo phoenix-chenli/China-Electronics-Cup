@@ -1,0 +1,267 @@
+{
+  "observed_at": "2026-10-13T03:16:05.553825+00:00",
+  "instance": {
+    "workspace": "3301b1172d823d5a37eb3736",
+    "id": "96783326e8044e59b3e035e4d3157fa0",
+    "pid": 6441
+  },
+  "backend_source_sha256": {
+    "math_structure.py": "0cfcf2207353510bcee3246c9107cb858319ecdd563754b5c74a7afd35e46d72",
+    "scenarios.py": "6f5bc3e8ff3b27e0aac7cfbbd254cce391e6c2272f89cf4d3ec3eeba0d0b44e8",
+    "document_review.py": "dc88ecc0cc52587ceae79f60a8d67697ea89e41dff2400729d694031e9e7cb9d",
+    "query_routing.py": "15903cf20219c7b1751876c9207d3be5dfac37cfc9d1a7916573edb733a45e0a",
+    "store.py": "410baf444cbe2da0174da79e327ddb1eb017ae4535ba6a82b3cce1db7b23bab3",
+    "sharing.py": "c6feb52b0c66c2af4ead230b3528796a3dc4fa006e9c9b0a0830e20f2de3aa1c",
+    "document_native.py": "4a10176684cbba9a0e338ff7d83e8731427198befff23b9ddd82448966e7d8ae",
+    "database_answer.py": "149e64cde2c6685a48f51d0c30e09e03d0b39b02e80e9d3a3d67386841be7223",
+    "rag_index.py": "9fe860d7eed534b7aa765c83e7dc00fa7e7696e1bfcea08e3f9b28beb4cf6d56",
+    "docx_reader.py": "f29afc4197ab59ff38e6efce7c97078224a853202b145d080193a2d33cd38584",
+    "documents.py": "c36378596e65daad34185e4cfa946578b31985ab4c5ccf7fdec9dd724a581b3e",
+    "evaluation.py": "cfb04d53f3b9a107a6cb93fac4068ce984d02b77235f28900f665e3a9f0b1470",
+    "connections.py": "43398385ad02ab20f9e990eb5baaebbad628ed408cf09fca024e571fdf4529f2",
+    "chinook_benchmark.py": "4ad883306f06c48b4aa401351b730a16ca3cd529f43ea35a34acdd676743a050",
+    "formula_source.py": "bdc168e8096fc06b57fced002a16bd04372c9ed8f034df26d00fa11aa08779a2",
+    "ocr.py": "04535790da73e913e302819b0c7f57bbcb566cb597a4d5532332b5e8f02eb888",
+    "extensions.py": "592b4bd79723f172a98e4cbec95f6fbd971c36254979818c9989dad635cccf41",
+    "query_normalize.py": "1bd5ca7db3d8cdce6309836f3f804dfe10d3bbd0d14dfdf8808c3ab2a672dd61",
+    "seed.py": "50fcefe4b03c303e1c5b0c66cc510f4389d2ec6d49a46d8e71c805923fc86bea",
+    "engine.py": "d2cc48f53c681a30cdcd4bc0fda983e16fbc1c0ddf7899a7658110556b2544de",
+    "vault.py": "82641fd63200c8fe4ecdc55215049068d66edd4b688039e5c34d5fe8ad5375ab",
+    "document_tasks.py": "be390c47c8cda6d35dce84bbd78569c44ea660dae85e7c7d0002e9face5247a8",
+    "ocr_structure.py": "726929aaa9263692eeb426e000905e2e088e1b8427e430a539d7985fad757e31",
+    "agent.py": "ed787edb8bce5f9dd9ea21823634c9f697a054735a20318fc239b1475b23f077",
+    "settings.py": "5e3ccc63a3ed3b8b14216688faf0b7fd23e74f416ccb788e282a263b911fde89",
+    "rag_grounding.py": "b2a91123f19a4ecc60cd19e2a24f4441f72e21f41797f5fd9f9425e9d86229c2",
+    "document_providers.py": "f7a72915ba8e1a70e8c1dd2cdebe7ff2d097fb9d1458cd07e109fac9c3b664a6",
+    "public_statistics.py": "5827f2dda54698cc1e694b48e043114b04263fe5b0a77ff1660b7d3a5eda52fc",
+    "rag_retrieval.py": "53cdc4b1756d611d43e426e09a172a12fd20c411790c8e5fb788150eea69cd6c",
+    "counter_check.py": "698ce6a9a94336e1eaec7416d98a6a8aae0704dd4e5582b8d5de7b4c2e47804f",
+    "main.py": "379cbb1ee10f706f9e71d876f7a475002139c75437a05602ca3f6ef9f43e3519",
+    "database_query.py": "5be6cdcc632f8777fb6300bdaf765bf93993774bf11d596775023bf4903eb19f",
+    "document_quality.py": "121b1ba139f9ca2df6cde4bcb19a85ac4f82fbe98d6722e3a215d66421d0f51e",
+    "conversations.py": "263a7f01993a9671723800045d1c53258c52cc31d03e7b9bb78343f13d2211d4",
+    "sql_guard.py": "33fcf3995aa19e21c6c958d7a78e726d349af8d801696d9dc85bbd8d8bd0cd33",
+    "rag_providers.py": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02"
+  },
+  "startup_source_matches": true,
+  "frontend_tests": 68,
+  "frontend_test_execution_date": "2026-10-12",
+  "frontend_source_changed_since_build": false,
+  "frontend_types": "passed",
+  "frontend_build": "passed",
+  "backend_offline_modules": 38,
+  "backend_offline_tests": 616,
+  "served_files": [
+    {
+      "path": "assets/chart-m0iKjQt9.js",
+      "sha256": "d0ba53741efb088e79ec4ebf27366d7dafb27314b6dc4b19351e3b36099bd992",
+      "matches": true
+    },
+    {
+      "path": "assets/evidence-B4By4bMk.js",
+      "sha256": "706cce53cae8cb84cb77280d143bac94102911fe75731f8003058fa9a0bb713e",
+      "matches": true
+    },
+    {
+      "path": "assets/index-Cm0IwBsa.js",
+      "sha256": "c089fd918174fe81ce07d8a87e0e23a4dfbb74abd94dd112c503c0e28865ce85",
+      "matches": true
+    },
+    {
+      "path": "assets/index-DDtW5D2Q.css",
+      "sha256": "702d94e3c83c0f73ef34019522a92d61e2b24bf4e586198662f6c8a194d2b98d",
+      "matches": true
+    },
+    {
+      "path": "assets/jsx-runtime-D3jfb0Ew.js",
+      "sha256": "a2c68294426b0ded53fa2d6c97bb39c4a51f99e5e4b23e7953a2c69298e361f8",
+      "matches": true
+    },
+    {
+      "path": "assets/scenario-DnDDFUOR.js",
+      "sha256": "718be1bb4f5034d92b3b46817f492b695267321fb0b24db593bf06305bc18944",
+      "matches": true
+    },
+    {
+      "path": "assets/settings-CyvFQPAm.js",
+      "sha256": "63ed12c440ef55a83448d34716fe78d2b020fca3386b98f8c4926cac6764c8ee",
+      "matches": true
+    },
+    {
+      "path": "assets/ui-CPlpZ6FI.css",
+      "sha256": "c71842a5c425e88181a3aafbf6803c758cce24ba0c27c0378d8ba76adbca2059",
+      "matches": true
+    },
+    {
+      "path": "assets/ui-CsaMTxTi.js",
+      "sha256": "54eb27cc2cb07040c6fb457ff5749a038da620459c9486f3926f92db70265032",
+      "matches": true
+    },
+    {
+      "path": "favicon.svg",
+      "sha256": "57eeeb71004ea822e16ae5dd81d32711060c05ebd2a604221add4995a0f38959",
+      "matches": true
+    },
+    {
+      "path": "index.html",
+      "sha256": "bd656b48a6b70b80ab50fd1b98699f1cddb537d24049848d283247f3c25bac77",
+      "matches": true
+    }
+  ],
+  "original_sources": [
+    {
+      "document_id": "366dc500ee9a6a484435",
+      "name": "2024中国生态环境状况公报_完整扫描原件.pdf",
+      "pages_or_logical_sections": 150,
+      "sha256": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "09793c37ce7da815939b",
+      "name": "2024中国生态环境状况公报_扫描原页摘录.pdf",
+      "pages_or_logical_sections": 4,
+      "sha256": "7208a08fdbab7f2948f753151005293ca0063ec76b2e394e712bbc101e28c81a",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "925900bdb312cae1feed",
+      "name": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "pages_or_logical_sections": 8,
+      "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "566a24785808bab921b7",
+      "name": "openEuler24.03LTS_SP3技术白皮书_社区原件.pdf",
+      "pages_or_logical_sections": 91,
+      "sha256": "0f020b4d11540f97d12574896d6da5c6b99e9b89493f48206aaac711f5646cfb",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "b8ee2f75c4f82375e544",
+      "name": "全国碳市场发展报告2024_官方原件.pdf",
+      "pages_or_logical_sections": 33,
+      "sha256": "dbc4a2de63ca95310dcae14df5145298f1c84e99836b9c4b014ac7b469cddabe",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "a34ee7111711d42c3897",
+      "name": "新津区2024年统计公报原文摘录_转换展示件.docx",
+      "pages_or_logical_sections": 4,
+      "sha256": "2480ad21113de3487fc5f8f8880c818307e498174ff9caaa9fe1c84f8dd654b2",
+      "download_sha256_matches": true,
+      "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "c4111ee0abf302a4ed9b",
+      "name": "淮南市2024年国民经济和社会发展统计公报.pdf",
+      "pages_or_logical_sections": 16,
+      "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "c4d861a981e905f1d180",
+      "name": "石景山区2024年国民经济和社会发展统计公报.pdf",
+      "pages_or_logical_sections": 12,
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "download_sha256_matches": true,
+      "content_type": "application/pdf",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "9b7a8a953a6dc578e090",
+      "name": "石景山区人形机器人产业发展实施方案2024年_征求意见稿_官方原件.docx",
+      "pages_or_logical_sections": 5,
+      "sha256": "702065300f18f4df269631ae63c182e769574ed7f5f21bd735c358f2975666e8",
+      "download_sha256_matches": true,
+      "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "956008731a980adf28f9",
+      "name": "石景山区人形机器人产业发展实施方案2024年_起草说明_官方原件.docx",
+      "pages_or_logical_sections": 1,
+      "sha256": "c2e73986fe4bfc5ceaed0525b4be04f052230fce5e31228e1d0c0002153ec975",
+      "download_sha256_matches": true,
+      "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "origin": null,
+      "publication_status": null
+    },
+    {
+      "document_id": "1fc3cdaa2fc7eb66ab21",
+      "name": "石景山区人形机器人方案2024年_征求意见公告_官方网页正文.txt",
+      "pages_or_logical_sections": 1,
+      "sha256": "14e6b910707b29b3a33c8a7f9ceeb358c630fde50179b1a87927d1d5b6fad08b",
+      "download_sha256_matches": true,
+      "content_type": "text/plain; charset=utf-8",
+      "origin": null,
+      "publication_status": null
+    }
+  ],
+  "requested_text_model": "deepseek-v4-flash-0731",
+  "endpoint": "https://tokenrhythm.studio/v1",
+  "provider_status": {
+    "embedding": {
+      "role": "embedding",
+      "ready": true,
+      "local": true,
+      "revision": 1,
+      "dimension": 512,
+      "max_tokens": 512,
+      "fingerprint": "e2f287abb37bb13499d6ea6534a2166a9a9412b897ac20c78bd2bfeb45be93d2",
+      "provider_id": "bge-small-zh-v1.5",
+      "model": "BAAI/bge-small-zh-v1.5",
+      "mode": "local",
+      "precision": "q8",
+      "onnx_source": "Xenova/bge-small-zh-v1.5",
+      "model_revision": "75c43b069aac4d136ba6bc1122f995fedcfd2781",
+      "reason": "",
+      "error": null
+    },
+    "rerank": {
+      "role": "rerank",
+      "ready": true,
+      "local": true,
+      "revision": 1,
+      "dimension": null,
+      "max_tokens": 512,
+      "fingerprint": "7ef14a179b552cf7b5b2e23e3ab1911d545e29df121e2b6e6fed71901ea1846a",
+      "provider_id": "bge-reranker-base",
+      "model": "BAAI/bge-reranker-base",
+      "mode": "local",
+      "precision": "q8",
+      "onnx_source": "Xenova/bge-reranker-base",
+      "model_revision": "280bcc27a84e0b898c251e06fddb25171bd9b101",
+      "reason": "",
+      "error": null
+    }
+  },
+  "paid_model_calls_this_verification": 0,
+  "boundary": "只读HTTP字节、已完成日志与进程启动摘要核对；非Windows验收、人工语义准确率或永久可用性证明。",
+  "frontend_source_vs_validated_build": {
+    "files_checked": 53,
+    "mismatches": 0
+  }
+}

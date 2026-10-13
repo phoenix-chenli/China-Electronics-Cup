@@ -17,6 +17,41 @@ def catalog(namespace="main"):
 
 
 class SQLGuardTests(unittest.TestCase):
+    def test_alias_syntax_feedback_explains_quotes_without_rewriting_the_query(self):
+        with self.assertRaisesRegex(ValueError,'双引号'):
+            validate('SELECT amount AS 占比% FROM orders',catalog())
+        checked=validate('SELECT amount AS "占比%" FROM orders',catalog())
+        self.assertIn('"占比%"',checked['sql'])
+
+    def test_self_join_requires_actual_complete_unique_key_with_fixed_years(self):
+        schema={'tables':{'main.stats':{'columns':{'region':'TEXT','metric':'TEXT','year':'INTEGER','value':'REAL'},
+            'unique_keys':[{'columns':['region','metric','year']}] }},'relations':[]}
+        sql="SELECT b.value-a.value AS difference FROM stats a JOIN stats b ON a.region=b.region AND a.metric=b.metric WHERE a.year=2023 AND b.year=2024"
+        checked=validate(sql,schema)
+        self.assertEqual(checked['relations'][0]['source'],'filtered_unique_key')
+        with sqlite3.connect(':memory:') as db:
+            db.execute('CREATE TABLE stats(region TEXT,metric TEXT,year INTEGER,value REAL,UNIQUE(region,metric,year))')
+            db.executemany('INSERT INTO stats VALUES (?,?,?,?)',[('A','gdp',2023,100),('A','gdp',2024,110),('B','gdp',2023,200),('B','gdp',2024,230)])
+            self.assertEqual(db.execute(checked['sql']).fetchall(),[(10.0,),(30.0,)])
+        for unsafe in [sql.replace(' AND b.year=2024',''),sql.replace('a.year=2023 AND b.year=2024','(a.year=2023 OR a.year=2022) AND b.year=2024')]:
+            with self.assertRaises(ValueError):validate(unsafe,schema)
+        no_key=copy.deepcopy(schema);no_key['tables']['main.stats'].pop('unique_keys')
+        with self.assertRaises(ValueError):validate(sql,no_key)
+
+    def test_import_metadata_unique_key_is_not_used_as_database_constraint(self):
+        from backend.database_query import guard_schema
+        guarded=guard_schema({'tables':[{'qualified_name':'main.stats','columns':[{'name':'id','type':'INTEGER','primary_key':False}],
+            'primary_key':['id'],'unique_keys':[{'columns':['id'],'source':'import_metadata'}]}],'relations':[]})
+        self.assertEqual(guarded['tables']['main.stats']['primary_key'],[])
+        self.assertEqual(guarded['tables']['main.stats']['unique_keys'],[])
+
+    def test_unknown_physical_column_has_actionable_schema_feedback_without_relaxing_guard(self):
+        with self.assertRaisesRegex(ValueError,'字段 p.artist_id.*表 products') as failed:
+            validate('SELECT p.artist_id FROM products p',catalog())
+        self.assertIn('id、name',str(failed.exception))
+        checked=validate('SELECT o.id FROM orders o WHERE EXISTS(SELECT 1 FROM products p WHERE p.id=o.product_id)',catalog())
+        self.assertEqual(checked['tables'],['main.orders','main.products'])
+
     def test_sqlite_final_alias_case_is_preserved_without_changing_catalog_scope(self):
         result=validate('SELECT product_id AS "产品ID",amount AS "Amount_CNY" FROM orders ORDER BY "Amount_CNY" DESC',catalog())
         self.assertEqual(result['unit_origins'],{'产品ID':'main.orders.product_id','Amount_CNY':'main.orders.amount'})

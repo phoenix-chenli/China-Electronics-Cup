@@ -1,0 +1,943 @@
+{
+  "phase": "completed",
+  "started_at": "2026-10-12T13:47:40.707869+00:00",
+  "hardware": {
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "logical_cpus": 10,
+    "python": "3.13.6",
+    "libraries": {
+      "PyMuPDF": "1.28.2",
+      "onnxruntime": "1.23.2",
+      "tokenizers": "0.22.2",
+      "sqlglot": "30.21.0",
+      "numpy": "2.5.3"
+    }
+  },
+  "background_note": "保留本机服务与前端构建；仅本机模型，无外部调用。",
+  "public_synthetic_data": true,
+  "isolated_runtime": true,
+  "paid_text_model_calls": 0,
+  "database": [
+    {
+      "metric_rows": 1000,
+      "tables": 3,
+      "reference_rows": 10,
+      "schema_first_ms": 1.03,
+      "query_first_ms": 27.47,
+      "warm": {
+        "samples_ms": [
+          3.2,
+          3.15,
+          2.92
+        ],
+        "samples": 3,
+        "p50_ms": 3.15,
+        "p95_ms": 3.2
+      },
+      "concurrency_2": {
+        "samples_ms": [
+          5.44,
+          4.83
+        ],
+        "samples": 2,
+        "p50_ms": 5.14,
+        "p95_ms": 5.41
+      },
+      "independent_result_match": true,
+      "file_unchanged": true
+    },
+    {
+      "metric_rows": 10000,
+      "tables": 3,
+      "reference_rows": 10,
+      "schema_first_ms": 1.77,
+      "query_first_ms": 5.8,
+      "warm": {
+        "samples_ms": [
+          5.24,
+          5.26,
+          5.28
+        ],
+        "samples": 3,
+        "p50_ms": 5.26,
+        "p95_ms": 5.28
+      },
+      "concurrency_2": {
+        "samples_ms": [
+          6.41,
+          8.31
+        ],
+        "samples": 2,
+        "p50_ms": 7.36,
+        "p95_ms": 8.22
+      },
+      "independent_result_match": true,
+      "file_unchanged": true
+    },
+    {
+      "metric_rows": 100000,
+      "tables": 3,
+      "reference_rows": 10,
+      "schema_first_ms": 8.77,
+      "query_first_ms": 36.68,
+      "warm": {
+        "samples_ms": [
+          35.54,
+          35.76,
+          36.85
+        ],
+        "samples": 3,
+        "p50_ms": 35.76,
+        "p95_ms": 36.74
+      },
+      "concurrency_2": {
+        "samples_ms": [
+          42.84,
+          40.42
+        ],
+        "samples": 2,
+        "p50_ms": 41.63,
+        "p95_ms": 42.72
+      },
+      "independent_result_match": true,
+      "file_unchanged": true
+    }
+  ],
+  "documents": [
+    {
+      "pages": 10,
+      "native_parse_ms": 101.8,
+      "page_first_ms": 3.54,
+      "page_warm": {
+        "samples_ms": [
+          3.62,
+          3.33,
+          3.38
+        ],
+        "samples": 3,
+        "p50_ms": 3.38,
+        "p95_ms": 3.6
+      },
+      "index_ms": 994.69,
+      "retrieval_first_after_index_ms": 566.33,
+      "warm": {
+        "samples_ms": [
+          545.73,
+          555.94,
+          537.47
+        ],
+        "samples": 3,
+        "p50_ms": 545.73,
+        "p95_ms": 554.91
+      },
+      "warm_stages": [
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.069+00:00",
+            "duration_ms": 1.63,
+            "count": 50,
+            "finished_at": "2026-10-12T13:47:44.070+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.070+00:00",
+            "duration_ms": 0.32,
+            "count": 0,
+            "finished_at": "2026-10-12T13:47:44.071+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.071+00:00",
+            "duration_ms": 0.71,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:44.071+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.071+00:00",
+            "duration_ms": 7.43,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:44.079+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.079+00:00",
+            "duration_ms": 2.51,
+            "count": 20,
+            "finished_at": "2026-10-12T13:47:44.081+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.081+00:00",
+            "duration_ms": 0.02,
+            "count": 32,
+            "finished_at": "2026-10-12T13:47:44.081+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.081+00:00",
+            "duration_ms": 507.65,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:44.589+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.589+00:00",
+            "duration_ms": 23.88,
+            "count": 8,
+            "finished_at": "2026-10-12T13:47:44.613+00:00"
+          }
+        ],
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.637+00:00",
+            "duration_ms": 1.67,
+            "count": 50,
+            "finished_at": "2026-10-12T13:47:44.639+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.639+00:00",
+            "duration_ms": 0.29,
+            "count": 0,
+            "finished_at": "2026-10-12T13:47:44.639+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.639+00:00",
+            "duration_ms": 0.72,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:44.640+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.640+00:00",
+            "duration_ms": 8.02,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:44.648+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.648+00:00",
+            "duration_ms": 2.49,
+            "count": 20,
+            "finished_at": "2026-10-12T13:47:44.650+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.650+00:00",
+            "duration_ms": 0.02,
+            "count": 32,
+            "finished_at": "2026-10-12T13:47:44.650+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:44.650+00:00",
+            "duration_ms": 504.9,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:45.155+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.155+00:00",
+            "duration_ms": 36.58,
+            "count": 8,
+            "finished_at": "2026-10-12T13:47:45.192+00:00"
+          }
+        ],
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.214+00:00",
+            "duration_ms": 1.67,
+            "count": 50,
+            "finished_at": "2026-10-12T13:47:45.216+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.216+00:00",
+            "duration_ms": 0.29,
+            "count": 0,
+            "finished_at": "2026-10-12T13:47:45.216+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.216+00:00",
+            "duration_ms": 0.68,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:45.217+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.217+00:00",
+            "duration_ms": 7.68,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:45.225+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.225+00:00",
+            "duration_ms": 2.47,
+            "count": 20,
+            "finished_at": "2026-10-12T13:47:45.227+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.227+00:00",
+            "duration_ms": 0.02,
+            "count": 32,
+            "finished_at": "2026-10-12T13:47:45.227+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.227+00:00",
+            "duration_ms": 501.8,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:45.729+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:45.729+00:00",
+            "duration_ms": 21.67,
+            "count": 8,
+            "finished_at": "2026-10-12T13:47:45.751+00:00"
+          }
+        ]
+      ],
+      "concurrency_2": {
+        "samples_ms": [
+          788.63,
+          798.24
+        ],
+        "samples": 2,
+        "p50_ms": 793.43,
+        "p95_ms": 797.76
+      },
+      "retrieval_errors": [],
+      "citations_located": 24,
+      "citations_returned": 24,
+      "native_text_only": true
+    },
+    {
+      "pages": 100,
+      "native_parse_ms": 1040.79,
+      "page_first_ms": 22.47,
+      "page_warm": {
+        "samples_ms": [
+          24.03,
+          26.11,
+          22.4
+        ],
+        "samples": 3,
+        "p50_ms": 24.03,
+        "p95_ms": 25.9
+      },
+      "index_ms": 7015.53,
+      "retrieval_first_after_index_ms": 748.54,
+      "warm": {
+        "samples_ms": [
+          963.36,
+          755.82,
+          880.59
+        ],
+        "samples": 3,
+        "p50_ms": 880.59,
+        "p95_ms": 955.08
+      },
+      "warm_stages": [
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.593+00:00",
+            "duration_ms": 4.0,
+            "count": 500,
+            "finished_at": "2026-10-12T13:47:55.597+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.597+00:00",
+            "duration_ms": 0.3,
+            "count": 0,
+            "finished_at": "2026-10-12T13:47:55.597+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.597+00:00",
+            "duration_ms": 1.45,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:55.598+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.598+00:00",
+            "duration_ms": 11.52,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:55.610+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.610+00:00",
+            "duration_ms": 21.32,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:55.631+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.631+00:00",
+            "duration_ms": 0.03,
+            "count": 69,
+            "finished_at": "2026-10-12T13:47:55.631+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:55.631+00:00",
+            "duration_ms": 764.54,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:56.396+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.396+00:00",
+            "duration_ms": 158.09,
+            "count": 8,
+            "finished_at": "2026-10-12T13:47:56.554+00:00"
+          }
+        ],
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.715+00:00",
+            "duration_ms": 4.5,
+            "count": 500,
+            "finished_at": "2026-10-12T13:47:56.719+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.719+00:00",
+            "duration_ms": 0.34,
+            "count": 0,
+            "finished_at": "2026-10-12T13:47:56.720+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.720+00:00",
+            "duration_ms": 1.41,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:56.721+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.721+00:00",
+            "duration_ms": 12.23,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:56.733+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.733+00:00",
+            "duration_ms": 21.6,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:56.755+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.755+00:00",
+            "duration_ms": 0.03,
+            "count": 69,
+            "finished_at": "2026-10-12T13:47:56.755+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:56.755+00:00",
+            "duration_ms": 561.22,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:57.316+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.316+00:00",
+            "duration_ms": 152.48,
+            "count": 8,
+            "finished_at": "2026-10-12T13:47:57.469+00:00"
+          }
+        ],
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.622+00:00",
+            "duration_ms": 4.72,
+            "count": 500,
+            "finished_at": "2026-10-12T13:47:57.626+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.626+00:00",
+            "duration_ms": 0.39,
+            "count": 0,
+            "finished_at": "2026-10-12T13:47:57.627+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.627+00:00",
+            "duration_ms": 1.54,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:57.628+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.628+00:00",
+            "duration_ms": 12.2,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:57.641+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.641+00:00",
+            "duration_ms": 21.7,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:57.662+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.662+00:00",
+            "duration_ms": 0.03,
+            "count": 69,
+            "finished_at": "2026-10-12T13:47:57.662+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:57.662+00:00",
+            "duration_ms": 671.1,
+            "count": 30,
+            "finished_at": "2026-10-12T13:47:58.333+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:47:58.334+00:00",
+            "duration_ms": 166.74,
+            "count": 8,
+            "finished_at": "2026-10-12T13:47:58.500+00:00"
+          }
+        ]
+      ],
+      "concurrency_2": {
+        "samples_ms": [
+          1138.02,
+          1136.37
+        ],
+        "samples": 2,
+        "p50_ms": 1137.19,
+        "p95_ms": 1137.94
+      },
+      "retrieval_errors": [],
+      "citations_located": 24,
+      "citations_returned": 24,
+      "native_text_only": true
+    },
+    {
+      "pages": 500,
+      "native_parse_ms": 5667.01,
+      "page_first_ms": 99.31,
+      "page_warm": {
+        "samples_ms": [
+          98.11,
+          99.38,
+          95.44
+        ],
+        "samples": 3,
+        "p50_ms": 98.11,
+        "p95_ms": 99.26
+      },
+      "index_ms": 34544.49,
+      "retrieval_first_after_index_ms": 1398.92,
+      "warm": {
+        "samples_ms": [
+          1392.61,
+          1394.31,
+          1366.65
+        ],
+        "samples": 3,
+        "p50_ms": 1392.61,
+        "p95_ms": 1394.14
+      },
+      "warm_stages": [
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.372+00:00",
+            "duration_ms": 15.54,
+            "count": 2500,
+            "finished_at": "2026-10-12T13:48:42.388+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.388+00:00",
+            "duration_ms": 0.52,
+            "count": 0,
+            "finished_at": "2026-10-12T13:48:42.388+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.388+00:00",
+            "duration_ms": 5.52,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:42.394+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.394+00:00",
+            "duration_ms": 31.36,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:42.425+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.425+00:00",
+            "duration_ms": 8.76,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:42.434+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.434+00:00",
+            "duration_ms": 0.03,
+            "count": 87,
+            "finished_at": "2026-10-12T13:48:42.434+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:42.434+00:00",
+            "duration_ms": 571.01,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:43.005+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:43.005+00:00",
+            "duration_ms": 755.73,
+            "count": 8,
+            "finished_at": "2026-10-12T13:48:43.761+00:00"
+          }
+        ],
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.506+00:00",
+            "duration_ms": 16.23,
+            "count": 2500,
+            "finished_at": "2026-10-12T13:48:44.522+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.522+00:00",
+            "duration_ms": 0.5,
+            "count": 0,
+            "finished_at": "2026-10-12T13:48:44.523+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.523+00:00",
+            "duration_ms": 5.75,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:44.529+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.529+00:00",
+            "duration_ms": 31.08,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:44.560+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.560+00:00",
+            "duration_ms": 9.15,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:44.569+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.569+00:00",
+            "duration_ms": 0.04,
+            "count": 87,
+            "finished_at": "2026-10-12T13:48:44.569+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:44.569+00:00",
+            "duration_ms": 583.93,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:45.153+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:45.153+00:00",
+            "duration_ms": 743.18,
+            "count": 8,
+            "finished_at": "2026-10-12T13:48:45.896+00:00"
+          }
+        ],
+        [
+          {
+            "stage": "scope",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.645+00:00",
+            "duration_ms": 15.88,
+            "count": 2500,
+            "finished_at": "2026-10-12T13:48:46.661+00:00"
+          },
+          {
+            "stage": "source_quality",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.661+00:00",
+            "duration_ms": 0.44,
+            "count": 0,
+            "finished_at": "2026-10-12T13:48:46.662+00:00"
+          },
+          {
+            "stage": "bm25",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.662+00:00",
+            "duration_ms": 5.42,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:46.668+00:00"
+          },
+          {
+            "stage": "dense",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.668+00:00",
+            "duration_ms": 31.51,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:46.699+00:00"
+          },
+          {
+            "stage": "noise_tolerant",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.699+00:00",
+            "duration_ms": 8.81,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:46.708+00:00"
+          },
+          {
+            "stage": "rrf",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.708+00:00",
+            "duration_ms": 0.03,
+            "count": 87,
+            "finished_at": "2026-10-12T13:48:46.708+00:00"
+          },
+          {
+            "stage": "rerank",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:46.708+00:00",
+            "duration_ms": 574.82,
+            "count": 30,
+            "finished_at": "2026-10-12T13:48:47.283+00:00"
+          },
+          {
+            "stage": "evidence_pack",
+            "status": "completed",
+            "started_at": "2026-10-12T13:48:47.283+00:00",
+            "duration_ms": 725.58,
+            "count": 8,
+            "finished_at": "2026-10-12T13:48:48.008+00:00"
+          }
+        ]
+      ],
+      "concurrency_2": {
+        "samples_ms": [
+          2336.5,
+          2431.53
+        ],
+        "samples": 2,
+        "p50_ms": 2384.02,
+        "p95_ms": 2426.78
+      },
+      "retrieval_errors": [],
+      "citations_located": 24,
+      "citations_returned": 24,
+      "native_text_only": true
+    }
+  ],
+  "providers": {
+    "embedding": {
+      "provider": {
+        "role": "embedding",
+        "ready": true,
+        "local": true,
+        "revision": 1,
+        "dimension": 512,
+        "max_tokens": 512,
+        "fingerprint": "e2f287abb37bb13499d6ea6534a2166a9a9412b897ac20c78bd2bfeb45be93d2",
+        "provider_id": "bge-small-zh-v1.5",
+        "model": "BAAI/bge-small-zh-v1.5",
+        "mode": "local",
+        "precision": "q8",
+        "onnx_source": "Xenova/bge-small-zh-v1.5",
+        "model_revision": "75c43b069aac4d136ba6bc1122f995fedcfd2781",
+        "reason": "",
+        "error": null
+      },
+      "process_first_ms": 144.45,
+      "warm": {
+        "samples_ms": [
+          8.7,
+          9.8,
+          8.11
+        ],
+        "samples": 3,
+        "p50_ms": 8.7,
+        "p95_ms": 9.69
+      }
+    },
+    "rerank": {
+      "provider": {
+        "role": "rerank",
+        "ready": true,
+        "local": true,
+        "revision": 1,
+        "dimension": null,
+        "max_tokens": 512,
+        "fingerprint": "7ef14a179b552cf7b5b2e23e3ab1911d545e29df121e2b6e6fed71901ea1846a",
+        "provider_id": "bge-reranker-base",
+        "model": "BAAI/bge-reranker-base",
+        "mode": "local",
+        "precision": "q8",
+        "onnx_source": "Xenova/bge-reranker-base",
+        "model_revision": "280bcc27a84e0b898c251e06fddb25171bd9b101",
+        "reason": "",
+        "error": null
+      },
+      "process_first_ms": 642.1,
+      "passages": 2,
+      "warm": {
+        "samples_ms": [
+          13.59,
+          19.67,
+          13.88
+        ],
+        "samples": 3,
+        "p50_ms": 13.88,
+        "p95_ms": 19.09
+      }
+    }
+  },
+  "cancellations": [
+    {
+      "operation": "database-1000-pre-cancelled",
+      "status": "cancelled"
+    },
+    {
+      "operation": "database-10000-pre-cancelled",
+      "status": "cancelled"
+    },
+    {
+      "operation": "database-100000-pre-cancelled",
+      "status": "cancelled"
+    },
+    {
+      "operation": "retrieval-10-pre-cancelled",
+      "status": "cancelled"
+    },
+    {
+      "operation": "retrieval-10-after-scope",
+      "status": "cancelled",
+      "duration_ms": 1.78
+    },
+    {
+      "operation": "retrieval-100-pre-cancelled",
+      "status": "cancelled"
+    },
+    {
+      "operation": "retrieval-100-after-scope",
+      "status": "cancelled",
+      "duration_ms": 4.9
+    },
+    {
+      "operation": "retrieval-500-pre-cancelled",
+      "status": "cancelled"
+    },
+    {
+      "operation": "retrieval-500-after-scope",
+      "status": "cancelled",
+      "duration_ms": 16.84
+    }
+  ],
+  "boundary": "组件实测，不含远程文本生成、浏览器绘制或Windows实机；首次使用未清空操作系统缓存；小样本P95仅描述此次观测。",
+  "source_sha256": {
+    "01_程序代码/backend/database_query.py": "08bf3d35d5a39d62232f218b23aa1599c7fd41149c8bb3ff918729755a894337",
+    "01_程序代码/backend/sql_guard.py": "5949cd6bc81f66fe923f5d8b7498bc3e6c98612108432efbeee6cb1cad11e55e",
+    "01_程序代码/backend/documents.py": "c36378596e65daad34185e4cfa946578b31985ab4c5ccf7fdec9dd724a581b3e",
+    "01_程序代码/backend/rag_index.py": "9fe860d7eed534b7aa765c83e7dc00fa7e7696e1bfcea08e3f9b28beb4cf6d56",
+    "01_程序代码/backend/rag_retrieval.py": "a12d5e16900a41902fb12320e497e0c836a27b46616b10135e3a0fc36aed2ac4",
+    "01_程序代码/backend/rag_providers.py": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02"
+  },
+  "finished_at": "2026-10-12T13:48:51.200430+00:00"
+}

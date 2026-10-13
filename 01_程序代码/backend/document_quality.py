@@ -59,10 +59,19 @@ def assess(pages, outline=None):
     grade="low" if score<25 else "medium" if score<55 else "high"
     measured={p["number"]:p["quality_signals"]["sharpness"] for p in pages
               if isinstance(p.get("quality_signals"),dict) and isinstance(p["quality_signals"].get("sharpness"),(int,float))}
-    blurry=[]
-    if len(measured)>=3:
-        ordered=sorted(measured.values());median=ordered[len(ordered)//2]
-        blurry=[number for number,value in sorted(measured.items()) if value<median*SHARPNESS_RATIO]
+    signals_by_number={p['number']:p['quality_signals'] for p in pages if isinstance(p.get('quality_signals'),dict)}
+    blurry=[]; comparable={}
+    for number,value in measured.items():
+        signal=signals_by_number[number]
+        ink=signal.get('ink_ratio')
+        if signal.get('blank') or ink is None:continue
+        peers=[v for n,v in measured.items() if n!=number
+            and not signals_by_number[n].get('blank')
+            and isinstance(signals_by_number[n].get('ink_ratio'),(int,float))
+            and .5*max(ink,.002)<=signals_by_number[n]['ink_ratio']<=2*max(ink,.002)]
+        if len(peers)<2:continue
+        peers.sort();median=peers[len(peers)//2];comparable[number]=len(peers)
+        if value<median*SHARPNESS_RATIO:blurry.append(number)
     notes=[]
     if scanned>=.2:notes.append(f"约 {scanned:.0%} 的页面没有可用文字，建议先在正式解析中补齐这些页")
     if tables>=1 or image_area>=.25:notes.append("表格或图片占比较大；需要结构化表格与图表数值时，可另选视觉服务，但须先预览外发内容并确认")
@@ -70,8 +79,8 @@ def assess(pages, outline=None):
     if not headings:notes.append("没有识别到目录层级，长文档的定位与切片上下文会较弱")
     return {"score":score,"level":level,"grade":grade,"factors":factors,
             "suggested_mode":"ocr" if scanned>=.2 else "native","notes":notes,
-            "blurry_pages":blurry,"sharpness_measured_pages":len(measured),
-            "rules":"七项可测量特征按固定权重加权（合计 100）：无文字层页面 30、图像面积占比 15、表格密度 15、版式碎片化 10、缺少目录层级 10、页面旋转 10、文字层损坏 10；分档为 低<25≤中<55≤高。清晰度不参与评分：它以文档内各页中位数为基准，低于 "+str(SHARPNESS_RATIO)+" 倍才列为可疑页，绝对值只保留 "+str(SHARPNESS_FLOOR)+" 的灾难性下限。",
+            "blurry_pages":blurry,"sharpness_measured_pages":len(measured),"sharpness_comparable_pages":comparable,
+            "rules":"七项可测量特征按固定权重加权（合计 100）：无文字层页面 30、图像面积占比 15、表格密度 15、版式碎片化 10、缺少目录层级 10、页面旋转 10、文字层损坏 10；分档为 低<25≤中<55≤高。清晰度不参与评分：它排除空白页，仅比较墨迹密度在0.5至2倍范围内的至少两张其他页面，以其清晰度中位数为基准，低于 "+str(SHARPNESS_RATIO)+" 倍才列为可疑页，绝对值只保留 "+str(SHARPNESS_FLOOR)+" 的灾难性下限。",
             "boundary":"复杂度只描述解析难度，取自解析结果的可测量特征，不含语义判断，也不预测问答准确率或内容质量。"}
 
 
@@ -115,6 +124,11 @@ def text_skew(page):
     width=max(1.0,float(page.get("width") or 1));height=max(1.0,float(page.get("height") or 1))
     angles=[]
     for block in page.get("blocks",[]):
+        baselines=block.get("baseline_angles")
+        if baselines:
+            angles.extend(a for a in baselines if isinstance(a,(int,float)) and abs(a)<15)
+            continue
+        if "\n" in block.get("text", "").strip():continue
         chars=[c for c in block.get("chars",[]) if isinstance(c.get("box"),(list,tuple)) and len(c["box"])==4]
         if len(chars)<8:continue
         first,last=chars[0],chars[-1]
@@ -161,8 +175,10 @@ def page_signals(raw):
             # Edge variance is a sharpness *hint*: it falls with blur and with
             # clean blank pages alike, so it is reported with its threshold and
             # never as proof that the content is unusable.
-            sharpness=float(np.asarray(image.filter(ImageFilter.FIND_EDGES),dtype=np.float32).var())
-        return {"sharpness":round(sharpness,2),"deskew_degrees":_projection_skew(gray)}
+            sharpness=float(np.asarray(image.filter(ImageFilter.FIND_EDGES),dtype=np.float32)[2:-2,2:-2].var())
+            ink_ratio=float((gray<180).mean())
+        return {"sharpness":round(sharpness,2),"ink_ratio":round(ink_ratio,4),"blank":ink_ratio<.002,
+                "deskew_degrees":_projection_skew(gray),"measurement":"raster-v2-cropped-edges"}
     except Exception:
         # Advisory only: a format that cannot be measured reports nothing rather
         # than failing the document.
@@ -195,12 +211,12 @@ def inspect(page):
     # Orientation and image-quality alarms. Each is a measured value or an
     # explicit "not measured"; none of them rewrites the original, and none
     # reports a page as healthy without evidence.
-    page['quality_checks'].append({'name':'页面颠倒','value':'旋转元数据 180°' if rotation==180 else '未发现颠倒证据',
-        'status':'needs_review' if rotation==180 else 'observed'})
+    page['quality_checks'].append({'name':'页面颠倒','value':'旋转元数据 180°' if rotation==180 else '文字朝向未测量（仅检查旋转元数据）',
+        'status':'needs_review' if rotation==180 else 'not_checked'})
     page['quality_checks'].append({'name':'页面倾斜','value':None if deskew is None else deskew,
         'status':'needs_review' if deskew is not None and abs(deskew)>=SKEW_LIMIT else 'observed'})
     page['quality_checks'].append({'name':'插图清晰度','value':sharpness,
-        'status':'needs_review' if sharpness is not None and sharpness<SHARPNESS_FLOOR else 'observed'})
+        'status':'needs_review' if sharpness is not None and not signals.get('blank') and sharpness<SHARPNESS_FLOOR else 'observed'})
     page['quality_checks'].append({'name':'繁体字','value':len(traditional),
         'status':'needs_review' if traditional else 'observed'})
     issues=page.setdefault('issues',[])
@@ -210,8 +226,8 @@ def inspect(page):
         issues.append({'code':'page_upside_down','message':'页面旋转元数据为 180°，文字方向可能颠倒；请在识别或视觉解析前确认，并在 0/90/180/270 中选择正确的输入方向'})
     if deskew is not None and abs(deskew)>=SKEW_LIMIT:
         issues.append({'code':'page_skewed','message':f'文字行约有 {abs(deskew):.1f}° 倾斜（使行水平约需旋转 {deskew:+.1f}°）；定位框仍按当前页面计算，识别或阅读前建议先校正'})
-    if sharpness is not None and sharpness<SHARPNESS_FLOOR:
-        issues.append({'code':'low_image_sharpness','message':f'插图清晰度提示偏低（边缘方差 {sharpness}，阈值 {SHARPNESS_FLOOR:g}）；低清扫描与纯空白页都会得到低值，该值不代表内容不可用，可对照原件重读或改用视觉服务'})
+    if sharpness is not None and not signals.get('blank') and sharpness<SHARPNESS_FLOOR:
+        issues.append({'code':'low_image_sharpness','message':f'插图清晰度提示偏低（边缘方差 {sharpness}，阈值 {SHARPNESS_FLOOR:g}）；低内容密度也可能得到低值，空白页不触发此告警，该值不代表内容不可用，可对照原件重读或改用视觉服务'})
     if traditional:
         issues.append({'code':'traditional_characters','message':'正文含 '+str(sum(1 for ch in text if ch in table))+' 个繁体字（'+'、'.join(traditional[:12])+'）；系统不自动改写原文，可在“对照原件复核”中确认后保存新解析'})
     if bad>=2 and ratio>.02:

@@ -127,6 +127,29 @@ class RagAgentTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'未提供的数值'):
                 grounding.synthesis({'text':'人口为12万人。','support_span_ids':['s']},{'s':span},{'s'},question='能列出12个月各自涨幅吗？')
 
+    def test_registered_document_year_is_context_not_an_invented_measurement(self):
+        span={'id':'s','evidence_id':'e','source':'官方统计公报.pdf','text':'年末参保人数为43.7万人。',
+              'publication':{'document_year':2024},'locator':{'page':12}}
+        with patch.object(grounding.documents,'resolve',return_value={'status':'located'}):
+            claim=grounding.synthesis({'text':'2024年年末参保人数为43.7万人。','support_span_ids':['s']},
+                                      {'s':span},{'s'},question='年末参保人数是多少？')
+            self.assertEqual(claim['question_scope_mentions'][0]['kind'],'registered_document_period')
+            for text in ('2023年年末参保人数为43.7万人。','年末参保人数为2024万人。'):
+                with self.assertRaisesRegex(ValueError,'未提供的数值'):
+                    grounding.synthesis({'text':text,'support_span_ids':['s']},{'s':span},{'s'},question='年末参保人数是多少？')
+
+    def test_database_filter_year_is_context_only_and_needs_the_selected_contract(self):
+        fact={'id':'f','kind':'database_row','row_values':{'数量':83},'evidence_ids':['e'],
+              'query_provenance':{'answer_contract':{'period_years':['2021']}}}
+        item={'text':'2021年查询数量为83。','support_fact_ids':['f']}
+        claim=grounding.synthesis(item,{},set(),{'f':fact},question='2021年有多少？')
+        self.assertEqual(claim['question_scope_mentions'][0]['kind'],'query_filter_period')
+        for text in ('2020年查询数量为83。','查询数量为2021。'):
+            with self.assertRaisesRegex(ValueError,'未提供的数值'):
+                grounding.synthesis({**item,'text':text},{},set(),{'f':fact},question='2021年有多少？')
+        with self.assertRaisesRegex(ValueError,'未提供的数值'):
+            grounding.synthesis(item,{},set(),{'f':{**fact,'query_provenance':{}}},question='2021年有多少？')
+
     def test_supported_information_gap_answer_reconciles_only_typed_inference_target(self):
         needed=[{'id':'R1','text':'披露范围','independent':True,'answer_kind':'original_source_check'},
                 {'id':'R2','text':'能否据此确定，缺少什么','independent':False,'answer_kind':'identify_missing_inputs'}]
@@ -248,6 +271,30 @@ class RagAgentTest(unittest.TestCase):
         self.assertEqual(captured[0]['answer_kind_contract'],captured[1]['answer_kind_contract'])
         self.assertEqual(captured[0]['question'],captured[1]['question'])
 
+    def test_publication_status_comes_from_pinned_server_document_not_model_source(self):
+        from unittest.mock import patch
+        publication={'origin':'original_docx_from_official_site','publication_status':'public_consultation_draft'}
+        locator={'document_id':'doc','sha256':'fixed','parse_id':'parse','page':1,
+                 'text_range':{'start':0,'end':8,'text_sha256':'exact'}}
+        source={'id':'e1','type':'document','source':'草案.docx','snippet':'建设场景试点',
+                'locator':locator,'publication':{'publication_status':'formally_effective'}}
+        with patch.object(grounding.documents,'resolve',return_value={
+                'status':'located','locator':locator,'quote':source['snippet'],
+                'quality':{'confirmed':True},'publication':publication}):
+            span=grounding.bind_source(source)
+        packet=grounding.packet([span])
+        self.assertEqual(packet['spans'][0]['publication'],publication)
+        self.assertNotIn('formally_effective',json.dumps(packet))
+        captures=[]
+        def judge(tool,label,system,payload):
+            captures.append(payload)
+            return {'claims':[{'claim_id':'c1','status':'supported','detail':'仅描述草案任务'}],
+                    'coverage':[{'requirement_id':'R1','status':'supported','claim_ids':['c1'],'reason':'所列任务'}]}
+        grounding.review('草案列了什么任务', [{'id':'R1','text':'所列任务','independent':False}],
+            [{'id':'c1','kind':'synthesis','text':'草案提出建设场景试点。','support_span_ids':[span['id']]}],
+            {span['id']:span},{},judge)
+        self.assertEqual(captures[0]['claims'][0]['citations'][0]['publication'],publication)
+
     def test_sufficiency_packet_retains_cross_page_identity_and_exact_text(self):
         spans = [
             {'id':'s1','evidence_id':'e1','source':'固定原件.pdf','text':'年末存款余额620.42亿元，比上年增长',
@@ -336,13 +383,13 @@ class RagAgentTest(unittest.TestCase):
     def test_invalid_assessment_is_visible_failure_not_missing_documents(self):
         doc,_=self.source();self.setup_rag()
         self.script({'action':'tool','tool':'document.search','arguments':{'query':'售后发票'}},required,
-            {'coverage':[]})
+            {'coverage':[]},{'coverage':[]})
         response=self.ask(doc)
         self.assertEqual(response.status_code,400,response.text)
         result=response.json();self.assertEqual(result['answer_status'],'failed')
         self.assertIn('证据核验未完成',result['answer']);self.assertTrue(result['evidence'])
         self.assertNotIn('现有证据不足，未生成确定结论',result['answer'])
-        self.assertEqual(len(legacy.ModelFixture.calls),3)
+        self.assertEqual(len(legacy.ModelFixture.calls),4)
 
     def test_invalid_coverage_types_are_rejected_without_internal_type_errors(self):
         needed={'R1':{'id':'R1'}}
@@ -372,6 +419,24 @@ class RagAgentTest(unittest.TestCase):
         self.assertEqual({s for e in retained['evidence'] for s in e['support_span_ids']},{'s0','s1'})
         self.assertLess(sum(len(m['content']) for m in run.messages),48000)
         self.assertFalse(run.result['agent']['context_compactions'][0]['document_spans_truncated'])
+
+    def test_answer_repair_checkpoint_preserves_question_and_evidence_without_schema_repetition(self):
+        from backend import agent
+        run=agent.Run.__new__(agent.Run)
+        run.messages=[{'role':'system','content':'只读与固定来源'}, {'role':'user','content':'2024年甲地区的值及原句口径'},
+            {'role':'user','content':'大表结构'*20000}, {'role':'assistant','content':'旧规划'},
+            {'role':'user','content':'来源编号错误；只修正一次'}]
+        run.result={'agent':{},'events':[{'tool':'database.query','status':'completed'}]}
+        packet={'spans':[{'id':'s1','text':'甲地区2024年金额100万元，例外条件保留。'}],
+                'facts':[{'id':'f1','value':100,'unit':'untyped'}],
+                'queries':{'q1':{'sql':'SELECT value FROM measures WHERE year=?','params':[2024]}}}
+        fixed=copy.deepcopy(run.messages[:2]);events=copy.deepcopy(run.result['events']);original=copy.deepcopy(packet)
+        run.checkpoint_answer_repair(packet)
+        self.assertEqual(run.messages[:2],fixed);self.assertEqual(run.result['events'],events)
+        self.assertEqual(json.loads(run.messages[2]['content'].split('\n',1)[1]),original)
+        self.assertEqual(run.messages[-1]['content'],'来源编号错误；只修正一次')
+        self.assertNotIn('大表结构',''.join(x['content'] for x in run.messages))
+        self.assertFalse(run.result['agent']['context_compactions'][0]['source_query_replayed'])
 
     def test_decimal_formatting_is_preserved_without_allowing_new_numbers(self):
         span={'id':'s1','evidence_id':'e1','text':'门槛为2000万元，增长率为5%。','locator':{}}
@@ -606,6 +671,21 @@ class RagAgentTest(unittest.TestCase):
         source=next(e for e in result['evidence'] if e['id']==claim['evidence_ids'][0])
         resolved=self.client.post('/api/evidence/resolve',json={'locator':source['locator'],'quote':quote}).json()
         self.assertEqual(resolved['status'],'located')
+
+    def test_excerpt_keeps_its_range_when_the_same_sentence_occurs_elsewhere(self):
+        quote='甲产品售后处理要求申请人提交发票。'
+        doc,_=self.source(quote+'特殊型号除外。\n\n'+('无关的公开合成材料。\n'*500)+quote)
+        self.setup_rag()
+        def excerpt(payload):
+            source=next(e for e in legacy.tool_results(payload)[-1]['result']['evidence'] if quote in e['snippet'])
+            return {'action':'answer','claims':[{'evidence_id':source['id'],'quote':quote}]}
+        self.script({'action':'tool','tool':'document.search','arguments':{'query':'甲产品售后发票'}},required,assessment,excerpt,support)
+        response=self.ask(doc);self.assertEqual(response.status_code,200,response.text)
+        result=response.json();self.assertEqual(result['answer_status'],'supported')
+        claim=result['claims'][0];source=next(e for e in result['evidence'] if e['id']==claim['evidence_ids'][0])
+        self.assertEqual(self.client.post('/api/evidence/resolve',json={'locator':source['locator'],'quote':quote}).json()['status'],'located')
+        unpinned={k:v for k,v in source['locator'].items() if k not in {'text_range','rects'}}
+        self.assertEqual(self.client.post('/api/evidence/resolve',json={'locator':unpinned,'quote':quote}).json()['status'],'ambiguous')
 
     def test_singular_evidence_text_alias_still_requires_an_exact_original_quote(self):
         doc,_=self.source();self.setup_rag()

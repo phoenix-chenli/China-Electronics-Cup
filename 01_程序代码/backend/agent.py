@@ -65,7 +65,7 @@ schema.inspect参数为空，或table_names字符串数组。
 database.schema参数为空，或table_names字符串数组。先读取结构，再生成SQL；表太多时按返回表清单选择相关表。
 database.query参数sql、params位置参数列表（SQL用?占位）、explanation中文关联/汇总说明。仅返回用户要求的列及粒度。
 用户明确只返回N列或用引号指定“列名依次为”时，最终SELECT必须严格保留这些列、别名与顺序；单位写进要求的别名，不附加单位列。不得在工具结果后删除列伪装满足要求；输出约束由执行前校验。
-用户未指定列名时，SELECT 的输出别名一律写成简短中文（如 艺术家数量、发票总金额_元、增长率_百分比），不要保留英文别名；单位写进别名。别名只影响显示，不得改变表、字段、筛选、关联或计算。
+用户未指定列名时，SELECT 的输出别名写成简短中文（如 艺术家数量、发票金额合计）。字段类型和模型别名不证明单位；只有本轮服务端字段说明、实际单位列或明确原文给出了单位时才写入别名。不得凭金额字段推断人民币、美元或净额，计数不能写成百分比。别名不得改变实际字段、筛选、关联或计算。
 只问计算结果时只投影计算列；要求分项与合计时在同一条SQL中一起返回。原文摘录通过document.search取得，不把source_quote等整页文字加入数值结果。仅查原值不算用户明确要求的差额、合计或比值时，问题尚未回答完整。
 source_vocabulary是当前公开资料的真实维度取值与定义，不是示例答案。优先按真实取值筛选；未给词表时，可用小型维度表的有限取值查询确认名称。不要把用户简称直接用于等号；必要时用LIKE匹配独特名称片段，空结果先核对取值。
 词表已明确region_id与地区名的映射时，用该region_id直接筛选事实表；已给metric_id和指标名时直接使用该metric_id。仅为解析名称不再JOIN维度表。只有用户需要名称列或维度表另有必要条件时才关联；保持用户实际要求的输出列，不返回固定年份、来源注释等无关列。
@@ -92,6 +92,7 @@ evidence.verify参数evidence_ids（可选）；这是确定性来源检查，�
 数值查询返回0行时，先核对对象、年份和筛选条件；确认当前查询没有取得所需记录后，可使用工具返回的empty_result_answer，选择真实database_empty事实并给empty_query_fact_id；系统据此返回资料不足状态。普通文档缺口继续按文档评审处理，不使用这个SQL专用入口。这只说明该SQL筛选范围内没有匹配记录，不表示数值为0或全库/外部不存在。覆盖年份等诊断保留在执行记录，不与另一条SQL的空查询事实混成所问数值表；不能用SQL来源id伪装文档support_span_ids。若问题还要求其他可答分项，继续取得同一查询范围的部分答案，不用空结果入口隐藏分项。
 文档综合结论可用{kind:"synthesis",text:"可单独核对的结论",support_span_ids:["实际返回的原文位置id"]}；每条都要有直接支持，不自造引用。
 数据库问数的结论也可用{kind:"synthesis",text:"用中文说明查得结果的结论",support_fact_ids:["本轮工具返回的事实id"]}；句中每个数字都必须等于所列事实的实际返回值，服务端逐个核对，出现未列出的数字即拒绝发布；没有文档依据时不要填写support_span_ids。只按事实陈述，不推断单位、口径或原因。
+用户要求解释数据库结果的含义、比较口径或推断边界时，使用synthesis并绑定本次查询事实，单独复读fact文字不能代替解释。已有结果之外的结论必须说明缺口，不补充未经查询的事实。
 用户问能否由现有披露推断另一量时，用synthesis明确解释披露单位、对象及推断边界；仅贴原文不能替代这项回答。所引片段未提供的值只能说无法据此确定，不能填零，也不能把检索未命中说成全库不存在。不额外命名原文未写的“设计能力”等口径。并列标签可以说明对象不同，无需补造具体行政边界。假设条件下的解释不需要另外验证该条件实际发生。
 knowledge范围只使用文档；hybrid范围结合当前指定数据库与文档规则。hybrid中的数值查询/比较/比例计算先database.schema再database.query，随后用document.search核对口径和出处；纯定义解释问题可仅检索文档。比例可在同一条SQL里取分子、分母、计算结果和公布值，返回列名注明单位。数据库数值及计算只用fact_id，不在综合文字中自行计算。
 文档工具返回充分性检查；缺事实时按missing_requirements最多补一次检索，保留原问题对象、日期与条件。多份原文逐一核对时，补检索应聚焦尚缺依据的对象与原句；不能用一份资料已命中替代其余资料已查证。未检索到某对象的相关原句时明确保留该子问缺口，不宣称完整核对。独立子问已有直接依据时保留其fact或引用，缺失的原因等另列缺口；只有不能独立回答或完全无依据时返回空claims，不能凭常识补齐。
@@ -100,8 +101,8 @@ knowledge范围只使用文档；hybrid范围结合当前指定数据库与文�
 用户补充澄清条件时结合previous_question与previous_clarification，只更改用户补充的缺项，保留已经明确的实体、时间、口径和固定资料范围。
 只选与问题相关的事实、摘录或有直接原文支持的综合结论，保持单位、实体、时间、模拟边界。不能用自由改写替代数值事实。
 最终数据结论只选择同一次查询的facts；需要跨表统计时用JOIN/CTE/子查询在一条SQL内完成，不混合不同查询的范围。
-数据库结果按问题要求排列行和列，单位写在列名中；原始值与所需差额、比例、排名在同一条SQL中一次返回，计算列按所需小数位ROUND，不追加无关元数据列。需要并排比较指标时用条件聚合，分别汇总一对多明细后再关联。
-综合说明用于解释口径、适用条件和推断边界。可复述同一最终查询中已明确选择fact_id的原值，综合结论必须同时引用直接支持对象、单位和口径的support_span_ids；不能自行计算、转换单位或引入未选择的数字。需要新差值、比值或小数位时先在SQL中计算并返回。数值按显示精度相符只能说明该精度下一致，不能据此断言原始差异来自四舍五入、修订或其他实际原因。
+数据库结果按问题要求排列行和列，确认过的单位写在列名中；原始值与所需差额、比例、排名在同一条SQL中一次返回，计算列按所需小数位ROUND，不追加无关元数据列。需要并排比较指标时用条件聚合，分别汇总一对多明细后再关联。
+综合说明用于解释口径、适用条件和推断边界。可复述同一最终查询中已明确选择fact_id的原值。纯数据库回答可优先用kind为synthesis、text为简洁中文结论、support_fact_ids为同一次实际查询事实编号的格式；仍须经过服务端数字绑定和解释检查。文档综合结论必须引用直接支持对象、单位和口径的support_span_ids。不能自行计算、转换单位或引入未选择的数字。需要新差值、比值或小数位时先在SQL中计算并返回。数值按显示精度相符只能说明该精度下一致，不能据此断言原始差异来自四舍五入、修订或其他实际原因。
 没有证据时claims为空；不要捏造。business.query要求澄清时系统会直接向用户询问。
 工具失败时根据错误修正失败步骤，不必重复成功步骤。最后的来源和数值核验由系统执行。
 """
@@ -332,16 +333,13 @@ def _base(question, previous, confirmed, generic=False):
             "features": dict(engine.FEATURES), "data_version": s.data_version(), "created_at": s.now()}
 
 
-def bind_database_synthesis(claims):
-    """A database-only round runs no document review, so a sentence the server
-    already bound to its declared facts counts as supported for coverage.
-
-    This never claims semantic review: the sentence's numbers were checked
-    against the returned values, its wording was not judged.
-    """
+def bind_database_synthesis(claims, facts=None, question=''):
+    from . import database_answer
     for claim in claims:
-        if claim.get('kind') == 'synthesis' and claim.get('status') == 'pending_review' and claim.get('evidence_ids'):
-            claim['status'] = 'supported'
+        if claim.get('kind')=='synthesis' and claim.get('status')=='pending_review':
+            checked=database_answer.check(claim,facts or {},question)
+            claim['database_semantic_check']=checked
+            claim['status']='supported' if checked['status']=='verified_count' else 'needs_evidence'
     return claims
 
 
@@ -383,6 +381,10 @@ class Run:
         self.assessment_fingerprint = None
         self.judgment_errors = {}
         self.sql_attempts = 0
+        hybrid=self.database_context.get('query_scope')=='hybrid'
+        self.model_call_limit=16 if hybrid else MAX_MODEL_CALLS
+        self.step_limit=10 if hybrid else MAX_STEPS
+        self.sql_attempt_limit=5 if hybrid else MAX_SQL_ATTEMPTS
         self.query_snapshots = {}
         self.calculations = {}
         if self.database_mode:
@@ -407,6 +409,8 @@ class Run:
         self.result["agent"] = {"mode": "model", "connection_id": connection["id"],
                                 "model": connection["model"], "plan": [], "calls": 0,
                                 "usage": {}, "review": {"status": "pending", "detail": "尚未核验"}}
+        self.result['agent']['limits']={'model_calls':self.model_call_limit,'tool_steps':self.step_limit,
+            'sql_attempts':self.sql_attempt_limit,'seconds':MAX_SECONDS,'document_searches':2}
         scope=self.database_context.get('query_scope','sales')
         self.allowed_tools=set(TOOLS)
         if scope=='sales':
@@ -427,11 +431,16 @@ class Run:
         normalized_view = ({'normalized_text': normalization['normalized'], 'changes': normalization['changes'],
                             'boundary': normalization['boundary'] + ' 原问题保持不变，仍以原问题的对象与条件作答。'}
                            if normalization.get('applied') else None)
+        from . import database_answer
+        self.inherited_database_filters=database_answer.followup_filters(question,self.previous,
+            self.database_context.get('database_connection_id')) if self.database_mode else []
         self.messages = [{"role": "system", "content": SYSTEM + '\n'+guidance+"\n本轮可用工具：" + c.encode({k:v for k,v in TOOLS.items() if k in self.allowed_tools})},
                          {"role": "user", "content": c.encode({"question": question,
                           "question_normalization": normalized_view,
                           "previous_conditions": _limited_context(previous),
                           "previous_question":str((previous or {}).get('original_question') or (previous or {}).get('question',''))[:2000],
+                          "inherited_database_filters":self.inherited_database_filters,
+                          "followup_filter_instruction":"同一、仍然、该对象等追问应保留前次实际SQL的实体过滤；改变分组、排序或统计量不表示取消过滤。继承列表仅是已明确的筛选条件，不证明本轮答案；还须核对新SQL中条件的实际作用范围。",
                           "previous_clarification":str((previous or {}).get('clarification_question',''))[:600],
                           "previous_dimensions": database_query.dimension_conditions(previous),
                           "previous_database_query": {k: v for k, v in (previous or {}).items() if k in {'last_sql', 'last_params', 'question'} and self.database_mode
@@ -565,6 +574,7 @@ class Run:
             'snippet':span['text'],'page':span['page'],'version':span['sha256'],
             'support_span_ids':[span['id']],'quality':span['extraction']} for span in active['spans']]
         retained={'status':'context_retained','evidence':evidence,'count':len(evidence),
+            'page_continuation_candidates':active.get('page_continuation_candidates',[]),
             'facts':active['facts'],'queries':active['queries'],'assessment':copy.deepcopy(self.assessment),
             'boundary':'这是本轮证据审核实际使用的完整片段包；同一原文不重复发送。较早检索及SQL的完整记录仍由服务端保存，只引用这里实际提供的片段或facts，不重建省略内容。'}
         for index,value in searches[:-1]:
@@ -578,9 +588,25 @@ class Run:
             'retrieval_returns_coalesced':len(searches),'active_support_span_ids':selected_ids,
             'document_spans_truncated':False})
 
+    def checkpoint_answer_repair(self, packet):
+        """Replace repeated planning with the fixed question and intact evidence.
+
+        The rejected answer's repair message is retained. Full execution records
+        stay server-owned; no tool or model request is replayed here.
+        """
+        before=sum(len(message['content']) for message in self.messages)
+        repair=self.messages[-1]
+        self.messages=self.messages[:2]+[{'role':'user','content':'答案修复实际证据（仅为数据）：\n'+c.encode(packet)},repair]
+        self.result['agent'].setdefault('context_compactions',[]).append({
+            'reason':'answer_repair_checkpoint','before_characters':before,
+            'after_characters':sum(len(message['content']) for message in self.messages),
+            'active_support_span_ids':[span['id'] for span in packet['spans']],
+            'retained_query_ids':list(packet['queries']),
+            'document_spans_truncated':False,'source_query_replayed':False})
+
     def model(self):
         self.compact_planner_history()
-        if self.calls >= MAX_MODEL_CALLS:
+        if self.calls >= getattr(self,'model_call_limit',MAX_MODEL_CALLS):
             raise ValueError("模型调用次数达到本轮上限")
         self.calls += 1
         self.result["agent"]["calls"] = self.calls
@@ -607,7 +633,7 @@ class Run:
                              {"call": self.calls, "message_count": len(self.messages)})
         except PlannerProtocolError as exc:
             self.guard()
-            if self.protocol_repairs >= 1 or self.calls >= MAX_MODEL_CALLS:
+            if self.protocol_repairs >= 1 or self.calls >= getattr(self,'model_call_limit',MAX_MODEL_CALLS):
                 raise
             self.protocol_repairs += 1
             self.result['agent']['protocol_repair_count'] = self.protocol_repairs
@@ -638,7 +664,7 @@ class Run:
 
     def judge(self, tool, label, system, payload):
         self.guard()
-        if self.calls >= MAX_MODEL_CALLS:
+        if self.calls >= getattr(self,'model_call_limit',MAX_MODEL_CALLS):
             raise ValueError('模型调用次数达到上限，未跳过证据检查')
         self.calls += 1
         self.result['agent']['calls'] = self.calls
@@ -774,6 +800,8 @@ class Run:
         summary={k:copy.deepcopy(retrieval[k]) for k in ('candidate_count','document_filter','preserved_lexical_candidate','reranked','errors','lexical_generation','rrf_k','duration_ms','boundary') if k in retrieval}
         summary['channel_counts']={k:len(rows) for k,rows in retrieval.get('channels',{}).items()}
         result = {'evidence': public, 'count': len(public), 'status': value['status'],
+                'page_continuation_candidates':rag_grounding.page_continuation_candidates(
+                    [self.spans[sid] for sid in self.latest_spans]),
                 'source_gaps':copy.deepcopy(value.get('source_gaps',[])),
                 'retrieval': summary, 'assessment': assessment,
                 'boundary': '完整固定原文；检索分数不是答案置信度。未执行OCR。'}
@@ -866,9 +894,16 @@ class Run:
             return {**copy.deepcopy(self.database_cache[key]),'status':'already_executed','snapshot_reused':True,
                 'next_step':'本轮已经成功执行此SQL，停止重复。若还缺差额、合计、比例等计算，在新SQL中一次补全；若数值已足够，转文档检索或答案。',
                 'boundary':'复用本轮原查询快照和原fact_id，没有重新读取数据；该快照不证明数据库此刻的实时状态。'}
-        if self.sql_attempts >= MAX_SQL_ATTEMPTS:
-            raise ValueError('SQL尝试已达到3次上限，未放宽校验')
+        if self.sql_attempts >= self.sql_attempt_limit:
+            raise ValueError('SQL尝试已达到'+str(self.sql_attempt_limit)+'次上限，未放宽校验')
         self.sql_attempts += 1
+        if self.inherited_database_filters:
+            from . import database_answer
+            current=database_answer.literal_filters(args.get('sql'),args.get('params') or [])
+            missing=[item for item in self.inherited_database_filters if not any(
+                item['column']==other['column'] and item['kind']==other['kind'] and item['value']==other['value'] for other in current)]
+            if missing:raise ValueError('同一对象的追问丢失了前次实际筛选条件：'+c.encode(missing)+
+                '。请在本次SQL保留这些条件；分组或排序变化不代表取消对象过滤。字段编号来自真实前次查询，不是新问题答案。')
         explanation = args.get('explanation', '')
         if not isinstance(explanation, str) or len(explanation) > 500:
             raise ValueError('关联说明应为不超过500字的文字')
@@ -883,6 +918,9 @@ class Run:
         query_provenance = {'sql': value['sql'], 'params': value.get('params', []),
             'source_fingerprint': value['source']['fingerprint'], 'result_sha256': value['result_sha256'],
             'columns': value['columns'], 'returned_row_count': len(value['rows']), 'truncated': value['truncated']}
+        from . import database_answer
+        query_provenance['answer_contract']=database_answer.contract(value['sql'],value['columns'],self.database_context.get('source_vocabulary'),value['dialect'])
+        query_provenance['source_label_registry']=database_answer.source_labels(value['sql'],self.database_context.get('source_vocabulary'),value['dialect'])
         facts = []
         rows, columns = value['rows'], value['columns']
         # A fixed eight-row preview forces repeated queries even when a whole
@@ -949,7 +987,7 @@ class Run:
             raise ValueError('该工具不在本轮资料范围内，不可切换来源；请使用本轮可用工具')
         if not isinstance(args, dict):
             raise ValueError("工具参数必须是对象")
-        if self.tool_count >= MAX_STEPS:
+        if self.tool_count >= getattr(self,'step_limit',MAX_STEPS):
             raise ValueError("工具调用次数达到本轮上限")
         self.tool_count += 1
         plan = self.result["agent"]["plan"]
@@ -1162,7 +1200,8 @@ class Run:
         raw = body.get("claims")
         if not isinstance(raw, list) or len(raw) > 12:
             raise ValueError("答案必须包含最多 12 条有来源的结论")
-        if any(isinstance(x, dict) and x.get('kind') == 'synthesis' for x in raw):
+        if any(isinstance(x, dict) and x.get('kind') == 'synthesis'
+               and (x.get('support_span_ids') or not self.database_mode) for x in raw):
             self.rag_enabled = True
         if self.rag_enabled and self.rag_scope:
             from . import rag_index
@@ -1220,6 +1259,11 @@ class Run:
                 raise ValueError("模型摘录不在所引用原文中")
             quote=evidence['snippet'][matches[0][0]:matches[0][1]]
             quote_locator={k:v for k,v in evidence['locator'].items() if k not in {'text_range','rects'}}
+            original_range=evidence['locator'].get('text_range')
+            if original_range:
+                quote_start=original_range['start']+matches[0][0]
+                quote_locator['text_range']={'start':quote_start,'end':quote_start+len(quote),
+                    'text_sha256':hashlib.sha256(quote.encode()).hexdigest()}
             bound = documents.resolve(quote_locator, quote)
             if bound["status"] != "located":
                 raise ValueError("模型引用的原文无法定位")
@@ -1247,10 +1291,13 @@ class Run:
             referenced_formulas = [copy.deepcopy(self.calculations[c['fact_id']]) for c in claims
                                    if c.get('fact_id') in self.calculations]
             self.result['formulas'] = copy.deepcopy(selected.get('formulas', [])) + referenced_formulas
-        if body.get('empty_query_fact_id') is not None:
+        empty_id=body.get('empty_query_fact_id')
+        if empty_id is None and len(claims)==1 and claims[0].get('kind')=='database_empty':
+            empty_id=claims[0].get('fact_id')
+        if empty_id is not None:
             # This endpoint reports a real empty SQL result, never a model's
             # unsupported declaration that a requested value is zero/absent.
-            if (len(claims) != 1 or claims[0].get('fact_id') != body.get('empty_query_fact_id')
+            if (len(claims) != 1 or claims[0].get('fact_id') != empty_id
                     or len(query_ids) != 1 or self.result.get('rows')
                     or any(claim.get('kind') != 'database_empty' for claim in claims)
                     or self.result.get('database_query', {}).get('truncated')):
@@ -1293,14 +1340,51 @@ class Run:
                 return {'status': 'refused', 'checks': [{'name': '综合证据检查', 'status': 'unavailable'}]}
         else:
             self.result['answer_status'] = 'supported' if claims else 'refused'
-            bind_database_synthesis(claims)
+            bind_database_synthesis(claims,self.facts,self.result['question'])
+            from . import database_answer
+            candidates=[claim for claim in claims if claim.get('database_semantic_check',{}).get('reviewable')]
+            interpretation={'checks':[],'coverage_status':'supported','missing_requirements':[]}
+            if candidates:
+                try:
+                    interpretation=database_answer.review(claims,self.facts,self.result['question'],self.judge)
+                    for checked in interpretation['checks']:
+                        claim=next(x for x in candidates if x['id']==checked['claim_id'])
+                        claim['database_semantic_check']={**claim['database_semantic_check'],**checked,'method':'model_review'}
+                        if checked['status']=='supported':
+                            claim['status']='supported'
+                            claim['semantic_check']={'status':'supported','detail':checked['detail'],'method':'model_review'}
+                except InterruptedError:raise
+                except ValueError as exc:
+                    interpretation={'checks':[],'coverage_status':'unknown',
+                        'missing_requirements':['数据库解释的模型检查未完成：'+str(exc)]}
+                    self.result['database_review_error']=str(exc)
+            rejected=[claim for claim in claims if claim.get('database_semantic_check',{}).get('status')=='needs_review']
+            rejected.extend(claim for claim in candidates if claim['status']!='supported' and claim not in rejected)
+            if rejected or interpretation['coverage_status']!='supported':
+                reasons=list(dict.fromkeys([reason for claim in rejected for reason in claim['database_semantic_check']['reasons']]
+                    + [claim['database_semantic_check']['detail'] for claim in rejected if claim['database_semantic_check'].get('method')=='model_review']
+                    + interpretation['missing_requirements']))
+                safe=[claim for claim in claims if claim not in rejected]
+                seen={claim.get('fact_id') for claim in safe}
+                for claim in rejected:
+                    for fid in claim.get('support_fact_ids',[]):
+                        fact=self.facts.get(fid)
+                        if fact and fid not in seen:
+                            seen.add(fid)
+                            safe.append({**copy.deepcopy(fact),'fact_id':fid,'id':'raw-'+fid,
+                                'text':fact['text']+'（保留SQL返回值；输出别名不等于已确认的业务含义。）'})
+                claims=safe
+                self.result.update(answer_status='partial',missing_requirements=reasons,
+                    database_answer_check={'status':'raw_fallback','reasons':reasons,
+                        'detail':'综合解释尚未核验，已保留同次SQL实际结果；可在来源中核对字段、筛选与表达式。'})
+
         self.result["claims"] = claims
         self.result["answer"] = "\n\n".join(f["text"] for f in claims) or "本轮没有取得足够依据，未生成业务结论。"
         if self.result.get('answer_status') == 'partial':
             self.result['answer'] += '\n\n未完整回答：' + '；'.join(self.result.get('missing_requirements', []))
         self.result["headline"] = claims[0]["text"] if claims else "缺少可核验依据"
         supported=sum(f.get('status') in {'verified','supported','simulation'} and bool(f.get('evidence_ids')) for f in claims)
-        passed=bool(claims) and supported==len(claims)
+        passed=bool(claims) and supported==len(claims) and self.result.get('answer_status')=='supported'
         self.result["agent"]["review"] = {"status": "passed" if passed else "needs_evidence",
             "detail": "结论与本轮确定性事实或精确原文一致；不等于通用语义准确率。" if passed else "有结论缺少依据，已保留缺口提示。" if claims else "没有可引用事实，已明确拒答。"}
         return {"status": self.result["agent"]["review"]["status"], "checks": [{"name": "事实及原文绑定", "status": "passed" if passed else "needs_evidence"}]}
@@ -1389,6 +1473,10 @@ class Run:
                         and sid in self.spans and sid in self.delivered_spans))
                     repair_claims=[{'support_span_ids':valid_ids}] if len(valid_ids)<=8 else None
                     document_context=self.evidence_packet(repair_claims)['spans'] if self.delivered_spans else []
+                    # Glyph rectangles remain server-owned and recoverable via
+                    # the pinned range. They are not needed to repair text/IDs.
+                    document_context=[{**span,'locator':{k:v for k,v in span.get('locator',{}).items()
+                        if k not in {'rects','media_regions'}}} for span in document_context]
                     self.result['agent'].setdefault('answer_repairs',[]).append({
                         'reason':str(exc),'provided_document_span_ids':[span['id'] for span in document_context],
                         'source_text_truncated':False,'source_query_replayed':False})
@@ -1399,8 +1487,11 @@ class Run:
                         'valid_document_claim_context':document_context,
                         "instruction": ("不同查询的事实不能直接拼接，也不能靠删除用户要求的排序、分项或差额来解决。先用一次database.query在同一条SQL中返回全部所需列（可用受保护的条件聚合、子查询或CTE），保留原对象、年份、口径与排序；随后仅选择这次查询的新fact_id。仍受3次SQL总上限和原授权范围约束。" if combine_sql else "只引用实际返回的fact_id、精确文档原文或support_span_ids，修正答案一次。数据库结论可以直接选择valid_database_claim_examples；不能使用SQL来源id加quote，不能附加改写text/value/unit，也不能发明数字或位置。")+
                         ' synthesis的support_span_ids必须精确使用valid_document_claim_context中的id，不是evidence_id或chunk_id；摘录使用其中evidence_id和text内的精确连续原文。不得缩窄原问题、删掉有依据的子问或把字段名误当编号。完整原文仍需核对条件和统计口径。'+
+                        ' 若要换成自己的措辞、补对象标签、合并跨页句子或调整标点，使用kind:synthesis、text和support_span_ids；quote仅允许原文连续字句，不可将改写当作摘录。阅读page_continuation_candidates时同时保留前后两个引用；原生PDF页脚之后附加的表格抽取视图不是句子的尾部。'+
                         (" 若所需数值的已执行查询实际返回0行、仅需说明当前范围资料不足，可直接使用insufficient_evidence_answer_examples，不必把另一条覆盖诊断SQL合并为所问数值。该入口不能发布数字、外推全库不存在或省略问题仍要求的可答分项。" if empty_answers else '')})})
                     self.compact_planner_history()
+                    if sum(len(m['content']) for m in self.messages)>MAX_CONTEXT_CHARS:
+                        self.checkpoint_answer_repair(self.evidence_packet(repair_claims))
                     if sum(len(m['content']) for m in self.messages)>60000:
                         raise ValueError('完整答案修复上下文达到上限，请缩小问题范围；未截断引用')
                     continue
@@ -1418,7 +1509,7 @@ class Run:
             except ValueError as exc:
                 if self.judgment_errors:
                     self.refuse('本轮证据核验未完成')
-                if self.tool_count >= MAX_STEPS or body.get("tool") not in TOOLS or (body.get('tool') == 'database.query' and self.sql_attempts >= MAX_SQL_ATTEMPTS):
+                if self.tool_count >= self.step_limit or body.get("tool") not in TOOLS or (body.get('tool') == 'database.query' and self.sql_attempts >= self.sql_attempt_limit):
                     raise
                 self.messages.append({"role": "user", "content": c.encode({"tool": body.get("tool"), "error": str(exc), "instruction": "修正失败步骤；不要假装调用成功。"})})
             self.compact_planner_history()

@@ -102,6 +102,18 @@ class ConnectionsTests(unittest.TestCase):
     self.assertEqual(body['max_tokens'],1800);self.assertNotIn('max_completion_tokens',body)
     self.assertEqual(body['thinking'],{'type':'disabled'});self.assertNotIn('enable_thinking',body)
     self.assertEqual('response_format' in body,json_mode);self.assertEqual(result['finish_reason'],'stop')
+ def test_tokenrhythm_deepseek_json_contract_and_answer_budget(self):
+  d={**c.get(self.create()['id'],True),'endpoint':'https://tokenrhythm.studio/v1','model':'deepseek-v4-flash-0731'}
+  response={'model':d['model'],'choices':[{'finish_reason':'stop','message':{'content':'{"action":"tool","tool":"database.schema","arguments":{}}'}}]}
+  with patch.object(c,'request_json',return_value=response) as call:
+   result=c.chat(d,[{'role':'user','content':'返回一个 JSON 工具调用'}],max_tokens=1800,json_mode=True)
+   self.assertEqual(call.call_args.args[1],'https://tokenrhythm.studio/v1/chat/completions')
+   body=call.call_args.args[2]
+   self.assertEqual(body['model'],d['model']);self.assertEqual(body['max_tokens'],1800)
+   self.assertNotIn('max_completion_tokens',body)
+   self.assertEqual(body['response_format'],{'type':'json_object'})
+   self.assertEqual(body['thinking'],{'type':'disabled'})
+   self.assertEqual(json.loads(result['text'])['tool'],'database.schema')
  def test_connection_setup_retries_before_one_post(self):
   import httpcore
   from httpcore._backends.sync import SyncBackend
@@ -113,6 +125,13 @@ class ConnectionsTests(unittest.TestCase):
   d=self.create()
   with patch.object(SyncBackend,'connect_tcp',autospec=True,side_effect=connect):tested=c.test(d['id'])
   self.assertTrue(tested['last_test']['ok'],tested);self.assertEqual(len(attempts),2);self.assertEqual(len(Provider.calls),1)
+ def test_provider_pacing_wait_is_cancellable_before_any_submission(self):
+  stop=threading.Event();stop.set();account=c.hashlib.sha256(b'pacing-fixture').hexdigest()
+  c._provider_next_request[account]=time.monotonic()+30
+  started=time.monotonic()
+  with self.assertRaises(InterruptedError):
+   c._pace_provider({'endpoint':'https://tokenrhythm.studio/v1','_secret':'pacing-fixture'},time.monotonic()+60,stop)
+  self.assertLess(time.monotonic()-started,.2)
  def test_submitted_requests_are_not_automatically_replayed(self):
   for mode in ['unavailable','disconnect']:
    with self.subTest(mode=mode):

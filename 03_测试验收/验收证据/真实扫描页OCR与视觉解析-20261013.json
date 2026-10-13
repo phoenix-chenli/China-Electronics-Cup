@@ -1,0 +1,211 @@
+{
+  "ocr": {
+    "attempt_of": null,
+    "connection_id": null,
+    "created_at": "2026-10-12T16:37:37.920+00:00",
+    "document": {
+      "base_parse_id": "80a0cb126340435eb797cedbbc6377e1",
+      "format": "pdf",
+      "id": "366dc500ee9a6a484435",
+      "name": "2024中国生态环境状况公报_完整扫描原件.pdf",
+      "sha256": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+    },
+    "duration_ms": 4303.98,
+    "error": null,
+    "events": [
+      {
+        "duration_ms": 2021.0,
+        "finished_at": "2026-10-12T16:37:40.091+00:00",
+        "id": "135afc3e0a344de7bb9bf8302326c874",
+        "media_id": null,
+        "method": "ocr",
+        "page": 7,
+        "started_at": "2026-10-12T16:37:38.069+00:00",
+        "status": "completed",
+        "summary": "解析结果已校验，等待整批发布"
+      },
+      {
+        "duration_ms": 2046.85,
+        "finished_at": "2026-10-12T16:37:42.176+00:00",
+        "id": "af74165723b24893a9e4fe912c1564ff",
+        "media_id": null,
+        "method": "ocr",
+        "page": 47,
+        "started_at": "2026-10-12T16:37:40.128+00:00",
+        "status": "completed",
+        "summary": "解析结果已校验，等待整批发布"
+      }
+    ],
+    "finished_at": "2026-10-12T16:37:42.238+00:00",
+    "id": "a6d7c803bb4b446d898f89e31aefbb7f",
+    "image_count": 2,
+    "images": [
+      {
+        "bytes": 186638,
+        "image_sha256": "88a0603dea75aa31ba3ed15c12753aa1cdbe1d00da92087a91fb420f09b444cc",
+        "page": 7,
+        "preview_url": "/api/documents/366dc500ee9a6a484435/pages/7/image?version=3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+      },
+      {
+        "bytes": 191180,
+        "image_sha256": "14a62433415fc8a265ae97ae9de43660728835655563f6523e85708adaa57529",
+        "page": 47,
+        "preview_url": "/api/documents/366dc500ee9a6a484435/pages/47/image?version=3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+      }
+    ],
+    "index_job_id": "da3680ea7b14496797c47f1ceced03bb",
+    "mode": "ocr",
+    "pages": [
+      7,
+      47
+    ],
+    "processed": 2,
+    "provider": {
+      "engine": "rapidocr",
+      "engine_version": "3.9.0",
+      "error": null,
+      "execution_provider": "CPUExecutionProvider",
+      "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+      "local": true,
+      "location_precision": "line",
+      "mode": "local",
+      "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+      "model_revision": "RapidAI/RapidOCR-v3.9.0",
+      "onnxruntime_version": "1.23.2",
+      "provider_id": "ppocrv5-mobile-zh",
+      "ready": true,
+      "reason": ""
+    },
+    "request": {
+      "connection_id": null,
+      "document_id": "366dc500ee9a6a484435",
+      "media_ids": null,
+      "mode": "ocr",
+      "pages": [
+        7,
+        47
+      ],
+      "parse_id": "80a0cb126340435eb797cedbbc6377e1",
+      "rotation": 0,
+      "version": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+    },
+    "result": {
+      "before_parse_id": "80a0cb126340435eb797cedbbc6377e1",
+      "parse_id": "061df109a06e48bbb2d0b6a235bc4aee",
+      "sha256": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+    },
+    "rotation": 0,
+    "scope": "本机处理",
+    "stage": "解析已保存",
+    "started_at": "2026-10-12T16:37:37.934+00:00",
+    "status": "completed",
+    "total": 2,
+    "total_bytes": 377818
+  },
+  "vision": {
+    "attempt_of": null,
+    "connection_id": "edffde7a-efd0-4e6c-b225-28d6a5c36f91",
+    "created_at": "2026-10-12T17:42:11.096+00:00",
+    "document": {
+      "base_parse_id": "061df109a06e48bbb2d0b6a235bc4aee",
+      "format": "pdf",
+      "id": "366dc500ee9a6a484435",
+      "name": "2024中国生态环境状况公报_完整扫描原件.pdf",
+      "sha256": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+    },
+    "duration_ms": 21162.86,
+    "error": null,
+    "events": [
+      {
+        "duration_ms": 20939.96,
+        "finished_at": "2026-10-12T17:42:32.192+00:00",
+        "id": "76e35e8234724b8eb6f1730129fa5c5c",
+        "media_id": null,
+        "method": "vision",
+        "page": 47,
+        "started_at": "2026-10-12T17:42:11.266+00:00",
+        "status": "completed",
+        "summary": "解析结果已校验，等待整批发布"
+      },
+      {
+        "duration_ms": 2726.79,
+        "finished_at": "2026-10-12T17:42:14.120+00:00",
+        "id": "9f1cc44632d84567a2a7540b1ecc8da3",
+        "media_id": null,
+        "method": "ocr_observation",
+        "page": 47,
+        "started_at": "2026-10-12T17:42:11.397+00:00",
+        "status": "completed",
+        "summary": "已实际识别并保存 OCR 观察文字"
+      }
+    ],
+    "finished_at": "2026-10-12T17:42:32.257+00:00",
+    "id": "1b20a4b643bf4c5fb91310de51c3ef2b",
+    "image_count": 1,
+    "images": [
+      {
+        "bytes": 191180,
+        "image_sha256": "14a62433415fc8a265ae97ae9de43660728835655563f6523e85708adaa57529",
+        "page": 47,
+        "preview_url": "/api/documents/366dc500ee9a6a484435/pages/47/image?version=3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+      }
+    ],
+    "index_job_id": "0a63aadd46374d3891a57da0454c4015",
+    "mode": "vision",
+    "ocr_provider": {
+      "engine": "rapidocr",
+      "engine_version": "3.9.0",
+      "error": null,
+      "execution_provider": "CPUExecutionProvider",
+      "fingerprint": "2604483e33ca9219da6cf8e2a8b09a8e7584d405ad558fb58a1f08f4ea0436db",
+      "local": true,
+      "location_precision": "line",
+      "mode": "local",
+      "model": "PaddleOCR/PP-OCRv5-mobile-zh",
+      "model_revision": "RapidAI/RapidOCR-v3.9.0",
+      "onnxruntime_version": "1.23.2",
+      "provider_id": "ppocrv5-mobile-zh",
+      "ready": true,
+      "reason": ""
+    },
+    "pages": [
+      47
+    ],
+    "processed": 1,
+    "provider": {
+      "connection_id": "edffde7a-efd0-4e6c-b225-28d6a5c36f91",
+      "connection_revision": 2,
+      "fingerprint": "425e2d1dda667f1092b259ae14bd5dcba5cbdf1e4c29f1898e361a2b454b7f2a",
+      "local": false,
+      "model": "deepseek-flash",
+      "name": "TokenRhythm · DeepSeek Flash 视觉",
+      "ready": true
+    },
+    "request": {
+      "connection_id": "edffde7a-efd0-4e6c-b225-28d6a5c36f91",
+      "document_id": "366dc500ee9a6a484435",
+      "media_ids": null,
+      "mode": "vision",
+      "pages": [
+        47
+      ],
+      "parse_id": "061df109a06e48bbb2d0b6a235bc4aee",
+      "rotation": 0,
+      "version": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+    },
+    "result": {
+      "before_parse_id": "061df109a06e48bbb2d0b6a235bc4aee",
+      "parse_id": "b158a42f240240b8b2a632710aec9075",
+      "sha256": "3e37566ef1379f7db56b06eaf233f89803dd2832ba8fe0d654bb3083ed80d468"
+    },
+    "rotation": 0,
+    "scope": "外部视觉服务",
+    "stage": "解析已保存",
+    "started_at": "2026-10-12T17:42:11.108+00:00",
+    "status": "completed",
+    "total": 1,
+    "total_bytes": 191180
+  },
+  "human_review": "pending",
+  "boundary": "选定第7、47页的本机识别和第47页的视觉结构提取；未完成150页全文OCR，未核实的图表值继续待复核。"
+}

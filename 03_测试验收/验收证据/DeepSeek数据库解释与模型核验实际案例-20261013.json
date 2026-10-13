@@ -1,0 +1,1215 @@
+{
+  "question": "曲目时长高于所有曲目平均时长的曲目有多少首？请用自然中文解释这个数量的筛选含义，不能把平均值写成中位数。",
+  "actual": {
+    "run_id": "d05beb64-7d2d-4d34-a817-647ad83ed1ac",
+    "question": "曲目时长高于所有曲目平均时长的曲目有多少首？请用自然中文解释这个数量的筛选含义，不能把平均值写成中位数。",
+    "workspace_id": "sales-demo",
+    "query_spec": {
+      "metric": "database",
+      "query_scope": "database",
+      "database_connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7",
+      "database_connection_revision": 2,
+      "routing": {
+        "query_scope": "database",
+        "recommended_scope": "hybrid",
+        "selected_scope": "database",
+        "reason": "本轮采用你明确选择的范围。统计数值需要数据库计算，并用原始公报核对单位、口径和出处。",
+        "source_label": "Chinook 开源示例库（MIT · lerocha/chinook-database）",
+        "document_count": 0,
+        "project_id": "chinook-benchmark",
+        "project_name": "Chinook 公开基准",
+        "scope_options": [
+          {
+            "id": "database",
+            "label": "数据库"
+          },
+          {
+            "id": "knowledge",
+            "label": "文档"
+          },
+          {
+            "id": "hybrid",
+            "label": "数据库与文档"
+          }
+        ],
+        "database_connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7"
+      },
+      "database_source": {
+        "kind": "sqlite",
+        "connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7",
+        "revision": 2,
+        "name": "Chinook 公开基准 只读",
+        "fingerprint_scope": "schema_snapshot",
+        "fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511"
+      },
+      "schema_fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511",
+      "last_sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+      "last_params": [],
+      "question": "曲目时长高于所有曲目平均时长的曲目有多少首？请用自然中文解释这个数量的筛选含义，不能把平均值写成中位数。"
+    },
+    "status": "completed",
+    "answer": "高于平均时长的曲目数量 为 494。\n\n查询结果为494首。筛选含义是：先计算全部曲目时长（以毫秒为单位）的算术平均值，再统计时长严格大于该平均值的曲目数量。这里的494是曲目数量（首），不是中位数，也不是平均时长本身。",
+    "headline": "高于平均时长的曲目数量 为 494。",
+    "metrics": [],
+    "claims": [
+      {
+        "id": "claim-1",
+        "query_id": "database-1",
+        "text": "高于平均时长的曲目数量 为 494。",
+        "evidence_ids": [
+          "database-3fb48da76a10490aacf8f63bceb27a8e"
+        ],
+        "status": "supported",
+        "kind": "database_row",
+        "value": null,
+        "unit": null,
+        "row_values": {
+          "高于平均时长的曲目数量": 494
+        },
+        "display_decimals": {},
+        "query_provenance": {
+          "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+          "params": [],
+          "source_fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511",
+          "result_sha256": "96bb80e26ae7a8d05a7e19c188b0fdfba262d7333ddccd4c1bc83b3275ff0488",
+          "columns": [
+            "高于平均时长的曲目数量"
+          ],
+          "returned_row_count": 1,
+          "truncated": false,
+          "answer_contract": {
+            "fields": [
+              {
+                "column": "高于平均时长的曲目数量",
+                "expression": "COUNT(*)",
+                "kind": "count",
+                "simple_row_count": false,
+                "table": null,
+                "entity_label": null,
+                "unit": null,
+                "alias_semantics": "not_inferred"
+              }
+            ],
+            "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+            "period_years": [],
+            "table_labels": {
+              "Artist": "艺术家",
+              "Album": "专辑",
+              "Customer": "客户",
+              "Employee": "员工",
+              "Genre": "流派",
+              "Invoice": "发票",
+              "InvoiceLine": "发票明细",
+              "Playlist": "播放列表",
+              "Track": "曲目"
+            },
+            "context_year_labels": [],
+            "boundary": "输出表达式和计数类型来自实际SQL；别名不证明单位、净额、时期或因果含义。"
+          }
+        },
+        "fact_id": "database-1-row-1"
+      },
+      {
+        "text": "查询结果为494首。筛选含义是：先计算全部曲目时长（以毫秒为单位）的算术平均值，再统计时长严格大于该平均值的曲目数量。这里的494是曲目数量（首），不是中位数，也不是平均时长本身。",
+        "support_span_ids": [],
+        "support_fact_ids": [
+          "database-1-row-1"
+        ],
+        "inference_boundary_mentions": [],
+        "question_scope_mentions": [],
+        "table_unit_bindings": [],
+        "evidence_ids": [
+          "database-3fb48da76a10490aacf8f63bceb27a8e"
+        ],
+        "kind": "synthesis",
+        "status": "supported",
+        "value": null,
+        "unit": null,
+        "id": "claim-2",
+        "database_semantic_check": {
+          "status": "supported",
+          "reviewable": true,
+          "reasons": [
+            "指标、单位、对象或时期尚未取得可验证的解释依据"
+          ],
+          "detail": "SQL使用COUNT(*)统计milliseconds大于子查询AVG(milliseconds)的曲目数，返回494，与claim-2的数值和筛选含义一致。claim-2明确区分数量与平均值，未混淆中位数，符合表达式合同。",
+          "claim_id": "claim-2",
+          "method": "model_review"
+        },
+        "semantic_check": {
+          "status": "supported",
+          "detail": "SQL使用COUNT(*)统计milliseconds大于子查询AVG(milliseconds)的曲目数，返回494，与claim-2的数值和筛选含义一致。claim-2明确区分数量与平均值，未混淆中位数，符合表达式合同。",
+          "method": "model_review"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "id": "database-3fb48da76a10490aacf8f63bceb27a8e",
+        "type": "sql_result",
+        "source": "Chinook 公开基准 只读",
+        "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+        "status": "executed",
+        "locator": {
+          "query_scope": "database",
+          "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+          "params": [],
+          "columns": [
+            "高于平均时长的曲目数量"
+          ],
+          "rows": [
+            {
+              "高于平均时长的曲目数量": 494
+            }
+          ],
+          "row_count": 1,
+          "row_limit": 200,
+          "truncated": false,
+          "source": {
+            "kind": "sqlite",
+            "connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7",
+            "revision": 2,
+            "name": "Chinook 公开基准 只读",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511"
+          },
+          "version": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511",
+          "result_sha256": "96bb80e26ae7a8d05a7e19c188b0fdfba262d7333ddccd4c1bc83b3275ff0488",
+          "dialect": "sqlite"
+        }
+      }
+    ],
+    "events": [
+      {
+        "step_id": "agent-1",
+        "tool": "model.plan",
+        "label": "规划任务",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:12.331+00:00",
+        "duration_ms": 2374.57,
+        "summary": "执行完成",
+        "inputs": {
+          "call": 1,
+          "message_count": 2
+        },
+        "outputs": {
+          "tool": "database.schema",
+          "action": "tool",
+          "model": "deepseek-v4-flash-0731",
+          "usage": {
+            "completion_tokens": 16,
+            "prompt_tokens": 3419,
+            "total_tokens": 3435
+          }
+        },
+        "finished_at": "2026-10-12T17:41:14.706+00:00"
+      },
+      {
+        "step_id": "agent-2",
+        "tool": "database.schema",
+        "label": "读取问数数据库结构",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:14.706+00:00",
+        "duration_ms": 19.76,
+        "summary": "执行完成",
+        "inputs": {},
+        "outputs": {
+          "boundary": "字段与约束来自数据库；候选关联仅通过当前键唯一/值覆盖检查，未冒充声明外键。",
+          "source": {
+            "kind": "sqlite",
+            "connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7",
+            "revision": 2,
+            "name": "Chinook 公开基准 只读",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511"
+          },
+          "truncated": false,
+          "tables": [
+            {
+              "schema": "main",
+              "name": "Album",
+              "qualified_name": "main.Album",
+              "columns": [
+                {
+                  "name": "AlbumId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "Title",
+                  "type": "NVARCHAR(160)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "ArtistId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "AlbumId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": [
+                {
+                  "id": "fk-0",
+                  "columns": [
+                    "ArtistId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Artist",
+                  "referenced_columns": [
+                    "ArtistId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                }
+              ]
+            },
+            {
+              "schema": "main",
+              "name": "Artist",
+              "qualified_name": "main.Artist",
+              "columns": [
+                {
+                  "name": "ArtistId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "Name",
+                  "type": "NVARCHAR(120)",
+                  "nullable": true,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "ArtistId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": []
+            },
+            {
+              "schema": "main",
+              "name": "Customer",
+              "qualified_name": "main.Customer",
+              "columns": [
+                {
+                  "name": "CustomerId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "FirstName",
+                  "type": "NVARCHAR(40)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "LastName",
+                  "type": "NVARCHAR(20)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "Company",
+                  "type": "NVARCHAR(80)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Address",
+                  "type": "NVARCHAR(70)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "City",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "State",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Country",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "PostalCode",
+                  "type": "NVARCHAR(10)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Phone",
+                  "type": "NVARCHAR(24)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Fax",
+                  "type": "NVARCHAR(24)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Email",
+                  "type": "NVARCHAR(60)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "SupportRepId",
+                  "type": "INTEGER",
+                  "nullable": true,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "CustomerId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": [
+                {
+                  "id": "fk-0",
+                  "columns": [
+                    "SupportRepId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Employee",
+                  "referenced_columns": [
+                    "EmployeeId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                }
+              ]
+            },
+            {
+              "schema": "main",
+              "name": "Employee",
+              "qualified_name": "main.Employee",
+              "columns": [
+                {
+                  "name": "EmployeeId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "LastName",
+                  "type": "NVARCHAR(20)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "FirstName",
+                  "type": "NVARCHAR(20)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "Title",
+                  "type": "NVARCHAR(30)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "ReportsTo",
+                  "type": "INTEGER",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "BirthDate",
+                  "type": "DATETIME",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "HireDate",
+                  "type": "DATETIME",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Address",
+                  "type": "NVARCHAR(70)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "City",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "State",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Country",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "PostalCode",
+                  "type": "NVARCHAR(10)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Phone",
+                  "type": "NVARCHAR(24)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Fax",
+                  "type": "NVARCHAR(24)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Email",
+                  "type": "NVARCHAR(60)",
+                  "nullable": true,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "EmployeeId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": [
+                {
+                  "id": "fk-0",
+                  "columns": [
+                    "ReportsTo"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Employee",
+                  "referenced_columns": [
+                    "EmployeeId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                }
+              ]
+            },
+            {
+              "schema": "main",
+              "name": "Genre",
+              "qualified_name": "main.Genre",
+              "columns": [
+                {
+                  "name": "GenreId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "Name",
+                  "type": "NVARCHAR(120)",
+                  "nullable": true,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "GenreId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": []
+            },
+            {
+              "schema": "main",
+              "name": "Invoice",
+              "qualified_name": "main.Invoice",
+              "columns": [
+                {
+                  "name": "InvoiceId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "CustomerId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "InvoiceDate",
+                  "type": "DATETIME",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "BillingAddress",
+                  "type": "NVARCHAR(70)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "BillingCity",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "BillingState",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "BillingCountry",
+                  "type": "NVARCHAR(40)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "BillingPostalCode",
+                  "type": "NVARCHAR(10)",
+                  "nullable": true,
+                  "primary_key": false
+                },
+                {
+                  "name": "Total",
+                  "type": "NUMERIC(10,2)",
+                  "nullable": false,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "InvoiceId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": [
+                {
+                  "id": "fk-0",
+                  "columns": [
+                    "CustomerId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Customer",
+                  "referenced_columns": [
+                    "CustomerId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                }
+              ]
+            },
+            {
+              "schema": "main",
+              "name": "InvoiceLine",
+              "qualified_name": "main.InvoiceLine",
+              "columns": [
+                {
+                  "name": "InvoiceLineId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "InvoiceId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "TrackId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "UnitPrice",
+                  "type": "NUMERIC(10,2)",
+                  "nullable": false,
+                  "primary_key": false
+                },
+                {
+                  "name": "Quantity",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "InvoiceLineId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": [
+                {
+                  "id": "fk-0",
+                  "columns": [
+                    "TrackId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Track",
+                  "referenced_columns": [
+                    "TrackId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                },
+                {
+                  "id": "fk-1",
+                  "columns": [
+                    "InvoiceId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Invoice",
+                  "referenced_columns": [
+                    "InvoiceId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                }
+              ]
+            },
+            {
+              "schema": "main",
+              "name": "MediaType",
+              "qualified_name": "main.MediaType",
+              "columns": [
+                {
+                  "name": "MediaTypeId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "Name",
+                  "type": "NVARCHAR(120)",
+                  "nullable": true,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "MediaTypeId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": []
+            },
+            {
+              "schema": "main",
+              "name": "Playlist",
+              "qualified_name": "main.Playlist",
+              "columns": [
+                {
+                  "name": "PlaylistId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "Name",
+                  "type": "NVARCHAR(120)",
+                  "nullable": true,
+                  "primary_key": false
+                }
+              ],
+              "primary_key": [
+                "PlaylistId"
+              ],
+              "unique_keys": [],
+              "foreign_keys": []
+            },
+            {
+              "schema": "main",
+              "name": "PlaylistTrack",
+              "qualified_name": "main.PlaylistTrack",
+              "columns": [
+                {
+                  "name": "PlaylistId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                },
+                {
+                  "name": "TrackId",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "primary_key": true
+                }
+              ],
+              "primary_key": [
+                "PlaylistId",
+                "TrackId"
+              ],
+              "unique_keys": [
+                {
+                  "name": "sqlite_autoindex_PlaylistTrack_1",
+                  "columns": [
+                    "PlaylistId",
+                    "TrackId"
+                  ],
+                  "source": "database_constraint"
+                }
+              ],
+              "foreign_keys": [
+                {
+                  "id": "fk-0",
+                  "columns": [
+                    "TrackId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Track",
+                  "referenced_columns": [
+                    "TrackId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                },
+                {
+                  "id": "fk-1",
+                  "columns": [
+                    "PlaylistId"
+                  ],
+                  "referenced_schema": "main",
+                  "referenced_table": "Playlist",
+                  "referenced_columns": [
+                    "PlaylistId"
+                  ],
+                  "declared": true,
+                  "source": "database_constraint"
+                }
+              ]
+            }
+          ],
+          "tables_count": 11
+        },
+        "finished_at": "2026-10-12T17:41:14.725+00:00"
+      },
+      {
+        "step_id": "agent-3",
+        "tool": "model.decide",
+        "label": "根据工具结果决定下一步",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:14.725+00:00",
+        "duration_ms": 2252.59,
+        "summary": "执行完成",
+        "inputs": {
+          "call": 2,
+          "message_count": 4
+        },
+        "outputs": {
+          "tool": "database.query",
+          "action": "tool",
+          "model": "deepseek-v4-flash-0731",
+          "usage": {
+            "completion_tokens": 93,
+            "prompt_tokens": 8448,
+            "total_tokens": 8541
+          }
+        },
+        "finished_at": "2026-10-12T17:41:16.978+00:00"
+      },
+      {
+        "step_id": "agent-4",
+        "tool": "database.query",
+        "label": "校验并执行只读SQL",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:16.978+00:00",
+        "duration_ms": 64.31,
+        "summary": "执行完成",
+        "inputs": {
+          "sql": "SELECT COUNT(*) AS 高于平均时长的曲目数量 FROM Track WHERE Milliseconds > (SELECT AVG(Milliseconds) FROM Track)",
+          "explanation": "统计曲目时长（Milliseconds字段，单位为毫秒）高于所有曲目平均时长的曲目数量。先计算所有曲目的平均时长，再筛选出时长大于该平均值的曲目并计数。"
+        },
+        "outputs": {
+          "status": "executed",
+          "boundary": "返回行是实际SQL结果；未自动确认业务口径、单位或自然语言准确率。",
+          "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+          "params": [],
+          "source": {
+            "kind": "sqlite",
+            "connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7",
+            "revision": 2,
+            "name": "Chinook 公开基准 只读",
+            "fingerprint_scope": "schema_snapshot",
+            "fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511"
+          },
+          "validation": {
+            "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+            "tables": [
+              "main.track"
+            ],
+            "columns": [
+              "main.track.milliseconds"
+            ],
+            "relations": [],
+            "unit_origins": {},
+            "limit": 201,
+            "parameter_count": 0,
+            "parameter_style": "qmark",
+            "checks": [
+              {
+                "name": "单条只读查询及结构",
+                "status": "passed"
+              },
+              {
+                "name": "表字段和作用域",
+                "status": "passed"
+              },
+              {
+                "name": "声明或验证的关联键",
+                "status": "passed"
+              },
+              {
+                "name": "返回行数预算",
+                "status": "passed",
+                "limit": 201
+              }
+            ]
+          },
+          "row_limit": 200,
+          "truncated": false,
+          "facts": [
+            {
+              "id": "database-1-row-1",
+              "query_id": "database-1",
+              "text": "高于平均时长的曲目数量 为 494。",
+              "evidence_ids": [
+                "database-3fb48da76a10490aacf8f63bceb27a8e"
+              ],
+              "status": "supported",
+              "kind": "database_row",
+              "value": null,
+              "unit": null,
+              "display_decimals": {}
+            },
+            {
+              "id": "database-1-cell-1-0",
+              "query_id": "database-1",
+              "text": "返回结果第 1 行的 高于平均时长的曲目数量 为 494（未推断单位）。",
+              "evidence_ids": [
+                "database-3fb48da76a10490aacf8f63bceb27a8e"
+              ],
+              "status": "supported",
+              "kind": "database_value",
+              "value": 494,
+              "unit": "untyped",
+              "column": "高于平均时长的曲目数量",
+              "unit_origin": null
+            }
+          ],
+          "facts_count": 2,
+          "rows": [
+            {
+              "高于平均时长的曲目数量": 494
+            }
+          ],
+          "rows_count": 1,
+          "evidence": [
+            {
+              "id": "database-3fb48da76a10490aacf8f63bceb27a8e",
+              "type": "sql_result",
+              "source": "Chinook 公开基准 只读",
+              "snippet": "已执行经过字段与关联检查的只读查询；来源版本指向结构快照，返回行另有摘要。",
+              "page": null,
+              "version": null
+            }
+          ],
+          "evidence_count": 1
+        },
+        "finished_at": "2026-10-12T17:41:17.042+00:00"
+      },
+      {
+        "step_id": "agent-5",
+        "tool": "model.decide",
+        "label": "根据工具结果决定下一步",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:17.042+00:00",
+        "duration_ms": 2055.98,
+        "summary": "执行完成",
+        "inputs": {
+          "call": 3,
+          "message_count": 6
+        },
+        "outputs": {
+          "action": "answer",
+          "model": "deepseek-v4-flash-0731",
+          "usage": {
+            "completion_tokens": 106,
+            "prompt_tokens": 9967,
+            "total_tokens": 10073
+          }
+        },
+        "finished_at": "2026-10-12T17:41:19.099+00:00"
+      },
+      {
+        "step_id": "agent-6",
+        "tool": "answer.verify",
+        "label": "核验并组织答案",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:19.099+00:00",
+        "duration_ms": 1994.05,
+        "summary": "执行完成",
+        "inputs": {
+          "claim_count": 2,
+          "claim_bindings": [
+            {
+              "fact_id": "database-1-row-1"
+            },
+            {
+              "kind": "synthesis"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "passed",
+          "checks": [
+            {
+              "name": "事实及原文绑定",
+              "status": "passed"
+            }
+          ]
+        },
+        "finished_at": "2026-10-12T17:41:21.093+00:00"
+      },
+      {
+        "step_id": "agent-7",
+        "tool": "model.database_support",
+        "label": "核对数据库解释",
+        "status": "completed",
+        "started_at": "2026-10-12T17:41:19.100+00:00",
+        "duration_ms": 1992.07,
+        "summary": "执行完成",
+        "inputs": {
+          "call": 4,
+          "input_characters": 1966
+        },
+        "outputs": {
+          "checks": [
+            {
+              "claim_id": "claim-2",
+              "status": "supported",
+              "detail": "SQL使用COUNT(*)统计milliseconds大于子查询AVG(milliseconds)的曲目数，返回494，与claim-2的数值和筛选含义一致。claim-2明确区分数量与平均值，未混淆中位数，符合表达式合同。"
+            }
+          ],
+          "model": "deepseek-v4-flash-0731",
+          "usage": {
+            "completion_tokens": 106,
+            "prompt_tokens": 1063,
+            "total_tokens": 1169
+          },
+          "missing_requirements": []
+        },
+        "finished_at": "2026-10-12T17:41:21.093+00:00"
+      }
+    ],
+    "rows": [
+      {
+        "高于平均时长的曲目数量": 494
+      }
+    ],
+    "columns": [
+      "高于平均时长的曲目数量"
+    ],
+    "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+    "formulas": [],
+    "checks": [
+      {
+        "name": "单条只读查询及结构",
+        "status": "passed"
+      },
+      {
+        "name": "表字段和作用域",
+        "status": "passed"
+      },
+      {
+        "name": "声明或验证的关联键",
+        "status": "passed"
+      },
+      {
+        "name": "返回行数预算",
+        "status": "passed",
+        "limit": 201
+      }
+    ],
+    "features": {
+      "clarification": true,
+      "semantic_validation": true,
+      "evidence_binding": true,
+      "document_reparse": true,
+      "temporal_rules": true,
+      "unit_guard": true
+    },
+    "data_version": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511",
+    "created_at": "2026-10-12T17:41:12.331+00:00",
+    "agent": {
+      "mode": "model",
+      "connection_id": "545bcc62-db93-45f1-992f-0748c48b394d",
+      "model": "deepseek-v4-flash-0731",
+      "plan": [
+        {
+          "id": "tool-1",
+          "label": "读取当前选定数据库的表、字段、主键、外键及验证过的候选关系；不返回样本或密钥",
+          "tool": "database.schema",
+          "status": "completed",
+          "origin": "model_tool_selection"
+        },
+        {
+          "id": "tool-2",
+          "label": "在已读取结构的数据库生成并执行受校验的只读SELECT，支持JOIN、聚合、CTE及子查询",
+          "tool": "database.query",
+          "status": "completed",
+          "origin": "model_tool_selection"
+        }
+      ],
+      "calls": 4,
+      "usage": {
+        "completion_tokens": 321,
+        "prompt_tokens": 22897,
+        "total_tokens": 23218
+      },
+      "review": {
+        "status": "passed",
+        "detail": "结论与本轮确定性事实或精确原文一致；不等于通用语义准确率。"
+      }
+    },
+    "question_normalization": {
+      "original": "曲目时长高于所有曲目平均时长的曲目有多少首？请用自然中文解释这个数量的筛选含义，不能把平均值写成中位数。",
+      "normalized": "曲目时长高于所有曲目平均时长的曲目有多少首?请用自然中文解释这个数量的筛选含义,不能把平均值写成中位数。",
+      "changes": [
+        {
+          "kind": "unicode",
+          "from": "曲目时长高于所有曲目平均时长的曲目有多少首？请用自然中文解释这个数量的筛选含义，不能把平均值写成中位数。",
+          "to": "曲目时长高于所有曲目平均时长的曲目有多少首?请用自然中文解释这个数量的筛选含义,不能把平均值写成中位数。",
+          "source": "NFKC 兼容归一化"
+        }
+      ],
+      "applied": true,
+      "boundary": "只做词典与兼容形式的确定性归一；词表之外的写法原样返回，未命中不等于问题有误；不调用模型或外部服务。"
+    },
+    "database_query": {
+      "source": {
+        "kind": "sqlite",
+        "connection_id": "da66f15c-2471-4ec6-9659-d00efbf6eec7",
+        "revision": 2,
+        "name": "Chinook 公开基准 只读",
+        "fingerprint_scope": "schema_snapshot",
+        "fingerprint": "30931c039add395b555f8543f3526135d0d492b932439abe210c69c093129511"
+      },
+      "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+      "params": [],
+      "columns": [
+        "高于平均时长的曲目数量"
+      ],
+      "rows": [
+        {
+          "高于平均时长的曲目数量": 494
+        }
+      ],
+      "truncated": false,
+      "row_limit": 200,
+      "validation": {
+        "sql": "SELECT COUNT(*) AS \"高于平均时长的曲目数量\" FROM \"main\".\"track\" AS \"track\" WHERE \"track\".\"milliseconds\" > (SELECT AVG(\"track\".\"milliseconds\") AS \"_col_0\" FROM \"main\".\"track\" AS \"track\") LIMIT 201",
+        "tables": [
+          "main.track"
+        ],
+        "columns": [
+          "main.track.milliseconds"
+        ],
+        "relations": [],
+        "unit_origins": {},
+        "limit": 201,
+        "parameter_count": 0,
+        "parameter_style": "qmark",
+        "checks": [
+          {
+            "name": "单条只读查询及结构",
+            "status": "passed"
+          },
+          {
+            "name": "表字段和作用域",
+            "status": "passed"
+          },
+          {
+            "name": "声明或验证的关联键",
+            "status": "passed"
+          },
+          {
+            "name": "返回行数预算",
+            "status": "passed",
+            "limit": 201
+          }
+        ]
+      },
+      "joins": [],
+      "attempts": 1,
+      "explanation": "统计曲目时长（Milliseconds字段，单位为毫秒）高于所有曲目平均时长的曲目数量。先计算所有曲目的平均时长，再筛选出时长大于该平均值的曲目并计数。",
+      "query_id": "database-1",
+      "inspected_tables": [
+        "main.Album",
+        "main.Artist",
+        "main.Customer",
+        "main.Employee",
+        "main.Genre",
+        "main.Invoice",
+        "main.InvoiceLine",
+        "main.MediaType",
+        "main.Playlist",
+        "main.PlaylistTrack",
+        "main.Track"
+      ]
+    },
+    "answer_status": "supported",
+    "conditions": [],
+    "coverage": {
+      "supported": 2,
+      "total": 2,
+      "percent": 100,
+      "meaning": "已绑定本轮工具来源的结论占比；不等于语义准确率"
+    },
+    "latency_ms": 8761.76,
+    "actions": [
+      {
+        "id": "save",
+        "label": "保存",
+        "enabled": true,
+        "reason": null
+      },
+      {
+        "id": "copy",
+        "label": "复制",
+        "enabled": true,
+        "reason": null
+      },
+      {
+        "id": "table",
+        "label": "结果表",
+        "enabled": true,
+        "reason": null
+      },
+      {
+        "id": "recompute",
+        "label": "修改条件",
+        "enabled": false,
+        "reason": "请用自然语言追问"
+      }
+    ]
+  },
+  "no_post_retries": true,
+  "human_review": "pending"
+}

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 
+import re
 import sqlglot
 from sqlglot import exp
 from sqlglot.errors import ErrorLevel, OptimizeError, ParseError, TokenError
@@ -97,7 +98,11 @@ def _catalog(schema, dialect):
         if key in tables:
             _error("服务端表名重复")
         normalized = {_norm(k, dialect): str(v or "UNKNOWN") for k, v in columns.items()}
-        tables[key] = {"namespace": namespace, "name": name, "columns": normalized}
+        declared=[table.get('primary_key',[])]+[k.get('columns',[]) for k in table.get('unique_keys',[]) if isinstance(k,dict)]
+        unique=[{_norm(c,dialect) for c in columns} for columns in declared
+                if isinstance(columns,list) and columns and all(isinstance(c,str) and _norm(c,dialect) in normalized for c in columns)
+                and len(set(columns))==len(columns)]
+        tables[key] = {"namespace": namespace, "name": name, "columns": normalized,'unique_keys':unique}
         nested.setdefault(namespace, {})[name] = normalized
     return tables, MappingSchema(nested, dialect=dialect, normalize=dialect == "sqlite")
 
@@ -296,6 +301,23 @@ def _group_unique(scope,alias,origins,tables,dialect):
     return bool(keys) and all(keys) and set(keys)==origins
 
 
+def _filtered_unique(scope,alias,origins,tables,dialect):
+    """Use actual unique constraints and unambiguous equality filters only."""
+    selected=scope.selected_sources.get(alias)
+    source=selected[1] if selected else None
+    if not isinstance(source,exp.Table):return False
+    table=_table_key(source,tables,dialect)
+    if not origins or any(origin[0]!=table for origin in origins):return False
+    covered={origin[1] for origin in origins}
+    where=scope.expression.args.get('where')
+    for predicate in _conjuncts(where.this) if where else []:
+        if not isinstance(predicate,exp.EQ):continue
+        for col,value in [(predicate.left,predicate.right),(predicate.right,predicate.left)]:
+            if isinstance(col,exp.Column) and col.table==alias and isinstance(value,(exp.Literal,exp.Placeholder)):
+                covered.add(_norm(col.name,dialect))
+    return any(key<=covered for key in tables[table]['unique_keys'])
+
+
 def _joins(scopes, tables, relations, dialect):
     used = []
     for scope in scopes:
@@ -330,6 +352,12 @@ def _joins(scopes, tables, relations, dialect):
             matched = next((relation for pairs in grouped.values() if (relation := _matching_relation(pairs, relations))), None)
             if matched is None:
                 for other,origins in identical.items():
+                    if _filtered_unique(scope,alias,origins,tables,dialect) and _filtered_unique(scope,other,origins,tables,dialect):
+                        ordered=sorted(origins)
+                        matched={'left_table':other,'right_table':alias,'left_columns':[x[1] for x in ordered],
+                            'right_columns':[x[1] for x in ordered],'source':'filtered_unique_key','verified':True,
+                            'cardinality':'one_to_one','basis':'同一实际原表的唯一键：完整关联列及各侧明确等值过滤共同固定全部键列，未使用样本值推测唯一。'}
+                        break
                     right_unique=_group_unique(scope,alias,origins,tables,dialect)
                     left_unique=_group_unique(scope,other,origins,tables,dialect)
                     def grouped_source(name):
@@ -506,6 +534,20 @@ def validate(sql, schema, *, dialect="sqlite", max_rows=200, max_nodes=500):
                     table_references += 1
         if table_references > MAX_TABLE_REFERENCES:
             _error("SQL 数据表引用超过上限")
+        # Explain a known physical-field mistake before the optimizer collapses
+        # it into a generic qualification error. Derived/correlated scopes still
+        # pass through the unchanged optimizer and relationship checks below.
+        if dialect == 'sqlite':
+            for scope in scopes:
+                sources={alias.casefold():source for alias,(_,source) in scope.selected_sources.items()}
+                for column in scope.columns:
+                    source=sources.get(column.table.casefold()) if column.table else None
+                    if not isinstance(source,exp.Table) or column.is_star:continue
+                    entry=tables[_table_key(source,tables,dialect)]
+                    if column.name.casefold() not in entry['columns']:
+                        known='、'.join(list(entry['columns'])[:12])
+                        _error(f'字段 {column.table}.{column.name} 不属于已检查的表 {entry["name"]}。实际字段包括：{known}。'
+                               '请使用实际字段，必要时沿已声明外键补齐关联；仅修改排序或别名不能修复缺失字段。')
         tree = qualify(tree, dialect=dialect, schema=mapping, infer_schema=False,
                        validate_qualify_columns=True, allow_partial_qualification=False,
                        quote_identifiers=True, identify=True)
@@ -540,8 +582,13 @@ def validate(sql, schema, *, dialect="sqlite", max_rows=200, max_nodes=500):
         count = sum(1 for _ in tree.find_all(exp.Placeholder))
         normalized = tree.sql(dialect=dialect, unsupported_level=ErrorLevel.RAISE)
         driver_sql = _driver_sql(normalized, dialect, count)
-    except (ParseError, TokenError, OptimizeError, sqlglot.errors.UnsupportedError, RecursionError):
-        _error("SQL 无法安全解析，或表字段及作用域不匹配")
+    except (ParseError, TokenError, OptimizeError, sqlglot.errors.UnsupportedError, RecursionError) as exc:
+        if isinstance(exc,ParseError) and getattr(exc,'errors',None):
+            detail=str(exc.errors[0].get('description',''))[:180]
+        else:detail=re.sub(r'\x1b\[[0-9;]*m','',str(exc)).split('\n',1)[0][:180]
+        quoting='双引号' if dialect in {'sqlite','postgres'} else '该数据库的标识符引号'
+        _error('SQL语法或字段作用域不正确：'+detail+'。含%、点号或空格的输出别名必须用'+quoting+
+               '包围完整名称；同一SELECT内不能在另一表达式中引用刚起的列别名，应使用CTE或子查询。仍只能查询已检查字段。')
     return {"sql": normalized, "driver_sql": driver_sql, "tables": sorted(physical),
             "columns": sorted(columns), "relations": used, "unit_origins":unit_origins,"limit": limit,
             "parameter_count": count, "parameter_style": "qmark" if dialect == "sqlite" else "format",

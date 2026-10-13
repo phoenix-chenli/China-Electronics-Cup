@@ -1,0 +1,367 @@
+{
+  "observed_at": "2026-10-12",
+  "source_snapshot": [
+    {
+      "path": "02_数据资料/公开统计分析/原件/淮南市2024年国民经济和社会发展统计公报.pdf",
+      "sha256": "856a7e6d59709baeb38ef87ec85fa3822ef6f91159a4b7d85284fc2dad2d1ebc"
+    },
+    {
+      "path": "02_数据资料/公开统计分析/原件/2024年新津区国民经济和社会发展统计公报.pdf",
+      "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b"
+    },
+    {
+      "path": "02_数据资料/公开统计分析/原件/石景山区2024年国民经济和社会发展统计公报.pdf",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f"
+    }
+  ],
+  "cases": [
+    {
+      "source": "淮南市2024年国民经济和社会发展统计公报.pdf",
+      "transform": "clean",
+      "image_sha256": "79df89e90df2621ae595e9292b3e5d701ff607926e5ef4cba2089ed34594ded9",
+      "signals": {
+        "sharpness": 2813.9,
+        "ink_ratio": 0.0371,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "淮南市2024年国民经济和社会发展统计公报.pdf",
+      "transform": "blur3",
+      "image_sha256": "230d86a95637f384623a1a021d2ca878abd7c8cbb39be59f1e218de8ee4701ee",
+      "signals": {
+        "sharpness": 40.08,
+        "ink_ratio": 0.0083,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "low_image_sharpness"
+      ],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "淮南市2024年国民经济和社会发展统计公报.pdf",
+      "transform": "skew4",
+      "image_sha256": "5e4e34ebe551b21074db93c79aae0143781d31c12960a6e3786d778f09cfcce7",
+      "signals": {
+        "sharpness": 2799.63,
+        "ink_ratio": 0.0412,
+        "blank": false,
+        "deskew_degrees": -4.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "page_skewed"
+      ],
+      "known_skew_degrees": 4,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "淮南市2024年国民经济和社会发展统计公报.pdf",
+      "transform": "metadata180",
+      "image_sha256": "e1d68ca97e2076f0fb30c2ab103f4267f3234be0e34bffdfc7024dbb85ed8c07",
+      "signals": {
+        "sharpness": 2731.49,
+        "ink_ratio": 0.0375,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "page_rotated",
+        "page_upside_down"
+      ],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 180,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "淮南市2024年国民经济和社会发展统计公报.pdf",
+      "transform": "pixels180",
+      "image_sha256": "0d05f5745bfba919805b9dba3cebd467528346f23f44e6d95eb1469d717ac195",
+      "signals": {
+        "sharpness": 2731.49,
+        "ink_ratio": 0.0375,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "transform": "clean",
+      "image_sha256": "c5b18e8d0fb49a5daa6678417a2d70064d28f5717b04cba5e80f85b9283d63bf",
+      "signals": {
+        "sharpness": 3718.71,
+        "ink_ratio": 0.0543,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "transform": "blur3",
+      "image_sha256": "0a18f9170621c6dce90f965627bba66c3fafcc78e8bf42c7d4cb1e5748abc4ee",
+      "signals": {
+        "sharpness": 51.0,
+        "ink_ratio": 0.0105,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "low_image_sharpness"
+      ],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "transform": "skew4",
+      "image_sha256": "c26b91109fa201fbdcf253f7c607e80055b760cddf73272f8325d9111033d361",
+      "signals": {
+        "sharpness": 3767.93,
+        "ink_ratio": 0.0616,
+        "blank": false,
+        "deskew_degrees": -4.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "page_skewed"
+      ],
+      "known_skew_degrees": 4,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "transform": "metadata180",
+      "image_sha256": "ceebf42c9f7d3168f873ed4c24b6688ef66ce2cc901026b33bca221f4f46c2e9",
+      "signals": {
+        "sharpness": 3649.42,
+        "ink_ratio": 0.0568,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "page_rotated",
+        "page_upside_down"
+      ],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 180,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "transform": "pixels180",
+      "image_sha256": "3909fd83cccd16a609489d72878eefd81bc59441b400243c9700308855771645",
+      "signals": {
+        "sharpness": 3649.42,
+        "ink_ratio": 0.0568,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "石景山区2024年国民经济和社会发展统计公报.pdf",
+      "transform": "clean",
+      "image_sha256": "d7f76dc6778defc71f37797500eca7dce00c2556eb6a87c0e0fb81410badb44a",
+      "signals": {
+        "sharpness": 3145.43,
+        "ink_ratio": 0.0443,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "石景山区2024年国民经济和社会发展统计公报.pdf",
+      "transform": "blur3",
+      "image_sha256": "a261fc903a3d641cd9eda0bdd4aba9e99841a2470d90bcf972c2452d872b940e",
+      "signals": {
+        "sharpness": 46.54,
+        "ink_ratio": 0.0102,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "low_image_sharpness"
+      ],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "石景山区2024年国民经济和社会发展统计公报.pdf",
+      "transform": "skew4",
+      "image_sha256": "1fbabf8ede7784c8266d9381b6a19fd75ae5470fa87b781b8e2c82d51bb03265",
+      "signals": {
+        "sharpness": 3069.11,
+        "ink_ratio": 0.0493,
+        "blank": false,
+        "deskew_degrees": -4.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "page_skewed"
+      ],
+      "known_skew_degrees": 4,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "石景山区2024年国民经济和社会发展统计公报.pdf",
+      "transform": "metadata180",
+      "image_sha256": "224581f2bb58f736aebb87073a8fea373b19abd0aca99e78fcd7c281a01da8d9",
+      "signals": {
+        "sharpness": 2995.88,
+        "ink_ratio": 0.0461,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [
+        "page_rotated",
+        "page_upside_down"
+      ],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 180,
+      "orientation_pixels_supported": false
+    },
+    {
+      "source": "石景山区2024年国民经济和社会发展统计公报.pdf",
+      "transform": "pixels180",
+      "image_sha256": "7ebb8f43a0c867de90657188b8a31d0e6cbdb071e3d913073ae415ea7fd48015",
+      "signals": {
+        "sharpness": 2995.88,
+        "ink_ratio": 0.0461,
+        "blank": false,
+        "deskew_degrees": 0.0,
+        "measurement": "raster-v2-cropped-edges"
+      },
+      "codes": [],
+      "known_skew_degrees": 0,
+      "rotation_metadata": 0,
+      "orientation_pixels_supported": false
+    }
+  ],
+  "outlines": [
+    {
+      "source": "02_数据资料/公开统计分析/原件/淮南市2024年国民经济和社会发展统计公报.pdf",
+      "count": 15,
+      "attribution_candidates": [
+        "淮南市统计局\n国家统计局淮南调查队\n"
+      ],
+      "titles": [
+        "淮南市2024 年国民经济和社会发展",
+        "统计公报",
+        "一、综合",
+        "二、农业",
+        "三、工业和建筑业",
+        "四、服务业",
+        "五、固定资产投资",
+        "六、国内贸易",
+        "七、对外经济",
+        "八、交通运输和邮电业",
+        "九、财政金融",
+        "十、人民生活和社会保障",
+        "十一、科学技术和教育",
+        "十二、文化旅游、卫生健康和体育",
+        "十三、资源、环境和应急管理"
+      ],
+      "source_text_preserved": true,
+      "human_outline_labels": "pending",
+      "boundary": "真实原件的署名排除检查；不是完整目录人工F1评测。"
+    },
+    {
+      "source": "02_数据资料/公开统计分析/原件/2024年新津区国民经济和社会发展统计公报.pdf",
+      "count": 12,
+      "attribution_candidates": [],
+      "titles": [
+        "2024 年新津区国民经济和社会发展统计公报",
+        "一、综合",
+        "二、农业",
+        "三、工业和建筑业",
+        "四、固定资产投资",
+        "四、国内贸易和对外开放",
+        "五、交通、旅游",
+        "六、财政、金融",
+        "七、科学技术和教育",
+        "八、卫生、文化和体育",
+        "九、城市建设和环境保护",
+        "十、人口、人民生活和社会保障"
+      ],
+      "source_text_preserved": true,
+      "human_outline_labels": "pending",
+      "boundary": "真实原件的署名排除检查；不是完整目录人工F1评测。"
+    },
+    {
+      "source": "02_数据资料/公开统计分析/原件/石景山区2024年国民经济和社会发展统计公报.pdf",
+      "count": 11,
+      "attribution_candidates": [],
+      "titles": [
+        "石景山区2024 年 国民经济和社会发展统计公报",
+        "一、综合",
+        "二、工业和建筑业",
+        "三、第三产业",
+        "四、财政金融",
+        "五、固定资产投资和房地产开发",
+        "六、市场消费",
+        "七、对外经济",
+        "八、人民生活和社会保障",
+        "九、教育、科技、文化、旅游和卫生",
+        "十、环境"
+      ],
+      "source_text_preserved": true,
+      "human_outline_labels": "pending",
+      "boundary": "真实原件的署名排除检查；不是完整目录人工F1评测。"
+    }
+  ],
+  "metrics": {
+    "blur_absolute_alerts": 3,
+    "blur_cases": 3,
+    "clean_absolute_false_alerts": 0,
+    "clean_cases": 3,
+    "skew_alerts": 3,
+    "skew_cases": 3
+  },
+  "boundaries": [
+    "受控退化样本不是独立真人标注集",
+    "像素180度颠倒未自动识别；仅有旋转元数据时告警",
+    "复杂度分数不表示问答准确率",
+    "表格、公式与历史定位另由结构和引用回归核验"
+  ],
+  "external_model_calls": 0
+}

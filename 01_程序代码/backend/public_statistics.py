@@ -80,7 +80,9 @@ def install():
     digest = hashlib.sha256(data).hexdigest()
     if review.get('indicators_sha256') != digest or review.get('status') != 'verified':
         return {'installed': False, 'reason': '资料核验版本与指标版本不一致'}
-    for source in catalog['sources'] + catalog.get('derived_documents', []):
+    document_sources = (catalog['sources'] + catalog.get('derived_documents', [])
+                        + catalog.get('supplemental_documents', []))
+    for source in document_sources:
         expected = source.get('file_sha256', source.get('original_sha256'))
         if s.digest(SOURCE_DIR / source['file_path']) != expected:
             raise ValueError('公开资料原件摘要不一致，未导入')
@@ -104,7 +106,7 @@ def install():
     folder.mkdir(exist_ok=True)
     ids = []
     primary_ids = []
-    for source in catalog['sources'] + catalog.get('derived_documents', []):
+    for source in document_sources:
         original = SOURCE_DIR / source['file_path']
         target = folder / original.name
         if not target.exists() or s.digest(target) != s.digest(original): shutil.copy2(original, target)
@@ -115,7 +117,8 @@ def install():
         else:
             did = s.index_document(target)['id']
         ids.append(did)
-        if source in catalog['sources']: primary_ids.append(did)
+        if source in catalog['sources'] + catalog.get('supplemental_documents', []):
+            primary_ids.append(did)
         provenance = {k: v for k, v in source.items() if k not in {'file_path', 'landing_url'}}
         provenance['file_sha256'] = s.digest(original)
         with s.conn() as db:
@@ -131,11 +134,12 @@ def install():
         'source_vocabulary':{'regions':[{'region_id':r['region_id'], 'region_name':r['region_name']} for r in curated['regions']],
             'indicators':[{k:i[k] for k in ('metric_id','metric_name','unit')} for i in curated['indicators']],
             'indicators_sha256':digest,'boundary':'只含当前公开资料的指标名称、单位和地区名称，详细口径须查原文；不含问答样例或指标观测数值。'},
-        'source_label': '三地2024年官方统计公报与原文转换件', 'indicators_sha256': digest,
+        'source_label': '三地官方统计、产业政策、碳市场与开源技术原件', 'indicators_sha256': digest,
         'starter_questions': ['2024年新津民营经济增加值占GDP的比例是多少？计算结果与公报公布的比例是否一致？',
             '比较2024年淮南、新津、石景山的GDP和第三产业比重，并注明单位和出处。',
             '三地人口能直接比较吗？请核对常住与户籍口径。',
-            '新津2024年GDP现价增幅与公布的实际增速为什么不同？']})
+            '新津2024年GDP现价增幅与公布的实际增速为什么不同？',
+            '石景山2024年人形机器人方案的医疗与养老任务分别由谁牵头？这些任务是否已经完成？']})
     if not old:
         # Keep synthetic source fixtures separate from the public presentation.
         legacy = [d['id'] for d in s.doc_list() if d['id'] not in ids]

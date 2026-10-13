@@ -27,6 +27,11 @@ from . import rag_index, rag_providers
 from . import document_tasks, document_providers, document_review, query_routing, public_statistics, chinook_benchmark
 from .seed import seed_business, write_seed_docs
 
+# Capture once for runtime/source acceptance. Re-reading edited files in the
+# health handler would incorrectly identify old running code as the new build.
+BACKEND_SOURCE_AT_STARTUP={p.name:hashlib.sha256(p.read_bytes()).hexdigest()
+                           for p in sorted(Path(__file__).parent.glob('*.py'))}
+
 app=FastAPI(title="证流",version="0.7.0")
 app.include_router(conversations.router)
 app.include_router(scenarios.router)
@@ -153,7 +158,7 @@ def run(req, cancelled=None, progress=None):
 @app.get("/api/health")
 def health():
     cfg=agent.saved_config()
-    return {"ok":True,"service":"evidenceflow","version":"0.7.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"model_capabilities":{**connections.capabilities(),"ocr":bool(document_providers.describe().get('ready'))},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
+    return {"ok":True,"service":"evidenceflow","version":"0.7.0","mode":"configurable-agent","agent_mode":cfg['mode'],"query_scope":cfg.get('query_scope','sales'),"platform":platform.system()+" "+platform.machine(),"instance":{"workspace":os.environ.get("EVIDENCEFLOW_WORKSPACE_ID","manual"),"id":os.environ.get("EVIDENCEFLOW_INSTANCE_ID","manual"),"pid":os.getpid()},"backend_source_at_startup":BACKEND_SOURCE_AT_STARTUP,"model_capabilities":{**connections.capabilities(),"ocr":bool(document_providers.describe().get('ready'))},"local_only":connections.local_only(),"features":engine.FEATURES,"time":s.now()}
 
 @app.get("/api/summary")
 def summary(project_id: str | None=None):

@@ -1,3 +1,4 @@
+import {DatabaseAnswerCheck} from '../src/database-query'
 import assert from 'node:assert/strict'
 import {test} from 'node:test'
 import React from 'react'
@@ -74,4 +75,12 @@ test('empty database result still exposes SQL and saved names do not invent a sa
  assert.equal(savedAnalysisName(result),'按产品编号列出库存成本')
  assert.equal(savedAnalysisName({query_spec:{year:2024,region:'华东'}}),'2024 年华东经营分析')
  assert.equal(isDatabaseResult({query_spec:{metric:'document'}}),false)
+})
+
+
+test('database explanations that fail their unit or scope contract retain values with visible reasons',()=>{
+ const result={database_answer_check:{status:'raw_fallback',detail:'已保留同次SQL实际结果',reasons:['计数不能变成百分比','净额口径尚未确认']}}
+ const html=renderToStaticMarkup(<DatabaseAnswerCheck result={result}/>)
+ for(const text of ['已保留查询原值','解释尚待核验','计数不能变成百分比','净额口径尚未确认'])assert.ok(html.includes(text),text)
+ assert.equal(renderToStaticMarkup(<DatabaseAnswerCheck result={{}}/>),'')
 })

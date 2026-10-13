@@ -21,7 +21,7 @@ APP_DB, BUSINESS_DB = DATA / "app.db", DATA / "business.db"
 BASE_TABLES = {"orders", "products", "customers", "projects", "targets", "business_rules"}
 # Bumped whenever the stored shape of a parse changes, so an existing install
 # re-parses instead of keeping older metadata. Historical parses stay readable.
-PARSE_VERSION = 4
+PARSE_VERSION = 5
 _query_state = threading.local()
 
 @contextmanager

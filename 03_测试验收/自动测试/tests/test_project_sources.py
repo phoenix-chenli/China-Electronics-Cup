@@ -49,6 +49,45 @@ class ProjectSourceTests(unittest.TestCase):
         conversations.manager.pool.shutdown(wait=True)
         TEMP.cleanup()
 
+    def test_native_official_word_preserves_table_roles_and_draft_provenance(self):
+        before=s.digest(s.DATA/'public-statistics.db') if (s.DATA/'public-statistics.db').exists() else None
+        public_statistics.install()
+        bound=query_routing.profile('public-statistics')
+        native=[x for x in s.doc_list() if x.get('provenance',{}).get('origin')=='original_docx_from_official_site']
+        self.assertEqual(len(native),2)
+        self.assertTrue(all(x['id'] in bound['primary_document_ids'] for x in native))
+        doc=next(x for x in native if '征求意见稿_' in x['name'])
+        view=documents.layout(doc['id'])
+        tables=[t for page in view['pages'] for t in page.get('tables',[])]
+        self.assertEqual(len(tables),1)
+        self.assertEqual(tables[0]['rows'],22)
+        cells=tables[0]['cells']
+        rows={r:[c['text'] for c in cells if c['row']==r] for r in range(22)}
+        self.assertIn('区卫生健康委',rows[13])
+        self.assertIn('区民政局',rows[15])
+        text=next(page for page in view['pages'] if page.get('tables'))['text']
+        page=next(page for page in view['pages'] if page.get('tables'))['number']
+        quote='区卫生健康委'
+        start=text.index(quote)
+        located=documents.resolve({'document_id':doc['id'],'sha256':doc['sha256'],
+            'parse_id':view['parse_id'],'page':page,'text_range':{'start':start,'end':start+len(quote)}},quote)
+        self.assertEqual(located['status'],'located')
+        self.assertEqual(located['publication']['publication_status'],'public_consultation_draft')
+        self.assertFalse(located['quality']['human_reviewed'])
+        if before:self.assertEqual(s.digest(s.DATA/'public-statistics.db'),before)
+
+    def test_supplemental_source_hash_failure_stops_before_import(self):
+        import copy
+        original=copy.deepcopy(self.catalog)
+        original['supplemental_documents'][0]['file_sha256']='0'*64
+        actual_loads=json.loads
+        def replaced(data,*args,**kwargs):
+            result=actual_loads(data,*args,**kwargs)
+            return original if isinstance(result,dict) and 'supplemental_documents' in result else result
+        with patch('backend.public_statistics.json.loads',side_effect=replaced):
+            with self.assertRaisesRegex(ValueError,'摘要不一致'):
+                public_statistics.install()
+
     def test_public_database_integrity_and_decimal_reference(self):
         before=s.digest(self.path)
         d=connections.ready(self.cid,connections.DB_KINDS)

@@ -83,6 +83,60 @@ class DatabaseAgentTests(unittest.TestCase):
         self.assertIn('明确只返回1列',steps[0]['summary'])
         self.assertEqual(len([e for e in result['evidence'] if e['type']=='sql_result']),1)
 
+    def test_database_count_synthesis_uses_local_contract_without_document_model_review(self):
+        self.database()
+        def answer(payload):
+            fact=fixture.tool_results(payload)[-1]['result']['facts'][0]
+            return {'action':'answer','claims':[{'kind':'synthesis','text':'共有3条记录。','support_fact_ids':[fact['id']]}]}
+        self.script(schema_action(),sql_action('SELECT COUNT(*) AS n FROM settlements'),answer)
+        response=self.query('结算记录有多少条？')
+        self.assertEqual(response.status_code,200,response.text)
+        result=response.json()
+        self.assertEqual(result['answer_status'],'supported')
+        self.assertEqual(result['answer'],'共有3条记录。')
+        self.assertFalse(any(e['tool'] in {'model.requirements','model.support','model.evidence_assess'} for e in result['events']))
+        self.assertEqual(result['claims'][0]['database_semantic_check']['status'],'verified_count')
+
+    def test_unverified_database_prose_falls_back_to_the_same_actual_sql_rows(self):
+        self.database()
+        for text,reason in [('共有3%的结算记录。','百分比'),('净销售额为3。','净额'),('共有3条记录，同比增长。','比较'),('共有3条高质量记录。','指标')]:
+            def answer(payload,wording=text):
+                fact=fixture.tool_results(payload)[-1]['result']['facts'][0]
+                return {'action':'answer','claims':[{'kind':'synthesis','text':wording,'support_fact_ids':[fact['id']]}]}
+            replies=[schema_action(),sql_action('SELECT COUNT(*) AS n FROM settlements'),answer]
+            if reason=='指标':
+                replies.append({'checks':[{'claim_id':'claim-1','status':'unknown','detail':'COUNT结果没有记录质量字段或评价标准。'}],
+                                'coverage_status':'partial','missing_requirements':['未查询到质量评价依据']})
+            self.script(*replies)
+            response=self.query('结算记录有多少条？')
+            self.assertEqual(response.status_code,200,response.text)
+            result=response.json()
+            self.assertEqual(result['rows'],[{'n':3}])
+            self.assertEqual(result['database_query']['attempts'],1)
+            self.assertEqual(result['answer_status'],'partial')
+            self.assertEqual(result['database_answer_check']['status'],'raw_fallback')
+            self.assertIn(reason,' '.join(result['missing_requirements']))
+            self.assertNotIn(text,result['answer'])
+            self.assertIn('保留SQL返回值',result['answer'])
+            evidence=next(e for e in result['evidence'] if e['type']=='sql_result')
+            self.assertEqual(evidence['locator']['rows'],[{'n':3}])
+
+    def test_database_synthesis_has_one_model_review_without_document_judges(self):
+        self.database()
+        def answer(payload):
+            fact=fixture.tool_results(payload)[-1]['result']['facts'][0]
+            return {'action':'answer','claims':[{'kind':'synthesis','text':'查询得到的金额合计数值为25.75，原库单位未确认。','support_fact_ids':[fact['id']]}]}
+        self.script(schema_action(),sql_action('SELECT SUM(amount) AS 金额合计 FROM settlements'),answer,
+                    {'checks':[{'claim_id':'claim-1','status':'supported','detail':'同次SUM返回25.75，未引入未确认币种。'}],
+                     'coverage_status':'supported','missing_requirements':[]})
+        response=self.query('结算记录的金额合计数值是多少？')
+        self.assertEqual(response.status_code,200,response.text);result=response.json()
+        self.assertEqual(result['answer_status'],'supported')
+        self.assertIn('金额合计数值为25.75',result['answer'])
+        self.assertEqual(result['agent']['calls'],4)
+        self.assertTrue(any(e['tool']=='model.database_support' for e in result['events']))
+        self.assertFalse(any(e['tool'] in {'model.requirements','model.support','model.evidence_assess'} for e in result['events']))
+
     def test_unknown_schema_three_table_join_and_original_values(self):
         cid, path = self.database()
         before = s.digest(path)

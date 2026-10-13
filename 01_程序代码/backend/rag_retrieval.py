@@ -272,6 +272,20 @@ def _evidence(chunk, ranking):
             "retrieval": {"chunk_id": chunk["id"], "generation_id": chunk["generation_id"], **ranking}}
 
 
+def _continuation(chunk, by_id):
+    """Carry a possible native-PDF sentence continuation as separate evidence."""
+    methods=chunk.get('quality',{}).get('source_methods',[])
+    if methods!=['pdf_native'] or not chunk.get('source','').lower().endswith('.pdf'):return None
+    from .rag_grounding import native_sentence_tail
+    tail=native_sentence_tail(chunk['text'])
+    if not re.search(r'(?:增长|下降|减少|增加|达到|分别为|人均|同比|为|达|占|约|零售额|收入|余额|总额|总量|数量)\s*$',tail):return None
+    choices=[other for other in by_id.values() if all(other.get(key)==chunk.get(key) for key in ('document_id','sha256','parse_id'))
+             and other['page']==chunk['page']+1 and other['start']<=4
+             and other.get('quality',{}).get('source_methods')==['pdf_native']
+             and re.match(r'^\s*[-+]?\d[\d,.]*\s*(?:%|％|亿|万|元|人|个|家|吨|微克|所|倍)',other['text'])]
+    return min(choices,key=lambda c:c['end']) if choices else None
+
+
 def _pack(ranked, by_id, scope, cancelled=None, deadline=None):
     selected, characters = [], 0
     covered = []
@@ -291,6 +305,11 @@ def _pack(ranked, by_id, scope, cancelled=None, deadline=None):
         if characters+len(chunk["text"]) > CONTEXT_CHAR_LIMIT:
             continue
         selected.append(_evidence(chunk, ranking)); covered.append(chunk); characters += len(chunk["text"])
+        continuation=_continuation(chunk,by_id)
+        if continuation and len(selected)<EVIDENCE_LIMIT and characters+len(continuation['text'])<=CONTEXT_CHAR_LIMIT and not any(
+                c['document_id']==continuation['document_id'] and c['page']==continuation['page'] and c['start']<=continuation['start'] and c['end']>=continuation['end'] for c in covered):
+            selected.append(_evidence(continuation,{'context_for':chunk['id'],'reason':'同版本下一页的数值开头；仍须核对原句承接，不自动认定指标或单位'}))
+            covered.append(continuation);characters+=len(continuation['text'])
         for span in chunk.get("context_spans", []):
             if len(selected) >= EVIDENCE_LIMIT or characters+len(span["text"]) > CONTEXT_CHAR_LIMIT:
                 break

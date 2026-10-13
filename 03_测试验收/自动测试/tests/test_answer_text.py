@@ -87,7 +87,7 @@ class DatabaseSynthesisTest(unittest.TestCase):
                 {'kind':'synthesis','status':'pending_review','evidence_ids':[],'text':'无依据'},
                 {'kind':'excerpt','status':'supported','evidence_ids':['sql-e1'],'text':'摘录'}]
         agent.bind_database_synthesis(claims)
-        self.assertEqual(['supported','pending_review','supported'],[c['status'] for c in claims])
+        self.assertEqual(['needs_evidence','needs_evidence','supported'],[c['status'] for c in claims])
 
 
 if __name__=='__main__':

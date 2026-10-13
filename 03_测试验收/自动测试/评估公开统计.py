@@ -77,7 +77,7 @@ def execute(output,regression=False,case_ids=None):
     report={'dataset_id':dataset['dataset_id'],'dataset_sha256':EXPECTED_SHA,'run_kind':'regression' if regression else 'first_exposure',
         'frozen_at':dataset['frozen_at'],'started_at':now(),'phase':'running','model':model,
         'source_sha256':{n:hashlib.sha256((ROOT/'01_程序代码/backend'/n).read_bytes()).hexdigest() for n in ['agent.py','connections.py','database_query.py','sql_guard.py','rag_grounding.py','rag_retrieval.py','public_statistics.py','query_routing.py']},
-        'project_id':'public-statistics','workers':2,'human_review':'pending',
+        'project_id':'public-statistics','workers':1,'human_review':'pending',
         'selected_case_ids':[case['id'] for case in selected],
         'no_post_retries':True,'reference_answers_sent_to_model':False,
         'boundary':'SQL严格行匹配与引用定位是自动诊断，不能替代答全、口径和引用语义的真人复核。',
@@ -125,7 +125,7 @@ def execute(output,regression=False,case_ids=None):
             report['results'].append(row); report['requests'][case['id']]['status']='failed' if error else 'returned'
             write()
         print(json.dumps({k:row[k] for k in ['case_id','http_status','duration_ms','model_calls','nonempty_answer','expected_state_match','strict_sql_rows_match']},ensure_ascii=False),flush=True)
-    with ThreadPoolExecutor(max_workers=2) as pool:
+    with ThreadPoolExecutor(max_workers=1) as pool:
         for future in as_completed([pool.submit(run,c) for c in selected]): future.result()
     rows=report['results']; rows.sort(key=lambda row:row['case_id'])
     checks=[r['strict_sql_rows_match'] for r in rows if r['strict_sql_rows_match'] is not None]

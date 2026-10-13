@@ -73,6 +73,7 @@ def install():
         query_routing.bind(PROJECT_ID, {
             'default_scope': 'database', 'managed_public': True,
             'database_connection_id': config['id'], 'document_ids': [],
+            'source_vocabulary': {'table_labels': {'Artist':'艺术家','Album':'专辑','Customer':'客户','Employee':'员工','Genre':'流派','Invoice':'发票','InvoiceLine':'发票明细','Playlist':'播放列表','Track':'曲目'}},
             'source_label': 'Chinook 开源示例库（MIT · lerocha/chinook-database）',
             'starter_questions': [str(c.get('question', '')) for c in items[:3] if c.get('question')]})
         return {'installed': True, 'project_id': PROJECT_ID, 'connection_id': config['id'],

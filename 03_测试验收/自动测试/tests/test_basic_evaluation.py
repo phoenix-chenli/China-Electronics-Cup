@@ -1,3 +1,4 @@
+from contextlib import closing
 """Evaluation diagnostics must not silently turn source checks into accuracy."""
 import importlib.util
 import json
@@ -18,7 +19,7 @@ class BasicEvaluationTests(unittest.TestCase):
         root=Path(folder)
         (root/'source.pdf').write_bytes(b'synthetic-source-hash-fixture')
         (root/'indicators.json').write_text('{}')
-        with sqlite3.connect(root/'reference.db') as db:
+        with closing(sqlite3.connect(root/'reference.db')) as db, db:
             db.execute('CREATE TABLE values_table(value REAL)')
             db.execute('INSERT INTO values_table VALUES (12)')
         data={'frozen_before_model_execution':True,

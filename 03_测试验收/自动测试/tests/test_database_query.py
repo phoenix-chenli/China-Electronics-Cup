@@ -90,6 +90,13 @@ class DatabaseQueryTests(unittest.TestCase):
             'SELECT p.id,p.kind,SUM(p.amount) FROM payments p WHERE p.id=1 AND p.kind=\'actual\' GROUP BY p.id,p.kind']:
             with self.subTest(sql=sql):q.validate_question_grain(sql,'收款金额合计')
 
+    def test_chinese_rank_is_a_breakdown_but_previous_years_are_not(self):
+        sql='SELECT customer_id,COUNT(*) AS n FROM payments GROUP BY customer_id ORDER BY n DESC LIMIT 5'
+        for question in ('记录总数最多的前五位客户是谁？','记录总数最多的前5位客户是谁？','记录总数最多的客户有哪些？'):
+            q.validate_question_grain(sql,question)
+        with self.assertRaisesRegex(ValueError,'额外分组'):
+            q.validate_question_grain(sql,'前五年记录总数是多少？')
+
     def test_single_total_rejects_unfixed_date_or_unsafe_filter_proofs(self):
         for sql in [
             'SELECT p.id,SUM(p.amount) FROM payments p GROUP BY p.id',
@@ -167,6 +174,9 @@ class DatabaseQueryTests(unittest.TestCase):
         self.assertEqual(result['validation']['question_projection']['expected_names'],['合计_元'])
 
     def test_projection_does_not_guess_contract_for_ordinary_business_wording(self):
+        self.assertEqual(q.validate_question_projection('SELECT 1,2,3,4','只返回1行4列')['expected_count'],4)
+        with self.assertRaisesRegex(ValueError,'只返回4列'):
+            q.validate_question_projection('SELECT 1','返回一行四列')
         self.assertIsNone(q.validate_question_projection('SELECT 12,2024','请查询2024年金额及对应年份'))
         self.assertIsNone(q.validate_question_projection('SELECT 12','共有三列指标，可否比较？'))
         self.assertIsNone(q.validate_question_projection('SELECT 12','只返回金额和单位'))

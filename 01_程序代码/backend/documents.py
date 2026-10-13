@@ -113,8 +113,11 @@ def parse_page(path, page_number):
             raw=p.get_text("rawdict",sort=True,flags=pymupdf.TEXTFLAGS_RAWDICT & ~pymupdf.TEXT_PRESERVE_IMAGES)
             for bi,b in enumerate(raw["blocks"]):
                 if b["type"] != 0: continue
-                start=len(text); chars=[]; sizes=[]; fonts={}; bold=False
+                start=len(text); chars=[]; sizes=[]; fonts={}; bold=False; baselines=[]
                 for line in b["lines"]:
+                    direction=line.get("dir")
+                    if direction and len(direction)==2:
+                        baselines.append(round(__import__("math").degrees(__import__("math").atan2(direction[1],direction[0])),4))
                     for span in line["spans"]:
                         # Size, weight and family are recorded so a heading hierarchy
                         # can be inferred later for PDFs without bookmarks. Chinese
@@ -131,7 +134,7 @@ def parse_page(path, page_number):
                     text+="\n"
                 end=len(text)
                 if text[start:end].strip():
-                    blocks.append({"id":f"p{page_number}-b{bi}","start":start,"end":end,"text":text[start:end],"kind":"text","box":_box(b["bbox"],p),"chars":chars,"font_size":max(sizes) if sizes else None,"font":max(fonts,key=fonts.get) if fonts else None,"bold":bold})
+                    blocks.append({"id":f"p{page_number}-b{bi}","start":start,"end":end,"text":text[start:end],"kind":"text","box":_box(b["bbox"],p),"chars":chars,"font_size":max(sizes) if sizes else None,"font":max(fonts,key=fonts.get) if fonts else None,"bold":bold,"baseline_angles":baselines})
                 text+="\n"
             images=[{"box":_box(i["bbox"],p)} for i in p.get_image_info()]
             rotation=p.rotation
@@ -312,7 +315,10 @@ def resolve(locator, quote=""):
     method=p.get("provenance",{}).get("method",p.get("method","native_text"))
     scores=[b["confidence"] for b in relevant if isinstance(b.get("confidence"),(int,float)) and not isinstance(b.get("confidence"),bool) and 0<=b["confidence"]<=1]
     quality={"confirmed":status=="located","human_reviewed":bool(relevant) and all(b.get('human_reviewed') is True for b in relevant),"derived_view":bool(loc.get("derived_view")),"source_methods":sorted(methods),"location_precision":loc["location_precision"],"min_ocr_confidence":min(scores) if scores else None,"semantic_accuracy":"not_proven"}
-    return {"status":status,"matches":len(found),"locator":loc,"is_current":data["document"]["is_current"],"text_available":p["text_available"],"quote":p["text"][found[0][0]:found[0][1]] if status=="located" else quote,"method":"固定解析文字定位："+method,"recognition_derived":method not in {"native_text","docx_native","pdf_native","native"},"visual_verified":False,"quality":quality}
+    provenance=data['document'].get('provenance',{})
+    publication={k:v for k,v in provenance.items() if k in
+        {'title','institution','document_year','published_at','origin','publication_status','publication_group'}}
+    return {"status":status,"matches":len(found),"locator":loc,"is_current":data["document"]["is_current"],"text_available":p["text_available"],"quote":p["text"][found[0][0]:found[0][1]] if status=="located" else quote,"method":"固定解析文字定位："+method,"recognition_derived":method not in {"native_text","docx_native","pdf_native","native"},"visual_verified":False,"quality":quality,"publication":publication}
 
 
 def search(did, query, sha=None, parse_id=None):

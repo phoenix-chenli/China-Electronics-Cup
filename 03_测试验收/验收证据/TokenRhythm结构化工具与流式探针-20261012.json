@@ -1,0 +1,37 @@
+{
+  "observed_at": "2026-10-12T15:23:37.806383+00:00",
+  "endpoint": "https://tokenrhythm.studio/v1",
+  "requested_model": "deepseek-v4-flash-0731",
+  "no_post_retries": true,
+  "checks": [
+    {
+      "kind": "planner_json",
+      "passed": true,
+      "returned_model": "deepseek-v4-flash-0731",
+      "duration_ms": 1560.39,
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 27,
+        "total_tokens": 47
+      }
+    },
+    {
+      "kind": "native_tool_calls",
+      "passed": true,
+      "returned_model": "deepseek-v4-flash-0731",
+      "duration_ms": 1700.11,
+      "tool_choice": "required"
+    },
+    {
+      "kind": "stream_sse",
+      "passed": true,
+      "returned_model": "deepseek-v4-flash-0731",
+      "content_chunks": 2,
+      "done_event": true,
+      "duration_ms": 1550.24
+    }
+  ],
+  "text_model_requests": 3,
+  "phase": "completed",
+  "boundary": "接口兼容性探针；不表示知识问答正确率、上游绝不掉线或服务端推理已取消。"
+}

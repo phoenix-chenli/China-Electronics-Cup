@@ -1,0 +1,62 @@
+{
+  "prepared_at": "2026-10-13T03:23:59.188326+00:00",
+  "remote_base_commit": "1bd9fa359f035a7fcf22aee3a9440ab20856785b",
+  "source_files": 636,
+  "current_source_unchanged_during_copy": true,
+  "known_project_credentials_included": false,
+  "private_runtime_uploaded": false,
+  "personal_registration_uploaded": false,
+  "symlinks_included": false,
+  "historical_reports_home_paths_redacted": 6,
+  "frozen_dataset_sha256": [
+    {
+      "path": "03_测试验收/测试样本/优化评估集-20261010.json",
+      "sha256": "0488270e42a80e96bf1627ab5ada5fab3bf3ab49735d8cc019a075200c000cab"
+    },
+    {
+      "path": "03_测试验收/测试样本/多文档指定章节验证集-20261013.json",
+      "sha256": "77096071d694f08ce0735767787235ad19ed282de7ab69cc2ef04a2442ceff6a"
+    },
+    {
+      "path": "03_测试验收/测试样本/RAG回归评估集-20261010.json",
+      "sha256": "99d883a04d0cfd5b0051e9fce7be3c977bfa4425955ecf28045aebf414886f6a"
+    },
+    {
+      "path": "03_测试验收/测试样本/中级困难58表验证集-20261011.json",
+      "sha256": "022b78e13cdc80e7d82eedd24909a28e373dec5a26e4c7d6f5318f9fe1603c86"
+    },
+    {
+      "path": "03_测试验收/测试样本/多文档真实原件验证集-20261013.json",
+      "sha256": "9f08933e91099a9608a2f5683c2a658289c4f8120aa8c3ae0d2526754be7cceb"
+    },
+    {
+      "path": "03_测试验收/测试样本/真实Word与PDFTokenRhythm基线-20261012.json",
+      "sha256": "5d9ede91efef4e967a7336e036ba3ff999df6fb481892d3c6f5515360e75f67f"
+    },
+    {
+      "path": "03_测试验收/测试样本/Chinook连续五轮验证集-20261013.json",
+      "sha256": "b6232515a32f6d38090df690b4f22baab7a5ec3f199e1306a205612788180c48"
+    },
+    {
+      "path": "03_测试验收/测试样本/多文档题面明确验证集-20261013.json",
+      "sha256": "efeb2f1c9ca4cd0229c92f7dc88e53fcbe839e5139bf21b11e4e615f7f333480"
+    },
+    {
+      "path": "03_测试验收/测试样本/明确输出合同跨源验证集-20261013.json",
+      "sha256": "0f03fd8f7f49bcb0d4aa09e7df1fefb112921e52e3f071b89b3569353e0a9cca"
+    },
+    {
+      "path": "03_测试验收/测试样本/明确输出合同跨源验证集_v2-20261013.json",
+      "sha256": "318307287b49c84e241c1736600d8ffab439385646f2ce8f7db072dc7d685b4c"
+    },
+    {
+      "path": "03_测试验收/测试样本/公开统计新验证集-20261011.json",
+      "sha256": "2513698355fd3beb2918c413aae7b8d80c3be6544fcea48d3aee450fa6abe714"
+    }
+  ],
+  "backend_offline_modules": 38,
+  "backend_offline_tests": 616,
+  "frontend_tests": 68,
+  "frontend_build": "passed",
+  "boundary": "发布副本静态与隐私检查；Windows实机和真人语义评审仍待办；实际上传以远程提交核验为准。"
+}

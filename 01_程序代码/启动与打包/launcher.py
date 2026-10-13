@@ -9,6 +9,7 @@ STATE = LOGS / '服务实例.json'
 ENTRY = Path(__file__).with_name('start_server.py')
 URL = 'http://127.0.0.1:8765'
 WORKSPACE = hashlib.sha256(os.path.normcase(str(ROOT)).encode('utf-8')).hexdigest()[:24]
+STARTUP_SECONDS = 180
 
 def health():
     try:
@@ -53,6 +54,16 @@ def writable():
     except OSError:
         raise RuntimeError('目录不可写。请完整解压到自己的桌面或文档目录，再双击启动。') from None
 
+def wait_ready(process, instance):
+    """Cold PDF parsing can exceed 45 seconds; the wait remains bounded."""
+    deadline=time.monotonic()+STARTUP_SECONDS
+    while time.monotonic()<deadline:
+        current=health()
+        if ours(current) and current['instance']['id']==instance:return True
+        if process.poll() is not None:return False
+        time.sleep(.25)
+    return False
+
 def start():
     writable()
     with (LOGS / '启动锁').open('a+b') as lock:
@@ -93,14 +104,10 @@ def start():
         record = {'pid': process.pid, 'instance': instance, 'workspace': WORKSPACE,
                   'created': windows_process(process.pid) if os.name == 'nt' else None}
         temp = STATE.with_suffix('.tmp'); temp.write_text(json.dumps(record), encoding='utf-8'); temp.replace(STATE)
-        for _ in range(180):
-            current = health()
-            if ours(current) and current['instance']['id'] == instance:
-                print('证流已启动：' + URL)
-                if os.environ.get('EVIDENCEFLOW_NO_BROWSER') != '1': webbrowser.open(URL)
-                return
-            if process.poll() is not None: break
-            time.sleep(.25)
+        if wait_ready(process,instance):
+            print('证流已启动：' + URL)
+            if os.environ.get('EVIDENCEFLOW_NO_BROWSER') != '1': webbrowser.open(URL)
+            return
         if process.poll() is None: process.terminate()
         raise RuntimeError('启动未完成。请将 02_数据资料/运行数据/日志/服务日志.log 发给开发队友排查。')
 

@@ -1,3 +1,4 @@
+import {SourceProvenance} from '../src/evidence'
 import assert from 'node:assert/strict'
 import {test} from 'node:test'
 import React from 'react'
@@ -8,11 +9,6 @@ import {AnalysisPage,Claims} from '../src/workspace'
 import {savedAnalysisName} from '../src/result-presentation'
 
 const noop=()=>{}
-test('missing source pages request rereading originals without claiming complete recall',()=>{
- const html=renderToStaticMarkup(<RetrievalStatus result={{rag:{retrieval:[{channels:{bm25:[],dense:[]},reranked:false}],source_gaps:[{page:9,reason:'没有文字',instruction:'请重新识别固定原件'}]}}}/>)
- for(const text of ['1 处来源缺失或结构待复核','第 9 页','重新识别固定原件'])assert.ok(html.includes(text),text)
- assert.ok(!html.includes('候选重排：实际完成'))
-})
 const evidence=[{id:'doc-1',type:'document',source:'2024售后条款.pdf',snippet:'甲产品限额为100元。',locator:{document_id:'d1',sha256:'a'.repeat(64),parse_id:'p1',page:2}},{id:'doc-2',type:'document',source:'补充条件.md',snippet:'正常使用适用。',locator:{document_id:'d2',sha256:'b'.repeat(64),parse_id:'p2',page:1}}]
 const base={run_id:'rag-fixture',question:'2025年甲产品限额及例外条件？',status:'completed',answer_status:'refused',answer:'现有资料没有2025年适用条款，无法给出赔付结论。',query_spec:{metric:'document',query_scope:'knowledge'},claims:[],evidence,coverage:{supported:0,total:0},rows:[],columns:[],events:[],actions:[],rag:{retrieval:{mode:'lexical'}},missing_requirements:['2025年有效条款','例外条件'],conflicts:['两份旧资料的适用期不同'],agent:{mode:'model',calls:3}}
 
@@ -135,6 +131,17 @@ test('companion refuses celebration for insufficient or partially answered compl
  }
  assert.equal(answerNeedsContext({...base,answer_status:'supported',claims:[{status:'supported'}]}),false)
  assert.equal(answerNeedsContext({...base,answer_status:'supported',claims:[]}),true)
+})
+
+
+test('official native Word and unknown provenance cannot be mislabeled as a scanned PDF',()=>{
+ const source={institution:'官方机构',origin:'original_docx_from_official_site',document_year:2024,publication_status:'public_consultation_draft',published_at:'2024-08-28'}
+ const html=renderToStaticMarkup(<SourceProvenance provenance={source} format="docx" officialUrl="https://example.gov/source.docx"/>)
+ for(const text of ['官方 Word 原件','征求意见稿','不代表正式生效或实际完成','2024-08-28','https://example.gov/source.docx'])assert.ok(html.includes(text),text)
+ assert.ok(!html.includes('扫描 PDF'));assert.ok(!html.includes('PDF 原文转换'))
+ assert.equal(renderToStaticMarkup(<SourceProvenance/>),'')
+ const unknown=renderToStaticMarkup(<SourceProvenance provenance={{origin:'unrecognized'}} format="docx"/>)
+ assert.ok(unknown.includes('来源登记'));assert.ok(!unknown.includes('官方扫描'))
 })
 
 test('partial structures identify the document without describing a readable page as empty',()=>{

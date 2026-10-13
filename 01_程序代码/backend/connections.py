@@ -16,6 +16,8 @@ router=APIRouter(prefix='/api/connections')
 lock=threading.RLock()
 _model_pool=ThreadPoolExecutor(max_workers=4,thread_name_prefix='evidenceflow-model')
 _model_slots=threading.BoundedSemaphore(4)
+_provider_rate_lock=threading.Lock()
+_provider_next_request={}
 KINDS={'sqlite','postgresql','mysql','text','vision','embedding','rerank','brave','wikipedia'}
 DB_KINDS={'sqlite','postgresql','mysql'}
 
@@ -181,12 +183,25 @@ def request_json(d,url,body=None,headers=None,cancelled=None):
             return value
         except FutureTimeout:continue
 
+def _pace_provider(d,deadline,cancelled):
+    if urlsplit(d.get('endpoint','')).hostname!='tokenrhythm.studio':return
+    account=hashlib.sha256(d.get('_secret','').encode()).hexdigest()
+    with _provider_rate_lock:
+        start=max(time.monotonic(),_provider_next_request.get(account,0))
+        _provider_next_request[account]=start+2
+    while time.monotonic()<start:
+        if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
+        if time.monotonic()>=deadline:raise ValueError('服务限流等待超过本轮时限，请稍后重试')
+        if cancelled is not None:cancelled.wait(min(.1,start-time.monotonic()))
+        else:time.sleep(min(.1,max(0,start-time.monotonic())))
+
 def _request_json_transport(d,url,body,headers,deadline,cancelled):
     gate(d)
     if d.get('_required_kind'):
         current=ready(d['id'],{d['_required_kind']})
         if current['revision']!=d['revision']:raise ValueError('连接已改变，请重新准备请求')
     if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
+    _pace_provider(d,deadline,cancelled)
     remaining=deadline-time.monotonic()
     if remaining<=0:raise ValueError('模型请求超过总时限')
     try:
@@ -196,7 +211,21 @@ def _request_json_transport(d,url,body,headers,deadline,cancelled):
         with httpx.Client(timeout=httpx.Timeout(remaining,connect=min(5,remaining)),transport=transport,follow_redirects=False,trust_env=False) as client:
             with client.stream('POST' if body is not None else 'GET',url,json=body,headers={'User-Agent':'EvidenceFlow/0.3 (local research tool)',**(headers or {})}) as r:
                 if r.is_redirect:raise ValueError('服务要求重定向；请填写最终地址，凭据未转发')
-                if r.status_code>=400:raise ValueError({401:'凭据无效或已过期',403:'服务拒绝访问，请检查权限或服务访问限制',404:'接口或模型不存在',429:'服务限流或额度不足'}.get(r.status_code,'服务请求失败')+f'（HTTP {r.status_code}）')
+                if r.status_code>=400:
+                    detail={401:'凭据无效或已过期',403:'服务拒绝访问，请检查权限或服务访问限制',404:'接口或模型不存在',429:'服务限流或额度不足'}.get(r.status_code,'服务请求失败')
+                    raw=bytearray()
+                    for part in r.iter_bytes():
+                        raw.extend(part[:max(0,65537-len(raw))])
+                        if len(raw)>65536:break
+                    if len(raw)<=65536:
+                        try:
+                            error=json.loads(raw);code=error.get('code') or (error.get('error') or {}).get('code')
+                            trace=error.get('traceId') or error.get('trace_id')
+                            secret=d.get('_secret','')
+                            if isinstance(code,str) and re.fullmatch(r'[A-Za-z0-9_.-]{1,80}',code) and (not secret or secret not in code):detail+='；错误码 '+code
+                            if isinstance(trace,str) and re.fullmatch(r'[A-Za-z0-9_.:-]{1,128}',trace) and (not secret or secret not in trace):detail+='；请求编号 '+trace
+                        except (ValueError,AttributeError,TypeError):pass
+                    raise ValueError(detail+f'（HTTP {r.status_code}）')
                 data=bytearray()
                 for chunk in r.iter_bytes():
                     if cancelled is not None and cancelled.is_set():raise InterruptedError('查询已取消')
@@ -211,13 +240,14 @@ def _request_json_transport(d,url,body,headers,deadline,cancelled):
 def chat(d,messages,max_tokens=1200,cancelled=None,json_mode=False):
     headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
     body={'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens}
-    tokendance=urlsplit(d['endpoint']).hostname=='tokendance.space'
-    if tokendance and d['model'].startswith('deepseek-'):
+    host=urlsplit(d['endpoint']).hostname
+    structured_gateway=host in {'tokendance.space','tokenrhythm.studio'}
+    if structured_gateway and d['model'].startswith('deepseek-'):
         # DeepSeek shares the output budget with thinking by default. Our tools
         # and independent evidence checks handle this workflow without it.
         body.pop('max_completion_tokens')
         body.update(max_tokens=max_tokens,thinking={'type':'disabled'})
-    if json_mode and tokendance:
+    if json_mode and structured_gateway:
         body.update(response_format={'type':'json_object'},temperature=0)
         if d['model'].startswith('qwen3.8-'):body['enable_thinking']=False
     r=request_json(d,d['endpoint']+'/chat/completions',body,headers,cancelled=cancelled)

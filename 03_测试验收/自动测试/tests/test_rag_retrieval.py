@@ -64,6 +64,15 @@ class Providers(types.ModuleType):
 
 
 class RagRetrievalTest(unittest.TestCase):
+    def test_native_page_continuation_is_separate_same_version_evidence(self):
+        original={'id':'a','document_id':'d','sha256':'v','parse_id':'p','source':'公报.pdf','page':4,'start':400,'end':450,
+                  'text':'存款余额620.42亿元，比上年增长\n\n— 4 —','quality':{'source_methods':['pdf_native']}}
+        next_page={**original,'id':'b','page':5,'start':0,'end':100,'text':'4.5%；贷款余额743.02亿元，增长19.6%。'}
+        self.assertEqual(retrieval._continuation(original,{'b':next_page})['id'],'b')
+        self.assertIsNone(retrieval._continuation(original,{'b':{**next_page,'sha256':'other-version'}}))
+        self.assertIsNone(retrieval._continuation({**original,'text':'存款余额620.42亿元。'}, {'b':next_page}))
+        self.assertIsNone(retrieval._continuation(original,{'b':{**next_page,'quality':{'source_methods':['ocr']}}}))
+
     @classmethod
     def setUpClass(cls):
         s.init(); index.initialize()

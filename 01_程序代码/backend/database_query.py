@@ -442,7 +442,9 @@ def inspect(connection_id=None, table_names=None, cancelled=None, query=None):
 
 
 def guard_schema(snapshot):
-    return {"tables": {t["qualified_name"]: {"columns": {f["name"]: f["type"] for f in t["columns"]}}
+    return {"tables": {t["qualified_name"]: {"columns": {f["name"]: f["type"] for f in t["columns"]},
+                    "primary_key":[f['name'] for f in t['columns'] if f.get('primary_key')],
+                    "unique_keys":[key for key in t.get('unique_keys',[]) if key.get('source')=='database_constraint']}
                         for t in snapshot["tables"]},
             "relations": [copy.deepcopy(r) for r in snapshot.get("relations", []) + snapshot.get("relation_candidates", []) if r.get("verified")]}
 
@@ -485,6 +487,7 @@ def validate_question_projection(sql, question, dialect="sqlite"):
     from sqlglot import exp
     counts = {'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10}
     matches = re.findall(r'(?:只|仅)(?:返回|输出|显示)\s*([1-9]\d?|[一二两三四五六七八九十])\s*(?:个)?列', question)
+    matches += re.findall(r'(?:返回|输出|显示)\s*(?:[1-9]\d?|[一二两三四五六七八九十])\s*行\s*([1-9]\d?|[一二两三四五六七八九十])\s*列',question)
     matches += re.findall(r'(?:返回|输出|显示|保留|列出)(?!了|过|的)[^。；;\n]{0,120}?[，,]\s*(?:共|总共)\s*([1-9]\d?|[一二两三四五六七八九十])\s*(?:个)?列',question)
     count_values = {int(x) if x.isdigit() else counts[x] for x in matches}
     if len(count_values) > 1:
@@ -592,7 +595,9 @@ def validate_question_grain(sql, question, dialect="sqlite"):
     if group is None:
         return
     monthly = bool(re.search(r"按月|每月|逐月|月度|by\s+month|monthly", question, re.I))
-    breakdown = bool(re.search(r"分别|每[个台位种]|各[个台位种部地]|分组|按.{1,24}(?:统计|计数|计算|分组|汇总)|按(?:日|天|周|年|地区|区域|产品|站点)|排名|前\s*\d", question))
+    ranked_prefix = r'前\s*(?:\d+|[零〇一二三四五六七八九十百两]+)\s*(?:位|名|个|种|家|首|张|笔|项|类|条|大|(?=[，,。？?]|$))'
+    breakdown = bool(re.search(r"分别|每[个台位种]|各[个台位种部地]|分组|按.{1,24}(?:统计|计数|计算|分组|汇总)|按(?:日|天|周|年|地区|区域|产品|站点)|排名|"
+                              + ranked_prefix + r'|(?:最多|最少|最高|最低).{0,12}(?:哪些|哪个|谁|排名|排序)', question))
     single_total = bool(re.search(r"只返回(?:一个|单个)?(?:总数|计数)|(?:总计|合计|总数|共有|有多少)", question))
     if single_total and not monthly and not breakdown:
         # An equality in the outer WHERE fixes this exact column to one value.
