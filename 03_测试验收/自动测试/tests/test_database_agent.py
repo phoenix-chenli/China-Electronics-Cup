@@ -278,6 +278,10 @@ class DatabaseAgentTests(unittest.TestCase):
             self.assertEqual(context['previous_question'],original)
             self.assertEqual(context['previous_clarification'],clarification)
             self.assertEqual(context['database_source']['connection_id'],cid)
+            # A clarification reply is merged with the original question, so the
+            # model cannot answer the bare supplement and drop the original entity.
+            self.assertIn(original,context['question'])
+            self.assertIn('用户补充澄清',context['question'])
             return schema_action()
         self.script(inspect,sql_action('SELECT p.title,SUM(s.amount) AS amount FROM projects p JOIN settlements s ON s.project_id=p.id JOIN departments d ON d.id=p.department_id WHERE d.name=? GROUP BY p.id,p.title',['研发部']),fixture.select_fact)
         next_task=self.client.post('/api/tasks',json={'question':'按项目统计','session_id':session['id'],'request_id':uuid.uuid4().hex,'parent_message_id':parent}).json()

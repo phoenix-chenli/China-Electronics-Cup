@@ -39,6 +39,25 @@ TOOLS = {
 CONTEXT_FIELDS = {"year", "compare_year", "region", "product", "metric", "rule_mode",
                   "scenario_pct", "asks_top", "needs_formula", "needs_experience", "rule_id"}
 
+# A small, explicit Chinese gloss for the parent tables used to label a duplicate
+# entity in a clarification sentence. Presentation only: it never renames a column
+# in SQL, and every use prints the real table name beside the gloss so it cannot
+# be mistaken for a database field. Tables outside this list keep their own name.
+ENTITY_LABEL_GLOSS = {
+    "album": "专辑", "artist": "艺术家", "genre": "流派", "mediatype": "媒体类型",
+    "playlist": "播放列表", "track": "曲目", "customer": "客户", "employee": "员工",
+    "invoice": "发票", "supplier": "供应商", "product": "产品", "category": "类别",
+    "site": "站点", "sites": "站点", "device": "设备", "devices": "设备",
+    "store": "门店", "stores": "门店", "project": "项目", "projects": "项目",
+    "department": "部门", "departments": "部门", "team": "团队", "teams": "团队",
+}
+
+
+def entity_label(name):
+    """Chinese gloss for a parent-table label, with the real name kept beside it."""
+    gloss = ENTITY_LABEL_GLOSS.get(str(name or "").casefold())
+    return f"{gloss}（{name}）" if gloss else str(name)
+
 
 def requests_sql_calculation(question):
     """Explicit calculations/rankings in hybrid mode need executed DB facts.
@@ -68,6 +87,7 @@ database.query参数sql、params位置参数列表（SQL用?占位）、explanat
 用户未指定列名时，SELECT 的输出别名写成简短中文（如 艺术家数量、发票金额合计）。字段类型和模型别名不证明单位；只有本轮服务端字段说明、实际单位列或明确原文给出了单位时才写入别名。不得凭金额字段推断人民币、美元或净额，计数不能写成百分比。别名不得改变实际字段、筛选、关联或计算。
 只问计算结果时只投影计算列；要求分项与合计时在同一条SQL中一起返回。原文摘录通过document.search取得，不把source_quote等整页文字加入数值结果。仅查原值不算用户明确要求的差额、合计或比值时，问题尚未回答完整。
 source_vocabulary是当前公开资料的真实维度取值与定义，不是示例答案。优先按真实取值筛选；未给词表时，可用小型维度表的有限取值查询确认名称。不要把用户简称直接用于等号；必要时用LIKE匹配独特名称片段，空结果先核对取值。
+文本名称（曲名、专辑、客户、地区等）在库中的大小写可能与问题不同：按名称筛选一律用不区分大小写的比较（如 LOWER(列)=LOWER(?) 或 LIKE），不要用与问题完全相同的大小写做等值。因此这类查询返回0行时，先改用不区分大小写匹配复核，再判断是否真的无记录；不得直接当作“无资料”。
 词表已明确region_id与地区名的映射时，用该region_id直接筛选事实表；已给metric_id和指标名时直接使用该metric_id。仅为解析名称不再JOIN维度表。只有用户需要名称列或维度表另有必要条件时才关联；保持用户实际要求的输出列，不返回固定年份、来源注释等无关列。
 问题说“查询”“公布值”“比重是多少”而词表已有对应比重指标时，直接读取公布比重，不按显示人口或金额重新计算替换。只有用户明确要求计算、重算、比值或核对才进行算术，并区分计算值与公布值；用户指定小数位以外不自行改变数值精度。
 同一事实表需要比较多项指标时，优先按业务键分组做条件聚合。没有完整唯一键或验证关系的自连接不允许；不能反复重试相同的非法关联。
@@ -100,9 +120,11 @@ knowledge范围只使用文档；hybrid范围结合当前指定数据库与文�
 依据构成和部分/整体走势作有限关系解释时，逐条引用已披露数值与构成，不需要公报专门解释两者为何并存；保持非因果边界，不计算未经工具计算的贡献率。用户让你说明缺少什么时，识别缺失信息及对象、口径即可，不能把该子问改成必须查得未知数值。用户要求结合原文注明每个对象的口径时，每个对象都要有直接相关原句；数据库标签不是原文核对完成的证明，缺哪个对象就针对哪个补一次检索。
 需要用户明确口径或关联路径时返回{action:"clarify",question:"具体需要确认的问题"}，不要自行猜测。
 用户补充澄清条件时结合previous_question与previous_clarification，只更改用户补充的缺项，保留已经明确的实体、时间、口径和固定资料范围。
+本轮若是对上一轮澄清的补充，问题对象与条件仍来自上一轮原问题（question已并入原问题与补充）；补充内容只用于消除歧义，不得只按补充项（如专辑、编号、地区）筛选而丢掉原问题要求的实体或指标。
 只选与问题相关的事实、摘录或有直接原文支持的综合结论，保持单位、实体、时间、模拟边界。不能用自由改写替代数值事实。
 最终数据结论只选择同一次查询的facts；需要跨表统计时用JOIN/CTE/子查询在一条SQL内完成，不混合不同查询的范围。
 数据库结果按问题要求排列行和列，确认过的单位写在列名中；原始值与所需差额、比例、排名在同一条SQL中一次返回，计算列按所需小数位ROUND，不追加无关元数据列。需要并排比较指标时用条件聚合，分别汇总一对多明细后再关联。
+涉及时长（曲目、音视频等以毫秒或秒计的数值）时，除原始数值列外，在同一SQL中再给一列自然说法“X分Y秒”（用整除与取余把分、秒拼成一列，单位写进列名，例如毫秒 401920 → “6分42秒”，不足一分钟写出“0分38秒”）；用户未指定单位时默认这种写法，不要只给毫秒。
 综合说明用于解释口径、适用条件和推断边界。可复述同一最终查询中已明确选择fact_id的原值。纯数据库回答可优先用kind为synthesis、text为简洁中文结论、support_fact_ids为同一次实际查询事实编号的格式；仍须经过服务端数字绑定和解释检查。文档综合结论必须引用直接支持对象、单位和口径的support_span_ids。不能自行计算、转换单位或引入未选择的数字。需要新差值、比值或小数位时先在SQL中计算并返回。数值按显示精度相符只能说明该精度下一致，不能据此断言原始差异来自四舍五入、修订或其他实际原因。
 没有证据时claims为空；不要捏造。business.query要求澄清时系统会直接向用户询问。
 工具失败时根据错误修正失败步骤，不必重复成功步骤。最后的来源和数值核验由系统执行。
@@ -366,6 +388,20 @@ class Run:
         self.rag_enabled = self.database_context.get('query_scope') in {'knowledge', 'hybrid'}
         self.result = _base(question, previous, confirmed, generic=self.database_mode)
         self.previous, self.confirmed = previous or {}, confirmed or {}
+        # A reply to a clarification is not a fresh question: the objects and
+        # conditions still come from the original question, and the reply only
+        # resolves the ambiguity. Hand the model one merged question so it cannot
+        # answer the bare reply (e.g. an album name) as if it were the whole
+        # request and drop the entity the original question named.
+        prior_clarification = str(self.previous.get('clarification_question') or '')
+        original_question = str(self.previous.get('original_question') or self.previous.get('question') or '')
+        if prior_clarification and self.database_mode and original_question.strip() and original_question.strip() != str(question or '').strip():
+            self.model_question = f'{original_question}；用户补充澄清：{question}'
+        else:
+            self.model_question = question
+        # Set when the previous turn asked which record a duplicated name meant.
+        previous_ambiguity = self.previous.get('ambiguity')
+        self.previous_ambiguity = previous_ambiguity if isinstance(previous_ambiguity, list) else []
         initial=self.result['query_spec']
         self.fixed_conditions={k:initial[k] for k in CONTEXT_FIELDS if k in initial and initial.get('origins',{}).get(k) in {'explicit','confirmed'}}
         if initial['metric']!='document' and not initial.get('year'):
@@ -436,7 +472,7 @@ class Run:
         self.inherited_database_filters=database_answer.followup_filters(question,self.previous,
             self.database_context.get('database_connection_id')) if self.database_mode else []
         self.messages = [{"role": "system", "content": SYSTEM + '\n'+guidance+"\n本轮可用工具：" + c.encode({k:v for k,v in TOOLS.items() if k in self.allowed_tools})},
-                         {"role": "user", "content": c.encode({"question": question,
+                         {"role": "user", "content": c.encode({"question": self.model_question,
                           "question_normalization": normalized_view,
                           "previous_conditions": _limited_context(previous),
                           "previous_question":str((previous or {}).get('original_question') or (previous or {}).get('question',''))[:2000],
@@ -855,14 +891,35 @@ class Run:
                 connection_id=cid, expected_revision=self.database_context.get('database_connection_revision'), cancelled=self.cancelled)
             if ambiguities:
                 issue = ambiguities[0]
-                choices = '、'.join('/'.join(f'{key}={value}' for key, value in item.items()) for item in issue['candidates'])
-                if issue['truncated']:
-                    choices += ' 等；仅列部分候选'
-                title = f'“{issue["name"]}”对应多个对象，请补充 {"/".join(issue["key_fields"])} 或明确选择范围（{choices}）。'
+                candidates = issue['candidates']
+                # Users do not know internal keys, so prefer a related parent name
+                # (e.g. Album) as the label. Only a label whose value differs
+                # between the duplicates tells them apart; a constant one does not.
+                differing = [label for label in issue.get('label_fields') or []
+                             if len({json.dumps(item.get(label), ensure_ascii=False, sort_keys=True) for item in candidates}) > 1]
+                if differing:
+                    def shown(item, label):
+                        return item.get(label) if item.get(label) is not None else '（空）'
+                    if len(differing) == 1:
+                        label = differing[0]
+                        title = (f'“{issue["name"]}”在库中有 {len(candidates)} 条同名记录，{entity_label(label)}分别是：'
+                                 + '、'.join(str(shown(item, label)) for item in candidates) + '。请指明你要查的是哪一条。')
+                    else:
+                        title = (f'“{issue["name"]}”在库中有 {len(candidates)} 条同名记录，请指明你要查的是哪一条：'
+                                 + '；'.join('%d. %s' % (index + 1, '，'.join('%s为%s' % (entity_label(label), shown(item, label)) for label in differing))
+                                             for index, item in enumerate(candidates)) + '。')
+                    if issue['truncated']:
+                        title += '（候选较多，仅列部分）'
+                else:
+                    choices = '、'.join('/'.join(f'{key}={item.get(key)}' for key in issue['key_fields']) for item in candidates)
+                    if issue['truncated']:
+                        choices += ' 等；仅列部分候选'
+                    title = f'“{issue["name"]}”在库中有多条同名记录，需要先指明是哪一条：请补充 {"/".join(issue["key_fields"])} 或给出其他可区分的条件（候选：{choices}）。'
                 self.result.update(status='needs_clarification', answer_status='needs_clarification',
                     clarification={'title': title, 'fields': []}, headline=title, answer=title,
                     clarification_reason='ambiguous_entity', ambiguity=ambiguities)
-                self.result['query_spec'].update(question=self.result['question'], clarification_question=title)
+                self.result['query_spec'].update(question=self.result['question'], clarification_question=title,
+                    ambiguity=ambiguities)
             elif self.result['status'] != 'needs_clarification':
                 missing = database_query.dimension_clarification(self.result['question'], snapshot,
                     connection_id=cid, expected_revision=self.database_context.get('database_connection_revision'),
@@ -916,6 +973,18 @@ class Run:
             expected_revision=self.database_context.get('database_connection_revision'),
             expected_fingerprint=self.database_snapshot['source']['fingerprint'],
             snapshot=self.database_snapshot, cancelled=self.cancelled, question=self.result['question'])
+        if not value['rows'] and self.previous_ambiguity:
+            # The entity was confirmed to exist: the previous turn found several
+            # rows with exactly this name. So an empty result here means the
+            # filter is wrong (almost always a case/spelling mismatch), not that
+            # the data is absent. Ask for a case-insensitive retry instead of
+            # letting it publish "no matching records".
+            issue = next((item for item in self.previous_ambiguity if isinstance(item, dict)), {})
+            detail = ''
+            if issue.get('name_field'):
+                detail = '（名称列“%s”，库中取值如“%s”）' % (issue.get('name_field'), issue.get('name'))
+            raise ValueError('本轮要查的实体在库中确实存在同名多条（上一轮已确认）' + detail +
+                '，本次筛选却返回0行：请改用不区分大小写的匹配（如 LOWER(列)=LOWER(?) 或 LIKE）并保留原问题要求的其他条件后重查，不要把空结果当作“无资料”。')
         eid = value['evidence']['id']
         self.evidence[eid] = value['evidence']
         query_id = 'database-' + str(self.sql_attempts)

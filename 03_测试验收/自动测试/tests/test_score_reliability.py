@@ -112,8 +112,10 @@ class ScoreReliabilityTests(unittest.TestCase):
         result = response.json()
         self.assertEqual(result['answer_status'], 'needs_clarification')
         self.assertEqual(result['clarification_reason'], 'ambiguous_entity')
-        self.assertIn('device_id=1', result['answer'])
-        self.assertIn('device_id=2', result['answer'])
+        self.assertIn('2 条同名记录', result['answer'])
+        self.assertIn('东站', result['answer'])
+        self.assertIn('西站', result['answer'])
+        self.assertNotIn('device_id', result['answer'])
         self.assertFalse(any(e['tool'] == 'database.query' for e in result['events']))
         self.assertEqual(result['agent']['calls'], 1)
 
@@ -127,6 +129,39 @@ class ScoreReliabilityTests(unittest.TestCase):
         self.assertFalse(any(e['tool']=='database.query' for e in result['events']))
         snapshot=query.inspect(cid)
         self.assertIsNone(query.dimension_clarification('按2024年GDP比较发展表现，给出排名',snapshot,cid))
+
+    def test_definite_singular_reference_to_a_duplicated_name_clarifies(self):
+        # "这台甲型设备" is as singular as "我只指其中一台"; both point at one row of
+        # a name that has two. The same-name lookup must fire without the explicit
+        # "我只指其中一" wording, so a definite singular is not answered as if the
+        # name were unique.
+        self.database()
+        self.script(schema())
+        response = self.ask('这台甲型设备在哪个站点？')
+        self.assertEqual(response.status_code, 200, response.text)
+        result = response.json()
+        self.assertEqual(result['answer_status'], 'needs_clarification')
+        self.assertEqual(result['clarification_reason'], 'ambiguous_entity')
+        self.assertIn('东站', result['answer'])
+        self.assertIn('西站', result['answer'])
+        self.assertFalse(any(e['tool'] == 'database.query' for e in result['events']))
+        self.assertEqual(result['agent']['calls'], 1)
+
+    def test_same_name_duplicates_group_case_insensitively_with_a_label(self):
+        cid = self.database()
+        with closing(sqlite3.connect(self.database_path)) as db:
+            db.executescript('''
+                CREATE TABLE songs(song_id INTEGER PRIMARY KEY, title TEXT, site_id INTEGER REFERENCES sites(site_id));
+                INSERT INTO songs VALUES (1,'Dazed and Confused',1),(2,'Dazed And Confused',2),(3,'Other Song',1);
+            ''')
+            db.commit()
+        snapshot = query.inspect(cid)
+        findings = query.entity_ambiguities('Dazed And Confused 这首歌有多长？', snapshot, cid)
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0]['name'].casefold(), 'dazed and confused')
+        self.assertEqual({item['song_id'] for item in findings[0]['candidates']}, {1, 2})
+        self.assertEqual(findings[0]['label_fields'], ['sites'])
+        self.assertEqual({item['sites'] for item in findings[0]['candidates']}, {'东站', '西站'})
 
     def test_explicit_key_and_all_entities_do_not_trigger_singular_guard(self):
         cid = self.database()

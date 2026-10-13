@@ -669,13 +669,24 @@ def validate_question_grain(sql, question, dialect="sqlite"):
 def entity_ambiguities(question, snapshot, connection_id=None, expected_revision=None, cancelled=None):
     """Bounded exact-name lookups for explicitly singular entity questions.
 
-    Only names literally present in the question and their keys are returned.
-    This is neither a sample dump nor fuzzy entity guessing. A caller may show
-    these keys for clarification; no business query is run on an arbitrary match.
+    Only names present in the question are probed (case-insensitively). Each
+    duplicate is labelled by the name-like column of a directly related parent
+    table (one verified hop, e.g. Track -> Album.Title), so a clarification can
+    say which record is which without exposing internal keys. This is neither a
+    sample dump nor fuzzy entity guessing; no business query runs on an arbitrary
+    match.
     """
     if not isinstance(question, str) or len(question) > 2000:
         raise ValueError("实体消歧问题应为不超过2000字的文字")
-    singular = re.search(r"只(?:指|查|看|问).*(?:一[个台位]|其中)|其中一[个台位]|单个|哪[个台位].*(?:属于|对应)|(?:属于|对应)哪[个台位]|是哪[个台位]", question)
+    # A definite singular reference ("这首歌", "这张专辑", "该客户") points at one
+    # entity just as "我只指其中一台" does, so it opens the same name lookup. The
+    # gate only unlocks the probes; a clarification still needs a literally named
+    # entity that genuinely maps to more than one row.
+    singular = re.search(
+        r"只(?:指|查|看|问).*(?:一[个台位]|其中)|其中一[个台位]|单个|"
+        r"哪[个台位].*(?:属于|对应)|(?:属于|对应)哪[个台位]|是哪[个台位]|"
+        r"这(?:一)?[首张支位台家笔]|"
+        r"该(?:客户|专辑|曲目|歌曲|订单|产品|项目|设备|门店)|本(?:专辑|曲目|歌曲)", question)
     plural = re.search(r"所有|全部|每[个台位]|各[个台位]|分别|同名的?(?:都|全部)|两台|多台", question)
     identifier = re.search(r"(?:编号|\bid\b|\b\w+_id)\s*(?:为|是|[:：=])?\s*[A-Za-z0-9_-]+", question, re.I)
     if not singular or plural or identifier:
@@ -691,11 +702,29 @@ def entity_ambiguities(question, snapshot, connection_id=None, expected_revision
             current = _inspect_on(db, config, names, stop, deadline)
             if current["source"]["fingerprint"] != snapshot["source"]["fingerprint"]:
                 raise ValueError("数据库结构指纹已改变，请重新读取字段和关联")
+            by_key = {t.get("qualified_name") or _key(t): t for t in current["tables"]}
+            relations = [r for r in snapshot.get("relations", []) if r.get("verified")]
             findings, probes = [], 0
             for table in current["tables"]:
                 keys = table.get("primary_key", [])
                 if not keys:
                     continue
+                source = _qualified(config, table)
+                # One-hop parents whose own name-like column can label a duplicate.
+                parents = []
+                for relation in relations:
+                    if relation.get("left_table") != _key(table) or not relation.get("left_columns") or not relation.get("right_columns"):
+                        continue
+                    parent = by_key.get(relation.get("right_table"))
+                    if not parent or any(item[0] is parent for item in parents):
+                        continue
+                    label = next((f["name"] for f in parent["columns"]
+                                  if re.search(r"(?:^name$|_name$|^title$|名称$|姓名$)", f["name"], re.I)
+                                  and f["name"] not in parent.get("primary_key", [])), None)
+                    if label:
+                        parents.append((parent, relation["left_columns"][0], relation["right_columns"][0], label))
+                        if len(parents) >= 6:
+                            break
                 for field in table["columns"]:
                     name = field["name"]
                     if not re.search(r"(?:^name$|_name$|^title$|名称$|姓名$)", name, re.I) or name in keys:
@@ -704,25 +733,44 @@ def entity_ambiguities(question, snapshot, connection_id=None, expected_revision
                     probes += 1
                     if probes > 12:
                         return findings
-                    column = _quote(config, name)
+                    column = source + "." + _quote(config, name)
                     placeholder = "?" if config["kind"] == "sqlite" else "%s"
-                    containment = (f"INSTR({placeholder},{column})>0" if config["kind"] == "sqlite" else
-                                   f"STRPOS({placeholder},{column})>0" if config["kind"] == "postgresql" else
-                                   f"LOCATE({column},{placeholder})>0")
-                    columns = list(dict.fromkeys(keys + [name]))
-                    sql = "SELECT " + ",".join(_quote(config, k) for k in columns) + " FROM " + _qualified(config, table)
+                    # Name matching is case-insensitive ("Dazed and Confused" and
+                    # "Dazed And Confused" are the same title), so the containment
+                    # test and the Python-side check below both fold case.
+                    containment = (f"INSTR(LOWER({placeholder}),LOWER({column}))>0" if config["kind"] == "sqlite" else
+                                   f"STRPOS(LOWER({placeholder}),LOWER({column}))>0" if config["kind"] == "postgresql" else
+                                   f"LOCATE(LOWER({column}),LOWER({placeholder}))>0")
+                    select = [source + "." + _quote(config, k) for k in keys] + [column + " AS __name"]
+                    joins, label_fields = "", []
+                    for parent, left_column, right_column, label in parents:
+                        if label == name or len(label_fields) >= 3:
+                            continue
+                        target = _qualified(config, parent)
+                        alias = "__label_" + str(len(label_fields))
+                        select.append(target + "." + _quote(config, label) + " AS " + alias)
+                        joins += " LEFT JOIN " + target + " ON " + source + "." + left_column + " = " + target + "." + right_column
+                        label_fields.append(parent["name"])
+                    sql = "SELECT " + ",".join(select) + " FROM " + source + joins
                     sql += f" WHERE LENGTH({column})>=2 AND {containment} LIMIT 21"
                     rows = _read(db, sql, [question], limit=21)
+                    folded_question = question.casefold()
                     grouped = {}
                     for row in rows:
-                        value = row.get(name)
-                        if isinstance(value, str) and value in question:
-                            grouped.setdefault(value, []).append({k: _scalar(row[k]) for k in keys})
-                    for value, candidates in grouped.items():
+                        value = row.get("__name")
+                        if not isinstance(value, str) or not value or value.casefold() not in folded_question:
+                            continue
+                        candidate = {k: _scalar(row[k]) for k in keys}
+                        for index, label in enumerate(label_fields):
+                            candidate.setdefault(label, _scalar(row["__label_" + str(index)]))
+                        # Group case-insensitively so differently-cased spellings of
+                        # one title are one ambiguity, not several.
+                        grouped.setdefault(value.casefold(), [value, []])[1].append(candidate)
+                    for folded, (display, candidates) in grouped.items():
                         unique = {json.dumps(x, sort_keys=True, ensure_ascii=False): x for x in candidates}
                         if len(unique) > 1:
                             findings.append({"table": table["qualified_name"], "name_field": name,
-                                             "name": value, "key_fields": keys,
+                                             "name": display, "key_fields": keys, "label_fields": label_fields,
                                              "candidates": list(unique.values())[:10], "truncated": len(rows) > 20 or len(unique) > 10})
             return findings
     return _bounded(operation, cancelled)
