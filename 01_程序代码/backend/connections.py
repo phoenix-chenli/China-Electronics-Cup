@@ -241,10 +241,11 @@ def chat(d,messages,max_tokens=1200,cancelled=None,json_mode=False):
     headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
     body={'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens}
     host=urlsplit(d['endpoint']).hostname
-    structured_gateway=host in {'tokendance.space','tokenrhythm.studio'}
+    # DeepSeek shares the output budget with thinking by default, whether it is
+    # resold through TokenDance/TokenRhythm or served directly by api.deepseek.com.
+    # Our tools and independent evidence checks handle this workflow without it.
+    structured_gateway=host in {'tokendance.space','tokenrhythm.studio','api.deepseek.com'}
     if structured_gateway and d['model'].startswith('deepseek-'):
-        # DeepSeek shares the output budget with thinking by default. Our tools
-        # and independent evidence checks handle this workflow without it.
         body.pop('max_completion_tokens')
         body.update(max_tokens=max_tokens,thinking={'type':'disabled'})
     if json_mode and structured_gateway:

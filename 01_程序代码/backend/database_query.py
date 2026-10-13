@@ -741,6 +741,33 @@ def dimension_conditions(previous):
     return out
 
 
+# A selling superlative names no measure: "卖得最好" ranks differently by units
+# sold and by revenue, and the two leaders need not be the same item. The
+# ambiguity is in the wording rather than in any one schema, so the question is
+# asked back instead of silently resolved to one of the two readings.
+_SELLING_SUPERLATIVE = re.compile(r'卖得(?:最好|较好|很好|好|最火|最旺)|最好卖|最畅销|畅销|最热销|销售(?:最好|最火|冠军)')
+_SELLING_MEASURE = re.compile(r'销售额|销售金额|销售总额|营业额|营收|收入|金额|毛利|利润|单价|销量|销售量|售出|件数|数量|订单数|笔数|按金额|按数量|按销量|按销售额')
+_SELLING_DEFINITION = re.compile(r'口径|定义|含义|是什么|怎么算|如何计算|为什么|原因|解释|能不能|能否')
+
+
+def ranking_metric_clarification(question, snapshot=None, previous=None):
+    """Ask which measure a selling-performance ranking means.
+
+    Returns None when the question already names a measure (销量/销售额), asks
+    about meaning rather than a value, or no database snapshot is bound. The
+    check is metadata-only: it reads the question and the copied snapshot and
+    runs no SQL, so it is answered before any query is generated.
+    """
+    if not isinstance(snapshot, dict) or not snapshot.get('tables'):
+        return None
+    text = str(question or '')
+    if not _SELLING_SUPERLATIVE.search(text) or _SELLING_MEASURE.search(text) or _SELLING_DEFINITION.search(text):
+        return None
+    return {'title': '“卖得最好”按销量（售出数量）与按销售额（金额）可能得到不同结果，请确认统计口径：按销量、按销售额，或两种口径都给出。',
+            'dimensions': {'sales_metric': {'options': ['销量（售出数量）', '销售额（金额）'], 'truncated': False}},
+            'specified': dimension_conditions(previous or {})}
+
+
 def dimension_clarification(question, snapshot, connection_id=None, expected_revision=None, previous=None, cancelled=None):
     """Ask about missing dimensions of time-indexed measures, not all records.
 

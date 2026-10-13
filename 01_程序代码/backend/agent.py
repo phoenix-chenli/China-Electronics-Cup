@@ -75,6 +75,7 @@ source_vocabulary是当前公开资料的真实维度取值与定义，不是示
 统计表有多个可用年份而数值问题未指定年份或范围时，先具体询问年份，不擅自选择最新年份或把不同年份汇总。用户明确要求最新、历年、全部年度，或追问已固定年份时保留该意图。
 人口数值比较必须核对 population_type；常住人口、户籍人口、常住外来人口不是同一口径。缺口径时询问采用哪种或是否分别展示，不能混成一个排名、总数或比例。定义、历史解释和口径辨析问题不强制要求数值年份。
 读取candidate_tables的实际字段名匹配和关联grain_note。表字段候选不是授权扩展，不自行创造中文别名或单位。一对多时明确统计父实体、子记录或金额；两个子表先各自按关联键汇总再JOIN，不能直接SUM放大的父表/另一子表金额。COUNT实体与COUNT行不混淆，不明确时澄清。
+排名用“卖得最好/最畅销/卖得好”等表述而未指明销量（售出数量）还是销售额（金额）时，两种口径的榜首可能不是同一项：先clarify请用户选择，或一次返回两种口径各自的结果，不默认只按其中一种口径作答。
 只执行SELECT/WITH，可使用JOIN、聚合、CTE和嵌套查询，禁止写入、系统表、外部函数、笛卡尔积或递归。最多3次SQL尝试（含初次），不能因为错误放宽保护。
 数据库查询返回最多200行。截断结果只代表可见片段，不当作全表统计。查看返回列名、值及查询作用域再选择事实，不能自行推断单位。
 database.query返回already_executed表示同一SQL已在本轮成功执行，返回原查询快照及原fact_id；不是一次新的数据读取。停止重复该SQL。数值已足够时转document.search或answer；缺少计算列时在新SQL中一次补全。
@@ -866,6 +867,9 @@ class Run:
                 missing = database_query.dimension_clarification(self.result['question'], snapshot,
                     connection_id=cid, expected_revision=self.database_context.get('database_connection_revision'),
                     previous=self.previous, cancelled=self.cancelled)
+                if not missing:
+                    missing = database_query.ranking_metric_clarification(self.result['question'], snapshot,
+                        previous=self.previous)
                 if missing:
                     title = missing['title']
                     self.result.update(status='needs_clarification', answer_status='needs_clarification',

@@ -345,6 +345,20 @@ class ScoreReliabilityTests(unittest.TestCase):
         mixed=query.dimension_clarification('比较2024年各地人口总量，并说明人口口径',snapshot,cid)
         self.assertIn('population_type',mixed['dimensions'])
 
+    def test_a_selling_superlative_asks_for_the_measure_it_ranks_by(self):
+        cid = self.statistics_database()
+        snapshot = query.inspect(cid)
+        missing = query.ranking_metric_clarification('哪张专辑卖得最好？', snapshot)
+        self.assertEqual(set(missing['dimensions']), {'sales_metric'})
+        self.assertIn('销量', missing['title'])
+        self.assertIn('销售额', missing['title'])
+        for question in ['哪张专辑销售额最高？', '哪张专辑销量最高？', '按销量统计卖得最好的专辑',
+                         '卖得最好的口径是什么', '数据库里一共有多少张专辑', '曲目数最多的前五位艺术家',
+                         '播放时长最长的前五首曲目']:
+            self.assertIsNone(query.ranking_metric_clarification(question, snapshot), question)
+        self.assertIsNone(query.ranking_metric_clarification('哪张专辑卖得最好？', None))
+        self.assertIsNone(query.ranking_metric_clarification('哪张专辑卖得最好？', {'tables': []}))
+
     def test_explicit_source_override_does_not_compare_another_sources_revision(self):
         previous = {'metric': 'database', 'query_scope': 'database', 'database_connection_id': 'old',
                     'database_connection_revision': 2}

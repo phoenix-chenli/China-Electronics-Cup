@@ -318,6 +318,23 @@ class DatabaseAgentTests(unittest.TestCase):
         self.assertEqual(s.digest(source), before)
         self.assertEqual(s.get_run(response.json()['run_id'])['claims'], [])
 
+    def test_selling_superlative_clarifies_the_measure_before_running_sql(self):
+        # "卖得最好" ranks differently by units sold and by revenue, and the two
+        # leaders need not be the same row. The server asks which measure rather
+        # than silently answering under the revenue reading.
+        self.database()
+        self.script(schema_action())
+        response = self.query('哪个项目卖得最好？')
+        self.assertEqual(response.status_code, 200, response.text)
+        result = response.json()
+        self.assertEqual(result['answer_status'], 'needs_clarification')
+        self.assertEqual(result['clarification_reason'], 'missing_dimensions')
+        self.assertEqual(set(result['clarification_dimensions']), {'sales_metric'})
+        self.assertIn('销量', result['clarification']['title'])
+        self.assertIn('销售额', result['clarification']['title'])
+        self.assertEqual(result['agent']['calls'], 1)
+        self.assertEqual([e for e in result['events'] if e['tool'] == 'database.query'], [])
+
     def test_unrelated_join_is_rejected_and_ambiguity_is_clarified(self):
         self.database()
         self.script(schema_action(), sql_action('SELECT p.title,d.name FROM projects p JOIN departments d ON p.id=d.id'),
