@@ -473,17 +473,17 @@ def ocr(raw: bytes, rotation: int = 0, cancelled=None, deadline=None):
 
 def visual_schema():
     from . import visual_formula
-    return {'blocks': [{'text': 'string', 'box': '[x0,y0,x1,y1] in 0..1', 'kind': 'text|title|caption|header|footer|list|note'}],
+    return {'blocks': [{'text': 'string', 'box': [0.1,0.1,0.9,0.9], 'kind': 'text|title|caption|header|footer|list|note'}],
             'formulas': [visual_formula.schema()],
-            'tables': [{'title': 'string', 'box': '[x0,y0,x1,y1]', 'rows': 'integer', 'columns': 'integer',
+            'tables': [{'title': 'string', 'box': [0.1,0.1,0.9,0.9], 'rows': 'integer', 'columns': 'integer',
                         'cells': [{'row': 'zero-based integer', 'column': 'zero-based integer', 'rowspan': 'integer >=1',
                                    'colspan': 'integer >=1', 'text': 'string; empty is distinct from zero',
-                                   'box': '[x0,y0,x1,y1]', 'role': 'column_header|row_header|data|header|body|stub|corner|unknown'}]}],
+                                   'box': [0.1,0.1,0.2,0.2], 'role': 'column_header|row_header|data|header|body|stub|corner|unknown'}]}],
             'charts': [{'title': 'string', 'kind': 'bar|line|pie|scatter|area|stacked_bar|stacked_area|donut|other',
-                        'box': '[x0,y0,x1,y1]', 'x_label': 'string', 'y_label': 'string', 'unit': 'string',
+                        'box': [0.1,0.1,0.9,0.9], 'x_label': 'string', 'y_label': 'string', 'unit': 'string',
                         'series': [{'name': 'string', 'axis': 'primary|secondary|unknown', 'color': 'string',
                                     'points': [{'label': 'string', 'value': 'string or null', 'printed_text': 'string',
-                                                'box': '[x0,y0,x1,y1]', 'value_source': 'printed|estimated|unknown'}]}]}],
+                                                'box': [0.1,0.1,0.2,0.2], 'value_source': 'printed|estimated|unknown'}]}]}],
             'issues': [{'code': 'string', 'message': 'string', 'box': 'optional [x0,y0,x1,y1]'}],
             'provenance': {'notes': 'optional string'}}
 
@@ -692,7 +692,12 @@ def _validate_visual(body, observed):
         title_verdict = _evidence(item['title'], item['box'], observed)
         item['title_status'] = title_verdict['status'] if item['title'] else 'pending'
         item['status'] = 'confirmed' if all(cell['status'] == 'confirmed' for cell in item['cells']) and (not item['title'] or title_verdict['status'] == 'confirmed') else 'pending'
-        item['structure_status'] = 'schema_valid'; tables.append(item)
+        item['structure_status'] = 'schema_valid'
+        from . import table_structure
+        item['method']='visual_observed';table_structure.prepare(item)
+        if item['relation_status']=='pending':
+            issues.append({'code':'table_relation_requires_review','message':'表格的逻辑行列与单元格位置冲突；数字观测不代表表头对应关系已核验','box':item['box']})
+        tables.append(item)
     for chart in _list(body['charts'], 20):
         _object(chart, {'title', 'kind', 'box', 'x_label', 'y_label', 'unit', 'series'})
         item = {key: _text(chart[key], 300) for key in ('title', 'kind', 'x_label', 'y_label', 'unit')}
@@ -890,8 +895,11 @@ def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None
     if mime is None:raise ValueError('视觉发送仅支持 PNG、JPEG、WEBP；请先转换图片并重新预览')
     schema = json.dumps(visual_schema(), ensure_ascii=False)
     prompt = ('只提取图片中可见的文字、表格网格、图表和二维公式。返回一个严格 JSON 对象，不要代码围栏或额外说明。'
-              '坐标必须为原图归一化 [x0,y0,x1,y1]，范围0到1。只返回schema列出的字段。'
+              '坐标必须为原图归一化 [x0,y0,x1,y1]，范围0到1。box必须是4个JSON数字组成的数组，禁止字符串、对象或像素整数；示例坐标不是待复制的实际位置。只返回schema列出的字段。'
               '表格从0开始索引，合并格只列一次，所有网格含空白格必须被覆盖，不要按合计推算数字。'
+              '单元格box必须是完整单元格矩形而非文字外框，行列编号须与图上从上到下、从左到右的位置一致。'
+              '多级表头逐层保留，跨行行名用rowspan；column_header为列表头，row_header为数据行标识，corner为左上角表头。'
+              '空白保留空字符串，0只在原图明确印刷0时返回；单位和脚注保留原文，不把脚注编号并入数值。'
               '图点不可读的value为null；value必须是字符串，印刷标签printed、像素估读estimated、不可读unknown。'
               '不要把估读当印刷标签，不生成原因或预测。provenance仅允许notes字段。schema: '+schema)
     prompt += ('公式放入formulas，不要拆入blocks。逐个保留分子、分母、根次数、上下标、求和/积分上下限和括号；'

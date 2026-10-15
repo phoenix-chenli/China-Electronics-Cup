@@ -180,6 +180,8 @@ def bind_source(source):
         raise ValueError('检索证据不能定位到固定原件')
     if bound.get('quality',{}).get('confirmed') is False:
         raise ValueError('文档片段包含未核验识别结果，不能作为回答证据')
+    if bound.get('quality',{}).get('table_complete') is False:
+        raise ValueError('选区未包含完整表格行及对应表头，请选择完整行或打开原表核验')
     locator = bound['locator']
     if not locator.get('parse_id') or not locator.get('text_range', {}).get('text_sha256'):
         raise ValueError('文档证据缺少固定解析或文字摘要')
@@ -208,7 +210,7 @@ def packet(spans, facts=()):
               'publication': copy.deepcopy(x.get('publication',{})),
               'extraction': {k:v for k,v in x.get('quality',{}).items() if k in
                   {'source_methods','method','location_precision','location_precisions','human_reviewed',
-                   'confirmed','derived_view','structure','min_ocr_confidence','formula_ids','formula_id','formula_complete','table_id','cell_ids','chart_id','point_id','source_part','media_id'}}} for x in values],
+                   'confirmed','derived_view','structure','min_ocr_confidence','formula_ids','formula_id','formula_complete','table_id','cell_ids','table_complete','table_cell_bindings','table_relation_version','chart_id','point_id','source_part','media_id'}}} for x in values],
             'page_continuation_candidates': page_continuation_candidates(values),
             'queries': queries,
             'facts': [{'id': f['id'], 'text': f['text'], 'query_id': f.get('query_id'),

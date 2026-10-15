@@ -78,9 +78,21 @@ def _source_gaps(scope, cancelled=None, deadline=None, document_ids=None):
                     missing.append({'page':p['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending'})
                 if scope.get('scope_type')!='selection' and any(len(b['text'])>index.CHUNK_TOKENS for b in index._formula_blocks(p)):
                     missing.append({'page':p['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long'})
+                if scope.get('scope_type')!='selection' and any(b['table_row_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
+                    missing.append({'page':p['number'],'reason':'完整表格行超过检索片段窗口，请打开原表单独核验','reason_code':'source_table_row_too_long'})
+                if scope.get('scope_type')=='selection':
+                    start,end=scope['text_range']['start'],scope['text_range']['end']
+                    if any(b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in index._table_row_blocks(p)):
+                        missing.append({'page':p['number'],'reason':'选区只包含表格行的一部分，缺少完整对应关系','reason_code':'source_partial_table_row'})
         for page in missing:
-            gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],'action':'inspect_original_formula' if page.get('reason_code')=='source_formula_too_long' else 'reparse_original','reason_code':page.get('reason_code','source_text_missing'),
-                         'instruction':('请打开该固定版本的完整公式原文进行核验' if page.get('reason_code')=='source_formula_too_long' else '本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据' if page.get('reason_code')=='source_structure_pending' else '请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据')})
+            code=page.get('reason_code','source_text_missing')
+            actions={'source_formula_too_long':('inspect_original_formula','请打开该固定版本的完整公式原文进行核验'),
+                     'source_partial_table_row':('select_complete_table_row','请选择完整表格行，或打开原表同时核验多级表头与行名'),
+                     'source_table_row_too_long':('inspect_original_table','请打开该固定版本的原表核验整行及多级表头；检索未拆开这些对应关系'),
+                     'source_structure_pending':('reparse_original','本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据')}
+            action,instruction=actions.get(code,('reparse_original','请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据'))
+            gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],
+                         'action':action,'reason_code':code,'instruction':instruction})
     return gaps
 
 
@@ -339,6 +351,7 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_
             raise ValueError('检索文档筛选必须来自本轮固定范围，不能扩大范围')
         candidates = [c for c in candidates if c['document_id'] in document_ids]
     gaps=_stage(stages,'source_quality',lambda:_source_gaps(scope,cancelled,deadline,document_ids),cancelled,trace,deadline)
+    candidates=[c for c in candidates if c.get('quality',{}).get('table_complete') is not False]
     by_id = {c["id"]: c for c in candidates}
     if not candidates:
         return {"status": "insufficient", "evidence": [], "count": 0, "stages": stages,"source_gaps":gaps,

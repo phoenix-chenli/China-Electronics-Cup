@@ -20,7 +20,7 @@ from pathlib import Path
 
 from . import documents, store as s
 
-CHUNKER_VERSION = "source-spans-v4-atomic-formulas"
+CHUNKER_VERSION = "source-spans-v5-atomic-table-rows"
 CHUNK_TOKENS = 384
 OVERLAP_TOKENS = 48
 LOCK = threading.RLock()
@@ -229,17 +229,46 @@ def _formula_blocks(page):
     return sorted(out,key=lambda b:b['start'])
 
 
+def _table_row_blocks(page):
+    """Only source-bound, confirmed row views carry relational evidence."""
+    return [block for block in page.get('blocks',[])
+            if block.get('kind')=='table_row' and block.get('status','confirmed')=='confirmed'
+            and block.get('cell_bindings') and block.get('table_relation_version')]
+
+
+def _atomic_blocks(page):
+    """Overlapping formula/row intervals form one indivisible source interval."""
+    blocks=[{'start':b['start'],'end':b['end'],'formula_block_ids':[b['id']],
+             'table_row_ids':[],'table_ids':[]} for b in _formula_blocks(page)]
+    blocks += [{'start':b['start'],'end':b['end'],'formula_block_ids':[],
+                'table_row_ids':[b['id']],'table_ids':[b['table_id']] if b.get('table_id') else []}
+               for b in _table_row_blocks(page)]
+    protected=[]
+    for block in sorted(blocks,key=lambda b:(b['start'],b['end'])):
+        if protected and block['start']<protected[-1]['end']:
+            previous=protected[-1]
+            previous['end']=max(previous['end'],block['end'])
+            for key in ('formula_block_ids','table_row_ids','table_ids'):
+                previous[key]=list(dict.fromkeys(previous[key]+block[key]))
+        else:protected.append(block)
+    return protected
+
+
 def _source_spans(page,count,budget):
-    """Formula-bearing blocks are whole evidence; oversized ones need source review."""
-    protected=_formula_blocks(page)
+    """Whole formulas/related table rows only; omitted atoms remain in the source."""
+    protected=_atomic_blocks(page)
     for offset,limit in _confirmed_ranges(page):
         cursor=offset
         for block in protected:
             start,end=block['start'],block['end']
-            if start<cursor or end>limit:continue
-            for a,b,hard in _split(page['text'][cursor:start],count,budget):yield cursor+a,cursor+b,hard
-            if count(page['text'][start:end])<=budget:yield start,end,False
-            cursor=end
+            if end<=cursor or start>=limit:continue
+            if start>cursor:
+                for a,b,hard in _split(page['text'][cursor:start],count,budget):yield cursor+a,cursor+b,hard
+            # If a pending source interval cuts through an atom, neither side
+            # may masquerade as the complete relation or formula.
+            if start>=offset and end<=limit and count(page['text'][start:end])<=budget:
+                yield start,end,False
+            cursor=max(cursor,min(end,limit))
         for a,b,hard in _split(page['text'][cursor:limit],count,budget):yield cursor+a,cursor+b,hard
 
 
@@ -251,14 +280,25 @@ def _extraction_quality(page,start,end):
     quality={"confirmed":all(b.get("status","confirmed")=="confirmed" for b in blocks),
              "human_reviewed":bool(blocks) and all(b.get('human_reviewed') is True for b in blocks),"source_methods":methods,"location_precisions":precisions,
              "derived_view":any(b.get("derived_view",False) for b in blocks)}
+    row_objects={id(b) for b in _table_row_blocks(page)}
+    table_rows=[b for b in blocks if id(b) in row_objects]
+    complete_rows=[b for b in table_rows if start<=b['start'] and end>=b['end']]
+    complete_objects={id(b) for b in complete_rows}
+    if table_rows:quality['table_complete']=len(complete_rows)==len(table_rows)
     for field in ("media_id","source_part","table_id","cell_ids","chart_id","point_id","formula_id"):
         values=[]
         for block in blocks:
+            if field=='cell_ids' and id(block) in row_objects and id(block) not in complete_objects:continue
             value=block.get(field)
             if value is not None:
                 for item in value if isinstance(value,list) else [value]:
                     if item not in values:values.append(item)
         if values:quality[field]=values
+    bindings=[{**binding,'table_id':block['table_id']} for block in complete_rows
+              if block.get('table_id') for binding in block.get('cell_bindings',[])]
+    if bindings:
+        quality['table_cell_bindings']=bindings
+        quality['table_relation_version']=sorted({block['table_relation_version'] for block in complete_rows})
     formula_blocks=[b for b in _formula_blocks(page) if b['end']>start and b['start']<end]
     if formula_blocks:
         quality['formula_complete']=all(start<=b['start'] and end>=b['end'] for b in formula_blocks)
@@ -300,8 +340,12 @@ def _build_document(document_id, cancelled=None):
             continue
         pending=[{'kind':kind,'id':obj.get('id')} for kind in ('formulas','tables','charts') for obj in page.get(kind,[]) if obj.get('status')=='pending']
         if pending:missing.append({'page':page['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending','structures':pending})
-        oversized=[b for b in _formula_blocks(page) if count(b['text'])>budget]
-        if oversized:missing.append({'page':page['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long','formula_block_ids':[b['id'] for b in oversized]})
+        oversized=[b for b in _atomic_blocks(page) if count(page['text'][b['start']:b['end']])>budget]
+        formula_ids=list(dict.fromkeys(fid for b in oversized for fid in b['formula_block_ids']))
+        if formula_ids:missing.append({'page':page['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long','formula_block_ids':formula_ids})
+        table_rows=list(dict.fromkeys(rid for b in oversized for rid in b['table_row_ids']))
+        if table_rows:missing.append({'page':page['number'],'reason':'完整表格行超过检索片段窗口，请打开原表单独核验','reason_code':'source_table_row_too_long','table_row_ids':table_rows,
+                                      'table_ids':list(dict.fromkeys(tid for b in oversized for tid in b['table_ids']))})
         spans = list(_source_spans(page,count,budget))
         for start, end, hard_split in spans:
             text = page["text"][start:end]

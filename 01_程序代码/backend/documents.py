@@ -315,6 +315,17 @@ def resolve(locator, quote=""):
     method=p.get("provenance",{}).get("method",p.get("method","native_text"))
     scores=[b["confidence"] for b in relevant if isinstance(b.get("confidence"),(int,float)) and not isinstance(b.get("confidence"),bool) and 0<=b["confidence"]<=1]
     quality={"confirmed":status=="located","human_reviewed":bool(relevant) and all(b.get('human_reviewed') is True for b in relevant),"derived_view":bool(loc.get("derived_view")),"source_methods":sorted(methods),"location_precision":loc["location_precision"],"min_ocr_confidence":min(scores) if scores else None,"semantic_accuracy":"not_proven"}
+    table_rows=[b for b in relevant if b.get('kind')=='table_row' and b.get('cell_bindings') and b.get('table_relation_version')]
+    if table_rows:
+        complete=[b for b in table_rows if start<=b['start'] and end>=b['end']]
+        quality['table_complete']=len(complete)==len(table_rows)
+        incomplete_ids={b['id'] for b in table_rows if b not in complete}
+        for ref in loc.get('source_refs',[]):
+            if ref['id'] in incomplete_ids:ref.pop('cell_ids',None)
+        bindings=[{**binding,'table_id':b['table_id']} for b in complete for binding in b['cell_bindings']]
+        if bindings:
+            quality.update(table_cell_bindings=bindings,table_relation_version=sorted({b['table_relation_version'] for b in complete}),
+                           cell_ids=list(dict.fromkeys(cid for b in complete for cid in b.get('cell_ids',[]))))
     provenance=data['document'].get('provenance',{})
     publication={k:v for k,v in provenance.items() if k in
         {'title','institution','document_year','published_at','origin','publication_status','publication_group'}}

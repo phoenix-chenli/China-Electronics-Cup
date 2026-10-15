@@ -112,28 +112,25 @@ def _append(page,text,kind='text',box=None,**metadata):
 
 
 def _table_rows(page,table,method):
-    title=table.get('title') if table.get('title_status','confirmed')=='confirmed' else None
-    title=title or '表格结构视图'
-    if table.get('status')=='pending' and not any(c.get('label_review') for c in table.get('cells',[])):return
-    headers=[cell for cell in table.get('cells',[]) if cell.get('role') in {'header','column_header'} and cell.get('text')]
-    if any(h.get('status','confirmed')!='confirmed' for h in headers):return
-    for row in range(table['rows']):
-        cells=[c for c in table['cells'] if c['row']<=row<c['row']+c.get('rowspan',1)]
-        if not cells or any(c.get('status','confirmed')!='confirmed' for c in cells):continue
-        pairs=[]
-        for cell in sorted(cells,key=lambda c:c['column']):
-            if not cell.get('text'):continue
-            parents=[h for h in headers if h['row']<row and h['column']<=cell['column']<h['column']+h.get('colspan',1)]
-            label=' / '.join(h['text'] for h in sorted(parents,key=lambda h:h['row']))
-            if not label and table.get('method')=='ocr_aligned_columns':label=f"第{cell['column']+1}列"
-            pairs.append((label+'：' if label else '')+cell['text'])
-        if not pairs:continue
-        block=_append(page,title+f' · 第{row+1}行\n'+' | '.join(pairs),'table_row',table.get('box'),
-            source_method=method,status='confirmed',table_id=table['id'],cell_ids=[c['id'] for c in cells],
+    from . import table_structure
+    for view in table_structure.row_views(table):
+        block=_append(page,view['text'],'table_row',table.get('box'),
+            source_method=method,status='confirmed',table_id=table['id'],cell_ids=view['cell_ids'],
+            cell_bindings=view['cell_bindings'],table_relation_version=table_structure.VERSION,
             derived_view=True,
             source_part=table.get('source_part'),media_id=table.get('media_id'),
             location_precision='region' if table.get('box') else 'package_structure')
         if block:table.setdefault('text_ranges',[]).append({'start':block['start'],'end':block['end'],'cell_ids':block['cell_ids']})
+
+
+def _protect_table_regions(page,media_id=None):
+    """Keep the image/text observations, but answer through bound table views."""
+    areas=[t['box'] for t in page.get('tables',[]) if t.get('box') and t.get('media_id')==media_id and t.get('relation_audit')]
+    for block in page.get('blocks',[]):
+        box=block.get('box')
+        if not box or block.get('table_id') or block.get('media_id')!=media_id:continue
+        if any(max(0,min(box[2],b[2])-max(box[0],b[0]))*max(0,min(box[3],b[3])-max(box[1],b[1]))>1e-8 for b in areas):
+            block.update(status='pending',source_pending_reason='table_relation_view')
 
 
 def _table(node,source,index,depth=0):
@@ -390,11 +387,14 @@ def enhance_pdf_page(path,number,base_page):
         try:found=original.find_tables()
         except Exception:page['issues'].append('原生表格结构未提取，可选择正式结构解析');return page
         for ti,source in enumerate(found.tables[:50]):
-            matrix=source.extract();cells=[]
+            matrix=source.extract();cells=[];seen=set()
             if len(matrix)>500 or source.col_count>100:page['issues'].append('表格过大，未截断作为完整结构');continue
             for ri,row in enumerate(source.rows):
                 for ci,box in enumerate(row.cells):
                     if box is None:continue
+                    rectangle=tuple(round(v,3) for v in box)
+                    if rectangle in seen:continue
+                    seen.add(rectangle)
                     text=matrix[ri][ci] if ri<len(matrix) and ci<len(matrix[ri]) else None
                     cells.append({'id':f'pdf-p{number}-t{ti}-r{ri}-c{ci}','row':ri,'column':ci,'rowspan':1,'colspan':1,
                         'text':text or '','blank':text=='','box':_box(box,original),'pdf_box':list(box),
@@ -404,11 +404,21 @@ def enhance_pdf_page(path,number,base_page):
             ys=sorted(set(round(v,3) for row in source.rows for box in row.cells if box for v in (box[1],box[3])))
             for cell in cells:
                 box=cell['pdf_box'];cs=[x for x in xs if box[0]-.2<=x<=box[2]+.2];rs=[y for y in ys if box[1]-.2<=y<=box[3]+.2]
+                cell['column']=min(range(len(xs)),key=lambda i:abs(xs[i]-box[0]))
+                cell['row']=min(range(len(ys)),key=lambda i:abs(ys[i]-box[1]))
                 cell['colspan']=max(1,len(cs)-1);cell['rowspan']=max(1,len(rs)-1)
             table={'id':f'pdf-p{number}-t{ti}','title':'原生 PDF 表格','box':_box(source.bbox,original),'rows':source.row_count,
                 'columns':source.col_count,'cells':cells,'method':'pdf_native_table','status':'confirmed',
                 'external_header':{'names':source.header.names,'box':_box(source.header.bbox,original)} if source.header.external else None}
+            if table['external_header']:
+                boxes=getattr(source.header,'cells',[])
+                table['external_header']['cells']=[{'id':table['id']+f'-external-h{ci}','row':-1,'column':ci,
+                    'rowspan':1,'colspan':1,'text':name,'role':'column_header','status':'confirmed',
+                    'box':_box(boxes[ci],original) if ci<len(boxes) and boxes[ci] else table['external_header']['box']}
+                    for ci,name in enumerate(source.header.names) if name]
             page['tables'].append(table);_table_rows(page,table,'pdf_native_table')
+    _protect_table_regions(page)
+    page['text_available']=any(b.get('status','confirmed')=='confirmed' and b.get('text','').strip() for b in page.get('blocks',[]))
     return page
 
 
@@ -543,6 +553,7 @@ def apply_ocr_page(base_page,result,media_id=None):
         _append(page,formula['text'],'formula',formula['box'],source_method='ocr_spatial_formula',
                 status=formula['status'],media_id=media_id,formula_id=formula['id'],
                 location_precision='region',source_pending_reason='formula_structure_requires_review')
+    _protect_table_regions(page,media_id)
     page['text_available']=any(b.get('status','confirmed')=='confirmed' and b['text'].strip() for b in page['blocks'])
     page['ocr_required']=not page['text_available']
     _recognition_issues(page,result,'ocr',media_id,reset=True)
@@ -563,8 +574,14 @@ def apply_visual_page(base_page,result,media_id=None):
                 source_method='visual_observed',location_precision='region',media_id=media_id)
     for ti,table in enumerate(result.get('tables',[])):
         table=copy.deepcopy(table);table.update(media_id=media_id,method='visual_observed');table['id']=f"vision-p{page['number']}-{media_id or 'page'}-t{ti}"
-        for ci,cell in enumerate(table.get('cells',[])):cell.setdefault('id',table['id']+f'-c{ci}')
+        for ci,cell in enumerate(table.get('cells',[])):cell['id']=table['id']+f'-c{ci}'
         page['tables'].append(table);_table_rows(page,table,'visual_observed')
+    uncertain_tables=[t['box'] for t in page.get('tables',[]) if t.get('media_id')==media_id and t.get('relation_status')=='pending' and t.get('box')]
+    for block in page.get('blocks',[]):
+        box=block.get('box')
+        if not box or block.get('media_id')!=media_id:continue
+        if any(max(0,min(box[2],area[2])-max(box[0],area[0]))*max(0,min(box[3],area[3])-max(box[1],area[1]))>1e-8 for area in uncertain_tables):
+            block.update(status='pending',source_pending_reason='table_relation_requires_review')
     for ci,chart in enumerate(result.get('charts',[])):
         chart=copy.deepcopy(chart);chart.update(media_id=media_id,method='visual_observed');chart['id']=f"vision-p{page['number']}-{media_id or 'page'}-chart{ci}"
         for si,series in enumerate(chart.get('series',[])):
@@ -593,6 +610,7 @@ def apply_visual_page(base_page,result,media_id=None):
             overlap=max(0,min(box[2],area[2])-max(box[0],area[0]))*max(0,min(box[3],area[3])-max(box[1],area[1]))
             if overlap/((box[2]-box[0])*(box[3]-box[1]))>=.8:
                 block.update(status='pending',source_pending_reason='unverified_chart_association');break
+    _protect_table_regions(page,media_id)
     page['text_available']=any(b.get('status','confirmed')=='confirmed' and b.get('text','').strip() for b in page.get('blocks',[]))
     page['provenance']={**result.get('provenance',{}),'method':'visual_observed','human_reviewed':False,
         'structural_check':'completed','semantic_accuracy':'not_proven'}
@@ -700,17 +718,24 @@ def infer_pdf_outline(pages):
 def link_continuations(pages):
     """Only adjacent structurally matching tables with explicit repeat headers."""
     links=[]
+    # Recompute generated candidates after a header edit or reparse. Retain
+    # manually reviewed links, but never leave an obsolete automatic hint.
+    for page in pages:
+        for table in page.get('tables',[]):
+            table['continuations']=[x for x in table.get('continuations',[]) if x.get('status')!='candidate']
     for before,after in zip(pages,pages[1:]):
         if after['number']!=before['number']+1:continue
         for left in before.get('tables',[]):
             for right in after.get('tables',[]):
                 if left.get('columns')!=right.get('columns') or left.get('status')!='confirmed' or right.get('status')!='confirmed':continue
-                def headers(table):return [(c['column'],c.get('colspan',1),re.sub(r'\s+','',c['text'])) for c in table.get('cells',[]) if c.get('role') in {'header','column_header'} and c.get('text')]
+                def headers(table):return sorted((c.get('row',0),c.get('rowspan',1),c['column'],c.get('colspan',1),re.sub(r'\s+','',c['text'])) for c in table.get('cells',[]) if c.get('role') in {'header','column_header'} and c.get('text'))
                 lh,rh=headers(left),headers(right)
                 if not lh or lh!=rh:continue
                 a,b=left.get('box'),right.get('box')
                 if not a or not b or a[3]<.70 or b[1]>.35 or abs(a[0]-b[0])>.02 or abs(a[2]-b[2])>.02:continue
                 link={'previous_table_id':left['id'],'next_table_id':right['id'],'pages':[before['number'],after['number']],
                     'status':'candidate','reason':'相邻页、列数和重复表头一致、横向区域对齐；业务续表关系仍待确认'}
-                right.setdefault('continuations',[]).append(link);links.append(link)
+                existing=right.setdefault('continuations',[])
+                if link not in existing:existing.append(link)
+                links.append(link)
     return links

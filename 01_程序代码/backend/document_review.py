@@ -44,7 +44,10 @@ def targets(page):
             candidates=list(dict.fromkeys(text for r in page.get('label_reviews',[]) if r.get('media_id')==t.get('media_id') and r.get('observation_id') in c.get('evidence_lines',[]) for text in r.get('candidates',[]) if isinstance(text,str) and text.strip()))
             items.append({'id':'cell:'+t['id']+':'+c['id'],'kind':'cell','text':c.get('text',''),
                           'ocr_candidates':candidates,
-                          'label':f"{t.get('title') or '表格'} · 第 {c['row']+1} 行 {c['column']+1} 列",'box':c.get('box') or t.get('box'),'media_id':t.get('media_id'),'status':c.get('status','pending')})
+                          'label':f"{t.get('title') or '表格'} · 第 {c['row']+1} 行 {c['column']+1} 列"+(' · '+' / '.join(c['column_path'])[:300] if c.get('column_path') else ''),
+                          'column_path':c.get('column_path',[]),'rowspan':c.get('rowspan',1),'colspan':c.get('colspan',1),
+                          'box':c.get('box') or t.get('box'),'media_id':t.get('media_id'),
+                          'status':'pending' if t.get('relation_status')=='pending' else c.get('status','pending')})
     for chart in page.get('charts',[]):
         for si,series in enumerate(chart.get('series',[])):
             for p in series.get('points',[]):
@@ -161,6 +164,7 @@ def publish(did,req):
         audit['after']={k:getattr(req,k) for k in ['text','label','series_name','unit','title','x_label','y_label']}
         body.setdefault('human_reviews',[]).append(audit)
         page.setdefault('provenance',{})['human_reviewed_targets']=sum(r['page']==req.page for r in body['human_reviews'])
+        for media_id in {t.get('media_id') for t in page.get('tables',[])}:native._protect_table_regions(page,media_id)
         page['text_available']=any(b.get('status','confirmed')=='confirmed' and b.get('text','').strip() for b in page['blocks'])
         page['ocr_required']=not page['text_available']
         from .document_quality import inspect
