@@ -6,6 +6,10 @@ import {renderToStaticMarkup} from 'react-dom/server'
 import {DocumentStructures,OcrProviderStatus,PageProvenance,ProcessingPreview,ProcessingTaskStatus,StructuredChart,StructuredTable,documentPosition,ocrReady,processingDocumentId,processingPages,sourceHighlightRegions,submitProcessingTask,validSourceBox} from '../src/document-processing'
 
 const request={document_id:'public-doc',version:'a'.repeat(64),parse_id:'old-parse',pages:[1,3],mode:'vision' as const,rotation:90 as const,connection_id:'vision-tested'}
+test('formula preview discloses bounded extra calls before image consent',()=>{
+ const html=renderToStaticMarkup(<ProcessingPreview preview={{mode:'vision',document:{name:'公式图'},pages:[1],image_count:1,total_bytes:1024,formula_reread:{max_extra_images_per_image:2,max_extra_bytes_per_image:30000000},provider:{name:'视觉模型'}}}/>)
+ for(const text of ['局部放大识别','不发送其他来源','实际调用、失败和耗时','追加图片合计最多'])assert.ok(html.includes(text),text)
+})
 test('source-view metadata retains its document identity in the processing request',async()=>{
  const view={document:{document_id:'fixed-source',sha256:'b'.repeat(64)},parse_id:'fixed-parse'}
  const original=globalThis.fetch;let body:any

@@ -30,7 +30,12 @@ def targets(page):
     items=[]
     for b in page.get('blocks',[]):
         if b.get('table_id') or b.get('chart_id') or b.get('source_pending_reason')=='unverified_chart_association':continue
-        items.append({'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') or b.get('formula_ids') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')})
+        item={'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') or b.get('formula_ids') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')}
+        if b.get('formula_id'):
+            formula=next((f for f in page.get('formulas',[]) if f.get('id')==b['formula_id']),{})
+            candidates=[formula.get('page_candidate',{}).get('latex'),formula.get('latex')]
+            item['ocr_candidates']=list(dict.fromkeys(value for value in candidates if isinstance(value,str) and value))
+        items.append(item)
     for i,b in enumerate(page.get('recognition_pending',[])):
         if b.get('source_pending_reason')=='formula_structure_requires_review':continue
         items.append({'id':'pending:'+str(i),'kind':'text','text':b.get('text',''),'box':b.get('box'),'media_id':b.get('media_id'),'status':'pending'})

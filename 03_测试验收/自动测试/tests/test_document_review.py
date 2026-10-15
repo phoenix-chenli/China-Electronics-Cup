@@ -9,6 +9,23 @@ from backend import documents,document_review,rag_index
 
 
 class DocumentReviewTests(unittest.TestCase):
+    def test_visual_formula_review_clears_quality_warning_and_keeps_candidate_history(self):
+        from backend import document_native as native, document_providers as providers
+        d,_,body=self.source('')
+        parsed={k:copy.deepcopy(v) for k,v in body.items() if k not in {'document','parse_id'}}
+        payload={'blocks':[],'tables':[],'charts':[],'issues':[],'provenance':{},'formulas':[{'coordinate_space':'normalized_1000','box':[100,100,900,900],'tree':{'kind':'fraction','numerator':{'kind':'token','value':'a'},'denominator':None}}]}
+        parsed['pages'][0]=native.apply_visual_page(parsed['pages'][0],providers._validate_visual(payload,[]))
+        with s.conn() as db:data=documents.save_parse(db,d['id'],d['sha256'],parsed,'视觉公式候选夹具')
+        target='block:'+data['pages'][0]['blocks'][0]['id']
+        with patch.object(rag_index,'submit_index',return_value={'id':'formula-index'}):
+            response=self.correct(d,data,target,text=r'\frac{a}{b}')
+        self.assertEqual(response.status_code,200,response.text)
+        page=documents.layout(d['id'])['pages'][0]
+        self.assertEqual(page['formulas'][0]['status'],'confirmed')
+        self.assertFalse(any(isinstance(i,dict) and i.get('code')=='formula_structure_incomplete' for i in page['issues']))
+        old=documents.layout(d['id'],parse_id=data['parse_id'])['pages'][0]
+        self.assertEqual(old['formulas'][0]['status'],'pending')
+        self.assertFalse(old['formulas'][0]['structure_complete'])
     @classmethod
     def setUpClass(cls):cls.client=LocalClient()
     @classmethod

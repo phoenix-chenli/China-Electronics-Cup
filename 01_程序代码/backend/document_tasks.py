@@ -124,6 +124,9 @@ def _snapshot(req):
     if req.mode=="vision":
         from . import document_providers as providers
         snapshot["ocr_provider"]=providers.describe()
+        snapshot['formula_reread']={'max_extra_images_per_image':providers.FORMULA_REREAD_LIMIT,
+            'max_extra_bytes_per_image':providers.FORMULA_REREAD_LIMIT*providers.LIMITS['max_input_bytes'],
+            'scope':'仅对已预览原图内的复杂公式进行局部放大，不发送其他来源'}
     return snapshot
 
 
@@ -330,7 +333,12 @@ class Manager:
                             body["events"].append({"id":uuid.uuid4().hex,"page":number,"media_id":media_id,"method":"ocr_observation","status":"not_available","started_at":None,"duration_ms":None,"summary":"本机 OCR 未就绪；视觉结果仅依据已有同区域文字核对，缺观察依据的内容保留待复核"})
                             self.save_progress(body)
                         body["stage"]=f"结构视觉解析第 {number} 页";self.save_progress(body)
-                        result=providers.visual(raw,connection_id=body["connection_id"],expected_revision=body["provider"]["connection_revision"],observed_lines=lines,cancelled=stop,deadline=deadline)
+                        def visual_trace(call):
+                            current=next((item for item in body['events'] if item.get('id')==call['id']),None)
+                            if current is None:body['events'].append({**call,'page':number,'media_id':media_id})
+                            else:current.update(call)
+                            self.save_progress(body)
+                        result=providers.visual(raw,connection_id=body["connection_id"],expected_revision=body["provider"]["connection_revision"],observed_lines=lines,cancelled=stop,deadline=deadline,trace=visual_trace)
                         fresh=native.apply_visual_page(fresh,result,media_id=media_id)
                     if media_id:
                         pending=any(line.get("media_id")==media_id for line in fresh.get("recognition_pending",[])) or any(obj.get("media_id")==media_id and obj.get("status") in {"pending","needs_review"} for key in ("tables","charts") for obj in fresh.get(key,[])) or bool(result.get("issues"))

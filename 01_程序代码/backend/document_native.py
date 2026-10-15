@@ -570,13 +570,25 @@ def apply_visual_page(base_page,result,media_id=None):
         for si,series in enumerate(chart.get('series',[])):
             for pi,point in enumerate(series.get('points',[])):point.setdefault('id',chart['id']+f'-s{si}-p{pi}')
         page['charts'].append(chart);_chart_text(page,chart,'visual_observed')
+    for fi,formula in enumerate(result.get('formulas',[])):
+        formula=copy.deepcopy(formula)
+        formula.update(id=f"vision-p{page['number']}-{media_id or 'page'}-f{fi}",media_id=media_id,method='visual_observed')
+        page.setdefault('formulas',[]).append(formula)
+        _append(page,formula['latex'],'formula',formula['box'],status='pending',source_method='visual_observed',
+                location_precision='region',media_id=media_id)
+        page['blocks'][-1].update(formula_id=formula['id'],source_pending_reason='formula_structure_requires_review')
     _recognition_issues(page,result,'visual_observed',media_id)
     # Unverified chart associations cannot be bypassed via the underlying OCR
     # numbers. Keep them visible in the parse, excluded from answer evidence.
     uncertain=[c.get('box') for c in result.get('charts',[]) if c.get('status')!='confirmed' and c.get('box')]
+    formula_areas=[f['box'] for f in result.get('formulas',[])]
     for block in page.get('blocks',[]):
         box=block.get('box')
-        if block.get('media_id')!=media_id or not box or not re.search(r'\d',block.get('text','')):continue
+        if block.get('media_id')!=media_id or not box:continue
+        if any(max(0,min(box[2],area[2])-max(box[0],area[0]))*max(0,min(box[3],area[3])-max(box[1],area[1]))>1e-8 for area in formula_areas):
+            block.update(status='pending',source_pending_reason='formula_structure_requires_review')
+            continue
+        if not re.search(r'\d',block.get('text','')):continue
         for area in uncertain:
             overlap=max(0,min(box[2],area[2])-max(box[0],area[0]))*max(0,min(box[3],area[3])-max(box[1],area[1]))
             if overlap/((box[2]-box[0])*(box[3]-box[1]))>=.8:

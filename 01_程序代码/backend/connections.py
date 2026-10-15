@@ -238,6 +238,12 @@ def _request_json_transport(d,url,body,headers,deadline,cancelled):
     except (json.JSONDecodeError,UnicodeDecodeError):raise ValueError('服务返回的内容不是有效 JSON') from None
 
 def chat(d,messages,max_tokens=1200,cancelled=None,json_mode=False):
+    if urlsplit(d['endpoint']).path.rstrip('/').endswith('/apps/anthropic'):
+        from . import anthropic_vision
+        headers={'anthropic-version':'2023-06-01'}
+        if d.get('_secret'):headers['x-api-key']=d['_secret']
+        raw=request_json(d,d['endpoint']+'/v1/messages',anthropic_vision.request(messages,d['model'],max_tokens),headers,cancelled=cancelled)
+        return anthropic_vision.response(raw,d['model'])
     headers={'Authorization':'Bearer '+d['_secret']} if d.get('_secret') else {}
     body={'model':d['model'],'messages':messages,'stream':False,'max_completion_tokens':max_tokens}
     host=urlsplit(d['endpoint']).hostname

@@ -8,6 +8,7 @@ same-region native/OCR observations; model confidence cannot confirm content.
 from __future__ import annotations
 
 import base64
+import copy
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 import hashlib
 import importlib.metadata
@@ -36,6 +37,7 @@ MODEL_REVISION = 'RapidAI/RapidOCR-v3.9.0'
 LIMITS = {'max_side': 2400, 'max_pixels': 6000000, 'max_input_bytes': 15000000,
           'max_lines': 400, 'max_characters': 24000, 'ocr_timeout_seconds': 120,
           'vision_timeout_seconds': 60, 'max_response_characters': 29999}
+FORMULA_REREAD_LIMIT = 2
 LOW_SCORE = .8
 _SOURCE = 'https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.0/'
 # The ONNX digests are the registry in the official 3.9.0 wheel. Dictionary and
@@ -470,7 +472,9 @@ def ocr(raw: bytes, rotation: int = 0, cancelled=None, deadline=None):
 
 
 def visual_schema():
+    from . import visual_formula
     return {'blocks': [{'text': 'string', 'box': '[x0,y0,x1,y1] in 0..1', 'kind': 'text|title|caption|header|footer|list|note'}],
+            'formulas': [visual_formula.schema()],
             'tables': [{'title': 'string', 'box': '[x0,y0,x1,y1]', 'rows': 'integer', 'columns': 'integer',
                         'cells': [{'row': 'zero-based integer', 'column': 'zero-based integer', 'rowspan': 'integer >=1',
                                    'colspan': 'integer >=1', 'text': 'string; empty is distinct from zero',
@@ -537,7 +541,7 @@ def _strict_json(text):
         body = json.loads(text, object_pairs_hook=pairs, parse_constant=invalid)
     except (json.JSONDecodeError, RecursionError):
         raise ValueError('视觉响应不是严格 JSON 对象') from None
-    return _object(body, {'blocks', 'tables', 'charts', 'issues', 'provenance'})
+    return _object(body, {'blocks', 'tables', 'charts', 'issues', 'provenance'}, {'formulas'})
 
 
 def _canonical(value):
@@ -627,6 +631,22 @@ def _chart_association(point, observed):
 
 def _validate_visual(body, observed):
     blocks = []; tables = []; charts = []; issues = []; confirmed = []
+    from . import visual_formula
+    formulas = []
+    for formula in _list(body.get('formulas', []), 20):
+        _object(formula, {'box', 'tree'}, {'coordinate_space'})
+        item = visual_formula.parse(formula['tree'])
+        space=formula.get('coordinate_space','normalized')
+        if space not in {'normalized','normalized_1000'}:raise ValueError('公式坐标空间无效')
+        box=formula['box']
+        if space=='normalized_1000':
+            if not isinstance(box,list) or len(box)!=4 or any(type(x) not in (int,float) or not math.isfinite(x) or not 0<=x<=1000 for x in box):raise ValueError('公式归一化千分坐标无效')
+            box=[x/1000 for x in box]
+        item['box'] = _box(box)
+        item['coordinate_space']='normalized'
+        item['model_box']=formula['box'];item['model_coordinate_space']=space
+        formulas.append(item)
+        issues.append({'code':'formula_structure_incomplete', 'message':item['reason'], 'box':item['box']})
     def verify(item, text, box):
         verdict = _evidence(text, box, observed); item.update(verdict)
         if verdict['status'] == 'confirmed':
@@ -733,7 +753,7 @@ def _validate_visual(body, observed):
     notes = _text(body['provenance'].get('notes', ''), 1000)
     if sum(len(t) for t in confirmed) > LIMITS['max_characters']:
         raise ValueError('视觉确定性文字超过总文字限制')
-    return {'blocks': blocks, 'tables': tables, 'charts': charts, 'issues': issues,
+    return {'blocks': blocks, 'tables': tables, 'charts': charts, 'formulas': formulas, 'issues': issues,
             'confirmed_text': '\n'.join(dict.fromkeys(confirmed)), 'model_notes': notes}
 
 
@@ -746,8 +766,120 @@ def _vision_current(connection_id, revision):
     return provider
 
 
-def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None, deadline=None):
+def _visual_call(provider, messages, raw, purpose, cancelled, deadline, trace=None, max_tokens=5500):
+    _check(cancelled,deadline)
+    _vision_current(provider['id'],provider['revision'])
+    provider={**provider,'timeout':max(.01,min(provider['timeout'],deadline-time.monotonic()))}
+    event={'id':uuid.uuid4().hex,'method':'visual_model','purpose':purpose,'status':'running',
+           'started_at':s.now(),'duration_ms':None,'provider_id':provider['id'],
+           'model':provider['model'],'input_image_sha256':hashlib.sha256(raw).hexdigest(),'sent_bytes':len(raw)}
+    def emit():
+        if trace:trace(copy.deepcopy(event))
+    started=time.monotonic();emit()
+    try:
+        response=c.chat(provider,messages,max_tokens=max_tokens,cancelled=cancelled)
+        event.update(status='completed',actual_model=response['model'],usage=response.get('usage',{}))
+        return response,event
+    except (InterruptedError,TimeoutError) as exc:
+        event.update(status='cancelled' if isinstance(exc,InterruptedError) else 'failed',error=type(exc).__name__);raise
+    except Exception as exc:
+        detail=str(exc)
+        if provider.get('_secret'):detail=detail.replace(provider['_secret'],'[REDACTED]')
+        event.update(status='failed',error=detail[:250]);raise
+    finally:
+        event.update(duration_ms=round((time.monotonic()-started)*1000),finished_at=s.now());emit()
+
+
+def _reread_visual_formulas(raw, result, provider, cancelled, deadline, trace):
+    from . import visual_formula
+    from PIL import Image
+    records=[]
+    with Image.open(io.BytesIO(raw)) as opened:image=opened.convert('RGB')
+    width,height=image.size
+    for index,formula in enumerate(result['formulas']):
+        kinds=formula['structure_audit']['kinds']
+        complex_math=(not formula['structure_complete'] or kinds.get('large_operator',0)>0 or
+                      kinds.get('fraction',0)>1 or kinds.get('scripts',0)>1)
+        if not complex_math:continue
+        if len(records)>=FORMULA_REREAD_LIMIT:break
+        if deadline-time.monotonic()<10:
+            records.append({'formula_index':index,'status':'not_run_budget','duration_ms':0});break
+        _check(cancelled,deadline)
+        b=formula['box']
+        # A model box can end at a fraction bar and omit a bound's descender.
+        # Preserve a margin relative to formula height, not only page height.
+        padx=max(.01,.04*(b[2]-b[0]));pady=max(.025,.30*(b[3]-b[1]))
+        rect=(max(0,int((b[0]-padx)*width)),max(0,int((b[1]-pady)*height)),
+              min(width,int((b[2]+padx)*width)+1),min(height,int((b[3]+pady)*height)+1))
+        crop=image.crop(rect);scale=max(1,min(4,1400/max(crop.size)))
+        crop=crop.resize((max(1,round(crop.width*scale)),max(1,round(crop.height*scale))))
+        buffer=io.BytesIO();crop.save(buffer,format='PNG');payload=buffer.getvalue()
+        prompt=('仅识别此公式放大图，返回一个严格JSON对象，不要代码围栏或额外说明。'
+                '顶层仅允许blocks,tables,charts,formulas,issues,provenance六个字段。'
+                'blocks,tables,charts,issues均为[]，provenance必须为{}；formulas恰含一个公式。'
+                '不能求解、补全、纠正常见写法或把上下标拆为正文。'
+                '模糊/裁切内容必须unknown；不存在的脚标/上下限才用null。公式示例：'+
+                json.dumps(visual_formula.schema(),ensure_ascii=False)+visual_formula.instructions())
+        geometry=visual_formula.geometry_hints(payload) if kinds.get('large_operator',0) else {'available':False}
+        if geometry.get('pairs'):
+            prompt+=('Local measured ink positions: '+json.dumps(geometry,ensure_ascii=False)+
+                     'Use these only to inspect raised/lowered glyphs relative to their adjacent base, not to infer character identities. '
+                     'If the identity or association is unclear, keep unknown instead of using familiar notation. '
+                     'These hints are input only: never copy them into provenance or add output fields.')
+        prompt+='Return raw JSON only, no markdown fences; provenance must be {}.'
+        messages=[{'role':'user','content':[{'type':'text','text':prompt},
+            {'type':'image_url','image_url':{'url':'data:image/png;base64,'+base64.b64encode(payload).decode()}}]}]
+        record={'formula_index':index,'source_region_pixels':list(rect),'source_image_sha256':hashlib.sha256(raw).hexdigest(),
+                'input_image_sha256':hashlib.sha256(payload).hexdigest(),'sent_bytes':len(payload),'scale':scale,'geometry_hints':geometry}
+        # A failed re-read must not erase a contradiction already visible locally.
+        screened_tree,source_audit=visual_formula.audit_geometry(formula['tree'],geometry)
+        if source_audit['conflicts']:
+            screened=copy.deepcopy(formula);screened.update(visual_formula.parse(screened_tree))
+            screened.update(page_candidate={k:copy.deepcopy(formula[k]) for k in
+                ('latex','tree','box','structure_audit','structure_complete')},geometry_audit=source_audit,
+                reason='本机像素位置与模型上下标结构冲突，已保留未知节点，须对照原图核验')
+            result['formulas'][index]=screened
+        record['source_geometry_audit']=source_audit
+        started=time.monotonic()
+        try:
+            _image(payload)
+            response,call=_visual_call(provider,messages,payload,'formula_zoom',cancelled,deadline,trace,max_tokens=3500)
+            record.update(call_id=call['id'],usage=response.get('usage',{}),actual_model=response['model'],raw_response=response['text'])
+            candidates=_validate_visual(_strict_json(response['text']),[])['formulas']
+            if len(candidates)!=1:raise ValueError('局部复读未返回唯一完整公式候选')
+            candidate=candidates[0];relative=candidate['box']
+            audited_tree,geometry_audit=visual_formula.audit_geometry(candidate['tree'],geometry)
+            if geometry_audit['conflicts']:
+                candidate.update(visual_formula.parse(audited_tree))
+            candidate['geometry_audit']=geometry_audit
+            candidate['box']=[(rect[0]+relative[0]*(rect[2]-rect[0]))/width,(rect[1]+relative[1]*(rect[3]-rect[1]))/height,
+                              (rect[0]+relative[2]*(rect[2]-rect[0]))/width,(rect[1]+relative[3]*(rect[3]-rect[1]))/height]
+            original={k:copy.deepcopy(formula[k]) for k in ('latex','tree','box','structure_audit','structure_complete')}
+            candidate['page_candidate']=original
+            candidate['zoom_verification']='same_model_consistency' if _canonical(candidate['latex'])==_canonical(formula['latex']) else 'same_model_disagreement'
+            candidate['zoom_candidate_box']=relative;candidate['zoom_source_region_pixels']=list(rect)
+            candidate['reason']=('本机像素位置与模型上下标结构冲突，已保留未知节点，须对照原图核验'
+                if geometry_audit['conflicts'] else '局部放大公式候选仍须对照原图确认；同模型一致或分歧都不证明正确')
+            result['formulas'][index]=candidate
+            record.update(status='completed',candidate_latex=candidate['latex'],verification=candidate['zoom_verification'])
+        except (InterruptedError,TimeoutError):raise
+        except (ValueError,HTTPException) as exc:
+            _check(cancelled,deadline)
+            record.update(status='failed',error=str(exc)[:250])
+        finally:
+            record['duration_ms']=round((time.monotonic()-started)*1000);records.append(record)
+    result['formula_rereads']=records
+    return result
+
+
+def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None, deadline=None, trace=None):
     started = time.monotonic()
+    calls=[]
+    def record_call(event):
+        current=next((item for item in calls if item['id']==event['id']),None)
+        if current is None:calls.append(copy.deepcopy(event))
+        else:current.update(copy.deepcopy(event))
+        if trace:trace(event)
     deadline = min(deadline if deadline is not None else started+LIMITS['vision_timeout_seconds'], started+LIMITS['vision_timeout_seconds'])
     _check(cancelled, deadline)
     provider = _vision_current(connection_id, expected_revision)
@@ -757,11 +889,16 @@ def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None
         mime={'PNG':'image/png','JPEG':'image/jpeg','WEBP':'image/webp'}.get(original.format)
     if mime is None:raise ValueError('视觉发送仅支持 PNG、JPEG、WEBP；请先转换图片并重新预览')
     schema = json.dumps(visual_schema(), ensure_ascii=False)
-    prompt = ('只提取图片中可见的文字、表格网格和图表。返回一个严格 JSON 对象，不要代码围栏或额外说明。'
+    prompt = ('只提取图片中可见的文字、表格网格、图表和二维公式。返回一个严格 JSON 对象，不要代码围栏或额外说明。'
               '坐标必须为原图归一化 [x0,y0,x1,y1]，范围0到1。只返回schema列出的字段。'
               '表格从0开始索引，合并格只列一次，所有网格含空白格必须被覆盖，不要按合计推算数字。'
               '图点不可读的value为null；value必须是字符串，印刷标签printed、像素估读estimated、不可读unknown。'
               '不要把估读当印刷标签，不生成原因或预测。provenance仅允许notes字段。schema: '+schema)
+    prompt += ('公式放入formulas，不要拆入blocks。逐个保留分子、分母、根次数、上下标、求和/积分上下限和括号；'
+               '不求解、不补全、不用领域知识猜测。tree只用上述节点和原图符号，不生成LaTeX命令。'
+               '脚标/上下限确实不存在时才填null；模糊、裁切或无法判断时必须放unknown节点并说明原因。')
+    from . import visual_formula
+    prompt += visual_formula.instructions()
     messages = [{'role': 'user', 'content': [{'type': 'text', 'text': prompt},
                  {'type': 'image_url', 'image_url': {'url': 'data:'+mime+';base64,'+base64.b64encode(raw).decode()}}]}]
     # Independently re-read privacy/enabled/test/revision immediately before and
@@ -771,12 +908,13 @@ def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None
                 'timeout': max(.01, min(provider['timeout'], deadline-time.monotonic()))}
     _check(cancelled, deadline)
     try:
-        response = c.chat(provider, messages, max_tokens=5500, cancelled=cancelled)
+        response,primary_call = _visual_call(provider,messages,raw,'page',cancelled,deadline,record_call)
     except ValueError:
         _check(cancelled, deadline); raise
     _check(cancelled, deadline); _vision_current(connection_id, expected_revision)
     body = _strict_json(response['text'])
     result = _validate_visual(body, observed)
+    result = _reread_visual_formulas(raw,result,provider,cancelled,deadline,record_call)
     _check(cancelled, deadline); _vision_current(connection_id, expected_revision)
     duration = round((time.monotonic()-started)*1000)
     usage = {key: value for key, value in response.get('usage', {}).items()
@@ -791,6 +929,12 @@ def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None
                   'sent_bytes': len(raw), 'byte_scope': 'frozen_image_bytes_before_base64_transport',
                   'width': image.width, 'height': image.height, 'observation_count': len(observed),
                   'validation': 'schema_and_same_region_observation', 'model_notes': result.pop('model_notes')}
+    rereads=result['formula_rereads']
+    total_usage={key:sum(call.get('usage',{}).get(key,0) for call in calls if type(call.get('usage',{}).get(key)) is int)
+                 for key in ('prompt_tokens','completion_tokens','total_tokens')}
+    provenance.update(formula_reread_limit=FORMULA_REREAD_LIMIT,
+        image_submission_attempts=len(calls),total_prepared_image_bytes=sum(call['sent_bytes'] for call in calls),
+        formula_rereads=copy.deepcopy(rereads),primary_call_id=primary_call['id'],model_calls=calls,total_model_usage=total_usage)
     return {**result, 'provenance': provenance, 'provider': public_provider,
             'raw_response': response['text'], 'model': response['model'], 'method': 'visual',
             'input_image_sha256': provenance['input_image_sha256'], 'duration_ms': duration, 'usage': usage}
