@@ -1,0 +1,28 @@
+test_attaching_two_embedded_images_keeps_both (tests.test_page_preprocessing.PagePreprocessingTests.test_attaching_two_embedded_images_keeps_both) ... ok
+test_cancellation_not_swallowed_by_fallback (tests.test_page_preprocessing.PagePreprocessingTests.test_cancellation_not_swallowed_by_fallback) ... ok
+test_changed_number_never_overwrites_original (tests.test_page_preprocessing.PagePreprocessingTests.test_changed_number_never_overwrites_original) ... ok
+test_clear_result_one_call_and_real_provenance (tests.test_page_preprocessing.PagePreprocessingTests.test_clear_result_one_call_and_real_provenance) ... ok
+test_colour_chart_does_not_trigger_destructive_greyscale (tests.test_page_preprocessing.PagePreprocessingTests.test_colour_chart_does_not_trigger_destructive_greyscale) ... ok
+test_combined_output_limit_does_not_truncate (tests.test_page_preprocessing.PagePreprocessingTests.test_combined_output_limit_does_not_truncate) ... ok
+test_expanded_deskew_affine_round_trip_and_size_budget (tests.test_page_preprocessing.PagePreprocessingTests.test_expanded_deskew_affine_round_trip_and_size_budget) ... ok
+test_expired_deadline_runs_nothing (tests.test_page_preprocessing.PagePreprocessingTests.test_expired_deadline_runs_nothing) ... ok
+test_identical_pixels_not_counted_as_distinct_views (tests.test_page_preprocessing.PagePreprocessingTests.test_identical_pixels_not_counted_as_distinct_views) ... ok
+test_input_hash_mismatch_fails_base (tests.test_page_preprocessing.PagePreprocessingTests.test_input_hash_mismatch_fails_base) ... ok
+test_low_contrast_and_shadow_detected_without_reference_text (tests.test_page_preprocessing.PagePreprocessingTests.test_low_contrast_and_shadow_detected_without_reference_text) ... ok
+test_low_score_original_restored_only_by_two_full_unchanged_readings (tests.test_page_preprocessing.PagePreprocessingTests.test_low_score_original_restored_only_by_two_full_unchanged_readings) ... ok
+test_new_text_requires_two_unique_full_source_regions (tests.test_page_preprocessing.PagePreprocessingTests.test_new_text_requires_two_unique_full_source_regions) ... ok
+test_optional_failure_keeps_base_and_records_error (tests.test_page_preprocessing.PagePreprocessingTests.test_optional_failure_keeps_base_and_records_error) ... ok
+test_other_source_pending_reason_not_cleared (tests.test_page_preprocessing.PagePreprocessingTests.test_other_source_pending_reason_not_cleared) ... ok
+test_padding_is_not_source_evidence (tests.test_page_preprocessing.PagePreprocessingTests.test_padding_is_not_source_evidence) ... ok
+test_palette_transparency_composited (tests.test_page_preprocessing.PagePreprocessingTests.test_palette_transparency_composited) ... ok
+test_repeated_missing_minus_is_still_a_review_candidate (tests.test_page_preprocessing.PagePreprocessingTests.test_repeated_missing_minus_is_still_a_review_candidate) ... ok
+test_shared_coordinates_keep_manual_quarter_turn (tests.test_page_preprocessing.PagePreprocessingTests.test_shared_coordinates_keep_manual_quarter_turn) ... ok
+test_skew_requires_consistent_lines_and_rejects_one_diagonal (tests.test_page_preprocessing.PagePreprocessingTests.test_skew_requires_consistent_lines_and_rejects_one_diagonal) ... ok
+test_transparent_black_is_white_and_visible_ink_retained (tests.test_page_preprocessing.PagePreprocessingTests.test_transparent_black_is_white_and_visible_ink_retained) ... ok
+test_uniform_page_skips_all_enhancement (tests.test_page_preprocessing.PagePreprocessingTests.test_uniform_page_skips_all_enhancement) ... ok
+test_whole_region_needed_not_nearby_or_fragment (tests.test_page_preprocessing.PagePreprocessingTests.test_whole_region_needed_not_nearby_or_fragment) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.346s
+
+OK

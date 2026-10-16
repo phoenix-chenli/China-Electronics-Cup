@@ -1,0 +1,20 @@
+test_compact_fraction_is_pending_not_a_guessed_value (tests.test_ocr_structure.BoundaryOptimizationTest.test_compact_fraction_is_pending_not_a_guessed_value) ... ok
+test_hidden_degree_and_sum_bounds (tests.test_ocr_structure.BoundaryOptimizationTest.test_hidden_degree_and_sum_bounds) ... ok
+test_merged_row_name_requires_observed_vertical_overlap (tests.test_ocr_structure.BoundaryOptimizationTest.test_merged_row_name_requires_observed_vertical_overlap) ... ok
+test_noise_first_character_and_chinese (tests.test_ocr_structure.BoundaryOptimizationTest.test_noise_first_character_and_chinese) ... ok
+test_numeric_headers_and_missing_cell (tests.test_ocr_structure.BoundaryOptimizationTest.test_numeric_headers_and_missing_cell) ... ok
+test_fraction_requires_printed_bar_and_both_terms (tests.test_ocr_structure.StructureTest.test_fraction_requires_printed_bar_and_both_terms) ... ok
+test_incomplete_display_formula_does_not_enter_confirmed_text (tests.test_ocr_structure.StructureTest.test_incomplete_display_formula_does_not_enter_confirmed_text) ... ok
+test_office_fraction_and_sum_keep_hierarchy (tests.test_ocr_structure.StructureTest.test_office_fraction_and_sum_keep_hierarchy) ... ok
+test_paragraph_numbers_are_not_a_table (tests.test_ocr_structure.StructureTest.test_paragraph_numbers_are_not_a_table) ... ok
+test_previous_data_row_never_becomes_a_column_header (tests.test_ocr_structure.StructureTest.test_previous_data_row_never_becomes_a_column_header) ... ok
+test_repeated_columns_keep_headers_and_row_names (tests.test_ocr_structure.StructureTest.test_repeated_columns_keep_headers_and_row_names) ... ok
+test_rotated_grid_uses_reading_order_but_original_boxes (tests.test_ocr_structure.StructureTest.test_rotated_grid_uses_reading_order_but_original_boxes) ... ok
+test_short_following_section_reuses_observed_grid (tests.test_ocr_structure.StructureTest.test_short_following_section_reuses_observed_grid) ... ok
+test_uncertain_cells_do_not_become_supported_rows (tests.test_ocr_structure.StructureTest.test_uncertain_cells_do_not_become_supported_rows) ... ok
+test_unsupported_office_math_is_explicit (tests.test_ocr_structure.StructureTest.test_unsupported_office_math_is_explicit) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.306s
+
+OK

@@ -138,7 +138,7 @@ class TableRagTests(unittest.TestCase):
             chunks = [json.loads(r['body']) for r in db.execute('SELECT body FROM ef_rag_chunks WHERE generation_id=?', (generation['generation_id'],))]
         self.assertEqual([c['text'] for c in chunks], ['Supporting introduction.'])
         self.assertFalse(any(c['quality'].get('table_cell_bindings') for c in chunks))
-        self.assertEqual(generation['chunker'], 'source-spans-v5-atomic-table-rows')
+        self.assertEqual(generation['chunker'], 'source-spans-v6-atomic-chart-points')
 
     def test_real_page_scope_reports_table_gap_and_keeps_only_adjacent_prose(self):
         doc, page, row = self.source_page('2025 / Revenue: 120 | ' * 30)

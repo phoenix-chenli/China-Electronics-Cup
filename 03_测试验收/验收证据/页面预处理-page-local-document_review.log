@@ -1,0 +1,15 @@
+test_blank_and_zero_cells_stay_distinct_and_other_pending_cells_are_not_confirmed (tests.test_document_review.DocumentReviewTests.test_blank_and_zero_cells_stay_distinct_and_other_pending_cells_are_not_confirmed) ... ok
+test_chart_value_alone_cannot_confirm_association (tests.test_document_review.DocumentReviewTests.test_chart_value_alone_cannot_confirm_association) ... ok
+test_damaged_text_is_excluded_and_correction_restores_confirmed_range (tests.test_document_review.DocumentReviewTests.test_damaged_text_is_excluded_and_correction_restores_confirmed_range) ... ok
+test_docx_formula_paragraph_review_supersedes_old_observations (tests.test_document_review.DocumentReviewTests.test_docx_formula_paragraph_review_supersedes_old_observations) ... ok
+test_formula_review_confirms_complete_structure_and_keeps_old_parse (tests.test_document_review.DocumentReviewTests.test_formula_review_confirms_complete_structure_and_keeps_old_parse) ... ok
+test_label_cell_correction_updates_original_line_and_clears_pending (tests.test_document_review.DocumentReviewTests.test_label_cell_correction_updates_original_line_and_clears_pending) ... ok
+test_original_and_historical_quote_survive_correction_and_stale_write (tests.test_document_review.DocumentReviewTests.test_original_and_historical_quote_survive_correction_and_stale_write) ... ok
+test_pending_observation_needs_explicit_confirmation_and_index_failure_is_recoverable (tests.test_document_review.DocumentReviewTests.test_pending_observation_needs_explicit_confirmation_and_index_failure_is_recoverable) ... ok
+test_unrelated_edit_keeps_inline_formula_offsets_pinned (tests.test_document_review.DocumentReviewTests.test_unrelated_edit_keeps_inline_formula_offsets_pinned) ... ok
+test_visual_formula_review_clears_quality_warning_and_keeps_candidate_history (tests.test_document_review.DocumentReviewTests.test_visual_formula_review_clears_quality_warning_and_keeps_candidate_history) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 3.816s
+
+OK

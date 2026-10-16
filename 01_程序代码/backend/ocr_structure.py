@@ -8,6 +8,8 @@ from __future__ import annotations
 import re
 import statistics
 import io
+import math
+import time
 
 
 def detect(lines, rotation=0):
@@ -257,56 +259,187 @@ def formulas(lines, excluded=None):
     return out[:12]
 
 
+def _label_box(value):
+    if not isinstance(value,(tuple,list)) or len(value)!=4:return None
+    if any(isinstance(x,bool) or not isinstance(x,(int,float)) or not math.isfinite(x) for x in value):return None
+    if not 0<=value[0]<value[2]<=1 or not 0<=value[1]<value[3]<=1:return None
+    return list(value)
+
+
+def _label_score(line):
+    score=line.get('confidence')
+    return float(score) if not isinstance(score,bool) and isinstance(score,(int,float)) and math.isfinite(score) and 0<=score<=1 else 0.0
+
+
+def _label_text(text):
+    # Only whitespace is normalized. A glyph, sign, suffix, unit, or number is
+    # part of the source label; edit distance and dictionaries cannot certify it.
+    return ' '.join(text.split()) if isinstance(text,str) else ''
+
+
+def _label_crop_candidate(observed, target_box):
+    """Require the complete original region, not just its centre, to agree."""
+    candidates=[];inside=[];decisions=[]
+    tw,th=target_box[2]-target_box[0],target_box[3]-target_box[1]
+    rows=observed.get('lines',[])
+    if not isinstance(rows,list) or len(rows)>64:
+        return None,[], 'too_many_or_invalid_crop_observations'
+    for line in rows:
+        if not isinstance(line,dict):continue
+        box=_label_box(line.get('box'));text=_label_text(line.get('text'))
+        decision={'text':line.get('text'),'box':line.get('box'),'confidence':line.get('confidence')}
+        if not box or not text:
+            decision['reason']='invalid_candidate';decisions.append(decision);continue
+        iw=max(0,min(box[2],target_box[2])-max(box[0],target_box[0]))
+        ih=max(0,min(box[3],target_box[3])-max(box[1],target_box[1]))
+        area=(box[2]-box[0])*(box[3]-box[1]);intersection=iw*ih
+        coverage=intersection/(tw*th);purity=intersection/area
+        decision.update(target_coverage=round(coverage,6),region_purity=round(purity,6))
+        # A second fragment in the original region makes the one-line crop
+        # ambiguous even when only one fragment has a high recognition score.
+        if intersection>0 and (coverage>=.05 or purity>=.5):inside.append(line)
+        if iw/tw<.65 or ih/th<.65 or purity<.6:
+            decision['reason']='incomplete_or_neighbour_region'
+        elif line.get('status')!='confirmed' or _label_score(line)<.9:
+            decision['reason']='low_candidate_score'
+        elif re.search(r'[→←↑↓�]|[₀-₉⁰-⁹¹²³]|[\x00-\x1f\x7f\u200b-\u200f\u202a-\u202e\u2066-\u2069]',text):
+            decision['reason']='complex_or_unreadable_glyphs'
+        else:
+            decision['reason']='complete_region_candidate';candidates.append(line)
+        decisions.append(decision)
+    if len(candidates)!=1:return None,decisions,'no_single_complete_candidate'
+    if len(inside)!=1:return None,decisions,'fragmented_or_overlapping_observations'
+    return candidates[0],decisions,None
+
+
 def reread_labels(raw, result, recognize, cancelled=None, deadline=None, rotation=0):
-    """Bounded local rereads; agreement is OCR consistency, not semantic truth."""
+    """Bounded, source-bound crop consistency; changed glyphs remain candidates.
+
+    Two variants use the same OCR engine and do not form independent semantic
+    verification. They can restore a low-score observation only when the entire
+    original label is repeated unchanged, with complete, unambiguous geometry.
+    """
     from PIL import Image, ImageEnhance, ImageFilter
     from .document_providers import _check
     import hashlib
-    lines=result.get('lines',[]);targets={}
+    lines=result.get('lines',[]);targets={};ambiguous_labels=set()
     for table in result.get('tables',[]):
         for cell in table.get('cells',[]):
             if cell.get('role') not in {'header','column_header','row_header'}:continue
             for index in cell.get('evidence_lines',[]):
-                if not isinstance(index,int) or not 0<=index<len(lines):continue
+                if type(index) is not int or not 0<=index<len(lines):continue
                 line=lines[index]
-                if line.get('confidence',1)>=.94 and len(line['text'])<12 and not re.search(r'[→←↑↓�]',line['text']):continue
-                priority=(cell['role']!='row_header',line.get('confidence',0))
+                if line.get('human_reviewed') is True:continue
+                # In a known label role, compact digit/identifier shapes deserve
+                # a crop even at a high uncalibrated score (I/1, O/0, and dates).
+                # This only schedules observation; it never replaces a glyph.
+                compact_identifier=bool(len(line['text'].strip())<=12 and re.fullmatch(r'[\dIlOo|/_.:\-]+',line['text'].strip()))
+                ambiguous_identity=bool(len(line['text'].strip())<=12 and re.fullmatch(r'[01IlOo|/_.:\-]+',line['text'].strip()) and any(c.isalnum() for c in line['text']))
+                if ambiguous_identity:ambiguous_labels.add(index)
+                if line.get('status')=='confirmed' and _label_score(line)>=.94 and len(line['text'])<12 and not compact_identifier and not re.search(r'[→←↑↓�]|[₀-₉⁰-⁹¹²³]',line['text']):continue
+                priority=(cell['role']!='row_header',_label_score(line))
                 targets[index]=min(targets.get(index,priority),priority)
+    formula_lines={i for f in result.get('formulas',[]) for i in f.get('evidence_lines',[]) if type(i) is int}
+    for index,line in enumerate(lines):
+        if index in targets or index in formula_lines or line.get('human_reviewed') is True:continue
+        text=line.get('text','').strip()
+        if (not text or len(text)>40 or len(text.split())>6
+            or re.fullmatch(r'[\s\d.,%‰+−\-$€¥£()/:]+',text)
+            or re.search(r'[=∑Σ∏∫√{}\\]|[.!?。！？]$',text)):continue
+        if line.get('status')=='confirmed' and _label_score(line)>=.94:continue
+        # No chart classification is inferred here. Short uncertain observations
+        # can be chart labels; tables keep priority in the same six-label budget.
+        targets[index]=(2,_label_score(line))
     if not targets:return result
     with Image.open(io.BytesIO(raw)) as opened:image=opened.convert('RGB')
     width,height=image.size;reviews=result.setdefault('label_reviews',[])
     for index in sorted(targets,key=lambda i:targets[i])[:6]:
-        _check(cancelled,deadline);line=lines[index];b=line['box']
+        _check(cancelled,deadline);line=lines[index];b=_label_box(line.get('box'))
+        review={'observation_id':index,'original_text':line.get('original_text',line['text']),
+                'original_confidence':line.get('original_confidence',line.get('confidence')),
+                'source_status':line.get('status'),'source_pending_reason':line.get('source_pending_reason'),
+                'box':line.get('box'),'calls':[],'candidates':[],'candidate_observations':[],
+                'status':'pending','human_reviewed':False,
+                'confidence_scope':'uncalibrated_same_engine_crop_consistency',
+                'independent_verification':False}
+        line.setdefault('original_text',review['original_text']);line.setdefault('original_confidence',review['original_confidence'])
+        reviews.append(review)
+        if not b:
+            line.update(status='pending',source_pending_reason='label_invalid_source_region')
+            review['reason']='invalid_source_region';continue
         rect=(max(0,int((b[0]-.008)*width)),max(0,int((b[1]-.004)*height)),
               min(width,int((b[2]+.008)*width)+1),min(height,int((b[3]+.004)*height)+1))
         crop=image.crop(rect);scale=min(4,1600/max(crop.size));crop=crop.resize((max(1,int(crop.width*scale)),max(1,int(crop.height*scale))))
-        review={'observation_id':index,'original_text':line['text'],'box':b,'calls':[],'candidates':[],'candidate_observations':[],'status':'pending'}
+        target=[(b[0]*width-rect[0])/(rect[2]-rect[0]),(b[1]*height-rect[1])/(rect[3]-rect[1]),
+                (b[2]*width-rect[0])/(rect[2]-rect[0]),(b[3]*height-rect[1])/(rect[3]-rect[1])]
+        review.update(page_pixel_rect=list(rect),crop_target_box=target,coordinate_space='original_image')
         for name,variant in [('enlarged',crop),('contrast',ImageEnhance.Contrast(crop).enhance(1.4).filter(ImageFilter.UnsharpMask(radius=1,percent=120,threshold=3)))]:
             _check(cancelled,deadline);buf=io.BytesIO();variant.save(buf,format='PNG');payload=buf.getvalue()
+            digest=hashlib.sha256(payload).hexdigest()
+            call_started=time.monotonic()
             try:observed=recognize(payload,rotation=rotation,cancelled=cancelled,deadline=deadline)
-            except (InterruptedError,TimeoutError):raise
+            except (InterruptedError,TimeoutError) as exc:
+                status='cancelled' if isinstance(exc,InterruptedError) else 'timeout'
+                review['calls'].append({'variant':name,'status':status,'error':str(exc),
+                    'duration_ms':round((time.monotonic()-call_started)*1000),
+                    'input_image_sha256':digest,'page_pixel_rect':list(rect)})
+                review.update(status=status,reason='label_crop_'+status)
+                line.update(status='pending',source_pending_reason='label_crop_'+status)
+                raise
             except ValueError as exc:
-                review['calls'].append({'variant':name,'status':'failed','error':str(exc),'input_image_sha256':hashlib.sha256(payload).hexdigest()});continue
-            review['calls'].append({'variant':name,'status':'completed','duration_ms':observed['duration_ms'],'input_image_sha256':observed['input_image_sha256']})
-            # Reject neighbouring text and multi-line fragments; corrections must
-            # occupy this original label, not merely occur elsewhere in a crop.
-            cx=((b[0]+b[2])/2*width-rect[0])/(rect[2]-rect[0]);cy=((b[1]+b[3])/2*height-rect[1])/(rect[3]-rect[1])
-            matching=[l for l in observed['lines'] if l.get('status')=='confirmed' and l.get('confidence',0)>=.9
-                      and l['box'][0]<=cx<=l['box'][2] and l['box'][1]<=cy<=l['box'][3]]
-            review['candidates'].append(matching[0]['text'] if len(matching)==1 else None)
-            review['candidate_observations'].append(matching[0] if len(matching)==1 else None)
+                review['calls'].append({'variant':name,'status':'failed','error':str(exc),'input_image_sha256':digest,
+                    'duration_ms':round((time.monotonic()-call_started)*1000),'page_pixel_rect':list(rect)});continue
+            call={'variant':name,'status':'completed','duration_ms':observed['duration_ms'],
+                  'wall_duration_ms':round((time.monotonic()-call_started)*1000),
+                  'input_image_sha256':digest,'provider_input_image_sha256':observed.get('input_image_sha256'),
+                  'page_pixel_rect':list(rect)}
+            candidate,decisions,reason=_label_crop_candidate(observed,target)
+            if observed.get('input_image_sha256')!=digest:
+                candidate=None;reason='crop_image_hash_mismatch'
+            call.update(candidate_decisions=decisions,decision_reason=reason)
+            review['calls'].append(call)
+            review['candidates'].append(candidate['text'] if candidate else None)
+            if candidate:
+                mapped=dict(candidate);cb=candidate['box']
+                mapped.update(crop_box=cb,box=[(rect[0]+cb[0]*(rect[2]-rect[0]))/width,
+                    (rect[1]+cb[1]*(rect[3]-rect[1]))/height,(rect[0]+cb[2]*(rect[2]-rect[0]))/width,
+                    (rect[1]+cb[3]*(rect[3]-rect[1]))/height],coordinate_space='original_image')
+                review['candidate_observations'].append(mapped)
+            else:review['candidate_observations'].append(None)
         candidates=review['candidates']
-        if len(candidates)==2 and all(candidates) and candidates[0].strip()==candidates[1].strip() and not re.search(r'[→←↑↓�]|[₀-₉⁰-⁹]',candidates[0]):
-            text=candidates[0].strip();review.update(status='consistent',text=text,verification='same_engine_two_crop_consistency')
-            line.update(text=text,status='confirmed',original_text=review['original_text'],original_confidence=line.get('confidence'),confidence=min(l['confidence'] for l in review['candidate_observations']),label_review=review['verification'])
+        consistent=len(candidates)==2 and all(candidates) and _label_text(candidates[0])==_label_text(candidates[1])
+        source_block=review['source_pending_reason'] not in {None,'low_ocr_score','label_reread_disagreement','label_reread_source_conflict'}
+        unchanged=consistent and _label_text(candidates[0])==_label_text(review['original_text'])==_label_text(line['text'])
+        if unchanged and not source_block and index not in ambiguous_labels:
+            review.update(status='consistent',text=line['text'],verification='same_engine_two_crop_consistency',quality_status='observed_consistent')
+            line.update(status='confirmed',original_text=review['original_text'],original_confidence=review['original_confidence'],
+                        confidence=min(_label_score(l) for l in review['candidate_observations']),
+                        label_review=review['verification'],label_quality=review['confidence_scope'],human_reviewed=False)
+            line.pop('source_pending_reason',None)
         else:
-            line.update(status='pending',source_pending_reason='label_reread_disagreement')
-        for table in result.get('tables',[]):
-            for cell in table.get('cells',[]):
-                if index in cell.get('evidence_lines',[]):
-                    cell.update(text=line['text'],status=line['status'],label_review=review['status'])
-            table['status']='confirmed' if all(c.get('status')=='confirmed' for c in table.get('cells',[])) else 'pending'
-        reviews.append(review)
+            reason=('label_glyph_identity_requires_independent_confirmation' if index in ambiguous_labels
+                    else 'label_source_requires_review' if source_block
+                    else 'label_reread_source_conflict' if consistent else 'label_reread_disagreement')
+            review.update(reason=reason,quality_status='requires_review')
+            if consistent:review.update(consistent_candidate=candidates[0],verification='same_engine_candidate_only')
+            line.update(status='pending',source_pending_reason=reason)
+    # Repeated high scores cannot identify a glyph family with correlated
+    # I/l/1/O/0 errors. This applies only to known label roles, never data values.
+    # The bounded crop budget must not silently certify a deferred ambiguous ID.
+    for index in ambiguous_labels:
+        lines[index].update(status='pending',source_pending_reason='label_glyph_identity_requires_independent_confirmation')
+    # Multi-observation labels retain their full source text. A successful crop
+    # of one fragment cannot overwrite another fragment or confirm the whole cell.
+    reviewed={r['observation_id']:r for r in reviews}
+    for table in result.get('tables',[]):
+        for cell in table.get('cells',[]):
+            indices=cell.get('evidence_lines',[])
+            if not any(type(i) is int and (i in reviewed or i in ambiguous_labels) for i in indices):continue
+            valid=bool(indices) and all(type(i) is int and 0<=i<len(lines) for i in indices)
+            supported=valid and all(lines[i].get('status')=='confirmed' for i in indices)
+            if len(indices)==1 and valid:cell['text']=lines[indices[0]]['text']
+            cell.update(status='confirmed' if supported else 'pending',label_review='consistent' if supported else 'pending')
+        if table.get('cells'):table['status']='confirmed' if all(c.get('status')=='confirmed' for c in table['cells']) else 'pending'
     return result
 
 

@@ -276,6 +276,7 @@ def _check(cancelled=None, deadline=None):
 
 def _image(raw):
     from PIL import Image, UnidentifiedImageError
+    from .page_preprocessing import white_background
     if not isinstance(raw, bytes) or not raw or len(raw) > LIMITS['max_input_bytes']:
         raise ValueError('图片为空或超过 15 MB 限制')
     try:
@@ -288,7 +289,7 @@ def _image(raw):
             if im.format not in {'PNG', 'JPEG', 'WEBP', 'BMP', 'TIFF'}:
                 raise ValueError('不支持的图片格式')
             im.load()
-            return im.convert('RGB')
+            return white_background(im)
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError):
         raise ValueError('图片无法解码') from None
 
@@ -471,6 +472,16 @@ def ocr(raw: bytes, rotation: int = 0, cancelled=None, deadline=None):
             'provenance': provenance, 'provider': provider, 'width': width, 'height': height}
 
 
+def ocr_page(raw: bytes, rotation: int = 0, cancelled=None, deadline=None, trace=None):
+    """Page-only adaptive processing; formula/label crops keep the raw OCR path."""
+    from . import page_preprocessing
+    _check(cancelled,deadline)
+    provider=describe()
+    result=page_preprocessing.recognize(raw,_image(raw),ocr,rotation,cancelled,deadline,trace)
+    _check(cancelled,deadline);_still_current(provider)
+    return result
+
+
 def visual_schema():
     from . import visual_formula
     return {'blocks': [{'text': 'string', 'box': [0.1,0.1,0.9,0.9], 'kind': 'text|title|caption|header|footer|list|note'}],
@@ -481,6 +492,8 @@ def visual_schema():
                                    'box': [0.1,0.1,0.2,0.2], 'role': 'column_header|row_header|data|header|body|stub|corner|unknown'}]}],
             'charts': [{'title': 'string', 'kind': 'bar|line|pie|scatter|area|stacked_bar|stacked_area|donut|other',
                         'box': [0.1,0.1,0.9,0.9], 'x_label': 'string', 'y_label': 'string', 'unit': 'string',
+                        'plot_box': [0.2,0.2,0.8,0.8],
+                        'orientation': 'vertical|horizontal|unknown; only if directly visible',
                         'series': [{'name': 'string', 'axis': 'primary|secondary|unknown', 'color': 'string',
                                     'points': [{'label': 'string', 'value': 'string or null', 'printed_text': 'string',
                                                 'box': [0.1,0.1,0.2,0.2], 'value_source': 'printed|estimated|unknown'}]}]}],
@@ -699,9 +712,13 @@ def _validate_visual(body, observed):
             issues.append({'code':'table_relation_requires_review','message':'表格的逻辑行列与单元格位置冲突；数字观测不代表表头对应关系已核验','box':item['box']})
         tables.append(item)
     for chart in _list(body['charts'], 20):
-        _object(chart, {'title', 'kind', 'box', 'x_label', 'y_label', 'unit', 'series'})
+        _object(chart, {'title', 'kind', 'box', 'x_label', 'y_label', 'unit', 'series'}, {'orientation','plot_box'})
         item = {key: _text(chart[key], 300) for key in ('title', 'kind', 'x_label', 'y_label', 'unit')}
         item['box'] = _box(chart['box']); item['series'] = []
+        if 'plot_box' in chart:item['plot_box']=_box(chart['plot_box'],item['box'])
+        item['orientation']=chart.get('orientation','unknown')
+        if item['orientation'] not in {'vertical','horizontal','unknown'}:
+            raise ValueError('视觉图表方向无效')
         if item['kind'] not in {'bar', 'line', 'pie', 'scatter', 'area', 'stacked_bar', 'stacked_area', 'donut', 'other'}:
             raise ValueError('视觉图表类型无效')
         item['metadata_status'] = {key: _evidence(item[key], item['box'], observed)['status']
@@ -725,28 +742,14 @@ def _validate_visual(body, observed):
                              'box': _box(point['box'], item['box']), 'value_source': _text(point['value_source'], 30)}
                 if point_out['value_source'] not in {'printed', 'estimated', 'unknown'}:
                     raise ValueError('视觉图点数值来源无效')
-                verdict = _evidence(point_out['printed_text'], point_out['box'], observed)
-                number_supported = value is not None and bool(_NUMBERS.fullmatch(unicodedata.normalize('NFKC', value).strip()))
-                number_supported &= value is not None and _canonical(value) in _canonical(point_out['printed_text'])
-                if value is not None and _numeric_tokens(value):
-                    number_supported &= all(n in _numeric_tokens(point_out['printed_text']) for n in _numeric_tokens(value))
-                association = _chart_association(point_out, observed)
-                point_out['association_status'] = association['status']
-                metadata_supported = series_out['name_status'] == 'confirmed' and series_out['axis'] != 'unknown'
-                metadata_supported &= not item['title'] or item['metadata_status']['title'] == 'confirmed'
-                metadata_supported &= bool(item['unit']) and item['metadata_status']['unit'] == 'confirmed'
-                if item['kind'] not in {'pie', 'donut'}:
-                    metadata_supported &= bool(item['y_label']) and item['metadata_status']['y_label'] == 'confirmed'
-                    metadata_supported &= bool(item['x_label']) and item['metadata_status']['x_label'] == 'confirmed'
-                if point_out['value_source'] != 'printed' or not number_supported or verdict['status'] != 'confirmed' or association['status'] != 'confirmed' or not metadata_supported:
-                    verdict = {'status': 'pending', 'verification': 'estimated_or_unobserved_chart_value', 'evidence_lines': []}
-                    issues.append({'code': verdict['verification'], 'message': '图点没有可核对的印刷数值和类别；估读不进入确定性内容', 'box': point_out['box']})
-                else:
-                    confirmed.append(point_out['printed_text'])
-                point_out.update(verdict); series_out['points'].append(point_out)
-            series_out['status'] = 'confirmed' if series_out['name_status'] == 'confirmed' and series_out['points'] and all(p['status'] == 'confirmed' for p in series_out['points']) else 'pending'
+                series_out['points'].append(point_out)
             item['series'].append(series_out)
-        item['status'] = 'confirmed' if item['series'] and all(v['status'] == 'confirmed' for v in item['series']) else 'pending'
+        from . import chart_structure
+        chart_structure.prepare(item, observed)
+        for series in item['series']:
+            for point in series['points']:
+                if point.get('status')=='confirmed':confirmed.append(point['printed_text'])
+                else:issues.append({'code':'unverified_chart_association','message':point.get('reason') or '图点类别、数值、系列或单位关系待核验；估读不进入精确证据','box':point['box']})
         charts.append(item)
     for issue in _list(body['issues'], 100):
         _object(issue, {'code', 'message'}, {'box'})
@@ -901,6 +904,10 @@ def visual(raw, connection_id, expected_revision, observed_lines, cancelled=None
               '多级表头逐层保留，跨行行名用rowspan；column_header为列表头，row_header为数据行标识，corner为左上角表头。'
               '空白保留空字符串，0只在原图明确印刷0时返回；单位和脚注保留原文，不把脚注编号并入数值。'
               '图点不可读的value为null；value必须是字符串，印刷标签printed、像素估读estimated、不可读unknown。'
+              '图点box只框该点的印刷数值，不要把整幅图当图点；类别轴与数值轴分别写x_label/y_label，不把刻度当数据点。'
+              'charts的box必须包住整张图：标题、图例、两个坐标轴标题、轴单位、类别文字和绘图区都在box内；不要只框柱子或绘图区。'
+              'plot_box才是坐标轴围成的绘图区，位于chart.box内部。请准确完整框住印刷数值字符，留少量文字边距。'
+              'orientation只按图中可见方向填vertical/horizontal/unknown；多系列、双轴与图例不明时保留unknown，不猜系列归属。'
               '不要把估读当印刷标签，不生成原因或预测。provenance仅允许notes字段。schema: '+schema)
     prompt += ('公式放入formulas，不要拆入blocks。逐个保留分子、分母、根次数、上下标、求和/积分上下限和括号；'
                '不求解、不补全、不用领域知识猜测。tree只用上述节点和原图符号，不生成LaTeX命令。'

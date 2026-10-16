@@ -1,0 +1,9 @@
+test_blurred_recorded_output_keeps_weak_row_name_pending_without_false_bindings (tests.test_table_vision_replay.TableVisionReplayTests.test_blurred_recorded_output_keeps_weak_row_name_pending_without_false_bindings) ... ok
+test_clear_recorded_output_restores_all_15_exact_bindings (tests.test_table_vision_replay.TableVisionReplayTests.test_clear_recorded_output_restores_all_15_exact_bindings) ... ok
+test_logical_swap_cannot_pass_using_correct_numbers_in_correct_image_regions (tests.test_table_vision_replay.TableVisionReplayTests.test_logical_swap_cannot_pass_using_correct_numbers_in_correct_image_regions) ... ok
+test_model_copying_a_string_box_is_rejected_instead_of_coerced (tests.test_table_vision_replay.TableVisionReplayTests.test_model_copying_a_string_box_is_rejected_instead_of_coerced) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.032s
+
+OK

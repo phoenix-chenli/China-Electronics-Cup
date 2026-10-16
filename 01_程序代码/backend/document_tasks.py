@@ -121,6 +121,10 @@ def _snapshot(req):
             "pages":pages,"mode":req.mode,"rotation":req.rotation,"connection_id":req.connection_id,"provider":provider,
             "images":images,"image_count":len(images),"total_bytes":sum(x["bytes"] for x in images),
             "scope":"本机处理" if provider.get("local") else "外部视觉服务"}
+    if req.mode!='native':
+        from . import page_preprocessing
+        snapshot['page_preprocessing']={'version':page_preprocessing.VERSION,'max_extra_local_ocr_calls':page_preprocessing.MAX_EXTRA_CALLS,
+            'seconds_per_image':page_preprocessing.MAX_SECONDS,'scope':'仅本机生成按需增强候选，外部视觉仍发送冻结预览原图'}
     if req.mode=="vision":
         from . import document_providers as providers
         snapshot["ocr_provider"]=providers.describe()
@@ -273,6 +277,13 @@ class Manager:
                 self._guard(body,stop,deadline)
                 event={"id":uuid.uuid4().hex,"page":number,"media_id":media_id,"method":body["mode"],"status":"running","started_at":s.now(),"duration_ms":None}
                 body["events"].append(event);body["stage"]=f"解析第 {number} 页";self.save_progress(body);page_started=time.monotonic()
+                def page_trace(call):
+                    current=next((item for item in body['events'] if item.get('id')==call['id']),None)
+                    detail={**call,'page':number,'media_id':media_id}
+                    detail['summary']='页面原图识别' if call.get('variant')=='original' else '页面按需增强识别'
+                    if current is None:body['events'].append(detail)
+                    else:current.update(detail)
+                    self.save_progress(body)
                 if body["mode"]=="native":
                     fresh=copy.deepcopy(native_body["pages"][number-1]) if native_body is not None else documents.parse_page(native_path,number)
                 else:
@@ -283,7 +294,7 @@ class Manager:
                     if len(raw)!=expected["bytes"] or hashlib.sha256(raw).hexdigest()!=expected["image_sha256"]: raise ValueError("页面图像与冻结预览不一致")
                     base=parsed["pages"][number-1]
                     if body["mode"]=="ocr":
-                        result=providers.ocr(raw,rotation=body["rotation"],cancelled=stop,deadline=deadline)
+                        result=providers.ocr_page(raw,rotation=body["rotation"],cancelled=stop,deadline=deadline,trace=page_trace)
                         if "tables" not in result: result["tables"]=native.detect_ruled_tables(raw,result.get("lines",[]))
                         from . import ocr_structure
                         spatial=ocr_structure.detect(result.get('lines',[]),body['rotation'])
@@ -303,14 +314,19 @@ class Manager:
                                         'method':'formula_crop_ocr','variant':call_key,'formula_id':formula['id'],**call})
                         fresh=native.apply_ocr_page(base,result,media_id=media_id)
                     else:
-                        lines=[{"text":b["text"],"box":b.get("box"),"status":b.get("status","confirmed")} for b in base.get("blocks",[]) if b.get("text","").strip() and b.get("media_id")==media_id]
+                        # Derived chart/table/visual strings cannot corroborate
+                        # a later model response as independent observations.
+                        lines=[{"text":b["text"],"box":b.get("box"),"status":b.get("status","confirmed"),"confidence":b.get('confidence',1)}
+                               for b in base.get("blocks",[]) if b.get("text","").strip() and b.get("box") and b.get("media_id")==media_id
+                               and not any(b.get(key) for key in ('table_id','chart_id','formula_id','formula_ids'))
+                               and b.get('source_method',b.get('method','native_text')) in {'native_text','native','pdf_native','docx_native','human_review'}]
                         fresh=copy.deepcopy(base)
                         if body.get("ocr_provider",{}).get("ready"):
                             ocr_started=time.monotonic()
                             observation={"id":uuid.uuid4().hex,"page":number,"media_id":media_id,"method":"ocr_observation","status":"running","started_at":s.now(),"duration_ms":None}
                             body["events"].append(observation);body["stage"]=f"识别第 {number} 页的视觉观察文字";self.save_progress(body)
                             try:
-                                observed=providers.ocr(raw,rotation=body["rotation"],cancelled=stop,deadline=deadline)
+                                observed=providers.ocr_page(raw,rotation=body["rotation"],cancelled=stop,deadline=deadline,trace=page_trace)
                                 self._guard(body,stop,deadline)
                                 if "tables" not in observed: observed["tables"]=native.detect_ruled_tables(raw,observed.get("lines",[]))
                                 from . import ocr_structure
@@ -318,11 +334,20 @@ class Manager:
                                 if not observed['tables']:
                                     observed['tables']=spatial['tables']
                                 observed['formulas']=spatial['formulas']
+                                ocr_structure.reread_labels(raw,observed,providers.ocr,stop,deadline,body['rotation'])
+                                for label_review in observed.get('label_reviews',[]):
+                                    for call in label_review['calls']:
+                                        body['events'].append({'id':uuid.uuid4().hex,'page':number,'media_id':media_id,'method':'label_crop_ocr',
+                                                               'observation_id':label_review['observation_id'],**call})
                                 if not base.get("text_available") or media_id:
                                     fresh=native.apply_ocr_page(base,observed,media_id=media_id)
                                 else:
                                     fresh["ocr_lines"]=copy.deepcopy(observed.get("lines",[]))
+                                    fresh['label_reviews']=([] if media_id is None else [r for r in fresh.get('label_reviews',[]) if r.get('media_id')!=media_id])+[
+                                        {**copy.deepcopy(r),'media_id':media_id} for r in observed.get('label_reviews',[])]
                                     fresh["ocr_provenance"]={**copy.deepcopy(observed.get("provenance",{})),"input_image_sha256":observed.get("input_image_sha256"),"fingerprint":observed.get("fingerprint"),"duration_ms":observed.get("duration_ms")}
+                                    from .page_preprocessing import attach
+                                    attach(fresh,observed,media_id)
                                 lines.extend(line for line in observed.get("lines",[]) if line.get("status")=="confirmed")
                                 if "ocr_provenance" not in fresh: fresh["ocr_provenance"]=copy.deepcopy(fresh.get("provenance",{}))
                                 observation.update(status="completed",finished_at=s.now(),duration_ms=round((time.monotonic()-ocr_started)*1000,2),summary="已实际识别并保存 OCR 观察文字")

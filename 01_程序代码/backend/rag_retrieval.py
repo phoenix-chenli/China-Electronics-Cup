@@ -80,15 +80,21 @@ def _source_gaps(scope, cancelled=None, deadline=None, document_ids=None):
                     missing.append({'page':p['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long'})
                 if scope.get('scope_type')!='selection' and any(b['table_row_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
                     missing.append({'page':p['number'],'reason':'完整表格行超过检索片段窗口，请打开原表单独核验','reason_code':'source_table_row_too_long'})
+                if scope.get('scope_type')!='selection' and any(b['chart_point_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
+                    missing.append({'page':p['number'],'reason':'完整图点关系超过检索片段窗口，请打开原图单独核验','reason_code':'source_chart_point_too_long'})
                 if scope.get('scope_type')=='selection':
                     start,end=scope['text_range']['start'],scope['text_range']['end']
                     if any(b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in index._table_row_blocks(p)):
                         missing.append({'page':p['number'],'reason':'选区只包含表格行的一部分，缺少完整对应关系','reason_code':'source_partial_table_row'})
+                    if any(b.get('chart_id') and b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in p.get('blocks',[])):
+                        missing.append({'page':p['number'],'reason':'选区只包含图点的一部分，缺少完整类别、系列及单位','reason_code':'source_partial_chart_point'})
         for page in missing:
             code=page.get('reason_code','source_text_missing')
             actions={'source_formula_too_long':('inspect_original_formula','请打开该固定版本的完整公式原文进行核验'),
                      'source_partial_table_row':('select_complete_table_row','请选择完整表格行，或打开原表同时核验多级表头与行名'),
                      'source_table_row_too_long':('inspect_original_table','请打开该固定版本的原表核验整行及多级表头；检索未拆开这些对应关系'),
+                     'source_partial_chart_point':('select_complete_chart_point','请选择完整图点关系，或打开原图同时核验类别、系列、轴及单位'),
+                     'source_chart_point_too_long':('inspect_original_chart','请打开该固定版本的完整图表核验；检索未截断图点对应关系'),
                      'source_structure_pending':('reparse_original','本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据')}
             action,instruction=actions.get(code,('reparse_original','请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据'))
             gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],

@@ -20,7 +20,7 @@ from pathlib import Path
 
 from . import documents, store as s
 
-CHUNKER_VERSION = "source-spans-v5-atomic-table-rows"
+CHUNKER_VERSION = "source-spans-v6-atomic-chart-points"
 CHUNK_TOKENS = 384
 OVERLAP_TOKENS = 48
 LOCK = threading.RLock()
@@ -239,16 +239,22 @@ def _table_row_blocks(page):
 def _atomic_blocks(page):
     """Overlapping formula/row intervals form one indivisible source interval."""
     blocks=[{'start':b['start'],'end':b['end'],'formula_block_ids':[b['id']],
-             'table_row_ids':[],'table_ids':[]} for b in _formula_blocks(page)]
+             'table_row_ids':[],'table_ids':[],'chart_point_ids':[],'chart_ids':[]} for b in _formula_blocks(page)]
     blocks += [{'start':b['start'],'end':b['end'],'formula_block_ids':[],
-                'table_row_ids':[b['id']],'table_ids':[b['table_id']] if b.get('table_id') else []}
+                'table_row_ids':[b['id']],'table_ids':[b['table_id']] if b.get('table_id') else [],
+                'chart_point_ids':[],'chart_ids':[]}
                for b in _table_row_blocks(page)]
+    blocks += [{'start':b['start'],'end':b['end'],'formula_block_ids':[],
+                'table_row_ids':[],'table_ids':[], 'chart_point_ids':[b.get('point_id',b['id'])],
+                'chart_ids':[b['chart_id']] if b.get('chart_id') else []}
+               for b in page.get('blocks',[]) if (b.get('chart_id') or b.get('kind')=='chart')
+               and b.get('status','confirmed')=='confirmed']
     protected=[]
     for block in sorted(blocks,key=lambda b:(b['start'],b['end'])):
         if protected and block['start']<protected[-1]['end']:
             previous=protected[-1]
             previous['end']=max(previous['end'],block['end'])
-            for key in ('formula_block_ids','table_row_ids','table_ids'):
+            for key in ('formula_block_ids','table_row_ids','table_ids','chart_point_ids','chart_ids'):
                 previous[key]=list(dict.fromkeys(previous[key]+block[key]))
         else:protected.append(block)
     return protected
@@ -299,6 +305,15 @@ def _extraction_quality(page,start,end):
     if bindings:
         quality['table_cell_bindings']=bindings
         quality['table_relation_version']=sorted({block['table_relation_version'] for block in complete_rows})
+    chart_blocks=[b for b in blocks if b.get('chart_id') or b.get('kind')=='chart']
+    if chart_blocks:
+        from . import chart_structure
+        views={(v['chart_id'],v['point_id']):v for chart in page.get('charts',[]) for v in chart_structure.point_views(chart)}
+        complete_charts=[b for b in chart_blocks if start<=b['start'] and end>=b['end']
+                         and (view:=views.get((b.get('chart_id'),b.get('point_id')))) and view['text']==b['text']]
+        quality['chart_complete']=len(complete_charts)==len(chart_blocks)
+        quality['chart_point_bindings']=[views[(b['chart_id'],b['point_id'])]['source_binding'] for b in complete_charts]
+        quality['chart_relation_version']=chart_structure.VERSION
     formula_blocks=[b for b in _formula_blocks(page) if b['end']>start and b['start']<end]
     if formula_blocks:
         quality['formula_complete']=all(start<=b['start'] and end>=b['end'] for b in formula_blocks)
@@ -346,6 +361,9 @@ def _build_document(document_id, cancelled=None):
         table_rows=list(dict.fromkeys(rid for b in oversized for rid in b['table_row_ids']))
         if table_rows:missing.append({'page':page['number'],'reason':'完整表格行超过检索片段窗口，请打开原表单独核验','reason_code':'source_table_row_too_long','table_row_ids':table_rows,
                                       'table_ids':list(dict.fromkeys(tid for b in oversized for tid in b['table_ids']))})
+        chart_points=list(dict.fromkeys(pid for b in oversized for pid in b['chart_point_ids']))
+        if chart_points:missing.append({'page':page['number'],'reason':'完整图点关系超过检索片段窗口，请打开原图单独核验','reason_code':'source_chart_point_too_long',
+                                       'chart_point_ids':chart_points,'chart_ids':list(dict.fromkeys(cid for b in oversized for cid in b['chart_ids']))})
         spans = list(_source_spans(page,count,budget))
         for start, end, hard_split in spans:
             text = page["text"][start:end]

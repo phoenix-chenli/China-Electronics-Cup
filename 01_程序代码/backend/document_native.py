@@ -224,20 +224,28 @@ def _chart(archive,part,index):
 
 
 def _chart_text(page,chart,method):
-    if chart.get('status')=='pending':return
-    for si,series in enumerate(chart.get('series',[])):
-        if series.get('name_status','confirmed')!='confirmed':continue
-        for point in series.get('points',[]):
-            if point.get('status')!='confirmed' or point.get('value') is None or point.get('value_source') in {'estimated','unknown'}:continue
-            metadata=chart.get('metadata_status',{})
-            unit=(chart.get('unit') if metadata.get('unit','confirmed')=='confirmed' else None) or '单位未标明'
-            title=(chart.get('title') if metadata.get('title','confirmed')=='confirmed' else None) or '图表结构视图'
-            text=f"图表：{title}\n系列：{series.get('name','')}；分类：{point.get('label','')}；数值：{point['value']}；单位：{unit}"
-            _append(page,text,'chart',point.get('box') or chart.get('box'),source_method=method,status='confirmed',
-                derived_view=True,
-                chart_id=chart['id'],point_id=point['id'],source_part=point.get('source_part') or chart.get('source_part'),
-                media_id=chart.get('media_id'),
-                location_precision='region' if point.get('box') or chart.get('box') else 'package_structure')
+    from . import chart_structure
+    for view in chart_structure.point_views(chart):
+        _append(page,view['text'],'chart',view.get('box') or chart.get('box'),source_method=method,status='confirmed',
+            derived_view=True,chart_id=chart['id'],point_id=view['point_id'],
+            chart_relation_version=view['chart_relation_version'],chart_point_binding=copy.deepcopy(view['source_binding']),
+            source_part=view['source_binding'].get('source_part') or chart.get('source_part'),media_id=chart.get('media_id'),
+            location_precision='region' if view.get('box') or chart.get('box') else 'package_structure')
+
+
+def _chart_overlap(box, chart):
+    area=chart.get('box')
+    return bool(box and area and max(0,min(box[2],area[2])-max(box[0],area[0]))*
+                max(0,min(box[3],area[3])-max(box[1],area[1]))>1e-8)
+
+
+def _protect_chart_regions(page,media_id=None):
+    """Chart OCR stays visible, but only bound point views can be evidence."""
+    charts=[c for c in page.get('charts',[]) if c.get('media_id')==media_id and c.get('box')]
+    for block in page.get('blocks',[]):
+        if block.get('media_id')!=media_id or block.get('chart_id'):continue
+        if any(_chart_overlap(block.get('box'),chart) for chart in charts):
+            block.update(status='pending',source_pending_reason='unverified_chart_association')
 
 
 def _media(archive,part):
@@ -561,6 +569,8 @@ def apply_ocr_page(base_page,result,media_id=None):
     page['provenance']={**result.get('provenance',{}),'method':'ocr','model':result.get('model'),'location_precision':'line',
         'fingerprint':result.get('fingerprint'),'input_image_sha256':result.get('input_image_sha256'),
         'duration_ms':result.get('duration_ms'),'rotation':result.get('rotation',0),'human_reviewed':False}
+    from .page_preprocessing import attach
+    attach(page,result,media_id)
     from .document_quality import inspect
     return inspect(page)
 
@@ -595,9 +605,6 @@ def apply_visual_page(base_page,result,media_id=None):
                 location_precision='region',media_id=media_id)
         page['blocks'][-1].update(formula_id=formula['id'],source_pending_reason='formula_structure_requires_review')
     _recognition_issues(page,result,'visual_observed',media_id)
-    # Unverified chart associations cannot be bypassed via the underlying OCR
-    # numbers. Keep them visible in the parse, excluded from answer evidence.
-    uncertain=[c.get('box') for c in result.get('charts',[]) if c.get('status')!='confirmed' and c.get('box')]
     formula_areas=[f['box'] for f in result.get('formulas',[])]
     for block in page.get('blocks',[]):
         box=block.get('box')
@@ -605,11 +612,7 @@ def apply_visual_page(base_page,result,media_id=None):
         if any(max(0,min(box[2],area[2])-max(box[0],area[0]))*max(0,min(box[3],area[3])-max(box[1],area[1]))>1e-8 for area in formula_areas):
             block.update(status='pending',source_pending_reason='formula_structure_requires_review')
             continue
-        if not re.search(r'\d',block.get('text','')):continue
-        for area in uncertain:
-            overlap=max(0,min(box[2],area[2])-max(box[0],area[0]))*max(0,min(box[3],area[3])-max(box[1],area[1]))
-            if overlap/((box[2]-box[0])*(box[3]-box[1]))>=.8:
-                block.update(status='pending',source_pending_reason='unverified_chart_association');break
+    _protect_chart_regions(page,media_id)
     _protect_table_regions(page,media_id)
     page['text_available']=any(b.get('status','confirmed')=='confirmed' and b.get('text','').strip() for b in page.get('blocks',[]))
     page['provenance']={**result.get('provenance',{}),'method':'visual_observed','human_reviewed':False,

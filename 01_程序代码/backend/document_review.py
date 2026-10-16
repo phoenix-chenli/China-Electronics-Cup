@@ -26,11 +26,34 @@ class Correction(connections.Strict):
     accepted:Literal[True]
 
 
+def _label_candidates(page, source):
+    index=source.get('observation_id')
+    if type(index) is not int:return []
+    return list(dict.fromkeys(text for r in page.get('label_reviews',[])
+        if r.get('media_id')==source.get('media_id') and r.get('observation_id')==index
+        for text in r.get('candidates',[]) if isinstance(text,str) and text.strip()))
+
+
+def _cell_linked(page, source):
+    index=source.get('observation_id')
+    return type(index) is int and any(t.get('media_id')==source.get('media_id')
+        and any(index in c.get('evidence_lines',[]) for c in t.get('cells',[])) for t in page.get('tables',[]))
+
+
+def _review_observation(page, source, text, mark):
+    index=source.get('observation_id')
+    if type(index) is not int:return
+    for observation in page.get('ocr_lines',[]):
+        if observation.get('media_id')==source.get('media_id') and observation.get('observation_id')==index:
+            observation.update(before_human_text=observation['text'],text=text,**mark)
+            observation.pop('source_pending_reason',None)
+
+
 def targets(page):
     items=[]
     for b in page.get('blocks',[]):
-        if b.get('table_id') or b.get('chart_id') or b.get('source_pending_reason')=='unverified_chart_association':continue
-        item={'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') or b.get('formula_ids') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed')}
+        if b.get('table_id') or b.get('chart_id') or b.get('source_pending_reason')=='unverified_chart_association' or _cell_linked(page,b):continue
+        item={'id':'block:'+b['id'],'kind':'formula' if b.get('formula_id') or b.get('formula_ids') else 'text','text':b['text'],'box':b.get('box'),'media_id':b.get('media_id'),'status':b.get('status','confirmed'),'ocr_candidates':_label_candidates(page,b)}
         if b.get('formula_id'):
             formula=next((f for f in page.get('formulas',[]) if f.get('id')==b['formula_id']),{})
             candidates=[formula.get('page_candidate',{}).get('latex'),formula.get('latex')]
@@ -38,7 +61,9 @@ def targets(page):
         items.append(item)
     for i,b in enumerate(page.get('recognition_pending',[])):
         if b.get('source_pending_reason')=='formula_structure_requires_review':continue
-        items.append({'id':'pending:'+str(i),'kind':'text','text':b.get('text',''),'box':b.get('box'),'media_id':b.get('media_id'),'status':'pending'})
+        if _cell_linked(page,b):continue
+        if any(c.get('media_id')==b.get('media_id') and native._chart_overlap(b.get('box'),c) for c in page.get('charts',[])):continue
+        items.append({'id':'pending:'+str(i),'kind':'text','text':b.get('text',''),'box':b.get('box'),'media_id':b.get('media_id'),'status':'pending','ocr_candidates':_label_candidates(page,b)})
     for t in page.get('tables',[]):
         for c in t.get('cells',[]):
             candidates=list(dict.fromkeys(text for r in page.get('label_reviews',[]) if r.get('media_id')==t.get('media_id') and r.get('observation_id') in c.get('evidence_lines',[]) for text in r.get('candidates',[]) if isinstance(text,str) and text.strip()))
@@ -54,6 +79,7 @@ def targets(page):
                 items.append({'id':'point:'+chart['id']+':'+str(si)+':'+p['id'],'kind':'chart_point',
                     'text':str(p['value']) if p.get('value') is not None else '', 'label':p.get('label') or '',
                     'series_name':series.get('name') or '', 'unit':chart.get('unit') or '', 'title':chart.get('title') or '',
+                    'chart_kind':chart.get('kind') or '',
                     'x_label':chart.get('x_label') or '', 'y_label':chart.get('y_label') or '',
                     'box':p.get('box') or chart.get('box'),'media_id':chart.get('media_id'),'status':p.get('status','pending')})
     return items
@@ -107,6 +133,7 @@ def publish(did,req):
             if not req.text.strip():raise ValueError('文字修正不能为空')
             _rewrite(page,[(b['start'],b['end'],req.text)])
             b.update(**mark,source_method='human_review',location_precision='region' if b.get('box') else 'text_range')
+            if not b.get('formula_id') and not b.get('formula_ids'):_review_observation(page,b,req.text,mark)
             if b.get('formula_ids'):
                 for fid in b['formula_ids']:
                     formula=next(f for f in page['formulas'] if f['id']==fid)
@@ -121,7 +148,8 @@ def publish(did,req):
         elif req.target.startswith('pending:'):
             i=int(req.target.split(':',1)[1]);line=page['recognition_pending'].pop(i)
             if not req.text.strip():raise ValueError('文字修正不能为空')
-            native._append(page,req.text,'text',line.get('box'),**mark,source_method='human_review',media_id=line.get('media_id'),location_precision='line')
+            _review_observation(page,line,req.text,mark)
+            native._append(page,req.text,'text',line.get('box'),**mark,source_method='human_review',media_id=line.get('media_id'),observation_id=line.get('observation_id'),location_precision='line')
         elif req.target.startswith('cell:'):
             table=next(t for t in page['tables'] if req.target.startswith('cell:'+t['id']+':'))
             cell=next(c for c in table['cells'] if req.target=='cell:'+table['id']+':'+c['id'])
@@ -150,13 +178,36 @@ def publish(did,req):
                 number=Decimal(req.text)
                 if not number.is_finite():raise InvalidOperation
             except InvalidOperation:raise ValueError('图点需要可核对的有限数值；无法读取时保留待复核') from None
-            if not all(v.strip() for v in [req.label,req.series_name,req.unit,req.title,req.x_label,req.y_label]):raise ValueError('请确认图点类别、系列、单位、标题和两轴对应关系')
+            axisless=chart.get('kind') in {'pie','donut','pieChart','doughnutChart'}
+            if not all(v.strip() for v in [req.label,req.series_name,req.unit,req.title]+([] if axisless else [req.x_label,req.y_label])):raise ValueError('请确认图点类别、系列、单位、标题及适用的两轴对应关系')
+            if axisless and (req.x_label.strip() or req.y_label.strip()):raise ValueError('饼图或环形图没有横纵轴，请保留两轴为空')
+            shared_changed=any((chart.get(key) or '')!=getattr(req,key) for key in ('title','unit','x_label','y_label'))
+            series_changed=(series.get('name') or '')!=req.series_name
+            invalidated=[]
+            for other_series in chart['series']:
+                for other in other_series.get('points',[]):
+                    if other is point or not (shared_changed or (other_series is series and series_changed)):continue
+                    if other.get('status')=='confirmed':
+                        if other.get('source_binding'):other['previous_source_binding']=copy.deepcopy(other['source_binding'])
+                        other.pop('source_binding',None)
+                        other.update(status='pending',association_status='pending',human_reviewed=False,
+                                     verification='shared_chart_metadata_changed',association_verification='shared_chart_metadata_changed',
+                                     reason='共享标题、轴、单位或系列名已修改，请重新对照原图核验该点')
+                        invalidated.append(other['id'])
+            audit['invalidated_point_ids']=invalidated
             point.update(value=str(number),label=req.label,printed_text=req.text,value_source='human_review',association_status='confirmed',**mark)
-            series.update(name=req.series_name,name_status='confirmed',axis='y',human_reviewed=True)
+            point.pop('reason',None)
+            point.pop('source_binding',None)
+            point['association_verification']='human_reviewed'
+            series.update(name=req.series_name,name_status='confirmed',axis='primary',human_reviewed=True)
             chart.update(title=req.title,unit=req.unit,x_label=req.x_label,y_label=req.y_label,human_reviewed=True,
                          metadata_status={k:'confirmed' for k in ['title','unit','x_label','y_label']})
-            series['status']='confirmed' if all(p.get('status')=='confirmed' for p in series['points']) else 'pending'
+            for reviewed_series in chart['series']:
+                reviewed_series['status']='confirmed' if all(p.get('status')=='confirmed' for p in reviewed_series['points']) else 'pending'
             chart['status']='confirmed' if all(s.get('status')=='confirmed' for s in chart['series']) else 'pending'
+            chart['relation_audit']={'status':chart['status'],'confirmed_points':sum(p.get('status')=='confirmed' for ser in chart['series'] for p in ser['points']),
+                                     'pending_points':sum(p.get('status')!='confirmed' for ser in chart['series'] for p in ser['points'])}
+            chart['relation_status']='consistent' if chart['status']=='confirmed' else 'partial' if chart['relation_audit']['confirmed_points'] else 'pending'
             _drop(page,lambda b:b.get('chart_id')==chart['id']);native._chart_text(page,chart,'human_review')
             for b in page['blocks']:
                 if b.get('chart_id')==chart['id']:
@@ -165,6 +216,7 @@ def publish(did,req):
         body.setdefault('human_reviews',[]).append(audit)
         page.setdefault('provenance',{})['human_reviewed_targets']=sum(r['page']==req.page for r in body['human_reviews'])
         for media_id in {t.get('media_id') for t in page.get('tables',[])}:native._protect_table_regions(page,media_id)
+        for media_id in {c.get('media_id') for c in page.get('charts',[])}:native._protect_chart_regions(page,media_id)
         page['text_available']=any(b.get('status','confirmed')=='confirmed' and b.get('text','').strip() for b in page['blocks'])
         page['ocr_required']=not page['text_available']
         from .document_quality import inspect

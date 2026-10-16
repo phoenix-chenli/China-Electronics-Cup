@@ -326,6 +326,18 @@ def resolve(locator, quote=""):
         if bindings:
             quality.update(table_cell_bindings=bindings,table_relation_version=sorted({b['table_relation_version'] for b in complete}),
                            cell_ids=list(dict.fromkeys(cid for b in complete for cid in b.get('cell_ids',[]))))
+    chart_blocks=[b for b in relevant if b.get('chart_id') or b.get('kind')=='chart']
+    if chart_blocks:
+        from . import chart_structure
+        views={(v['chart_id'],v['point_id']):v for chart in p.get('charts',[]) for v in chart_structure.point_views(chart)}
+        complete_charts=[b for b in chart_blocks if start<=b['start'] and end>=b['end']
+                         and (view:=views.get((b.get('chart_id'),b.get('point_id')))) and view['text']==b['text']]
+        quality['chart_complete']=len(complete_charts)==len(chart_blocks)
+        quality['chart_relation_version']=chart_structure.VERSION
+        quality['chart_point_bindings']=[views[(b['chart_id'],b['point_id'])]['source_binding'] for b in complete_charts]
+        if complete_charts:
+            quality['chart_id']=list(dict.fromkeys(b['chart_id'] for b in complete_charts))
+            quality['point_id']=list(dict.fromkeys(b['point_id'] for b in complete_charts))
     provenance=data['document'].get('provenance',{})
     publication={k:v for k,v in provenance.items() if k in
         {'title','institution','document_year','published_at','origin','publication_status','publication_group'}}
@@ -364,7 +376,8 @@ def render_image(did, number, sha=None):
     import io
     with Image.open(path) as image:
         if image.width*image.height>40_000_000: raise ValueError("图片超过 4000 万像素，请缩小后导入")
-        image=image.convert("RGB");image.thumbnail((2400,2400));buf=io.BytesIO();image.save(buf,format="PNG")
+        from .page_preprocessing import white_background
+        image=white_background(image);image.thumbnail((2400,2400));buf=io.BytesIO();image.save(buf,format="PNG")
         return buf.getvalue()
 
 

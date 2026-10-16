@@ -5,6 +5,7 @@ import copy
 import hashlib
 import json
 import re
+import unicodedata
 from decimal import Decimal
 from . import documents
 
@@ -182,6 +183,8 @@ def bind_source(source):
         raise ValueError('文档片段包含未核验识别结果，不能作为回答证据')
     if bound.get('quality',{}).get('table_complete') is False:
         raise ValueError('选区未包含完整表格行及对应表头，请选择完整行或打开原表核验')
+    if bound.get('quality',{}).get('chart_complete') is False:
+        raise ValueError('选区未包含完整图点类别、系列、数值及单位，请选择完整图点或打开原图核验')
     locator = bound['locator']
     if not locator.get('parse_id') or not locator.get('text_range', {}).get('text_sha256'):
         raise ValueError('文档证据缺少固定解析或文字摘要')
@@ -210,7 +213,7 @@ def packet(spans, facts=()):
               'publication': copy.deepcopy(x.get('publication',{})),
               'extraction': {k:v for k,v in x.get('quality',{}).items() if k in
                   {'source_methods','method','location_precision','location_precisions','human_reviewed',
-                   'confirmed','derived_view','structure','min_ocr_confidence','formula_ids','formula_id','formula_complete','table_id','cell_ids','table_complete','table_cell_bindings','table_relation_version','chart_id','point_id','source_part','media_id'}}} for x in values],
+                   'confirmed','derived_view','structure','min_ocr_confidence','formula_ids','formula_id','formula_complete','table_id','cell_ids','table_complete','table_cell_bindings','table_relation_version','chart_id','point_id','chart_complete','chart_point_bindings','chart_relation_version','source_part','media_id'}}} for x in values],
             'page_continuation_candidates': page_continuation_candidates(values),
             'queries': queries,
             'facts': [{'id': f['id'], 'text': f['text'], 'query_id': f.get('query_id'),
@@ -462,7 +465,8 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None, ava
     # This catches invented arithmetic; semantic review also checks Chinese values,
     # units/conditions. Numbers present in the source still do not prove support.
     def numbers(value):
-        literals=re.findall(r'(?<![\d.])[-+]?\d[\d,]*(?:\.\d+)?(?:%|％)?', value.replace('％','%'))
+        normalized=unicodedata.normalize('NFKC',value).replace('−','-').replace('–','-')
+        literals=re.findall(r'(?<![\d.,])[-+]?(?:\d{1,3}(?:,\d{3})+|\d+|(?=\.\d))(?:\.\d+)?(?:[eE][-+]?\d+)?%?(?![\d.,eE])',normalized)
         return {(Decimal(n.rstrip('%').replace(',','')),n.endswith('%')) for n in literals}
     # Page references are verified locator metadata, not invented measurements.
     # Remove only an explicitly labelled, actually cited PDF page occurrence;
@@ -553,6 +557,22 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None, ava
                     'header_span_id':percent_headers[key],'table_id':key[-1],
                     'status':'requires_row_column_unit_review'})
                 missing.remove((number,percent))
+    chart_units=[]
+    for span in cited:
+        # Re-resolve the fixed atom: a caller's quality flags cannot confer
+        # percentage units on an unrelated literal elsewhere in the page.
+        authoritative=documents.resolve(span['locator'],span['text'])
+        quality=authoritative.get('quality',{})
+        if quality.get('chart_complete') is not True:continue
+        for binding in quality.get('chart_point_bindings',[]):
+            if unicodedata.normalize('NFKC',str(binding.get('unit_text') or '')).strip()!='%':continue
+            witnessed=numbers(str(binding.get('value') or ''))
+            for number,percent in sorted(missing.copy()):
+                if percent and ((number,False) in witnessed or (number,True) in witnessed):
+                    missing.remove((number,percent))
+                    chart_units.append({'number':str(number),'unit':'%','span_id':span['id'],
+                                        'chart_id':binding['chart_id'],'point_id':binding['point_id'],
+                                        'status':'source_bound_chart_unit_requires_semantic_review'})
     bindings=[]
     # A calculation repeated in a cross-source explanation must retain the
     # exact server fact that the answer already selected. No free arithmetic,
@@ -573,7 +593,7 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None, ava
         raise ValueError('综合陈述含原文未提供的数值：'+values+'。未披露的量应说明缺口，不能认定其数值；否定未披露值时用文字说明。需要计算时必须使用有来源的公式或SQL事实。')
     return {'text': text.strip(), 'support_span_ids': ids,'support_fact_ids':list(dict.fromkeys(declared+bindings)),
             'inference_boundary_mentions': boundary_mentions,
-            'question_scope_mentions':scope_mentions,'table_unit_bindings':table_units,
+            'question_scope_mentions':scope_mentions,'table_unit_bindings':table_units,'chart_unit_bindings':chart_units,
             'literal_sign_bindings':sign_bindings,
             'evidence_ids': list(dict.fromkeys([x['evidence_id'] for x in cited]+
                 [eid for fid in bindings for eid in pool[fid].get('evidence_ids',[])])),
@@ -641,6 +661,7 @@ def review(question, needed, claims, spans, facts, judge):
             'fact': fact,'bound_facts':bound_facts,
             'question_scope_mentions':claim.get('question_scope_mentions', []),
             'table_unit_bindings':claim.get('table_unit_bindings', []),
+            'chart_unit_bindings':claim.get('chart_unit_bindings', []),
             'literal_sign_bindings':claim.get('literal_sign_bindings', []),
             'inference_boundary_mentions': claim.get('inference_boundary_mentions', [])})
     payload = {'question': question, 'answer_kind_contract': ANSWER_KIND_CONTRACT,
@@ -656,6 +677,7 @@ def review(question, needed, claims, spans, facts, judge):
         'inference_boundary_mentions仅标记对用户所问零值假设的不能确定表述，不是查得数值或支持证明。'
         'question_scope_mentions只标记问题的时期或月份范围，不是观测值；仍核对引用的实际行列是否属于该时期，不从问题创造事实。'
         'table_unit_bindings仅证明同一固定原生表中存在该字面值且表头标有%，不能证明该数属于百分比列；逐条核对具体指标行、列名和单位。金额列写成百分比、不同指标或年份串值必须unsupported。'
+        'chart_unit_bindings绑定固定图点的显式单位；需同时核对对应类别、系列、轴、时期与问题口径，禁止把金额单位改写为百分比，禁止把像素估读当精确值。'
         '“不能据此认定该量为0”可以是披露范围支持的推断边界；仍须核对引用，不得转成该量实际为0、非0或全库未披露。'
         'excerpt是固定原文摘录；核对其是否忠实引用，不能因该摘录单独不足以答完问题就判原句unsupported。问题答全由coverage另行检查。'
         'extraction说明解析方法与定位结构；Word页码可能是逻辑节，扫描摘录页码可能不是原始物理页码，不将相邻解析位置自动当作相邻原页。'

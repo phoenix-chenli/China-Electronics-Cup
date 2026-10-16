@@ -1,0 +1,74 @@
+{
+  "vertical_clear": {
+    "labels": [
+      "North",
+      "South",
+      "West"
+    ],
+    "values": [
+      "120",
+      "200",
+      "160"
+    ],
+    "unit": "kCNY",
+    "title": "Regional revenue",
+    "series": "Revenue",
+    "x_label": "Region",
+    "y_label": "Revenue",
+    "horizontal": false
+  },
+  "vertical_blur": {
+    "labels": [
+      "North",
+      "South",
+      "West"
+    ],
+    "values": [
+      "120",
+      "200",
+      "160"
+    ],
+    "unit": "kCNY",
+    "title": "Regional revenue",
+    "series": "Revenue",
+    "x_label": "Region",
+    "y_label": "Revenue",
+    "horizontal": false
+  },
+  "horizontal_cn": {
+    "labels": [
+      "华东",
+      "华南",
+      "西北"
+    ],
+    "values": [
+      "120",
+      "200",
+      "160"
+    ],
+    "unit": "万元",
+    "title": "地区季度销售",
+    "series": "销售额",
+    "x_label": "销售额",
+    "y_label": "地区",
+    "horizontal": true
+  },
+  "unit_missing": {
+    "labels": [
+      "North",
+      "South",
+      "West"
+    ],
+    "values": [
+      "120",
+      "200",
+      "160"
+    ],
+    "unit": "",
+    "title": "Regional revenue",
+    "series": "Revenue",
+    "x_label": "Region",
+    "y_label": "Revenue",
+    "horizontal": false
+  }
+}

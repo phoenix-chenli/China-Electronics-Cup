@@ -1,0 +1,604 @@
+{
+  "date": "2026-10-16",
+  "scope": "Related local component regression, authored diagnostics and production builds; no complete Windows BAT/Mac launch or independent benchmark claim.",
+  "backend": {
+    "local": {
+      "modules": [
+        {
+          "module": "page_preprocessing",
+          "tests": 23,
+          "unittest_seconds": 0.335,
+          "passed": true,
+          "log": "页面预处理-page-local-page_preprocessing.log",
+          "test_source_sha256": "7dc7b173785f263c1b1ab0f53afa08ec066755412d5f773e0b4c951d20f907b9"
+        },
+        {
+          "module": "document_providers",
+          "tests": 20,
+          "unittest_seconds": 0.624,
+          "passed": true,
+          "log": "页面预处理-page-local-document_providers.log",
+          "test_source_sha256": "fccb79462ff18f2d3450321af25b6eaf97c6d5b11f8564ffa5713548328dc183"
+        },
+        {
+          "module": "document_tasks",
+          "tests": 22,
+          "unittest_seconds": 7.088,
+          "passed": true,
+          "log": "页面预处理-page-local-document_tasks.log",
+          "test_source_sha256": "9aaedbb938207510b25ab0c2375dab87d7ac0a0b04aff2a7effe3bc7a5887a93"
+        },
+        {
+          "module": "ocr_structure",
+          "tests": 15,
+          "unittest_seconds": 0.306,
+          "passed": true,
+          "log": "页面预处理-page-local-ocr_structure.log",
+          "test_source_sha256": "c8e4d632f27844c4a843b9f789204e5d2c8a231975f1ffe5638f125551f697a8"
+        },
+        {
+          "module": "label_quality",
+          "tests": 32,
+          "unittest_seconds": 3.659,
+          "passed": true,
+          "log": "页面预处理-page-local-label_quality.log",
+          "test_source_sha256": "e52ac7f84595eebd317c5ec9bffda32fcaf7247ca1a3610869b8c7b725ad7b3b"
+        },
+        {
+          "module": "math_labels",
+          "tests": 20,
+          "unittest_seconds": 3.821,
+          "passed": true,
+          "log": "页面预处理-page-local-math_labels.log",
+          "test_source_sha256": "5b6b9b28048ae79fa3425e52efdd6feba25df1fa4aa5b91c710aea6629faec20"
+        },
+        {
+          "module": "document_native",
+          "tests": 10,
+          "unittest_seconds": 0.308,
+          "passed": true,
+          "log": "页面预处理-page-local-document_native.log",
+          "test_source_sha256": "ddad88558b26e039250d038d592fab820ce9fd0bace356e08a701a9feb90d15f"
+        },
+        {
+          "module": "table_structure",
+          "tests": 21,
+          "unittest_seconds": 0.011,
+          "passed": true,
+          "log": "页面预处理-page-local-table_structure.log",
+          "test_source_sha256": "0db1627c1155e50f9426a7a78231ef9907425a4b7a31a114b47240ee7025a298"
+        },
+        {
+          "module": "table_rag",
+          "tests": 12,
+          "unittest_seconds": 0.925,
+          "passed": true,
+          "log": "页面预处理-page-local-table_rag.log",
+          "test_source_sha256": "ef13b7da2de26d2a9a742629d78a1a5dc432a533a213fe31f6222b78888a5b2a"
+        },
+        {
+          "module": "chart_structure",
+          "tests": 35,
+          "unittest_seconds": 0.023,
+          "passed": true,
+          "log": "页面预处理-page-local-chart_structure.log",
+          "test_source_sha256": "61b6caa5ad331f1a47562b0a3abf49c012e71dce7d03f26bf5f25ebed616aff3"
+        },
+        {
+          "module": "chart_evidence",
+          "tests": 13,
+          "unittest_seconds": 2.379,
+          "passed": true,
+          "log": "页面预处理-page-local-chart_evidence.log",
+          "test_source_sha256": "92262ce2914fb703dd1932167ee0effebf554ab78bdd65e5f300cf05e9e93809"
+        },
+        {
+          "module": "chart_integration_audit",
+          "tests": 10,
+          "unittest_seconds": 1.088,
+          "passed": true,
+          "log": "页面预处理-page-local-chart_integration_audit.log",
+          "test_source_sha256": "ac5f53e382cd001551d9f4bb492cc70ecc85772069487ee1e397c8653f03331c"
+        },
+        {
+          "module": "rag_retrieval",
+          "tests": 46,
+          "unittest_seconds": 21.193,
+          "passed": true,
+          "log": "页面预处理-page-local-rag_retrieval.log",
+          "test_source_sha256": "334a9664631b638952a9d526b605c4a16db03aa17896a201447f6b5d1ea3d1a7"
+        },
+        {
+          "module": "visual_formula",
+          "tests": 27,
+          "unittest_seconds": 0.137,
+          "passed": true,
+          "log": "页面预处理-page-local-visual_formula.log",
+          "test_source_sha256": "c1ef7a4a0c27a8c157152bc3cc64aad233deb61c12e7beabd20d5dc1d2e6c148"
+        },
+        {
+          "module": "document_review",
+          "tests": 10,
+          "unittest_seconds": 3.816,
+          "passed": true,
+          "log": "页面预处理-page-local-document_review.log",
+          "test_source_sha256": "ef91086faa3f3ae334f08222b050272e1b6bc3ff16e13b8a61bc1f55222b6584",
+          "initial_sandbox_startup_failure_log": "页面预处理-page-local-document_review.log.sandbox.log",
+          "retry_outside_sandbox": true
+        },
+        {
+          "module": "document_reader",
+          "tests": 23,
+          "unittest_seconds": 6.106,
+          "passed": true,
+          "log": "页面预处理-page-local-document_reader.log",
+          "test_source_sha256": "9f7da47f40f616d5b00f9e7d23346ce3c42a7e531974084c33563b148fb6a2e5",
+          "initial_sandbox_startup_failure_log": "页面预处理-page-local-document_reader.log.sandbox.log",
+          "retry_outside_sandbox": true
+        },
+        {
+          "module": "formula_source",
+          "tests": 4,
+          "unittest_seconds": 1.345,
+          "passed": true,
+          "log": "页面预处理-page-local-formula_source.log",
+          "test_source_sha256": "ef4f68d7061a7549f68ead4981c796c96c29e4c9213ceab0398b2ec64d05961d",
+          "initial_sandbox_startup_failure_log": "页面预处理-page-local-formula_source.log.sandbox.log",
+          "retry_outside_sandbox": true
+        }
+      ],
+      "module_count": 17,
+      "tests": 343,
+      "all_passed": true,
+      "source_hashes_at_delivery": {
+        "01_程序代码/backend/agent.py": "d6c953f1a5dbf3db4a3a58895d0720eb30cd8cb321de9f3a70f164d8ca38dce5",
+        "01_程序代码/backend/anthropic_vision.py": "3e3c67704c4c5cfcc9c6a4d78ce6e51b0514f805b9b2e5696b69da84bff330c0",
+        "01_程序代码/backend/chart_structure.py": "779a1dcd5c7e203e8c9b4bcb0f2e19169108e7bc6618fcf8cb51c11849a10502",
+        "01_程序代码/backend/connections.py": "084c29187303553235debe96988a035fb2c226f8fc2d6fd12042ac40ba55a83a",
+        "01_程序代码/backend/conversations.py": "263a7f01993a9671723800045d1c53258c52cc31d03e7b9bb78343f13d2211d4",
+        "01_程序代码/backend/counter_check.py": "698ce6a9a94336e1eaec7416d98a6a8aae0704dd4e5582b8d5de7b4c2e47804f",
+        "01_程序代码/backend/database_query.py": "fb4f2f5568f9c35c136b1c9cb612f35ad75b802fc22f4aa4456020e9f62860c0",
+        "01_程序代码/backend/document_native.py": "f3d38878f21b690182a798f5d833c1d0404ad1daee6cd7a019d09644a129e509",
+        "01_程序代码/backend/document_providers.py": "1a95411cc602f17dbad71e7f106fd418f347795d5385315aa4f8f92cdc6a5217",
+        "01_程序代码/backend/document_quality.py": "cde5d7fba8b7ea74f4241a810976d0da08705eb80b05e0c54c0ffb0d75383fb1",
+        "01_程序代码/backend/document_review.py": "2dabdbe01fe9d178c1fc9ed3c9d9277c29bf8ee81e6d2b94d7154775669012aa",
+        "01_程序代码/backend/document_tasks.py": "ec971dd8b0bb360a5d04fe4269c21a6e8a5136abfaf16c9af54711080c38e3d9",
+        "01_程序代码/backend/documents.py": "61095262f74dbece563a0660b52027d0a663f31be0dd780710e913493b51d08e",
+        "01_程序代码/backend/docx_reader.py": "f29afc4197ab59ff38e6efce7c97078224a853202b145d080193a2d33cd38584",
+        "01_程序代码/backend/engine.py": "d2cc48f53c681a30cdcd4bc0fda983e16fbc1c0ddf7899a7658110556b2544de",
+        "01_程序代码/backend/evaluation.py": "cfb04d53f3b9a107a6cb93fac4068ce984d02b77235f28900f665e3a9f0b1470",
+        "01_程序代码/backend/extensions.py": "592b4bd79723f172a98e4cbec95f6fbd971c36254979818c9989dad635cccf41",
+        "01_程序代码/backend/formula_source.py": "bdc168e8096fc06b57fced002a16bd04372c9ed8f034df26d00fa11aa08779a2",
+        "01_程序代码/backend/main.py": "229d7fde1b5389152f0cc404a4ad756bd7df4e8c5f2fa55d691d3f97d92ed364",
+        "01_程序代码/backend/math_structure.py": "f6cfe37217de18d3490b426b7c6ab68736040ef099615cb8b80913f09ccfd599",
+        "01_程序代码/backend/ocr.py": "04535790da73e913e302819b0c7f57bbcb566cb597a4d5532332b5e8f02eb888",
+        "01_程序代码/backend/ocr_structure.py": "db146b7190d69c2d809a0629c83c2b412fd0f2f0ef082ae40dff9f110427d1e7",
+        "01_程序代码/backend/page_preprocessing.py": "f2029cb6d4d0fedada203ae932e027e7de860f5d6bc2add896765a5846552d5e",
+        "01_程序代码/backend/public_statistics.py": "ac5398aaba20b486e45480e38480230dd10b3e95e0a8c25ac3b9188841e8c43f",
+        "01_程序代码/backend/query_routing.py": "1539c72acfc96d26893e13bc5e26c68f5b55d0a5ef7520326aab443fefe59cc8",
+        "01_程序代码/backend/rag_grounding.py": "440e41de03fac7b21c5194e5c81499493a29624a1f0a047b703fe2db29537a85",
+        "01_程序代码/backend/rag_index.py": "37e082293fa40ef556eadb4a6af79f8180248a8d49059775e814ff6a99839560",
+        "01_程序代码/backend/rag_providers.py": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02",
+        "01_程序代码/backend/rag_retrieval.py": "3a17c2bcad1ddc206a37705b7757d3463da734b37a1d2ac2f96b6e335cace744",
+        "01_程序代码/backend/scenarios.py": "6f5bc3e8ff3b27e0aac7cfbbd254cce391e6c2272f89cf4d3ec3eeba0d0b44e8",
+        "01_程序代码/backend/seed.py": "50fcefe4b03c303e1c5b0c66cc510f4389d2ec6d49a46d8e71c805923fc86bea",
+        "01_程序代码/backend/settings.py": "5e3ccc63a3ed3b8b14216688faf0b7fd23e74f416ccb788e282a263b911fde89",
+        "01_程序代码/backend/sharing.py": "c6feb52b0c66c2af4ead230b3528796a3dc4fa006e9c9b0a0830e20f2de3aa1c",
+        "01_程序代码/backend/sql_guard.py": "5949cd6bc81f66fe923f5d8b7498bc3e6c98612108432efbeee6cb1cad11e55e",
+        "01_程序代码/backend/store.py": "2bde771b6b73fa3232249e6089f3e57fae381b332a060061861439f21c29ff89",
+        "01_程序代码/backend/table_structure.py": "13331880a6d18e9f1ce94b14338e2cd17f0cb2bd7f09257ae4c982f208fa5697",
+        "01_程序代码/backend/vault.py": "82641fd63200c8fe4ecdc55215049068d66edd4b688039e5c34d5fe8ad5375ab",
+        "01_程序代码/backend/visual_formula.py": "56babfe6aed55defca8280eb05af68e98f5a1b9d091f7612798018ae3ac77fd0"
+      }
+    },
+    "repository": {
+      "modules": [
+        {
+          "module": "page_preprocessing",
+          "tests": 23,
+          "unittest_seconds": 0.346,
+          "passed": true,
+          "log": "页面预处理-page-repository-page_preprocessing.log",
+          "test_source_sha256": "7dc7b173785f263c1b1ab0f53afa08ec066755412d5f773e0b4c951d20f907b9"
+        },
+        {
+          "module": "document_providers",
+          "tests": 20,
+          "unittest_seconds": 0.425,
+          "passed": true,
+          "log": "页面预处理-page-repository-document_providers.log",
+          "test_source_sha256": "f6de7974a4211af416666e2921c0085c18cdb43115f4bddb7643caafaab46e67"
+        },
+        {
+          "module": "document_tasks",
+          "tests": 22,
+          "unittest_seconds": 8.895,
+          "passed": true,
+          "log": "页面预处理-page-repository-document_tasks.log",
+          "test_source_sha256": "5fd50c5afbb21d3a4f8e8d16349f3cf8844dcde4ff91db8cae54e69d2af869c5"
+        },
+        {
+          "module": "ocr_structure",
+          "tests": 15,
+          "unittest_seconds": 0.354,
+          "passed": true,
+          "log": "页面预处理-page-repository-ocr_structure.log",
+          "test_source_sha256": "c8e4d632f27844c4a843b9f789204e5d2c8a231975f1ffe5638f125551f697a8"
+        },
+        {
+          "module": "label_quality",
+          "tests": 32,
+          "unittest_seconds": 3.87,
+          "passed": true,
+          "log": "页面预处理-page-repository-label_quality.log",
+          "test_source_sha256": "e52ac7f84595eebd317c5ec9bffda32fcaf7247ca1a3610869b8c7b725ad7b3b"
+        },
+        {
+          "module": "math_labels",
+          "tests": 20,
+          "unittest_seconds": 1.996,
+          "passed": true,
+          "log": "页面预处理-page-repository-math_labels.log",
+          "test_source_sha256": "5b6b9b28048ae79fa3425e52efdd6feba25df1fa4aa5b91c710aea6629faec20"
+        },
+        {
+          "module": "document_native",
+          "tests": 10,
+          "unittest_seconds": 0.314,
+          "passed": true,
+          "log": "页面预处理-page-repository-document_native.log",
+          "test_source_sha256": "ddad88558b26e039250d038d592fab820ce9fd0bace356e08a701a9feb90d15f"
+        },
+        {
+          "module": "table_structure",
+          "tests": 21,
+          "unittest_seconds": 0.011,
+          "passed": true,
+          "log": "页面预处理-page-repository-table_structure.log",
+          "test_source_sha256": "0db1627c1155e50f9426a7a78231ef9907425a4b7a31a114b47240ee7025a298"
+        },
+        {
+          "module": "table_rag",
+          "tests": 12,
+          "unittest_seconds": 1.02,
+          "passed": true,
+          "log": "页面预处理-page-repository-table_rag.log",
+          "test_source_sha256": "c498702a283283b1c3b1f23c2979de0c8f74dd2086e3b902d0a5b9efd3a9307c"
+        },
+        {
+          "module": "chart_structure",
+          "tests": 35,
+          "unittest_seconds": 0.029,
+          "passed": true,
+          "log": "页面预处理-page-repository-chart_structure.log",
+          "test_source_sha256": "61b6caa5ad331f1a47562b0a3abf49c012e71dce7d03f26bf5f25ebed616aff3"
+        },
+        {
+          "module": "chart_evidence",
+          "tests": 13,
+          "unittest_seconds": 2.353,
+          "passed": true,
+          "log": "页面预处理-page-repository-chart_evidence.log",
+          "test_source_sha256": "92262ce2914fb703dd1932167ee0effebf554ab78bdd65e5f300cf05e9e93809"
+        },
+        {
+          "module": "chart_integration_audit",
+          "tests": 10,
+          "unittest_seconds": 1.207,
+          "passed": true,
+          "log": "页面预处理-page-repository-chart_integration_audit.log",
+          "test_source_sha256": "ac5f53e382cd001551d9f4bb492cc70ecc85772069487ee1e397c8653f03331c"
+        },
+        {
+          "module": "rag_retrieval",
+          "tests": 47,
+          "unittest_seconds": 21.733,
+          "passed": true,
+          "log": "页面预处理-page-repository-rag_retrieval.log",
+          "test_source_sha256": "2b56ec2489b670ddb81dbaace35a2a9fb7c0d561125b839e50c2c9408fc6d23d"
+        },
+        {
+          "module": "visual_formula",
+          "tests": 27,
+          "unittest_seconds": 0.231,
+          "passed": true,
+          "log": "页面预处理-page-repository-visual_formula.log",
+          "test_source_sha256": "c1ef7a4a0c27a8c157152bc3cc64aad233deb61c12e7beabd20d5dc1d2e6c148"
+        },
+        {
+          "module": "document_review",
+          "tests": 10,
+          "unittest_seconds": 3.628,
+          "passed": true,
+          "log": "页面预处理-page-repository-document_review.log",
+          "test_source_sha256": "ef91086faa3f3ae334f08222b050272e1b6bc3ff16e13b8a61bc1f55222b6584",
+          "initial_sandbox_startup_failure_log": "页面预处理-page-repository-document_review.log.sandbox.log",
+          "retry_outside_sandbox": true
+        },
+        {
+          "module": "document_reader",
+          "tests": 26,
+          "unittest_seconds": 6.769,
+          "passed": true,
+          "log": "页面预处理-page-repository-document_reader.log",
+          "test_source_sha256": "597d35aeca46a41effd941cf494f7391262884bc9755a5e97e74b7e85f45e162",
+          "initial_sandbox_startup_failure_log": "页面预处理-page-repository-document_reader.log.sandbox.log",
+          "retry_outside_sandbox": true
+        },
+        {
+          "module": "formula_source",
+          "tests": 4,
+          "unittest_seconds": 1.324,
+          "passed": true,
+          "log": "页面预处理-page-repository-formula_source.log",
+          "test_source_sha256": "ef4f68d7061a7549f68ead4981c796c96c29e4c9213ceab0398b2ec64d05961d",
+          "initial_sandbox_startup_failure_log": "页面预处理-page-repository-formula_source.log.sandbox.log",
+          "retry_outside_sandbox": true
+        },
+        {
+          "module": "grounding_protocol",
+          "tests": 8,
+          "unittest_seconds": 0.012,
+          "passed": true,
+          "log": "页面预处理-page-repository-grounding_protocol.log",
+          "test_source_sha256": "78e53b11a361d92dfd3270dbb806a648eb69fa49cecd14fb74425d3f4979127a"
+        }
+      ],
+      "module_count": 18,
+      "tests": 355,
+      "all_passed": true,
+      "source_hashes_at_delivery": {
+        "01_程序代码/backend/agent.py": "c53194b72181e16fb773c1e8d844cee7d11997b8c40c33ef0457822ff753064c",
+        "01_程序代码/backend/anthropic_vision.py": "3e3c67704c4c5cfcc9c6a4d78ce6e51b0514f805b9b2e5696b69da84bff330c0",
+        "01_程序代码/backend/chart_structure.py": "779a1dcd5c7e203e8c9b4bcb0f2e19169108e7bc6618fcf8cb51c11849a10502",
+        "01_程序代码/backend/chinook_benchmark.py": "4ad883306f06c48b4aa401351b730a16ca3cd529f43ea35a34acdd676743a050",
+        "01_程序代码/backend/connections.py": "5b1328e729ce0c93692f98cf08d8adfcda45fa8e8341da575d8172d48f0cc979",
+        "01_程序代码/backend/conversations.py": "263a7f01993a9671723800045d1c53258c52cc31d03e7b9bb78343f13d2211d4",
+        "01_程序代码/backend/counter_check.py": "698ce6a9a94336e1eaec7416d98a6a8aae0704dd4e5582b8d5de7b4c2e47804f",
+        "01_程序代码/backend/database_answer.py": "149e64cde2c6685a48f51d0c30e09e03d0b39b02e80e9d3a3d67386841be7223",
+        "01_程序代码/backend/database_query.py": "fe47a814b8fb474b281702f9af7d68182893c1747a6525eef98720cee1a7561e",
+        "01_程序代码/backend/document_native.py": "63274181fd28656dccd838cd790ee393488cc15a5a72bfa29fe9194370e117cd",
+        "01_程序代码/backend/document_providers.py": "d9d1ae35033f0ccb7384223c467a3c067afb57fc5143d9d28b7d8d90b8f8f27f",
+        "01_程序代码/backend/document_quality.py": "121b1ba139f9ca2df6cde4bcb19a85ac4f82fbe98d6722e3a215d66421d0f51e",
+        "01_程序代码/backend/document_review.py": "2dabdbe01fe9d178c1fc9ed3c9d9277c29bf8ee81e6d2b94d7154775669012aa",
+        "01_程序代码/backend/document_tasks.py": "675b0113e652d50d0d494699db3fc60d156a2eac90ba36d224c2781577c8df91",
+        "01_程序代码/backend/documents.py": "e946c421fedd2a8b59c94557c072ba9564be9f71c77dde2e4bf9e2f03631c2f9",
+        "01_程序代码/backend/docx_reader.py": "f29afc4197ab59ff38e6efce7c97078224a853202b145d080193a2d33cd38584",
+        "01_程序代码/backend/engine.py": "d2cc48f53c681a30cdcd4bc0fda983e16fbc1c0ddf7899a7658110556b2544de",
+        "01_程序代码/backend/evaluation.py": "cfb04d53f3b9a107a6cb93fac4068ce984d02b77235f28900f665e3a9f0b1470",
+        "01_程序代码/backend/extensions.py": "592b4bd79723f172a98e4cbec95f6fbd971c36254979818c9989dad635cccf41",
+        "01_程序代码/backend/formula_source.py": "bdc168e8096fc06b57fced002a16bd04372c9ed8f034df26d00fa11aa08779a2",
+        "01_程序代码/backend/main.py": "379cbb1ee10f706f9e71d876f7a475002139c75437a05602ca3f6ef9f43e3519",
+        "01_程序代码/backend/math_structure.py": "f6cfe37217de18d3490b426b7c6ab68736040ef099615cb8b80913f09ccfd599",
+        "01_程序代码/backend/ocr.py": "04535790da73e913e302819b0c7f57bbcb566cb597a4d5532332b5e8f02eb888",
+        "01_程序代码/backend/ocr_structure.py": "db146b7190d69c2d809a0629c83c2b412fd0f2f0ef082ae40dff9f110427d1e7",
+        "01_程序代码/backend/page_preprocessing.py": "f2029cb6d4d0fedada203ae932e027e7de860f5d6bc2add896765a5846552d5e",
+        "01_程序代码/backend/public_statistics.py": "5827f2dda54698cc1e694b48e043114b04263fe5b0a77ff1660b7d3a5eda52fc",
+        "01_程序代码/backend/query_normalize.py": "1bd5ca7db3d8cdce6309836f3f804dfe10d3bbd0d14dfdf8808c3ab2a672dd61",
+        "01_程序代码/backend/query_routing.py": "15903cf20219c7b1751876c9207d3be5dfac37cfc9d1a7916573edb733a45e0a",
+        "01_程序代码/backend/rag_grounding.py": "76d762dda7b56ae16b72548fec9562221434d233a9a5f96c8f5c9fac74f8750e",
+        "01_程序代码/backend/rag_index.py": "18afdc391a607b25e2059e4a197b36ead012d60c0b976714a5e0b99ba79efc4f",
+        "01_程序代码/backend/rag_providers.py": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02",
+        "01_程序代码/backend/rag_retrieval.py": "e42d037e23fd38c2c4a9e506b2f6ff7372c5420f902a26c6e96c7d3cd00fd2ac",
+        "01_程序代码/backend/scenarios.py": "6f5bc3e8ff3b27e0aac7cfbbd254cce391e6c2272f89cf4d3ec3eeba0d0b44e8",
+        "01_程序代码/backend/seed.py": "50fcefe4b03c303e1c5b0c66cc510f4389d2ec6d49a46d8e71c805923fc86bea",
+        "01_程序代码/backend/settings.py": "5e3ccc63a3ed3b8b14216688faf0b7fd23e74f416ccb788e282a263b911fde89",
+        "01_程序代码/backend/sharing.py": "c6feb52b0c66c2af4ead230b3528796a3dc4fa006e9c9b0a0830e20f2de3aa1c",
+        "01_程序代码/backend/sql_guard.py": "33fcf3995aa19e21c6c958d7a78e726d349af8d801696d9dc85bbd8d8bd0cd33",
+        "01_程序代码/backend/store.py": "410baf444cbe2da0174da79e327ddb1eb017ae4535ba6a82b3cce1db7b23bab3",
+        "01_程序代码/backend/table_structure.py": "13331880a6d18e9f1ce94b14338e2cd17f0cb2bd7f09257ae4c982f208fa5697",
+        "01_程序代码/backend/vault.py": "82641fd63200c8fe4ecdc55215049068d66edd4b688039e5c34d5fe8ad5375ab",
+        "01_程序代码/backend/visual_formula.py": "56babfe6aed55defca8280eb05af68e98f5a1b9d091f7612798018ae3ac77fd0"
+      }
+    }
+  },
+  "frontend": {
+    "local": {
+      "tests": 84,
+      "steps": [
+        {
+          "step": "bundle",
+          "exit_code": 0,
+          "seconds": 0.424,
+          "log": "页面预处理-chart-local-ui-bundle.log"
+        },
+        {
+          "step": "tests",
+          "exit_code": 0,
+          "seconds": 2.173,
+          "log": "页面预处理-chart-local-ui-tests.log"
+        },
+        {
+          "step": "typecheck",
+          "exit_code": 0,
+          "seconds": 3.237,
+          "log": "页面预处理-chart-local-ui-typecheck.log"
+        },
+        {
+          "step": "build",
+          "exit_code": 0,
+          "seconds": 4.28,
+          "log": "页面预处理-chart-local-ui-build.log"
+        }
+      ],
+      "all_passed": true
+    },
+    "repository": {
+      "tests": 85,
+      "steps": [
+        {
+          "step": "bundle",
+          "exit_code": 0,
+          "seconds": 0.292,
+          "log": "页面预处理-chart-ui-bundle.log"
+        },
+        {
+          "step": "tests",
+          "exit_code": 0,
+          "seconds": 1.218,
+          "log": "页面预处理-chart-ui-tests.log"
+        },
+        {
+          "step": "typecheck",
+          "exit_code": 0,
+          "seconds": 0.849,
+          "log": "页面预处理-chart-ui-typecheck.log"
+        },
+        {
+          "step": "build",
+          "exit_code": 0,
+          "seconds": 2.505,
+          "log": "页面预处理-chart-ui-build.log"
+        }
+      ],
+      "all_passed": true
+    }
+  },
+  "diagnostics": [
+    {
+      "file": "页面预处理-controls-20261016-215233.json",
+      "sha256": "1bea62af7235af2b5929b9d8ad7dfdc0230454dc26768bb10138efa786329626",
+      "phase": "controls"
+    },
+    {
+      "file": "页面预处理-development-20261016-214421.json",
+      "sha256": "3b75df09e3aa58f9c30e7f86bb0f0c359cf74b66e48a481364f8e7f9110ed7cc",
+      "phase": "development"
+    },
+    {
+      "file": "页面预处理-development-20261016-214701.json",
+      "sha256": "11295da9ac08f81013ba34398e8c275eb3c982b123456434fad10b44201a5d56",
+      "phase": "development"
+    },
+    {
+      "file": "页面预处理-validation-20261016-214901.json",
+      "sha256": "71df206cda50eee8cf5ef02a894e892ed53e0c61a8da2a19dc01f0c6ccc3d207",
+      "phase": "validation"
+    }
+  ],
+  "public_file_sha256": {
+    "页面预处理-page-local-page_preprocessing.log": "76d71de10779f38833fbbb66ff16c2e0362d48181320cd6845dab65c80ad18d6",
+    "页面预处理-page-local-document_providers.log": "360272628177ca9f67bbba2fb31544164e64ce7c13aab3bd1a9c0ba81d6be2aa",
+    "页面预处理-page-local-document_tasks.log": "d91cbcbe32a000686ac7d6c0d9dda20f1a6a10d66e796e78a8f8a52a6c6f97e6",
+    "页面预处理-page-local-ocr_structure.log": "764fde989a29a67b34b4213ff3e13b6a6d272e93aab5219d07544b77afac4d88",
+    "页面预处理-page-local-label_quality.log": "b3ff8ae0d82bb81da5e56da28be9626f0194ae175afb5e58b37d8db98a59f400",
+    "页面预处理-page-local-math_labels.log": "57f5c74d9bc31c98b5a4cb4231f19287ff5a8b2d6b0db660ffadc75607b2e9b0",
+    "页面预处理-page-local-document_native.log": "338f236ca9eb0ef591bbbe823aa87f7ec93a0489760b6ba3700b3b4c97521c9c",
+    "页面预处理-page-local-table_structure.log": "05335015f1a982b1f2828bb36dbbd5f9061b1df893f0a4b306ca6b3ddf460425",
+    "页面预处理-page-local-table_rag.log": "adbfd1aaa6e4e390ebe0ebf832e5f2fb10b805e6358599e760370902ed8a7d53",
+    "页面预处理-page-local-chart_structure.log": "5a805713829856a7bec2f7a6289111337bccbf7fb2389007bc16da87ab0cdd67",
+    "页面预处理-page-local-chart_evidence.log": "d3f19f36494881340c8df152f25ba8cd4d7d1f247537bd6d16aff16e4e233a40",
+    "页面预处理-page-local-chart_integration_audit.log": "26f25fc8f34c2e7fe5c11fe1c636e28d3fe130ec38ce788746868974df9b68dc",
+    "页面预处理-page-local-rag_retrieval.log": "32212ba6406f4b7f128f74b178e67514d84c9a8505a16b133c4f2f0c66fb0ef3",
+    "页面预处理-page-local-visual_formula.log": "2c989631b74bdf8833b2c354a4c97f7a564281c453f92bfbbe5ca54aa7675211",
+    "页面预处理-page-local-document_review.log": "b1eead5ca7a0905e6ac6eed988590e2e326a1ba2027c5cea8180c10b24a40313",
+    "页面预处理-page-local-document_review.log.sandbox.log": "36ff1c42deacfefa148f007c22983d083a35c2efc1846298421ad7e86d6ef147",
+    "页面预处理-page-local-document_reader.log": "6be4ce3d85771b14e26f0568d0a5733f2a1a7d52ce90a9161a5f36a6486c47c9",
+    "页面预处理-page-local-document_reader.log.sandbox.log": "8006e0e6979ac67e76bcd294bd1272751156f60616e7d12a60c9e6692ab65ac8",
+    "页面预处理-page-local-formula_source.log": "4389029dd98559f2b87116088bd9910fe9409005ce78f5b9c59d0ce763fb1d5a",
+    "页面预处理-page-local-formula_source.log.sandbox.log": "213f98f27ff74e106ea792ba86f4c70b1ae8611621e36e5f688cf2f07b0f7a6d",
+    "页面预处理-page-repository-page_preprocessing.log": "a7e7b07b0e03e87235f3a0e7fcc6dd09094f8cfcc38a45181f818f15be3f926b",
+    "页面预处理-page-repository-document_providers.log": "64d217d8749420353cf5661f11ac5cf285db25b9520ba4c4d6fef8c05f814240",
+    "页面预处理-page-repository-document_tasks.log": "2e027d3a418b9b570a6301645084867954a512230d48f9fd30bee65012c607cb",
+    "页面预处理-page-repository-ocr_structure.log": "9507898c45cea4fad3ed0865542a06621aafab690206ac8981ed0b3aefe0ee85",
+    "页面预处理-page-repository-label_quality.log": "23f31226971b3ba69a46417a49c410682a658684c5e33dae9b0027e83dca3154",
+    "页面预处理-page-repository-math_labels.log": "d5efe7e562c590919929100d5a25308e8e0d951eba071d550da54975bc7acac7",
+    "页面预处理-page-repository-document_native.log": "b22dbb6a53cd963e9cb18f11ca5c3b09445507310691c1cec3f4bcac0dc795b4",
+    "页面预处理-page-repository-table_structure.log": "05335015f1a982b1f2828bb36dbbd5f9061b1df893f0a4b306ca6b3ddf460425",
+    "页面预处理-page-repository-table_rag.log": "86a1aa82142dd64954b788325fca3d6abef104955196c9ddea4c61bfca6c42bb",
+    "页面预处理-page-repository-chart_structure.log": "5b006d49e29f0f2792f16573f69615f30ac00817ec0b792d09e6cd4d0b018e19",
+    "页面预处理-page-repository-chart_evidence.log": "09ebba4b4db355eb3a6154bb6449b646153311d2c370b825b3a67f2aff011ddf",
+    "页面预处理-page-repository-chart_integration_audit.log": "3336594065e63fc86f462ebcdbf2ea3a5bdf7860f1170d8c613c3e7019d6a5c0",
+    "页面预处理-page-repository-rag_retrieval.log": "86c100a57a22f2fd4d2b29e53af3d46587244ef0bc330f2f347422813c7fefc1",
+    "页面预处理-page-repository-visual_formula.log": "8cce3c60b2c73690bee026cf176662e2684567c6072db57daf4f5541b4ca3d39",
+    "页面预处理-page-repository-document_review.log": "dd6cfb7066bba17795c03e36edb79f0178ea6c1602d297b2237abe139839c1aa",
+    "页面预处理-page-repository-document_review.log.sandbox.log": "92a38ae24889a5d01d06e5625b86c1bdf532cfa9343ab5a03e721152dd0bcb8e",
+    "页面预处理-page-repository-document_reader.log": "6a8c013f0dcf834bbbb4816690219ef7e580d8fe92ecb350db0923ef29ce3815",
+    "页面预处理-page-repository-document_reader.log.sandbox.log": "cd363e023e42dc401865320cc877793a4608ac106557a5a13393e85097d61eaf",
+    "页面预处理-page-repository-formula_source.log": "eaa9425b1dbf0bd3f47b672967e2f6bc05beef0b92b5f3528edb349457672b48",
+    "页面预处理-page-repository-formula_source.log.sandbox.log": "45da71fb4e59832a5f040f00ea58ae4f9125efd7d52e3ccac5bc32192bd3a21e",
+    "页面预处理-page-repository-grounding_protocol.log": "cea166eb5e597448bddd150e54209e1b28b325faac9bf5538d303c0eb1981900",
+    "页面预处理-chart-local-ui-bundle.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "页面预处理-chart-local-ui-tests.log": "17a4cb60c9cb43524ff93d851404875461c377df2763d058b0a7e6e3e4fdb996",
+    "页面预处理-chart-local-ui-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "页面预处理-chart-local-ui-build.log": "d1527e3e04d3b646865636c9ccfbfd5fb8c6ada0dce07ab027ce67b78a19e97e",
+    "页面预处理-chart-ui-bundle.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "页面预处理-chart-ui-tests.log": "cd9eddfedfb14142fb63ac8d427b82b083206b56106220edc0f0e17d7440302b",
+    "页面预处理-chart-ui-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "页面预处理-chart-ui-build.log": "d4e50b7c2fb27d2f12af0f55864d346fc1f0b0ac347fcd33c998a8bdb95d0ec7",
+    "页面诊断-development-blur.png": "57df87f1d23375152c30fcbd20aaa8855823650b2d76a98b5affe698dad4c79a",
+    "页面诊断-development-clear.png": "f2f9a158fcfb8e1219947d1e592681377f4aa6be2652bb6c41a0639ce318fd7a",
+    "页面诊断-development-combined.png": "d3289ed1ca56b00494eb27f57a9b052120e05f81c5824de275d13d6da6c3d581",
+    "页面诊断-development-dark_background.png": "afeea9afd137344b45e305200b8b2c6d25ee2ad20967451ebf26fba5df8018e3",
+    "页面诊断-development-low_contrast.png": "f7eb4973ca32ecc147425f025bfc67c0d1f80e81fa32b737bb3e71c76708160b",
+    "页面诊断-development-noise.png": "5f0691ba3c51e460e681abf70734bf835952b4c36fe1b19dae1d8e8a218ff016",
+    "页面诊断-development-shadow.png": "ff147e738952d1093724956aca39ad88d6dc510137ea110beff2727483416a8d",
+    "页面诊断-development-sideways.png": "ade632f3c96d3e4efa6c8f52d0782ea8414743ea231817d6c80c9e6fde954684",
+    "页面诊断-development-skew_negative.png": "6a666c1e785f035a8fdd13e3dbcee1729e8c28b1a4e88ea1e7d862a863baa988",
+    "页面诊断-development-skew_positive.png": "b9908cf7a2dbe7ed4654f8a8cf8cabfaebf81d0aa8d46cd2fcc6ae3f9e5db4a6",
+    "页面诊断-development-small.png": "d3807bde3f17748f526bf3099ca5423be2e1fcf47b0f74856f0700dfeaf269c6",
+    "页面诊断-development-transparent.png": "6984f7eb0363631b72d00485a35f07de56452270c6553548aeb3f37e6665c23b",
+    "页面诊断-validation-blur.png": "9e96cc9611d9c4f674996056ad6b6e125e4fc9de79a8cb30aa8671495d02a53e",
+    "页面诊断-validation-clear.png": "71c8a1bcebc277c6197b3c385a6bb0a4c1fbc933e56d0b0fcb7d036654d099c0",
+    "页面诊断-validation-combined.png": "b725a741400698ef5ba3d6c52745ab57ea8b95393365a1e80468cc21b6b47010",
+    "页面诊断-validation-dark_background.png": "7ee8c52904b1e37caf3f265e03f03d87268b319379317b7317f1468b3dd1d47b",
+    "页面诊断-validation-low_contrast.png": "cf25f4fc09d832c0e7331885e720d1e51510fca9a73268ad6cbd12b5b2ae63f6",
+    "页面诊断-validation-noise.png": "1d2142bcf5faf291b5ab36bcf458b9fa41f91c29fb99ce83f1cfb2402f1fe939",
+    "页面诊断-validation-shadow.png": "5dee3eb8569a2f3b64306b40a37f13c37cbc514b6653bc012d49a63a61c7503f",
+    "页面诊断-validation-sideways.png": "4072b851bfa29d5417daa4453ec3930b4f46311ff8b58be871e1281c715048c4",
+    "页面诊断-validation-skew_negative.png": "21d29e2f194c8740327f4a8d8603a53b69425d1054c151fad8fde42a9dbcb791",
+    "页面诊断-validation-skew_positive.png": "9bc2b56a6c4a251cf44e01068c76a3c225c5e127756383bc7280e4d7f19667cb",
+    "页面诊断-validation-small.png": "885dc20027bd4751468880cad7ce9aee6d7feb0544c03b3b55c7839ea1329a21",
+    "页面诊断-validation-transparent.png": "03c4f0d8441afd76c39abbfb0f6dc69dd4ee27886429f8b9ad6fa276f814aeeb"
+  },
+  "dist": [
+    {
+      "target": "repository",
+      "files": {
+        "assets/chart-m0iKjQt9.js": "d0ba53741efb088e79ec4ebf27366d7dafb27314b6dc4b19351e3b36099bd992",
+        "assets/evidence-8iErZRvz.js": "dbd17403589ff55c0bfc331340637b00e17013e7b0c9088f31742bba6e76daad",
+        "assets/index-DbAGm3wR.js": "563bb0a36f486231e99e5962272497a86a274c2d06df68678a0080923ed6c65f",
+        "assets/index-DDtW5D2Q.css": "702d94e3c83c0f73ef34019522a92d61e2b24bf4e586198662f6c8a194d2b98d",
+        "assets/jsx-runtime-D3jfb0Ew.js": "a2c68294426b0ded53fa2d6c97bb39c4a51f99e5e4b23e7953a2c69298e361f8",
+        "assets/scenario-DSMSWGSt.js": "24b5f1c74fdad575eb48e83ea4e2671dec79d33e356d317226b3f082b7740a12",
+        "assets/settings-dHLOnt1b.js": "d3bf31988e91088b536a244e6ea5c222e5b9475dea58358c9cc7d8750acbd63a",
+        "assets/ui-CPlpZ6FI.css": "c71842a5c425e88181a3aafbf6803c758cce24ba0c27c0378d8ba76adbca2059",
+        "assets/ui-CsaMTxTi.js": "54eb27cc2cb07040c6fb457ff5749a038da620459c9486f3926f92db70265032",
+        "favicon.svg": "57eeeb71004ea822e16ae5dd81d32711060c05ebd2a604221add4995a0f38959",
+        "index.html": "50770cf33f02fea8b1d2f939469c261305ab37b2add7fd6db7e9105b5867edc9"
+      },
+      "all_match_build": true
+    },
+    {
+      "target": "local",
+      "files": {
+        "assets/chart-m0iKjQt9.js": "d0ba53741efb088e79ec4ebf27366d7dafb27314b6dc4b19351e3b36099bd992",
+        "assets/evidence-CNBtmlpB.js": "6af50702bef17d8e3ccc39643252cec6a4fbc660a3d4050c8d9001a2d0ccf4c6",
+        "assets/index-BdPN5iKH.css": "89b9f4d8b3df39f6bfa15661794b3e68ff5e452d78968c142e5aa9730af128e6",
+        "assets/index-CQDRREq2.js": "ecf20269ee895824351c910b054982e67fdd0d52f6b6cf14673f90dc415c9de0",
+        "assets/jsx-runtime-D3jfb0Ew.js": "a2c68294426b0ded53fa2d6c97bb39c4a51f99e5e4b23e7953a2c69298e361f8",
+        "assets/scenario-2Z_-1_Gb.js": "7e92c26d26e683fe3556881b95c7a8a275ebc80a552f4376dc5681a3612528c3",
+        "assets/settings-BiJEifZl.js": "87d825ed622415c6c9be70e6ba568c03e7a706171f85dca7445cfef32b13c3ba",
+        "assets/ui-CPlpZ6FI.css": "c71842a5c425e88181a3aafbf6803c758cce24ba0c27c0378d8ba76adbca2059",
+        "assets/ui-CsaMTxTi.js": "54eb27cc2cb07040c6fb457ff5749a038da620459c9486f3926f92db70265032",
+        "favicon.svg": "57eeeb71004ea822e16ae5dd81d32711060c05ebd2a604221add4995a0f38959",
+        "index.html": "5d9c7336c03b0c3d651628959be562f32319c77b8bf737612a729dac798dcdfc"
+      },
+      "all_match_build": true
+    }
+  ],
+  "notes": [
+    "Initial local HTTP startup restrictions are preserved and approved retries passed.",
+    "Initial integration exposed missing started_at on page call events; it was fixed and the durable cancellation regression passed.",
+    "First development diagnostics showed two enhanced views could both omit a minus sign; all new observations now require review.",
+    "A new test initially expected the page reason to remain the top-level label reason; the test now verifies the original page reason in retained label review history and the final pending state.",
+    "The older local baseline lacks test_grounding_protocol; its orchestration stopped before that nonexistent module, and visual_formula was subsequently run separately. Existing tests were not deleted or renamed.",
+    "Per-module runner verified frozen source during each test; delivery hashes are recorded separately. Counts do not sum repeated attempts.",
+    "Development and validation are both authored synthetic pages, not independent benchmark data. No GitHub push or Release was performed."
+  ],
+  "delivery_audit": {
+    "public_inputs_and_logs_match_sha256": true,
+    "backend_sources_and_tests_match_records": true,
+    "diagnostic_image_references_resolve": true
+  }
+}

@@ -1,0 +1,9 @@
+test_altered_formula_or_unbound_source_cannot_become_business_rule (tests.test_formula_source.FormulaSourceTests.test_altered_formula_or_unbound_source_cannot_become_business_rule) ... ok
+test_chinese_literal_equation_binds_database_units_and_rate_quote (tests.test_formula_source.FormulaSourceTests.test_chinese_literal_equation_binds_database_units_and_rate_quote) ... ok
+test_source_equation_and_dimension_produce_independent_value (tests.test_formula_source.FormulaSourceTests.test_source_equation_and_dimension_produce_independent_value) ... ok
+test_wrong_parameter_and_result_units_are_rejected (tests.test_formula_source.FormulaSourceTests.test_wrong_parameter_and_result_units_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.345s
+
+OK

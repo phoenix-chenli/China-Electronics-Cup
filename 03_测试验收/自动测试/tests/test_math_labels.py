@@ -103,12 +103,16 @@ class MathLabelsTest(unittest.TestCase):
         result={'lines':lines,'tables':[{'id':'t','status':'pending','cells':[{'role':'row_header','text':'BlurryOriginal','evidence_lines':[0],'status':'pending'}]}]}
         return buf.getvalue(),result
     def provider(self,text):return {'lines':([] if text is None else [{'text':text,'box':[.1,.1,.9,.9],'confidence':.95,'status':'confirmed'}]),'duration_ms':4,'input_image_sha256':'a'*64}
-    def test_label_consistency_preserves_original(self):
+    def test_changed_label_consistency_preserves_original_as_pending(self):
+        import hashlib
         raw,result=self.fixture();calls=[]
-        def recognize(data,**kwargs):calls.append(data);return self.provider('ClearLabel')
+        def recognize(data,**kwargs):
+            calls.append(data);response=self.provider('ClearLabel')
+            response['input_image_sha256']=hashlib.sha256(data).hexdigest();return response
         spatial.reread_labels(raw,result,recognize)
         self.assertEqual(len(calls),2);self.assertEqual(result['lines'][0]['original_text'],'BlurryOriginal')
-        self.assertEqual(result['lines'][0]['text'],'ClearLabel');self.assertEqual(result['tables'][0]['status'],'confirmed')
+        self.assertEqual(result['lines'][0]['text'],'BlurryOriginal');self.assertEqual(result['tables'][0]['status'],'pending')
+        self.assertEqual(result['label_reviews'][0]['consistent_candidate'],'ClearLabel')
     def test_missing_or_disagreeing_crop_remains_pending(self):
         for second in [None,'OtherLabel']:
             raw,result=self.fixture();answers=iter(['ClearLabel',second])

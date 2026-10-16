@@ -174,7 +174,11 @@ class DocumentProviderTests(unittest.TestCase):
                     {'label': '2026', 'value': '120', 'printed_text': '120', 'box': [.4, .4, .7, .6], 'value_source': 'printed'}]}]}
 
     def test_chart_estimation_unobserved_values_and_wrong_types_are_not_confirmed(self):
-        seen = p._observations([{'text': '期间 收入 元 项目', 'box': [.05, .8, .8, .9]},
+        # Axis titles and unit need their actual separate source positions;
+        # finding these words together anywhere in the chart is insufficient.
+        seen = p._observations([{'text':'期间','box':[.45,.9,.55,.95]},
+                                {'text':'收入(元)','box':[.03,.35,.18,.4]},
+                                {'text':'项目','box':[.7,.1,.8,.15]},
                                 {'text': '2026 120', 'box': [.5, .45, .6, .5]}])
         value = body(); value['charts'] = [self.chart()]
         self.assertEqual(p._validate_visual(value, seen)['charts'][0]['series'][0]['points'][0]['status'], 'confirmed')

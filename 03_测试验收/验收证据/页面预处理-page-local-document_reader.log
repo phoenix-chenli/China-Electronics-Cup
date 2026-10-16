@@ -1,0 +1,39 @@
+Consider using the pymupdf_layout package for a greatly improved page layout analysis.
+test_ambiguous_quote_requires_explicit_occurrence (tests.test_document_reader.DocumentReaderTest.test_ambiguous_quote_requires_explicit_occurrence) ... ok
+test_broken_original_is_retained_but_not_reported_readable (tests.test_document_reader.DocumentReaderTest.test_broken_original_is_retained_but_not_reported_readable) ... ok
+test_claim_checks_are_scoped_and_formula_recomputed (tests.test_document_reader.DocumentReaderTest.test_claim_checks_are_scoped_and_formula_recomputed) ... ok
+test_comparable_units_and_conflicts_are_explicit (tests.test_document_reader.DocumentReaderTest.test_comparable_units_and_conflicts_are_explicit) ... ok
+test_docx_failures_are_explicit_and_original_is_retained (tests.test_document_reader.DocumentReaderTest.test_docx_failures_are_explicit_and_original_is_retained) ... ok
+test_docx_heading_path_matches_markdown_convention (tests.test_document_reader.DocumentReaderTest.test_docx_heading_path_matches_markdown_convention) ... ok
+test_docx_headings_table_and_exact_location (tests.test_document_reader.DocumentReaderTest.test_docx_headings_table_and_exact_location) ... ok
+test_docx_import_tasks_and_old_package_locator_survive_restore (tests.test_document_reader.DocumentReaderTest.test_docx_import_tasks_and_old_package_locator_survive_restore) ... \\?\[临时验证目录]\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:44: SyntaxWarning: invalid escape sequence '\.'
+  re_han_default = re.compile("([\u4E00-\u9FD5a-zA-Z0-9+#&\._%\-]+)", re.U)
+\\?\[临时验证目录]\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:46: SyntaxWarning: invalid escape sequence '\s'
+  re_skip_default = re.compile("(\r\n|\s)", re.U)
+\\?\[临时验证目录]\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\finalseg\__init__.py:78: SyntaxWarning: invalid escape sequence '\.'
+  re_skip = re.compile("([a-zA-Z0-9]+(?:\.\d+)?%?)")
+Building prefix dict from the default dictionary ...
+Loading model from cache [临时验证目录]\ocr-fix-tests\jieba.cache
+Loading model cost 0.691 seconds.
+Prefix dict has been built successfully.
+ok
+test_docx_recognition_flag_only_when_an_image_is_embedded (tests.test_document_reader.DocumentReaderTest.test_docx_recognition_flag_only_when_an_image_is_embedded) ... ok
+test_docx_reparse_keeps_outline_and_pins_previous_parse (tests.test_document_reader.DocumentReaderTest.test_docx_reparse_keeps_outline_and_pins_previous_parse) ... ok
+test_followup_preserves_document_scope_but_new_sales_query_leaves_it (tests.test_document_reader.DocumentReaderTest.test_followup_preserves_document_scope_but_new_sales_query_leaves_it) ... ok
+test_foreign_version_and_parse_are_rejected (tests.test_document_reader.DocumentReaderTest.test_foreign_version_and_parse_are_rejected) ... ok
+test_historical_file_and_parse_stay_pinned (tests.test_document_reader.DocumentReaderTest.test_historical_file_and_parse_stay_pinned) ... ok
+test_local_reparse_keeps_previous_parse_and_other_pages (tests.test_document_reader.DocumentReaderTest.test_local_reparse_keeps_previous_parse_and_other_pages) ... ok
+test_page_search_counts_occurrences_not_files (tests.test_document_reader.DocumentReaderTest.test_page_search_counts_occurrences_not_files) ... ok
+test_pdf_rotation_geometry_matches_independent_search (tests.test_document_reader.DocumentReaderTest.test_pdf_rotation_geometry_matches_independent_search) ... ok
+test_render_aspect_ratio_and_page_validation (tests.test_document_reader.DocumentReaderTest.test_render_aspect_ratio_and_page_validation) ... ok
+test_scan_is_not_text_or_vision_verified (tests.test_document_reader.DocumentReaderTest.test_scan_is_not_text_or_vision_verified) ... ok
+test_scoped_question_stays_in_page_and_version (tests.test_document_reader.DocumentReaderTest.test_scoped_question_stays_in_page_and_version) ... ok
+test_tampered_original_cannot_be_reported_located (tests.test_document_reader.DocumentReaderTest.test_tampered_original_cannot_be_reported_located) ... ok
+test_unicode_and_real_heading_offsets (tests.test_document_reader.DocumentReaderTest.test_unicode_and_real_heading_offsets) ... ok
+test_webp_import_and_document_image_endpoint_return_original_geometry (tests.test_document_reader.DocumentReaderTest.test_webp_import_and_document_image_endpoint_return_original_geometry) ... ok
+test_wrong_range_does_not_fall_back (tests.test_document_reader.DocumentReaderTest.test_wrong_range_does_not_fall_back) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 6.106s
+
+OK

@@ -94,6 +94,28 @@ class DocumentTasksTest(unittest.TestCase):
         self.assertNotEqual("character",located["locator"]["location_precision"])
         self.assertFalse(documents.get_page(doc["id"],1,parse_id=before["parse_id"])["text_available"])
         self.assertIn("收入：100万元。",s.blocks(doc["id"])[0]["text"])
+        page=documents.get_page(doc['id'],1)
+        self.assertEqual(len(page['page_preprocessing']),1)
+        self.assertEqual(page['page_preprocessing'][0]['extra_calls'],0)
+        calls=[e for e in result['events'] if e['method']=='page_ocr']
+        self.assertEqual(len(calls),1);self.assertEqual(calls[0]['status'],'completed')
+        self.assertIsNotNone(calls[0]['started_at']);self.assertIsNotNone(calls[0]['duration_ms'])
+
+    def test_preprocessing_new_number_stays_pending_after_formal_publication(self):
+        from backend import page_preprocessing as prep
+        doc,_=self.source(fmt='png')
+        def candidate(raw,**kwargs):
+            observed=self.recognition(raw);row=copy.deepcopy(observed['lines'][0]);row['text']='华南利润：18.75'
+            observed['lines']=[]
+            return prep.merge(observed,[[row],[row]])[0]
+        with patch.object(providers,'ocr_page',side_effect=candidate),patch.object(providers,'ocr',side_effect=self.recognition):result=self.manager.submit(self.request(doc,mode='ocr'),synchronous=True)
+        self.assertEqual(result['status'],'completed',result)
+        page=documents.get_page(doc['id'],1)
+        self.assertFalse(any(b.get('status')=='confirmed' for b in page['blocks']))
+        self.assertEqual(page['recognition_pending'][0]['status'],'pending')
+        self.assertEqual(page['label_reviews'][0]['source_pending_reason'],'preprocessing_new_observation_requires_review')
+        located=documents.resolve({'document_id':doc['id'],'sha256':doc['sha256'],'page':1},'华南利润：18.75')
+        self.assertNotEqual(located['status'],'located')
 
     def test_official_source_identity_survives_recognition_publication(self):
         doc,_=self.source(fmt="png")
@@ -146,6 +168,40 @@ class DocumentTasksTest(unittest.TestCase):
         self.assertIn("收入：100万元。",page["text"]);self.assertEqual(self.provider["fingerprint"],page["ocr_provenance"]["fingerprint"])
         observation=next(event for event in result["events"] if event["method"]=="ocr_observation")
         self.assertEqual("completed",observation["status"]);self.assertIsNotNone(observation["duration_ms"])
+
+    def test_visual_observations_cannot_reuse_saved_derived_chart_table_formula_or_visual_text(self):
+        from backend import document_native as native
+        doc,_=self.source(fmt="png");original=documents.layout(doc['id'])
+        body={k:copy.deepcopy(v) for k,v in original.items() if k not in {'document','parse_id'}}
+        page=body['pages'][0]
+        derived=[('OLD_CHART_DERIVED',{'chart_id':'old-chart'}),
+                 ('OLD_TABLE_DERIVED',{'table_id':'old-table'}),
+                 ('OLD_FORMULA_DERIVED',{'formula_id':'old-formula'}),
+                 ('OLD_FORMULA_RANGE_DERIVED',{'formula_ids':['old-formula-range']}),
+                 ('OLD_VISUAL_DERIVED',{})]
+        for text,identity in derived:
+            # Even a saved human correction of an old structured view is not
+            # a new independent observation of the actual input pixels.
+            native._append(page,text,box=[.1,.2,.8,.4],status='confirmed',
+                           source_method='human_review' if identity else 'visual_observed',**identity)
+        page['text_available']=True
+        with s.conn() as db:documents.save_parse(db,doc['id'],doc['sha256'],body,'saved derived-view observation fixture')
+        cid=self.visual_connection();req=self.request(doc,mode='vision',connection_id=cid);preview=tasks.preview(req)
+        observed=[]
+        def visual(raw,**kwargs):
+            observed.extend(copy.deepcopy(kwargs['observed_lines']))
+            return {'blocks':[],'tables':[],'charts':[],'issues':[],'raw_response':'{}'}
+        with patch.object(providers,'ocr',side_effect=self.recognition) as ocr,patch.object(providers,'visual',side_effect=visual) as vision:
+            result=self.manager.submit(tasks.ParseRequest(**(req.model_dump()|{'preview_id':preview['preview_id'],'accepted':True})),synchronous=True)
+        self.assertEqual(result['status'],'completed',result)
+        ocr.assert_called_once();vision.assert_called_once()
+        self.assertEqual([line['text'] for line in observed],['收入：100万元。'])
+        self.assertEqual(observed[0]['confidence'],.99)
+        self.assertEqual(observed[0]['status'],'confirmed')
+        for stale,_ in derived:self.assertFalse(any(stale in line['text'] for line in observed),stale)
+        observation=next(event for event in result['events'] if event['method']=='ocr_observation')
+        self.assertEqual(observation['status'],'completed')
+        self.assertIsNotNone(observation['duration_ms'])
 
     def test_visual_ocr_failure_stops_before_external_structure_request(self):
         doc,_=self.source(fmt="png");cid=self.visual_connection();req=self.request(doc,mode="vision",connection_id=cid);preview=tasks.preview(req)

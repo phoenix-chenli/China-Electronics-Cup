@@ -1,0 +1,18 @@
+setUpClass (tests.test_formula_source.FormulaSourceTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (tests.test_formula_source.FormulaSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[仓库工作副本]\03_测试验收\自动测试\tests\test_formula_source.py", line 11, in setUpClass
+    def setUpClass(cls):cls.client=LocalClient()
+                                   ~~~~~~~~~~~^^
+  File "[仓库工作副本]\03_测试验收\自动测试\tests\test_conversations.py", line 29, in __init__
+    if not self.server.started: raise RuntimeError('Test server failed to start')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Test server failed to start
+
+----------------------------------------------------------------------
+Ran 0 tests in 5.010s
+
+FAILED (errors=1)
