@@ -1,0 +1,5870 @@
+{
+  "kind": "authored_workflow_diagnostic",
+  "model": "scripted HTTP fixture; no external model",
+  "retrieval": "real local lexical retrieval over authored disposable documents",
+  "tests": 28,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 65.036,
+  "source_sha256": {
+    "01_程序代码/backend/agent.py": "d5d0a53a71b518694728cb0417cc54b2c493f445f913ee44c2a6b5eee772852b",
+    "01_程序代码/backend/rag_grounding.py": "bc7ab10fbfc2f81046827726f0628cefaab97517f76a6ffef20f550fdb32e0b5",
+    "01_程序代码/backend/rag_completeness.py": "27ce958baa9f10683481c074248ee6917e0366602551e6910e28d3cd7e83433c",
+    "03_测试验收/自动测试/tests/test_rag_completeness.py": "2863b10be431fc8dad47413f07db39642b83546320a172ac32c607c411945099",
+    "03_测试验收/自动测试/评估RAG答全.py": "11ad3dba1e995a893195f20eeabd2e4f29f4e342c68873f61b94c66387dc52ca"
+  },
+  "source_unchanged": true,
+  "scenarios": [
+    {
+      "case": "test_drafting_omission_is_repaired_without_another_search",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "supported",
+      "answer": "甲产品售后处理要求申请人提交发票。\n\n甲产品赔付条款注明特殊型号除外。",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-99f3c5ecd020891e61c63043"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-2"
+            ],
+            "support_span_ids": [
+              "span-99f3c5ecd020891e61c63043"
+            ],
+            "reason": "例外已覆盖"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "answered"
+          }
+        ],
+        "answered": 2,
+        "total": 2,
+        "percent": 100,
+        "complete": true,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "rewrite",
+        "requirement_ids": [
+          "R2"
+        ],
+        "reason": "supported_evidence_omitted_from_answer",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-99f3c5ecd020891e61c63043"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-99f3c5ecd020891e61c63043"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 5,
+        "retained_claims": 1,
+        "targeted_requirement_ids": [
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-99f3c5ecd020891e61c63043"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-2"
+              ],
+              "support_span_ids": [
+                "span-99f3c5ecd020891e61c63043"
+              ],
+              "reason": "例外已覆盖"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "answered"
+            }
+          ],
+          "answered": 2,
+          "total": 2,
+          "percent": 100,
+          "complete": true,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": true,
+        "searches_after": 1,
+        "calls_after": 7
+      },
+      "stop_reason": "all_requirements_answered",
+      "model_calls": 7,
+      "latency_ms": 7529.83,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:05.419+00:00",
+          "duration_ms": 990.6,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:06.409+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:06.409+00:00",
+          "duration_ms": 2026.17,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "3d522629481f7edc529e4a2e8c439353562803c1266726b16abbcf8b4184d761",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "6a7b7e6b35d440482c2b53c36986dc4e78f5d83fdc199fd52042c00da7eca794",
+              "rrf_k": 60,
+              "duration_ms": 61.95,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-99f3c5ecd020891e61c63043"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-99f3c5ecd020891e61c63043"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-3d522629481f7edc529e4a2e8c439353562803c1266726b16abbcf8b4184d761",
+                "type": "document",
+                "source": "4f32a38bf02f4c1583afa0603c66c846.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-99f3c5ecd020891e61c63043"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "3d522629481f7edc529e4a2e8c439353562803c1266726b16abbcf8b4184d761",
+                  "generation_id": "cd7f390257523bd9b9313c4d4a465e8a7e5656c1e1e1121cfbb405f19995dba9",
+                  "id": "3d522629481f7edc529e4a2e8c439353562803c1266726b16abbcf8b4184d761",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -1.0142857142857138e-05
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:08.435+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:06.417+00:00",
+          "duration_ms": 981.52,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:07.398+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.399+00:00",
+          "duration_ms": 15.27,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:07.414+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.414+00:00",
+          "duration_ms": 2.1,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:07.417+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.417+00:00",
+          "duration_ms": 3.98,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:07.421+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:07.421+00:00",
+          "duration_ms": 6.4,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:07.427+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.427+00:00",
+          "duration_ms": 1.22,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:07.428+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.428+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:07.428+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:07.428+00:00",
+          "duration_ms": 8.42,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:07.437+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.437+00:00",
+          "duration_ms": 12.47,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:07.449+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:07.471+00:00",
+          "duration_ms": 964.13,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-99f3c5ecd020891e61c63043"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-99f3c5ecd020891e61c63043"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:08.435+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:08.435+00:00",
+          "duration_ms": 1011.79,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:09.447+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:09.447+00:00",
+          "duration_ms": 974.28,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-99f3c5ecd020891e61c63043"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:10.422+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:09.482+00:00",
+          "duration_ms": 939.54,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1459
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:10.421+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:10.422+00:00",
+          "duration_ms": 0.14,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ],
+            "span_ids": [
+              "span-99f3c5ecd020891e61c63043"
+            ],
+            "searches": 1
+          },
+          "finished_at": "2026-10-16T14:36:10.422+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:10.422+00:00",
+          "duration_ms": 960.86,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:11.383+00:00"
+        },
+        {
+          "step_id": "agent-18",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:11.383+00:00",
+          "duration_ms": 990.4,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 2,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-99f3c5ecd020891e61c63043"
+                ]
+              },
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-99f3c5ecd020891e61c63043"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "passed",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "passed"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:12.373+00:00"
+        },
+        {
+          "step_id": "agent-19",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:11.436+00:00",
+          "duration_ms": 936.74,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 7,
+            "input_characters": 2300
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-2"
+                ],
+                "reason": "例外已覆盖"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:12.373+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "29a0ac2a2cce8444c03f",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "daf4bff267fa49fabe3fdd3790cab1fb",
+          "generation_id": "cd7f390257523bd9b9313c4d4a465e8a7e5656c1e1e1121cfbb405f19995dba9"
+        }
+      ]
+    },
+    {
+      "case": "test_empty_initial_draft_with_sufficient_sources_gets_one_rewrite",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "supported",
+      "answer": "甲产品售后处理要求申请人提交发票。\n\n甲产品赔付条款注明特殊型号除外。",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-0e8e0ed5f56290ef7125bc93"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-2"
+            ],
+            "support_span_ids": [
+              "span-0e8e0ed5f56290ef7125bc93"
+            ],
+            "reason": "例外已覆盖"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "answered"
+          }
+        ],
+        "answered": 2,
+        "total": 2,
+        "percent": 100,
+        "complete": true,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "rewrite",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "reason": "supported_evidence_omitted_from_answer",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-0e8e0ed5f56290ef7125bc93"
+              ],
+              "reason": "原文提供相关条件"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-0e8e0ed5f56290ef7125bc93"
+              ],
+              "reason": "原文提供相关条件"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "unanswered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 0,
+          "total": 2,
+          "percent": 0,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 4,
+        "retained_claims": 0,
+        "targeted_requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-0e8e0ed5f56290ef7125bc93"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-2"
+              ],
+              "support_span_ids": [
+                "span-0e8e0ed5f56290ef7125bc93"
+              ],
+              "reason": "例外已覆盖"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "answered"
+            }
+          ],
+          "answered": 2,
+          "total": 2,
+          "percent": 100,
+          "complete": true,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": true,
+        "searches_after": 1,
+        "calls_after": 6
+      },
+      "stop_reason": "all_requirements_answered",
+      "model_calls": 6,
+      "latency_ms": 5727.45,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:13.748+00:00",
+          "duration_ms": 923.72,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:14.672+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:14.672+00:00",
+          "duration_ms": 1945.58,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "f545c4e3c2d6efc10109d5dd57670e5c4d0a4b58651d25f718e38d9855d215b0",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "ee22d6beb279160eb9a2ff9f93983004025aaac7d9a035d47ba699850bcf71b2",
+              "rrf_k": 60,
+              "duration_ms": 58.48,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-0e8e0ed5f56290ef7125bc93"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-0e8e0ed5f56290ef7125bc93"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-f545c4e3c2d6efc10109d5dd57670e5c4d0a4b58651d25f718e38d9855d215b0",
+                "type": "document",
+                "source": "9a17ef24e4e0462980fc6da417c98e36.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-0e8e0ed5f56290ef7125bc93"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "f545c4e3c2d6efc10109d5dd57670e5c4d0a4b58651d25f718e38d9855d215b0",
+                  "generation_id": "5e9a62eb6a8a0adb281532b28272bc57404059cafe3460e764d3229228e05301",
+                  "id": "f545c4e3c2d6efc10109d5dd57670e5c4d0a4b58651d25f718e38d9855d215b0",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -1.0142857142857138e-05
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:16.617+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:14.672+00:00",
+          "duration_ms": 947.18,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:15.619+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.620+00:00",
+          "duration_ms": 11.23,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:15.631+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.631+00:00",
+          "duration_ms": 2.04,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:15.633+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.633+00:00",
+          "duration_ms": 5.98,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:15.639+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:15.639+00:00",
+          "duration_ms": 8.86,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:15.648+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.648+00:00",
+          "duration_ms": 0.05,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:15.648+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.648+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:15.648+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:15.648+00:00",
+          "duration_ms": 6.89,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:15.655+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.655+00:00",
+          "duration_ms": 11.64,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:15.667+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:15.689+00:00",
+          "duration_ms": 928.08,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-0e8e0ed5f56290ef7125bc93"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-0e8e0ed5f56290ef7125bc93"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:16.617+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:16.617+00:00",
+          "duration_ms": 949.51,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:17.567+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:17.567+00:00",
+          "duration_ms": 11.85,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 0,
+            "claim_bindings": []
+          },
+          "outputs": {
+            "status": "refused",
+            "missing_requirements": []
+          },
+          "finished_at": "2026-10-16T14:36:17.579+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:17.579+00:00",
+          "duration_ms": 0.14,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ],
+            "span_ids": [
+              "span-0e8e0ed5f56290ef7125bc93"
+            ],
+            "searches": 1
+          },
+          "finished_at": "2026-10-16T14:36:17.579+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:17.579+00:00",
+          "duration_ms": 929.58,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:18.509+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:18.509+00:00",
+          "duration_ms": 963.12,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 2,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-0e8e0ed5f56290ef7125bc93"
+                ]
+              },
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-0e8e0ed5f56290ef7125bc93"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "passed",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "passed"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:19.472+00:00"
+        },
+        {
+          "step_id": "agent-18",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:18.558+00:00",
+          "duration_ms": 913.97,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "input_characters": 2300
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-2"
+                ],
+                "reason": "例外已覆盖"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:19.472+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "b030969fa467fbf78728",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "2cb81c0ef00843b4998e1becc5f649c4",
+          "generation_id": "5e9a62eb6a8a0adb281532b28272bc57404059cafe3460e764d3229228e05301"
+        }
+      ]
+    },
+    {
+      "case": "test_legacy_excerpt_binding_is_preserved_and_rechecked_during_repair",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "supported",
+      "answer": "甲产品赔付条款注明特殊型号除外。\n\n甲产品售后处理要求申请人提交发票。",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-2"
+            ],
+            "support_span_ids": [
+              "span-9fcf0ed8b849b0688e702d55"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-9fcf0ed8b849b0688e702d55"
+            ],
+            "reason": "例外已覆盖"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "answered"
+          }
+        ],
+        "answered": 2,
+        "total": 2,
+        "percent": 100,
+        "complete": true,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "rewrite",
+        "requirement_ids": [
+          "R2"
+        ],
+        "reason": "supported_evidence_omitted_from_answer",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-9fcf0ed8b849b0688e702d55"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-9fcf0ed8b849b0688e702d55"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 5,
+        "retained_claims": 1,
+        "targeted_requirement_ids": [
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-2"
+              ],
+              "support_span_ids": [
+                "span-9fcf0ed8b849b0688e702d55"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-9fcf0ed8b849b0688e702d55"
+              ],
+              "reason": "例外已覆盖"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "answered"
+            }
+          ],
+          "answered": 2,
+          "total": 2,
+          "percent": 100,
+          "complete": true,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": true,
+        "searches_after": 1,
+        "calls_after": 7
+      },
+      "stop_reason": "all_requirements_answered",
+      "model_calls": 7,
+      "latency_ms": 6584.77,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:20.768+00:00",
+          "duration_ms": 968.16,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:21.736+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:21.736+00:00",
+          "duration_ms": 1915.87,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "dd61c8ee782eb115e48f386077324bdad5ecc4a548e86bd9f002c2024ecad06b",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "c647caa8cc24fc1ff24f235e4c98655d00d4c031001c69caf41ab9e3b79300d2",
+              "rrf_k": 60,
+              "duration_ms": 52.73,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-9fcf0ed8b849b0688e702d55"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-9fcf0ed8b849b0688e702d55"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-dd61c8ee782eb115e48f386077324bdad5ecc4a548e86bd9f002c2024ecad06b",
+                "type": "document",
+                "source": "626e11635e8542dbb1b0a087aca35c54.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-9fcf0ed8b849b0688e702d55"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "dd61c8ee782eb115e48f386077324bdad5ecc4a548e86bd9f002c2024ecad06b",
+                  "generation_id": "c1b8a6bd1b8a4285c31d189faddc2cba2dff1f71b1faa8417238281990b917aa",
+                  "id": "dd61c8ee782eb115e48f386077324bdad5ecc4a548e86bd9f002c2024ecad06b",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -1.0142857142857138e-05
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:23.652+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:21.736+00:00",
+          "duration_ms": 928.47,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:22.665+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.665+00:00",
+          "duration_ms": 12.83,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:22.678+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.678+00:00",
+          "duration_ms": 2.09,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:22.680+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.680+00:00",
+          "duration_ms": 4.14,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:22.684+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:22.684+00:00",
+          "duration_ms": 6.69,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:22.691+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.691+00:00",
+          "duration_ms": 0.14,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:22.691+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.691+00:00",
+          "duration_ms": 0.02,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:22.691+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:22.691+00:00",
+          "duration_ms": 5.48,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:22.697+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.697+00:00",
+          "duration_ms": 11.03,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:22.708+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:22.728+00:00",
+          "duration_ms": 923.4,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-9fcf0ed8b849b0688e702d55"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-9fcf0ed8b849b0688e702d55"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:23.652+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:23.652+00:00",
+          "duration_ms": 895.7,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:24.548+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:24.548+00:00",
+          "duration_ms": 929.4,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {}
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:25.477+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:24.567+00:00",
+          "duration_ms": 909.97,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1457
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:25.477+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:25.477+00:00",
+          "duration_ms": 0.11,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ],
+            "span_ids": [
+              "span-9fcf0ed8b849b0688e702d55"
+            ],
+            "searches": 1
+          },
+          "finished_at": "2026-10-16T14:36:25.477+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:25.477+00:00",
+          "duration_ms": 931.44,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:26.409+00:00"
+        },
+        {
+          "step_id": "agent-18",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:26.409+00:00",
+          "duration_ms": 939.55,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-9fcf0ed8b849b0688e702d55"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "passed",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "passed"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:27.348+00:00"
+        },
+        {
+          "step_id": "agent-19",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:26.451+00:00",
+          "duration_ms": 897.42,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 7,
+            "input_characters": 2298
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-2"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "例外已覆盖"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:27.348+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "9d7f8ce375bf5eb7fa50",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "a0e1895a74e94928a2a9ad70712fa678",
+          "generation_id": "c1b8a6bd1b8a4285c31d189faddc2cba2dff1f71b1faa8417238281990b917aa"
+        }
+      ]
+    },
+    {
+      "case": "test_missing_sources_get_one_real_focused_search_in_fixed_scope",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "supported",
+      "answer": "甲产品售后处理要求申请人提交发票。\n\n甲产品赔付条款注明特殊型号除外。",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-e170a56600d5d52e346ed663",
+              "span-1436166c951338c119ff6dd8"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-2"
+            ],
+            "support_span_ids": [
+              "span-e170a56600d5d52e346ed663",
+              "span-1436166c951338c119ff6dd8"
+            ],
+            "reason": "例外已覆盖"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "answered"
+          }
+        ],
+        "answered": 2,
+        "total": 2,
+        "percent": 100,
+        "complete": true,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "retrieve",
+        "requirement_ids": [
+          "R2"
+        ],
+        "reason": "source_gap",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-e170a56600d5d52e346ed663"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "missing",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 5,
+        "retained_claims": 1,
+        "targeted_requirement_ids": [
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-e170a56600d5d52e346ed663",
+                "span-1436166c951338c119ff6dd8"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-2"
+              ],
+              "support_span_ids": [
+                "span-e170a56600d5d52e346ed663",
+                "span-1436166c951338c119ff6dd8"
+              ],
+              "reason": "例外已覆盖"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "answered"
+            }
+          ],
+          "answered": 2,
+          "total": 2,
+          "percent": 100,
+          "complete": true,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": true,
+        "searches_after": 2,
+        "calls_after": 8
+      },
+      "stop_reason": "all_requirements_answered",
+      "model_calls": 8,
+      "latency_ms": 7764.97,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:28.675+00:00",
+          "duration_ms": 919.69,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:29.594+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:29.594+00:00",
+          "duration_ms": 1959.49,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号",
+            "document_ids": [
+              "0ea6d60331c6dced0c96"
+            ]
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": [
+                "0ea6d60331c6dced0c96"
+              ],
+              "preserved_lexical_candidate": "a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "24903dce216a9ef900339fbf56ef5e4056c569c2743be89690b52cf675a14697",
+              "rrf_k": 60,
+              "duration_ms": 109.93,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "insufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-e170a56600d5d52e346ed663"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "missing",
+                  "reason": "未取得例外证据"
+                }
+              ],
+              "missing_requirements": [
+                "赔付例外：未取得例外证据"
+              ],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+                "type": "document",
+                "source": "fd7ca06f93fd471fa67e9da9e5821d73.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。",
+                "page": 1,
+                "version": "7339efa0483f743220bde881ada7fa7fdc3f3e36118c2baabcd746b2c5f7c358",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+                  "generation_id": "0cdb07dae907eee693cbdaa39e5ab92935f3cbd488d7fda64547f4429c63f718",
+                  "id": "a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -8.560147329650091e-06
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:31.554+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:29.594+00:00",
+          "duration_ms": 937.1,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:30.532+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回2项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.532+00:00",
+          "duration_ms": 21.45,
+          "count": 2,
+          "finished_at": "2026-10-16T14:36:30.554+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.554+00:00",
+          "duration_ms": 2.16,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:30.556+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.556+00:00",
+          "duration_ms": 3.67,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:30.560+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:30.560+00:00",
+          "duration_ms": 4.91,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:30.565+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.565+00:00",
+          "duration_ms": 0.03,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:30.565+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.565+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:30.565+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:30.565+00:00",
+          "duration_ms": 5.04,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:30.570+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.570+00:00",
+          "duration_ms": 10.28,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:30.580+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:30.652+00:00",
+          "duration_ms": 901.67,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1592
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "support_span_ids": [],
+                "reason": "未取得例外证据"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:31.554+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:31.554+00:00",
+          "duration_ms": 908.81,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:32.463+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:32.463+00:00",
+          "duration_ms": 965.34,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:33.428+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:32.504+00:00",
+          "duration_ms": 923.96,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1441
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:33.428+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.428+00:00",
+          "duration_ms": 1055.96,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "retrieve",
+            "requirement_ids": [
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "retrieve",
+            "requirement_ids": [
+              "R2"
+            ],
+            "span_ids": [
+              "span-e170a56600d5d52e346ed663",
+              "span-1436166c951338c119ff6dd8"
+            ],
+            "searches": 2
+          },
+          "finished_at": "2026-10-16T14:36:34.484+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.428+00:00",
+          "duration_ms": 1055.78,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品提交什么材料？赔付有哪些例外？\n重点补全：赔付例外"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 2,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 2,
+              "document_filter": null,
+              "preserved_lexical_candidate": "a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "24903dce216a9ef900339fbf56ef5e4056c569c2743be89690b52cf675a14697",
+              "rrf_k": 60,
+              "duration_ms": 100.27,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 2,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-e170a56600d5d52e346ed663",
+                    "span-1436166c951338c119ff6dd8"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-e170a56600d5d52e346ed663",
+                    "span-1436166c951338c119ff6dd8"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+                "type": "document",
+                "source": "fd7ca06f93fd471fa67e9da9e5821d73.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。",
+                "page": 1,
+                "version": "7339efa0483f743220bde881ada7fa7fdc3f3e36118c2baabcd746b2c5f7c358",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+                  "generation_id": "0cdb07dae907eee693cbdaa39e5ab92935f3cbd488d7fda64547f4429c63f718",
+                  "id": "a97e6133efc6c41ab537c131087d6083d0a7f9263c7d75d6ab2f5c287a1cabe8",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -4.65837411207577e-06
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              },
+              {
+                "id": "rag-e7e6ae7bc50fc8550aebf7f1dba69e31c689683ee43c04846d1b8326ee689599",
+                "type": "document",
+                "source": "89bc0dc9ad734cb1ad96f016f7f552c0.md",
+                "snippet": "甲产品赔付条款的适用范围：特殊型号除外。",
+                "page": 1,
+                "version": "183273efff2c19934ce1ba50959c4d2e166698c61aca1c3ffb47b889a0964bf7",
+                "support_span_ids": [
+                  "span-1436166c951338c119ff6dd8"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "e7e6ae7bc50fc8550aebf7f1dba69e31c689683ee43c04846d1b8326ee689599",
+                  "generation_id": "11c624e015cd39ab70353b3a3f14fc59c0d4e661959fe64fd14c15005d075fe0",
+                  "id": "e7e6ae7bc50fc8550aebf7f1dba69e31c689683ee43c04846d1b8326ee689599",
+                  "rrf_score": 0.016129032258064516,
+                  "channels": {
+                    "bm25": {
+                      "rank": 2,
+                      "score": -4.510967741935485e-06
+                    }
+                  },
+                  "fusion_rank": 2
+                }
+              }
+            ],
+            "evidence_count": 2
+          },
+          "finished_at": "2026-10-16T14:36:34.484+00:00"
+        },
+        {
+          "step_id": "retrieval-18",
+          "parent_step_id": "agent-17",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回2项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.429+00:00",
+          "duration_ms": 26.18,
+          "count": 2,
+          "finished_at": "2026-10-16T14:36:33.455+00:00"
+        },
+        {
+          "step_id": "retrieval-19",
+          "parent_step_id": "agent-17",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.455+00:00",
+          "duration_ms": 4.72,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:33.460+00:00"
+        },
+        {
+          "step_id": "retrieval-20",
+          "parent_step_id": "agent-17",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回2项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.460+00:00",
+          "duration_ms": 6.19,
+          "count": 2,
+          "finished_at": "2026-10-16T14:36:33.466+00:00"
+        },
+        {
+          "step_id": "retrieval-21",
+          "parent_step_id": "agent-17",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:33.466+00:00",
+          "duration_ms": 8.93,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:33.475+00:00"
+        },
+        {
+          "step_id": "retrieval-22",
+          "parent_step_id": "agent-17",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.475+00:00",
+          "duration_ms": 0.2,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:33.475+00:00"
+        },
+        {
+          "step_id": "retrieval-23",
+          "parent_step_id": "agent-17",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回2项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.475+00:00",
+          "duration_ms": 0.01,
+          "count": 2,
+          "finished_at": "2026-10-16T14:36:33.475+00:00"
+        },
+        {
+          "step_id": "retrieval-24",
+          "parent_step_id": "agent-17",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:33.475+00:00",
+          "duration_ms": 8.93,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:33.484+00:00"
+        },
+        {
+          "step_id": "retrieval-25",
+          "parent_step_id": "agent-17",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回2项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.484+00:00",
+          "duration_ms": 21.76,
+          "count": 2,
+          "finished_at": "2026-10-16T14:36:33.506+00:00"
+        },
+        {
+          "step_id": "agent-26",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:33.551+00:00",
+          "duration_ms": 932.81,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "input_characters": 2401
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663",
+                  "span-1436166c951338c119ff6dd8"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663",
+                  "span-1436166c951338c119ff6dd8"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:34.484+00:00"
+        },
+        {
+          "step_id": "agent-27",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:34.484+00:00",
+          "duration_ms": 932.71,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 7,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:35.417+00:00"
+        },
+        {
+          "step_id": "agent-28",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:35.417+00:00",
+          "duration_ms": 1013.84,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 2,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663",
+                  "span-1436166c951338c119ff6dd8"
+                ]
+              },
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-e170a56600d5d52e346ed663",
+                  "span-1436166c951338c119ff6dd8"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "passed",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "passed"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:36.431+00:00"
+        },
+        {
+          "step_id": "agent-29",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:35.517+00:00",
+          "duration_ms": 913.62,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 8,
+            "input_characters": 3386
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-2"
+                ],
+                "reason": "例外已覆盖"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:36.431+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "0ea6d60331c6dced0c96",
+          "sha256": "7339efa0483f743220bde881ada7fa7fdc3f3e36118c2baabcd746b2c5f7c358",
+          "parse_id": "cfa93ddb4d2145d7a3ede22e7a1149f7",
+          "generation_id": "0cdb07dae907eee693cbdaa39e5ab92935f3cbd488d7fda64547f4429c63f718"
+        },
+        {
+          "document_id": "e3f18cf0eaa91df65f42",
+          "sha256": "183273efff2c19934ce1ba50959c4d2e166698c61aca1c3ffb47b889a0964bf7",
+          "parse_id": "5d1a0f2e35de44b9b4189c523cce62de",
+          "generation_id": "11c624e015cd39ab70353b3a3f14fc59c0d4e661959fe64fd14c15005d075fe0"
+        }
+      ]
+    },
+    {
+      "case": "test_new_repair_claim_is_rechecked_and_not_automatically_promoted",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "partial",
+      "answer": "甲产品售后处理要求申请人提交发票。\n\n未完整回答：赔付例外：答案尚未给出例外",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-90b0651991c09c990de5a4a3"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "unanswered",
+            "claim_ids": [],
+            "support_span_ids": [
+              "span-90b0651991c09c990de5a4a3"
+            ],
+            "reason": "答案尚未给出例外"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "unanswered"
+          }
+        ],
+        "answered": 1,
+        "total": 2,
+        "percent": 50,
+        "complete": false,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "rewrite",
+        "requirement_ids": [
+          "R2"
+        ],
+        "reason": "supported_evidence_omitted_from_answer",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-90b0651991c09c990de5a4a3"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-90b0651991c09c990de5a4a3"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 5,
+        "retained_claims": 1,
+        "targeted_requirement_ids": [
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-90b0651991c09c990de5a4a3"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-90b0651991c09c990de5a4a3"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": false,
+        "searches_after": 1,
+        "calls_after": 7
+      },
+      "stop_reason": "repair_already_attempted",
+      "model_calls": 7,
+      "latency_ms": 6621.37,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:37.707+00:00",
+          "duration_ms": 924.47,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:38.631+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:38.631+00:00",
+          "duration_ms": 1884.95,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "fa0cee390ba41de7713f9319800b877545a7c6d739251adc5a956059cf3fbcf0",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "5acd84b2392ca870fc63ab34df1524f779a3623cc40db9221a0692c7056a7ff2",
+              "rrf_k": 60,
+              "duration_ms": 52.27,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-90b0651991c09c990de5a4a3"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-90b0651991c09c990de5a4a3"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-fa0cee390ba41de7713f9319800b877545a7c6d739251adc5a956059cf3fbcf0",
+                "type": "document",
+                "source": "6932e6d02e49493fb9da4f2c074ac093.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-90b0651991c09c990de5a4a3"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "fa0cee390ba41de7713f9319800b877545a7c6d739251adc5a956059cf3fbcf0",
+                  "generation_id": "cf475ceb0af6180f5db1bba383fb3fcebcecf3a359009892826fb261530b13e2",
+                  "id": "fa0cee390ba41de7713f9319800b877545a7c6d739251adc5a956059cf3fbcf0",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -9.418128317860735e-06
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:40.516+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:38.631+00:00",
+          "duration_ms": 927.21,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:39.559+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.559+00:00",
+          "duration_ms": 11.81,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:39.571+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.571+00:00",
+          "duration_ms": 2.79,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:39.574+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.574+00:00",
+          "duration_ms": 4.64,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:39.579+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:39.579+00:00",
+          "duration_ms": 6.23,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:39.585+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.585+00:00",
+          "duration_ms": 0.06,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:39.585+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.585+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:39.585+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:39.585+00:00",
+          "duration_ms": 6.32,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:39.591+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.592+00:00",
+          "duration_ms": 9.16,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:39.601+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:39.621+00:00",
+          "duration_ms": 895.43,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-90b0651991c09c990de5a4a3"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-90b0651991c09c990de5a4a3"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:40.516+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:40.516+00:00",
+          "duration_ms": 961.53,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:41.478+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:41.478+00:00",
+          "duration_ms": 972.24,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-90b0651991c09c990de5a4a3"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:42.450+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:41.507+00:00",
+          "duration_ms": 943.02,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1459
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:42.450+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:42.450+00:00",
+          "duration_ms": 0.14,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ],
+            "span_ids": [
+              "span-90b0651991c09c990de5a4a3"
+            ],
+            "searches": 1
+          },
+          "finished_at": "2026-10-16T14:36:42.450+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:42.450+00:00",
+          "duration_ms": 914.26,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:43.365+00:00"
+        },
+        {
+          "step_id": "agent-18",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:43.365+00:00",
+          "duration_ms": 959.04,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 2,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-90b0651991c09c990de5a4a3"
+                ]
+              },
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-90b0651991c09c990de5a4a3"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:44.324+00:00"
+        },
+        {
+          "step_id": "agent-19",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:43.419+00:00",
+          "duration_ms": 905.18,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 7,
+            "input_characters": 2300
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:44.324+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "035aa4f9794b5cb33bc7",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "ad8db1ee2be44c33a25de879b6ba2aba",
+          "generation_id": "cf475ceb0af6180f5db1bba383fb3fcebcecf3a359009892826fb261530b13e2"
+        }
+      ]
+    },
+    {
+      "case": "test_rejected_claim_is_not_treated_as_a_simple_omission",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "refused",
+      "answer": "现有引用未完整支持问题，未发布确定结论。\n缺少：提交材料：材料要求；赔付例外：答案尚未给出例外",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "unanswered",
+            "claim_ids": [],
+            "support_span_ids": [
+              "span-a85e0cf4d8b1579377bf3296"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "unanswered",
+            "claim_ids": [],
+            "support_span_ids": [
+              "span-a85e0cf4d8b1579377bf3296"
+            ],
+            "reason": "答案尚未给出例外"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "unanswered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "unanswered"
+          }
+        ],
+        "answered": 0,
+        "total": 2,
+        "percent": 0,
+        "complete": false,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": null,
+      "stop_reason": "retrieval_or_verification_budget_exhausted",
+      "model_calls": 5,
+      "latency_ms": 4874.85,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:45.624+00:00",
+          "duration_ms": 958.31,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:46.583+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:46.583+00:00",
+          "duration_ms": 1968.9,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "f9024842c4eb919d97d55b37393bbe84248ecd226cebdade5f260cffa6f1f38f",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "78f02220891248ff903652a2591fc4955f30fe843f7131e04f8a797123bcc1f6",
+              "rrf_k": 60,
+              "duration_ms": 54.98,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-a85e0cf4d8b1579377bf3296"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-a85e0cf4d8b1579377bf3296"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-f9024842c4eb919d97d55b37393bbe84248ecd226cebdade5f260cffa6f1f38f",
+                "type": "document",
+                "source": "f5a6ce9c5852488b8e34b47e4f368d42.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-a85e0cf4d8b1579377bf3296"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "f9024842c4eb919d97d55b37393bbe84248ecd226cebdade5f260cffa6f1f38f",
+                  "generation_id": "b47d77bb302dc02219bf9a32b8d0838328118c7d2d5308ac2caf8cf5d41ff136",
+                  "id": "f9024842c4eb919d97d55b37393bbe84248ecd226cebdade5f260cffa6f1f38f",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -9.528149376582624e-06
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:48.551+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:46.583+00:00",
+          "duration_ms": 969.43,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:47.552+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.553+00:00",
+          "duration_ms": 11.27,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:47.564+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.564+00:00",
+          "duration_ms": 1.95,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:47.566+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.566+00:00",
+          "duration_ms": 5.28,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:47.571+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:47.571+00:00",
+          "duration_ms": 5.88,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:47.577+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.577+00:00",
+          "duration_ms": 0.06,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:47.577+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.577+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:47.577+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:47.577+00:00",
+          "duration_ms": 8.55,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:47.586+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.586+00:00",
+          "duration_ms": 9.25,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:47.595+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:47.617+00:00",
+          "duration_ms": 934.48,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-a85e0cf4d8b1579377bf3296"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-a85e0cf4d8b1579377bf3296"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:48.551+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:48.552+00:00",
+          "duration_ms": 967.11,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:49.519+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:49.519+00:00",
+          "duration_ms": 977.33,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-a85e0cf4d8b1579377bf3296"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "refused",
+            "checks": [
+              {
+                "claim_id": "claim-1",
+                "status": "unsupported",
+                "detail": "与原文逐项核对"
+              }
+            ],
+            "missing_requirements": [
+              "提交材料：材料要求",
+              "赔付例外：答案尚未给出例外"
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:50.496+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:49.552+00:00",
+          "duration_ms": 943.8,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1459
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:50.496+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "f1060aded3547d85e384",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "6f4874b8afaa42a4a1c7de042be6e156",
+          "generation_id": "b47d77bb302dc02219bf9a32b8d0838328118c7d2d5308ac2caf8cf5d41ff136"
+        }
+      ]
+    },
+    {
+      "case": "test_replacement_draft_cannot_silently_drop_previously_accepted_item",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "supported",
+      "answer": "甲产品赔付条款注明特殊型号除外。\n\n甲产品售后处理要求申请人提交发票。",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-2"
+            ],
+            "support_span_ids": [
+              "span-de1a3593b7c26e11aac06ce8"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-de1a3593b7c26e11aac06ce8"
+            ],
+            "reason": "例外已覆盖"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "answered"
+          }
+        ],
+        "answered": 2,
+        "total": 2,
+        "percent": 100,
+        "complete": true,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "rewrite",
+        "requirement_ids": [
+          "R2"
+        ],
+        "reason": "supported_evidence_omitted_from_answer",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-de1a3593b7c26e11aac06ce8"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-de1a3593b7c26e11aac06ce8"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 5,
+        "retained_claims": 1,
+        "targeted_requirement_ids": [
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-2"
+              ],
+              "support_span_ids": [
+                "span-de1a3593b7c26e11aac06ce8"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-de1a3593b7c26e11aac06ce8"
+              ],
+              "reason": "例外已覆盖"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "answered"
+            }
+          ],
+          "answered": 2,
+          "total": 2,
+          "percent": 100,
+          "complete": true,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": true,
+        "searches_after": 1,
+        "calls_after": 7
+      },
+      "stop_reason": "all_requirements_answered",
+      "model_calls": 7,
+      "latency_ms": 6211.44,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:51.825+00:00",
+          "duration_ms": 847.12,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:52.672+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:52.672+00:00",
+          "duration_ms": 1799.11,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "d278ad8dcf56991b304c21d35193c46f0936895f88a6304fe59cc4415981501d",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "9e3c76a5cd46ff74c66a8c58534596756bf8a51be51c9b10f69661fa518b7f6c",
+              "rrf_k": 60,
+              "duration_ms": 50.85,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-de1a3593b7c26e11aac06ce8"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-de1a3593b7c26e11aac06ce8"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-d278ad8dcf56991b304c21d35193c46f0936895f88a6304fe59cc4415981501d",
+                "type": "document",
+                "source": "6f232992d9044670beda54f5b22ec6ba.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-de1a3593b7c26e11aac06ce8"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "d278ad8dcf56991b304c21d35193c46f0936895f88a6304fe59cc4415981501d",
+                  "generation_id": "c924b994b27d7118d8fe1048de941f3c58d19acdf682a383e6edaceb7367b7ff",
+                  "id": "d278ad8dcf56991b304c21d35193c46f0936895f88a6304fe59cc4415981501d",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -9.609164099784507e-06
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:36:54.471+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:52.672+00:00",
+          "duration_ms": 860.13,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:53.532+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.533+00:00",
+          "duration_ms": 13.53,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:53.546+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.546+00:00",
+          "duration_ms": 2.22,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:53.548+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.548+00:00",
+          "duration_ms": 4.62,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:53.553+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:53.553+00:00",
+          "duration_ms": 5.83,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:53.559+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.559+00:00",
+          "duration_ms": 0.04,
+          "count": 0,
+          "finished_at": "2026-10-16T14:36:53.559+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.559+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:53.559+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:36:53.559+00:00",
+          "duration_ms": 6.01,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:36:53.565+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.565+00:00",
+          "duration_ms": 10.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:36:53.575+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:53.595+00:00",
+          "duration_ms": 876.02,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-de1a3593b7c26e11aac06ce8"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-de1a3593b7c26e11aac06ce8"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:54.471+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:54.471+00:00",
+          "duration_ms": 888.32,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:55.359+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:55.359+00:00",
+          "duration_ms": 893.91,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-de1a3593b7c26e11aac06ce8"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:56.253+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:55.392+00:00",
+          "duration_ms": 861.13,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1459
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:56.253+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:56.253+00:00",
+          "duration_ms": 0.15,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ],
+            "span_ids": [
+              "span-de1a3593b7c26e11aac06ce8"
+            ],
+            "searches": 1
+          },
+          "finished_at": "2026-10-16T14:36:56.253+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:56.253+00:00",
+          "duration_ms": 831.77,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:36:57.085+00:00"
+        },
+        {
+          "step_id": "agent-18",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:57.085+00:00",
+          "duration_ms": 947.11,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-de1a3593b7c26e11aac06ce8"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "passed",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "passed"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:58.032+00:00"
+        },
+        {
+          "step_id": "agent-19",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:57.138+00:00",
+          "duration_ms": 894.11,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 7,
+            "input_characters": 2300
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-2"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "例外已覆盖"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:36:58.032+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "6d6d662ddc98da38c27c",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "26e601e27cb5456284c22b7dc17c236c",
+          "generation_id": "c924b994b27d7118d8fe1048de941f3c58d19acdf682a383e6edaceb7367b7ff"
+        }
+      ]
+    },
+    {
+      "case": "test_still_incomplete_stops_after_one_cycle_and_keeps_partial_answer",
+      "question": "甲产品提交什么材料？赔付有哪些例外？",
+      "answer_status": "partial",
+      "answer": "甲产品售后处理要求申请人提交发票。\n\n甲产品赔付条款注明特殊型号除外。\n\n未完整回答：赔付例外：答案尚未给出例外",
+      "completeness": {
+        "version": "rag-completeness-v1",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "提交材料",
+            "question_part_ids": [
+              "Q1"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "answered",
+            "claim_ids": [
+              "claim-1"
+            ],
+            "support_span_ids": [
+              "span-5665b217390bcfb5f31af6ae"
+            ],
+            "reason": "材料要求"
+          },
+          {
+            "id": "R2",
+            "text": "赔付例外",
+            "question_part_ids": [
+              "Q2"
+            ],
+            "answer_kind": "fact_value",
+            "independent": true,
+            "source_status": "supported",
+            "answer_status": "unanswered",
+            "claim_ids": [],
+            "support_span_ids": [
+              "span-5665b217390bcfb5f31af6ae"
+            ],
+            "reason": "答案尚未给出例外"
+          }
+        ],
+        "question_parts": [
+          {
+            "id": "Q1",
+            "text": "甲产品提交什么材料？",
+            "requirement_ids": [
+              "R1"
+            ],
+            "status": "answered"
+          },
+          {
+            "id": "Q2",
+            "text": "赔付有哪些例外？",
+            "requirement_ids": [
+              "R2"
+            ],
+            "status": "unanswered"
+          }
+        ],
+        "answered": 1,
+        "total": 2,
+        "percent": 50,
+        "complete": false,
+        "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+      },
+      "repair": {
+        "action": "rewrite",
+        "requirement_ids": [
+          "R2"
+        ],
+        "reason": "supported_evidence_omitted_from_answer",
+        "attempt": 1,
+        "before": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-5665b217390bcfb5f31af6ae"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-5665b217390bcfb5f31af6ae"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "status": "completed",
+        "searches_before": 1,
+        "calls_before": 5,
+        "retained_claims": 1,
+        "targeted_requirement_ids": [
+          "R2"
+        ],
+        "after": {
+          "version": "rag-completeness-v1",
+          "requirements": [
+            {
+              "id": "R1",
+              "text": "提交材料",
+              "question_part_ids": [
+                "Q1"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "answered",
+              "claim_ids": [
+                "claim-1"
+              ],
+              "support_span_ids": [
+                "span-5665b217390bcfb5f31af6ae"
+              ],
+              "reason": "材料要求"
+            },
+            {
+              "id": "R2",
+              "text": "赔付例外",
+              "question_part_ids": [
+                "Q2"
+              ],
+              "answer_kind": "fact_value",
+              "independent": true,
+              "source_status": "supported",
+              "answer_status": "unanswered",
+              "claim_ids": [],
+              "support_span_ids": [
+                "span-5665b217390bcfb5f31af6ae"
+              ],
+              "reason": "答案尚未给出例外"
+            }
+          ],
+          "question_parts": [
+            {
+              "id": "Q1",
+              "text": "甲产品提交什么材料？",
+              "requirement_ids": [
+                "R1"
+              ],
+              "status": "answered"
+            },
+            {
+              "id": "Q2",
+              "text": "赔付有哪些例外？",
+              "requirement_ids": [
+                "R2"
+              ],
+              "status": "unanswered"
+            }
+          ],
+          "answered": 1,
+          "total": 2,
+          "percent": 50,
+          "complete": false,
+          "meaning": "逐项回答覆盖，由固定问题、证据充分性及最终模型支持检查共同记录；不是事实准确率或人工验收。"
+        },
+        "resolved": false,
+        "searches_after": 1,
+        "calls_after": 7
+      },
+      "stop_reason": "repair_already_attempted",
+      "model_calls": 7,
+      "latency_ms": 6393.78,
+      "events": [
+        {
+          "step_id": "agent-1",
+          "tool": "model.plan",
+          "label": "规划任务",
+          "status": "completed",
+          "started_at": "2026-10-16T14:36:59.445+00:00",
+          "duration_ms": 810.67,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 1,
+            "message_count": 2
+          },
+          "outputs": {
+            "tool": "document.search",
+            "action": "tool",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:37:00.256+00:00"
+        },
+        {
+          "step_id": "agent-2",
+          "tool": "document.search",
+          "label": "检索相关文档",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:00.256+00:00",
+          "duration_ms": 1924.84,
+          "summary": "执行完成",
+          "inputs": {
+            "query": "甲产品售后处理发票特殊型号"
+          },
+          "outputs": {
+            "status": "degraded",
+            "count": 1,
+            "boundary": "完整固定原文；检索分数不是答案置信度。未执行OCR。",
+            "retrieval": {
+              "candidate_count": 1,
+              "document_filter": null,
+              "preserved_lexical_candidate": "3921a2a7e501df59dd41efd75be3ef1ee774e57ec7219cf7d3f760c2dafbaec5",
+              "reranked": false,
+              "errors": [
+                {
+                  "stage": "dense",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                },
+                {
+                  "stage": "rerank",
+                  "error": "本地模型未安装或文件不完整，请安装审定模型包"
+                }
+              ],
+              "lexical_generation": "6757e4e963992f3529e2e50b2b72f52598f00feb3066a08e9ebd49e69ffb5cf0",
+              "rrf_k": 60,
+              "duration_ms": 56.23,
+              "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验",
+              "channel_counts": {
+                "bm25": 1,
+                "noise_tolerant": 0
+              }
+            },
+            "assessment": {
+              "status": "sufficient",
+              "coverage": [
+                {
+                  "support_span_ids": [
+                    "span-5665b217390bcfb5f31af6ae"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R1",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                },
+                {
+                  "support_span_ids": [
+                    "span-5665b217390bcfb5f31af6ae"
+                  ],
+                  "fact_ids": [],
+                  "requirement_id": "R2",
+                  "status": "supported",
+                  "reason": "原文提供相关条件"
+                }
+              ],
+              "missing_requirements": [],
+              "conflicts": []
+            },
+            "evidence": [
+              {
+                "id": "rag-3921a2a7e501df59dd41efd75be3ef1ee774e57ec7219cf7d3f760c2dafbaec5",
+                "type": "document",
+                "source": "f89b49ddda20478a97f114cf733432ae.md",
+                "snippet": "甲产品售后处理要求申请人提交发票。赔付上限为100万元，特殊型号除外。",
+                "page": 1,
+                "version": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+                "support_span_ids": [
+                  "span-5665b217390bcfb5f31af6ae"
+                ],
+                "quality": {
+                  "confirmed": true,
+                  "derived_view": false,
+                  "human_reviewed": false,
+                  "source_methods": [
+                    "native_text"
+                  ],
+                  "structure": "Markdown 标题",
+                  "location_precision": "text_range"
+                },
+                "retrieval": {
+                  "chunk_id": "3921a2a7e501df59dd41efd75be3ef1ee774e57ec7219cf7d3f760c2dafbaec5",
+                  "generation_id": "24df87ebd8f0c7ee2e076a63885bdf2e40ea8fe7d041048780e673eac5dabda9",
+                  "id": "3921a2a7e501df59dd41efd75be3ef1ee774e57ec7219cf7d3f760c2dafbaec5",
+                  "rrf_score": 0.01639344262295082,
+                  "channels": {
+                    "bm25": {
+                      "rank": 1,
+                      "score": -9.671308698861127e-06
+                    }
+                  },
+                  "fusion_rank": 1
+                }
+              }
+            ],
+            "evidence_count": 1
+          },
+          "finished_at": "2026-10-16T14:37:02.181+00:00"
+        },
+        {
+          "step_id": "agent-3",
+          "tool": "model.requirements",
+          "label": "识别回答所需的事实",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:00.256+00:00",
+          "duration_ms": 930.51,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 2,
+            "input_characters": 408
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:37:01.187+00:00"
+        },
+        {
+          "step_id": "retrieval-4",
+          "parent_step_id": "agent-2",
+          "tool": "document.scope",
+          "label": "scope",
+          "summary": "返回1项",
+          "stage": "scope",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.188+00:00",
+          "duration_ms": 13.11,
+          "count": 1,
+          "finished_at": "2026-10-16T14:37:01.201+00:00"
+        },
+        {
+          "step_id": "retrieval-5",
+          "parent_step_id": "agent-2",
+          "tool": "document.source_quality",
+          "label": "source_quality",
+          "summary": "返回0项",
+          "stage": "source_quality",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.201+00:00",
+          "duration_ms": 2.2,
+          "count": 0,
+          "finished_at": "2026-10-16T14:37:01.203+00:00"
+        },
+        {
+          "step_id": "retrieval-6",
+          "parent_step_id": "agent-2",
+          "tool": "document.bm25",
+          "label": "bm25",
+          "summary": "返回1项",
+          "stage": "bm25",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.203+00:00",
+          "duration_ms": 4.19,
+          "count": 1,
+          "finished_at": "2026-10-16T14:37:01.207+00:00"
+        },
+        {
+          "step_id": "retrieval-7",
+          "parent_step_id": "agent-2",
+          "tool": "document.dense",
+          "label": "dense",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "dense",
+          "status": "failed",
+          "started_at": "2026-10-16T14:37:01.207+00:00",
+          "duration_ms": 7.23,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:37:01.214+00:00"
+        },
+        {
+          "step_id": "retrieval-8",
+          "parent_step_id": "agent-2",
+          "tool": "document.noise_tolerant",
+          "label": "noise_tolerant",
+          "summary": "返回0项",
+          "stage": "noise_tolerant",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.214+00:00",
+          "duration_ms": 0.05,
+          "count": 0,
+          "finished_at": "2026-10-16T14:37:01.214+00:00"
+        },
+        {
+          "step_id": "retrieval-9",
+          "parent_step_id": "agent-2",
+          "tool": "document.rrf",
+          "label": "rrf",
+          "summary": "返回1项",
+          "stage": "rrf",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.214+00:00",
+          "duration_ms": 0.01,
+          "count": 1,
+          "finished_at": "2026-10-16T14:37:01.214+00:00"
+        },
+        {
+          "step_id": "retrieval-10",
+          "parent_step_id": "agent-2",
+          "tool": "document.rerank",
+          "label": "rerank",
+          "summary": "本地模型未安装或文件不完整，请安装审定模型包",
+          "stage": "rerank",
+          "status": "failed",
+          "started_at": "2026-10-16T14:37:01.214+00:00",
+          "duration_ms": 8.58,
+          "error": "本地模型未安装或文件不完整，请安装审定模型包",
+          "finished_at": "2026-10-16T14:37:01.223+00:00"
+        },
+        {
+          "step_id": "retrieval-11",
+          "parent_step_id": "agent-2",
+          "tool": "document.evidence_pack",
+          "label": "evidence_pack",
+          "summary": "返回1项",
+          "stage": "evidence_pack",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.223+00:00",
+          "duration_ms": 9.91,
+          "count": 1,
+          "finished_at": "2026-10-16T14:37:01.233+00:00"
+        },
+        {
+          "step_id": "agent-12",
+          "tool": "evidence.assess",
+          "label": "判断证据是否足够回答",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:01.255+00:00",
+          "duration_ms": 925.39,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 3,
+            "input_characters": 1610
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-5665b217390bcfb5f31af6ae"
+                ],
+                "reason": "原文提供相关条件"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "supported",
+                "support_span_ids": [
+                  "span-5665b217390bcfb5f31af6ae"
+                ],
+                "reason": "原文提供相关条件"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:37:02.181+00:00"
+        },
+        {
+          "step_id": "agent-13",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:02.181+00:00",
+          "duration_ms": 906.14,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 4,
+            "message_count": 4
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:37:03.087+00:00"
+        },
+        {
+          "step_id": "agent-14",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:03.087+00:00",
+          "duration_ms": 920.94,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 1,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-5665b217390bcfb5f31af6ae"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:37:04.008+00:00"
+        },
+        {
+          "step_id": "agent-15",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:03.116+00:00",
+          "duration_ms": 892.09,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 5,
+            "input_characters": 1459
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:37:04.008+00:00"
+        },
+        {
+          "step_id": "agent-16",
+          "tool": "answer.complete",
+          "label": "补齐未回答的分项",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:04.008+00:00",
+          "duration_ms": 0.22,
+          "summary": "执行完成",
+          "inputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ]
+          },
+          "outputs": {
+            "action": "rewrite",
+            "requirement_ids": [
+              "R2"
+            ],
+            "span_ids": [
+              "span-5665b217390bcfb5f31af6ae"
+            ],
+            "searches": 1
+          },
+          "finished_at": "2026-10-16T14:37:04.009+00:00"
+        },
+        {
+          "step_id": "agent-17",
+          "tool": "model.decide",
+          "label": "根据工具结果决定下一步",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:04.009+00:00",
+          "duration_ms": 868.9,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 6,
+            "message_count": 3
+          },
+          "outputs": {
+            "action": "answer",
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            }
+          },
+          "finished_at": "2026-10-16T14:37:04.878+00:00"
+        },
+        {
+          "step_id": "agent-18",
+          "tool": "answer.verify",
+          "label": "核验并组织答案",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:04.878+00:00",
+          "duration_ms": 958.81,
+          "summary": "执行完成",
+          "inputs": {
+            "claim_count": 2,
+            "claim_bindings": [
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-5665b217390bcfb5f31af6ae"
+                ]
+              },
+              {
+                "kind": "synthesis",
+                "support_span_ids": [
+                  "span-5665b217390bcfb5f31af6ae"
+                ]
+              }
+            ]
+          },
+          "outputs": {
+            "status": "needs_evidence",
+            "checks": [
+              {
+                "name": "事实及原文绑定",
+                "status": "needs_evidence"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:37:05.836+00:00"
+        },
+        {
+          "step_id": "agent-19",
+          "tool": "model.support",
+          "label": "逐条检查引用支持并核对答全情况",
+          "status": "completed",
+          "started_at": "2026-10-16T14:37:04.930+00:00",
+          "duration_ms": 906.55,
+          "summary": "执行完成",
+          "inputs": {
+            "call": 7,
+            "input_characters": 2300
+          },
+          "outputs": {
+            "model": "fixture-main-agent",
+            "usage": {
+              "prompt_tokens": 11,
+              "completion_tokens": 7,
+              "total_tokens": 18
+            },
+            "coverage": [
+              {
+                "requirement_id": "R1",
+                "status": "supported",
+                "claim_ids": [
+                  "claim-1"
+                ],
+                "reason": "材料要求"
+              },
+              {
+                "requirement_id": "R2",
+                "status": "missing",
+                "claim_ids": [],
+                "reason": "答案尚未给出例外"
+              }
+            ]
+          },
+          "finished_at": "2026-10-16T14:37:05.836+00:00"
+        }
+      ],
+      "source_versions": [
+        {
+          "document_id": "ea0bf2a42b0416ed41a1",
+          "sha256": "124c297142320ee528b6f213a062bdb74f0077d06c9e76765a6f99da4dd62ca5",
+          "parse_id": "a386359c7c064867afb91176f83575a6",
+          "generation_id": "24df87ebd8f0c7ee2e076a63885bdf2e40ea8fe7d041048780e673eac5dabda9"
+        }
+      ]
+    }
+  ],
+  "boundary": "验证逐项覆盖与有界补救流程，不能作为真实模型答全率、事实准确率或OHR-Bench成绩。"
+}

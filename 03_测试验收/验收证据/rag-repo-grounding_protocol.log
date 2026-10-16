@@ -1,0 +1,13 @@
+test_assessor_repair_cannot_accept_unknown_source (tests.test_grounding_protocol.GroundingProtocolTests.test_assessor_repair_cannot_accept_unknown_source) ... ok
+test_invalid_coverage_reference_can_be_repaired_once_without_waiving_gap (tests.test_grounding_protocol.GroundingProtocolTests.test_invalid_coverage_reference_can_be_repaired_once_without_waiving_gap) ... ok
+test_missing_coverage_may_explain_rejected_claim_but_supported_cannot_use_it (tests.test_grounding_protocol.GroundingProtocolTests.test_missing_coverage_may_explain_rejected_claim_but_supported_cannot_use_it) ... ok
+test_negative_rate_can_be_read_as_decline_magnitude_without_approving_units (tests.test_grounding_protocol.GroundingProtocolTests.test_negative_rate_can_be_read_as_decline_magnitude_without_approving_units) ... ok
+test_original_source_coverage_repairs_missing_document_claim_reference (tests.test_grounding_protocol.GroundingProtocolTests.test_original_source_coverage_repairs_missing_document_claim_reference) ... ok
+test_reading_view_preserves_separate_originals_and_protects_next_page (tests.test_grounding_protocol.GroundingProtocolTests.test_reading_view_preserves_separate_originals_and_protects_next_page) ... ok
+test_registered_numeric_identifier_does_not_supply_an_extra_measurement (tests.test_grounding_protocol.GroundingProtocolTests.test_registered_numeric_identifier_does_not_supply_an_extra_measurement) ... ok
+test_second_invalid_response_stops_and_transport_error_is_not_replayed (tests.test_grounding_protocol.GroundingProtocolTests.test_second_invalid_response_stops_and_transport_error_is_not_replayed) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK

@@ -1,0 +1,61 @@
+test_archive_during_query_discards_late_evidence (tests.test_rag_retrieval.RagRetrievalTest.test_archive_during_query_discards_late_evidence) ... \\?\[本机用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:44: SyntaxWarning: invalid escape sequence '\.'
+  re_han_default = re.compile("([\u4E00-\u9FD5a-zA-Z0-9+#&\._%\-]+)", re.U)
+\\?\[本机用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:46: SyntaxWarning: invalid escape sequence '\s'
+  re_skip_default = re.compile("(\r\n|\s)", re.U)
+\\?\[本机用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\finalseg\__init__.py:78: SyntaxWarning: invalid escape sequence '\.'
+  re_skip = re.compile("([a-zA-Z0-9]+(?:\.\d+)?%?)")
+Building prefix dict from the default dictionary ...
+Loading model from cache [本机用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\rag-local-tests\jieba.cache
+Loading model cost 0.339 seconds.
+Prefix dict has been built successfully.
+ok
+test_archive_excludes_frozen_retrieval_but_history_resolves (tests.test_rag_retrieval.RagRetrievalTest.test_archive_excludes_frozen_retrieval_but_history_resolves) ... ok
+test_cancel_does_not_publish_late_evidence (tests.test_rag_retrieval.RagRetrievalTest.test_cancel_does_not_publish_late_evidence) ... ok
+test_cancel_during_rerank_stops_before_evidence_pack (tests.test_rag_retrieval.RagRetrievalTest.test_cancel_during_rerank_stops_before_evidence_pack) ... ok
+test_cancelled_index_does_not_mark_late_vectors_ready (tests.test_rag_retrieval.RagRetrievalTest.test_cancelled_index_does_not_mark_late_vectors_ready) ... ok
+test_chunk_bounds_preserve_unicode_and_original_text (tests.test_rag_retrieval.RagRetrievalTest.test_chunk_bounds_preserve_unicode_and_original_text) ... ok
+test_corrupt_lexical_publication_is_rejected (tests.test_rag_retrieval.RagRetrievalTest.test_corrupt_lexical_publication_is_rejected) ... ok
+test_corrupt_saved_vector_degrades_without_using_nan_scores (tests.test_rag_retrieval.RagRetrievalTest.test_corrupt_saved_vector_degrades_without_using_nan_scores) ... ok
+test_embedding_cache_reuses_verified_inputs (tests.test_rag_retrieval.RagRetrievalTest.test_embedding_cache_reuses_verified_inputs) ... ok
+test_embedding_zero_vectors_are_not_ready (tests.test_rag_retrieval.RagRetrievalTest.test_embedding_zero_vectors_are_not_ready) ... ok
+test_empty_explicit_index_scope_does_not_send_all_documents (tests.test_rag_retrieval.RagRetrievalTest.test_empty_explicit_index_scope_does_not_send_all_documents) ... ok
+test_empty_source_reports_gap_instead_of_complete_retrieval (tests.test_rag_retrieval.RagRetrievalTest.test_empty_source_reports_gap_instead_of_complete_retrieval) ... ok
+test_exact_lexical_body_match_survives_semantic_reranker_demoting_it (tests.test_rag_retrieval.RagRetrievalTest.test_exact_lexical_body_match_survives_semantic_reranker_demoting_it) ... ok
+test_expired_deadline_stops_before_any_model_call (tests.test_rag_retrieval.RagRetrievalTest.test_expired_deadline_stops_before_any_model_call) ... ok
+test_frozen_lexical_statistics_survive_new_publication (tests.test_rag_retrieval.RagRetrievalTest.test_frozen_lexical_statistics_survive_new_publication) ... ok
+test_invalid_rerank_scores_degrade_with_failure_trace (tests.test_rag_retrieval.RagRetrievalTest.test_invalid_rerank_scores_degrade_with_failure_trace) ... ok
+test_large_finite_vectors_have_finite_normalized_cosine (tests.test_rag_retrieval.RagRetrievalTest.test_large_finite_vectors_have_finite_normalized_cosine) ... ok
+test_large_scope_noise_preselection_keeps_typo_candidate (tests.test_rag_retrieval.RagRetrievalTest.test_large_scope_noise_preselection_keeps_typo_candidate) ... ok
+test_model_document_filter_cannot_expand_scope (tests.test_rag_retrieval.RagRetrievalTest.test_model_document_filter_cannot_expand_scope) ... ok
+test_model_document_filter_narrows_frozen_scope_before_recall (tests.test_rag_retrieval.RagRetrievalTest.test_model_document_filter_narrows_frozen_scope_before_recall) ... ok
+test_newly_completed_vectors_do_not_change_queued_scope (tests.test_rag_retrieval.RagRetrievalTest.test_newly_completed_vectors_do_not_change_queued_scope) ... ok
+test_noise_recall_preserves_original_spelling_and_scope (tests.test_rag_retrieval.RagRetrievalTest.test_noise_recall_preserves_original_spelling_and_scope) ... ok
+test_numpy_vectors_retrieve_without_keyword_overlap (tests.test_rag_retrieval.RagRetrievalTest.test_numpy_vectors_retrieve_without_keyword_overlap) ... ok
+test_original_blocks_are_not_replaced (tests.test_rag_retrieval.RagRetrievalTest.test_original_blocks_are_not_replaced) ... ok
+test_oversized_formula_reports_source_review_without_partial_chunks (tests.test_rag_retrieval.RagRetrievalTest.test_oversized_formula_reports_source_review_without_partial_chunks) ... ok
+test_preview_does_not_call_embedding_or_reranker (tests.test_rag_retrieval.RagRetrievalTest.test_preview_does_not_call_embedding_or_reranker) ... ok
+test_provider_call_timeout_degrades_while_shared_budget_remains (tests.test_rag_retrieval.RagRetrievalTest.test_provider_call_timeout_degrades_while_shared_budget_remains) ... ok
+test_provider_revision_change_degrades_without_sending_query (tests.test_rag_retrieval.RagRetrievalTest.test_provider_revision_change_degrades_without_sending_query) ... ok
+test_provider_timeout_cannot_publish_keyword_fallback_after_total_deadline (tests.test_rag_retrieval.RagRetrievalTest.test_provider_timeout_cannot_publish_keyword_fallback_after_total_deadline) ... ok
+test_query_syntax_is_data_not_fts_injection (tests.test_rag_retrieval.RagRetrievalTest.test_query_syntax_is_data_not_fts_injection) ... ok
+test_readable_page_reports_pending_structure_in_frozen_generation (tests.test_rag_retrieval.RagRetrievalTest.test_readable_page_reports_pending_structure_in_frozen_generation) ... ok
+test_real_fts_bm25_and_locators (tests.test_rag_retrieval.RagRetrievalTest.test_real_fts_bm25_and_locators) ... ok
+test_remote_index_without_fixed_preview_is_rejected (tests.test_rag_retrieval.RagRetrievalTest.test_remote_index_without_fixed_preview_is_rejected) ... ok
+test_remote_preview_provider_change_before_worker_sends_nothing (tests.test_rag_retrieval.RagRetrievalTest.test_remote_preview_provider_change_before_worker_sends_nothing) ... ok
+test_remote_preview_reparse_between_preview_and_worker_sends_nothing (tests.test_rag_retrieval.RagRetrievalTest.test_remote_preview_reparse_between_preview_and_worker_sends_nothing) ... ok
+test_remote_preview_stops_after_replacement_before_next_batch (tests.test_rag_retrieval.RagRetrievalTest.test_remote_preview_stops_after_replacement_before_next_batch) ... ok
+test_reparse_same_sha_has_new_generation (tests.test_rag_retrieval.RagRetrievalTest.test_reparse_same_sha_has_new_generation) ... ok
+test_replace_keeps_old_answer_version (tests.test_rag_retrieval.RagRetrievalTest.test_replace_keeps_old_answer_version) ... ok
+test_rrf_uses_ranks_not_incompatible_raw_scores (tests.test_rag_retrieval.RagRetrievalTest.test_rrf_uses_ranks_not_incompatible_raw_scores) ... ok
+test_scope_filter_happens_before_limit (tests.test_rag_retrieval.RagRetrievalTest.test_scope_filter_happens_before_limit) ... ok
+test_selected_text_ignores_keyword_overlap_and_stays_pinned (tests.test_rag_retrieval.RagRetrievalTest.test_selected_text_ignores_keyword_overlap_and_stays_pinned) ... ok
+test_shared_deadline_reaches_both_actual_provider_calls (tests.test_rag_retrieval.RagRetrievalTest.test_shared_deadline_reaches_both_actual_provider_calls) ... ok
+test_short_overlap_does_not_hide_required_original_conditions (tests.test_rag_retrieval.RagRetrievalTest.test_short_overlap_does_not_hide_required_original_conditions) ... ok
+test_trace_reports_start_before_actual_provider_and_terminal_after (tests.test_rag_retrieval.RagRetrievalTest.test_trace_reports_start_before_actual_provider_and_terminal_after) ... ok
+test_true_provider_rerank_changes_fusion_order (tests.test_rag_retrieval.RagRetrievalTest.test_true_provider_rerank_changes_fusion_order) ... ok
+test_wrong_selected_range_does_not_match_another_occurrence (tests.test_rag_retrieval.RagRetrievalTest.test_wrong_selected_range_does_not_match_another_occurrence) ... ok
+
+----------------------------------------------------------------------
+Ran 46 tests in 8.543s
+
+OK

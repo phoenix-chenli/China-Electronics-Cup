@@ -35,11 +35,18 @@ export function documentQuestionScope(mode:string,document:Obj,page:number,selec
   ...(mode==='focused'&&selection?{text_range:{start:selection.start,end:selection.end},quote:selection.text}:{})}
 }
 
+export function RagCompleteness({result}:Obj){
+ const coverage=result.rag?.completeness
+ if(!coverage||!Array.isArray(coverage.requirements)||!Number.isInteger(coverage.total)||coverage.total<=0)return null
+ const rows:Obj[]=coverage.requirements,repair=result.rag?.completion_repair
+ return <div className="rag-completeness"><strong>逐项回答：{coverage.answered} / {coverage.total}</strong><small>依据模型支持检查统计，仍需核对原文；不代表事实准确率。</small><details open={!coverage.complete}><summary>{coverage.complete?'查看已回答分项':'查看已回答与未解决分项'}</summary><ul>{rows.map((row:Obj)=><li key={row.id}><span className={'badge '+(row.answer_status==='answered'?'green':'amber')}>{row.answer_status==='answered'?'已回答':row.answer_status==='conflicted'?'证据冲突':row.source_status==='supported'?'已有证据，尚未答出':'仍缺证据'}</span> {row.text}{row.answer_status!=='answered'&&row.reason&&<p>{row.reason}</p>}</li>)}</ul></details>{repair&&<small>本轮已尝试{repair.action==='retrieve'?'定向补查并补写':'依据已有证据补写'}一次；{coverage.complete?'分项已覆盖。':'仍有未解决分项。'}</small>}</div>
+}
+
 export function RagOutcome({result,onEvidence}:Obj){
  const status=result.answer_status==='supported'&&!result.claims?.length?'refused':result.answer_status||(!result.claims?.length?'refused':'supported'),missing=notes(result.missing_requirements),conflicts=notes(result.conflicts)
  const local=result.agent?.mode==='local',caution=status!=='supported'||local,text=result.refusal_reason||(['refused','failed','insufficient_evidence'].includes(status)?result.answer:!result.claims?.length?result.answer:'')
  const evidence:Obj[]=result.evidence||[],related=['refused','partial','insufficient_evidence'].includes(status)||!result.claims?.length
- return <section className={'rag-outcome '+(caution?'is-caution':'')} aria-label="本轮证据回答状态" role="status"><div className="rag-outcome-heading">{caution?<AlertCircle size={18}/>:<CheckCircle2 size={18}/>}<strong>{local?'原文检索，未生成综合答案':answerNames[status]||'本轮回答状态待确认'}</strong></div>{text&&<p className="preserve-text">{text}</p>}{missing.length>0&&<div><h4>仍缺少的信息</h4><ul>{missing.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{conflicts.length>0&&<div><h4>资料中的冲突</h4><ul>{conflicts.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{related&&evidence.length>0&&<details><summary>可查看的相关{evidence.some(e=>e.type!=='document')?'依据':'原文'} · {evidence.length} 处</summary><p className="muted">相关材料供核对，不能据此补出尚未获支持的结论。</p><div className="rag-related">{evidence.map(e=><button type="button" className="text-link" key={e.id} onClick={()=>onEvidence?.(e)}><FileText size={14}/>{e.source}{e.locator?.page?' · '+sourcePosition(e.locator):''}</button>)}</div></details>}<RetrievalStatus result={result}/></section>
+ return <section className={'rag-outcome '+(caution?'is-caution':'')} aria-label="本轮证据回答状态" role="status"><div className="rag-outcome-heading">{caution?<AlertCircle size={18}/>:<CheckCircle2 size={18}/>}<strong>{local?'原文检索，未生成综合答案':answerNames[status]||'本轮回答状态待确认'}</strong></div>{text&&<p className="preserve-text">{text}</p>}{missing.length>0&&<div><h4>仍缺少的信息</h4><ul>{missing.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{conflicts.length>0&&<div><h4>资料中的冲突</h4><ul>{conflicts.map((x,i)=><li key={i}>{x}</li>)}</ul></div>}{related&&evidence.length>0&&<details><summary>可查看的相关{evidence.some(e=>e.type!=='document')?'依据':'原文'} · {evidence.length} 处</summary><p className="muted">相关材料供核对，不能据此补出尚未获支持的结论。</p><div className="rag-related">{evidence.map(e=><button type="button" className="text-link" key={e.id} onClick={()=>onEvidence?.(e)}><FileText size={14}/>{e.source}{e.locator?.page?' · '+sourcePosition(e.locator):''}</button>)}</div></details>}<RagCompleteness result={result}/><RetrievalStatus result={result}/></section>
 }
 
 export function RagScopeNote({result}:Obj){

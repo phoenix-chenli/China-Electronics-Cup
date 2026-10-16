@@ -214,6 +214,7 @@ class RagAgentTest(unittest.TestCase):
                  {'text':'每厂原句中的单位','independent':True,'answer_kind':'original_source_check'},
                  {'text':'是否可直接合计','independent':False,'answer_kind':'bounded_inference'},
                  {'text':'统一口径还缺什么','independent':False,'answer_kind':'identify_missing_inputs'}]
+        for i,row in enumerate(planned):row['question_part_ids']=['Q1' if i<2 else 'Q2']
         captured={}
         def judge(tool,label,system,payload):
             captured.update(payload);return {'requirements':planned}

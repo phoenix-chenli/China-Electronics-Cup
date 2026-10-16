@@ -9,3 +9,5 @@
 .rag-local-models{margin-top:20px}.rag-local-models article{display:flex;gap:16px;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:14px 0}.rag-local-models article>div{display:grid;gap:5px;min-width:0}.rag-local-models strong{overflow-wrap:anywhere}.rag-local-models small{color:var(--muted)}
 .document-question-scope{display:grid;gap:6px;padding:8px 0}.document-question-scope label{display:flex;gap:10px;align-items:center}.document-question-scope select{max-width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel-solid);color:inherit}.document-question-scope small{color:var(--muted)}
 @media(max-width:640px){.rag-provider-field{grid-template-columns:1fr}.rag-local-models article{align-items:flex-start;flex-direction:column}.rag-local-models button{width:100%}.rag-index-actions .button{flex:1}}
+
+.rag-completeness{display:grid;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}.rag-completeness small{color:var(--muted)}.rag-completeness li{margin:8px 0}.rag-completeness summary{cursor:pointer}

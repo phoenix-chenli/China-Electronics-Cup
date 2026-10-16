@@ -18,7 +18,7 @@ from typing import Literal
 
 from fastapi import APIRouter, HTTPException
 from pydantic import Field
-from . import connections as c, documents, engine, store as s, database_query, rag_grounding
+from . import connections as c, documents, engine, store as s, database_query, rag_grounding, rag_completeness
 
 router = APIRouter(prefix="/api/agent")
 MAX_STEPS = 8
@@ -413,6 +413,8 @@ class Run:
         self.rag_scope = self.database_context.get('rag_scope')
         self.spans, self.delivered_spans, self.latest_spans = {}, set(), []
         self.requirements, self.assessment, self.search_rounds = [], None, 0
+        self.completeness_repairs = 0
+        self.retained_answer_items = []
         self.database_snapshot = None
         self.schema_cache, self.search_cache, self.database_cache = {}, {}, {}
         self.assessment_fingerprint = None
@@ -537,7 +539,7 @@ class Run:
     def trace_output(value):
         """Keep real, bounded tool returns available for local inspection."""
         output = {k: copy.deepcopy(value[k]) for k in
-                  ("status", "checks", "tool", "action", "model", "usage", "count", "boundary", "query_spec", "sql", "params", "source", "validation", "row_limit", "truncated", "retrieval", "assessment", "coverage", "missing_requirements", "conflicts", "cached") if k in value}
+                  ("status", "checks", "tool", "action", "model", "usage", "count", "boundary", "query_spec", "sql", "params", "source", "validation", "row_limit", "truncated", "retrieval", "assessment", "coverage", "missing_requirements", "conflicts", "cached", "requirement_ids", "span_ids", "searches") if k in value}
         for key, limit in (("facts", 12), ("formulas", 8), ("rows", 5), ("tables", 10)):
             if key in value:
                 output[key] = copy.deepcopy(value[key][:limit])
@@ -750,7 +752,9 @@ class Run:
             raise ValueError('最终回答引用超过8个完整原文位置，请缩小范围；未省略待核对的来源')
         preferred = [sid for x in (self.assessment or {}).get('coverage', []) if x['status'] == 'supported'
                      for sid in x.get('support_span_ids', [])]
-        chosen = rag_grounding.select_span_ids(self.spans, self.latest_spans + preferred, cited)
+        groups = [[sid for sid in row.get('support_span_ids', []) if sid in self.delivered_spans]
+                  for row in (self.assessment or {}).get('coverage', []) if row['status'] == 'supported']
+        chosen = rag_grounding.select_span_ids(self.spans, self.latest_spans + preferred, cited, coverage_groups=groups)
         spans = {sid: self.spans[sid] for sid in chosen if sid in self.delivered_spans}
         selected = [self.facts[claim['fact_id']] for claim in claims or [] if claim.get('fact_id') in self.facts]
         ids = {f['id'] for f in selected}
@@ -831,7 +835,8 @@ class Run:
         public = self.public_evidence(sources)
         self.latest_spans = rag_grounding.retrieved_span_order(public,value.get('retrieval',{}))
         self.result.setdefault('rag', {'scope': copy.deepcopy(self.rag_scope), 'retrieval': []})['retrieval'].append(copy.deepcopy(value.get('retrieval', {})))
-        self.result['rag']['source_gaps']=copy.deepcopy(value.get('source_gaps',[]))
+        self.result['rag']['source_gaps']=rag_completeness.source_gaps(
+            self.result['rag'].get('source_gaps', []), value.get('source_gaps', []))
         assessment = self.assess_evidence() if self.rag_enabled else None
         retrieval=value.get('retrieval',{})
         summary={k:copy.deepcopy(retrieval[k]) for k in ('candidate_count','document_filter','preserved_lexical_candidate','reranked','errors','lexical_generation','rrf_k','duration_ms','boundary') if k in retrieval}
@@ -1051,7 +1056,7 @@ class Run:
         self.database_cache[key]=copy.deepcopy(returned)
         return returned
 
-    def tool(self, name, args):
+    def tool(self, name, args, origin='model_tool_selection'):
         if name not in TOOLS:
             raise ValueError("模型请求了未授权工具；只允许现有只读业务工具")
         if name not in self.allowed_tools:
@@ -1066,8 +1071,10 @@ class Run:
         plan = self.result["agent"]["plan"]
         planned = next((p for p in plan if p["tool"] == name and p["status"] in {"pending", "failed"}), None)
         if planned is None:
-            planned={"id":"tool-"+str(self.tool_count),"label":TOOLS[name],"tool":name,"status":"pending","origin":"model_tool_selection"}
+            planned={"id":"tool-"+str(self.tool_count),"label":TOOLS[name],"tool":name,"status":"pending","origin":origin}
             plan.append(planned)
+        if origin != 'model_tool_selection':
+            planned['origin'] = origin
         if planned:
             planned["status"] = "running"
         try:
@@ -1273,6 +1280,19 @@ class Run:
         raw = body.get("claims")
         if not isinstance(raw, list) or len(raw) > 12:
             raise ValueError("答案必须包含最多 12 条有来源的结论")
+        raw = copy.deepcopy(raw)
+        # A repair must not silently drop a previously accepted document-only
+        # answer. Rebuild and review these items again; never carry SQL facts
+        # across query scopes or carry a previous model verdict as proof.
+        texts = [item.get('text') or item.get('quote') for item in raw if isinstance(item, dict)]
+        for item in self.retained_answer_items:
+            if (item.get('text') or item.get('quote')) not in texts:
+                raw.append(copy.deepcopy(item))
+        if len(raw) > 12:
+            raise ValueError('补全回答含已核验分项，超过12条结论预算；请合并相同目标并保留全部子问')
+        if self.rag_enabled:
+            self.result['rag'].pop('verification', None)
+            self.result['rag']['empty_draft'] = not raw
         if any(isinstance(x, dict) and x.get('kind') == 'synthesis'
                and (x.get('support_span_ids') or not self.database_mode) for x in raw):
             self.rag_enabled = True
@@ -1397,6 +1417,11 @@ class Run:
                 if check.get('assessment_reconciliation'):
                     self.result['rag']['assessment_reconciliation']=copy.deepcopy(check['assessment_reconciliation'])
                 self.result['rag']['verification'] = copy.deepcopy(check)
+                accepted = {claim['id']: claim for claim in check['claims']}
+                self.retained_answer_items = [copy.deepcopy(item) for i, item in enumerate(raw)
+                    if accepted.get('claim-'+str(i+1), {}).get('support_span_ids')
+                    and not accepted['claim-'+str(i+1)].get('fact_id')
+                    and not accepted['claim-'+str(i+1)].get('support_fact_ids')]
                 self.result.update(answer_status=check['answer_status'],
                     missing_requirements=check['missing_requirements'], conflicts=check['conflicts'])
                 claims = check['claims']
@@ -1452,6 +1477,8 @@ class Run:
                         'detail':'综合解释尚未核验，已保留同次SQL实际结果；可在来源中核对字段、筛选与表达式。'})
 
         self.result["claims"] = claims
+        if claims:
+            self.result.pop('refusal_reason', None)
         self.result["answer"] = "\n\n".join(f["text"] for f in claims) or "本轮没有取得足够依据，未生成业务结论。"
         if self.result.get('answer_status') == 'partial':
             self.result['answer'] += '\n\n未完整回答：' + '；'.join(self.result.get('missing_requirements', []))
@@ -1471,7 +1498,78 @@ class Run:
             missing_requirements=missing, conflicts=conflicts or (self.assessment or {}).get('conflicts', []))
         self.result['agent']['review'] = {'status': 'needs_evidence', 'detail': reason}
 
+    def update_completeness(self):
+        if not self.rag_enabled or not self.requirements:
+            return None
+        rag = self.result['rag']
+        value = rag_completeness.ledger(self.result['question'], self.requirements,
+            self.assessment, rag.get('verification'))
+        rag['completeness'] = value
+        if rag.get('completion_repair'):
+            rag['completion_repair']['after'] = copy.deepcopy(value)
+            rag['completion_repair']['resolved'] = value['complete']
+        return value
+
+    def repair_completeness(self):
+        coverage = self.update_completeness()
+        if not coverage or not self.search_rounds:
+            return False
+        decision = rag_completeness.recovery(coverage,
+            self.result['rag'].get('verification', {}).get('checks', []),
+            searches=self.search_rounds, calls_left=self.model_call_limit-self.calls,
+            tools_left=self.step_limit-self.tool_count,
+            attempted=self.completeness_repairs >= rag_completeness.MAX_REPAIRS,
+            empty_draft=self.result['rag'].get('empty_draft', False)
+                and not self.result['agent'].get('answer_repairs'))
+        self.result['rag']['completion_stop_reason'] = decision['reason']
+        if decision['action'] == 'stop':
+            return False
+        self.guard()
+        self.completeness_repairs += 1
+        record = {**decision, 'attempt': self.completeness_repairs,
+            'before': copy.deepcopy(coverage), 'status': 'running', 'searches_before': self.search_rounds,
+            'calls_before': self.calls, 'retained_claims': len(self.retained_answer_items)}
+        self.result['rag']['completion_repair'] = record
+        query, targeted = rag_completeness.focused_query(self.result['question'], self.requirements,
+            decision['requirement_ids']) if decision['action'] == 'retrieve' else (None, decision['requirement_ids'])
+        if decision['action'] == 'retrieve' and not query:
+            record.update(status='blocked', reason='完整问题与补全目标超过查询预算，未截断原问题')
+            return False
+        record['targeted_requirement_ids'] = targeted
+        def prepare():
+            if decision['action'] == 'retrieve':
+                self.tool('document.search', {'query': query}, origin='server_completeness_recovery')
+            packet = self.evidence_packet()
+            checkpoint = {'original_question': self.result['question'], 'requirements': self.requirements,
+                'question_coverage': self.update_completeness(), 'evidence': packet,
+                'retained_document_answer_items': self.retained_answer_items,
+                'instruction': '进行本轮唯一一次答全补救。只使用这些真实工具证据回答原问题的全部可答分项，保留已核验的独立回答；'
+                    '缺少的部分明确列出，不补造数值、因果或不存在结论。保留原对象、时期、单位、否定和例外；'
+                    '优先直接返回action:answer，全部结论仍须重新核验。synthesis使用evidence.spans中的id作为support_span_ids。'}
+            self.messages = self.messages[:2]+[{'role': 'user', 'content': c.encode(checkpoint)}]
+            if sum(len(m['content']) for m in self.messages) > MAX_CONTEXT_CHARS:
+                raise ValueError('补全证据超过上下文预算，请缩小问题；未截断原文')
+            return {'action': decision['action'], 'requirement_ids': targeted,
+                'span_ids': [s['id'] for s in packet['spans']], 'searches': self.search_rounds}
+        try:
+            self.step('answer.complete', '补齐未回答的分项', prepare, {'action': decision['action'], 'requirement_ids': targeted})
+            record.update(status='prepared', searches_after=self.search_rounds)
+        except InterruptedError:
+            record['status'] = 'cancelled'
+            raise
+        except ValueError as exc:
+            record['status'] = 'failed'
+            raise EvidenceJudgmentFailure('答全补救未完成：'+str(exc)) from exc
+        except Exception:
+            record['status'] = 'failed'
+            raise
+        return True
+
     def finish(self):
+        self.update_completeness()
+        repair = self.result.get('rag', {}).get('completion_repair')
+        if repair and repair['status'] == 'prepared':
+            repair.update(status='completed', calls_after=self.calls)
         for item in self.result["agent"]["plan"]:
             if item["status"] == "pending":
                 item["status"] = "skipped"
@@ -1519,6 +1617,8 @@ class Run:
                     bindings=[{k:claim[k] for k in ('fact_id','evidence_id','kind','support_span_ids') if k in claim}
                               for claim in body.get('claims',[]) if isinstance(claim,dict)]
                     self.step("answer.verify", "核验并组织答案", lambda: self.answer(body), {"claim_count": len(body.get("claims", [])), 'claim_bindings':bindings})
+                    if self.repair_completeness():
+                        continue
                     return self.finish()
                 except ValueError as exc:
                     if isinstance(exc,EvidenceJudgmentFailure):
