@@ -100,7 +100,7 @@ source_vocabulary是当前公开资料的真实维度取值与定义，不是示
 数据库查询返回最多200行。截断结果只代表可见片段，不当作全表统计。查看返回列名、值及查询作用域再选择事实，不能自行推断单位。
 database.query返回already_executed表示同一SQL已在本轮成功执行，返回原查询快照及原fact_id；不是一次新的数据读取。停止重复该SQL。数值已足够时转document.search或answer；缺少计算列时在新SQL中一次补全。
 business.query参数question（完整业务问题）、confirmed（可选已知条件）；仅支持销售示例口径。
-document.search参数query，可选focus字符串数组、year整数（例如2024，不是字符串）、document_ids本轮rag_scope.documents中的文档ID数组。补查某份原文时可限定document_ids，不能引用范围外文档。用需要核对的指标、原句关键词与对象组成简短查询，不把整段复杂问题重复作检索词。依据查得实体再搜索，不能自行猜冠军。
+document.search参数query，可选focus字符串数组、year整数（例如2024，不是字符串）、document_ids本轮目录预览或真实工具返回的文档ID数组（服务端校验固定范围）。补查某份原文时可限定document_ids，不能引用范围外文档。用需要核对的指标、原句关键词与对象组成简短查询，不把整段复杂问题重复作检索词。依据查得实体再搜索，不能自行猜冠军。
 document.search的source_gaps说明固定来源有缺失文字页，需要重新识别原件；重复搜索不能恢复空页。不得据此宣称资料不存在所问内容，不把待复核公式或未确认表头当作确定证据。
 formula.calculate参数expression、parameters:[{name,value,unit,evidence_ids}]；每个数值必须来自本轮工具的数值事实或公式参数。
 应用文档公式时额外给formula_source:{support_span_id,source_quote,result_unit}。原文需有明确公式如fee [元] = base + max(0, minutes - included) * price；结构和量纲由服务端核对。只列数字或自然语言规则不能当作已确认公式，不明确时澄清。
@@ -381,6 +381,17 @@ def row_fact_text(index, row, columns, display_row=None, single=False):
     return ('' if single else '返回结果第 ' + str(index + 1) + ' 行：') + pairs + '。'
 
 
+def _rag_scope_preview(scope):
+    """Bound prompt metadata, never the server-owned retrieval scope or quotes."""
+    if not scope:return {},[]
+    sources=scope.get("documents",[]);shown=sources[:8]
+    view={"scope_type":scope.get("scope_type"),"documents":[dict(row) for row in shown],
+          "document_count":len(sources),"catalog_preview_only":len(sources)>len(shown)}
+    catalog=[{"document_id":row["document_id"],"name":s.doc_get(row["document_id"])["name"],
+              "sha256":row["sha256"]} for row in shown]
+    return view,catalog
+
+
 class Run:
     def __init__(self, question, previous, confirmed, connection, cancelled, progress, document_context, database_context=None):
         self.database_context = database_context or query_context(previous, document_context, question=question)
@@ -473,6 +484,11 @@ class Run:
         from . import database_answer
         self.inherited_database_filters=database_answer.followup_filters(question,self.previous,
             self.database_context.get('database_connection_id')) if self.database_mode else []
+        prompt_scope,prompt_catalog=_rag_scope_preview(self.rag_scope)
+        if prompt_scope.get("catalog_preview_only"):
+            self.result["agent"]["scope_preview"]={"document_count":prompt_scope["document_count"],
+                "preview_count":len(prompt_catalog),"server_scope_unchanged":True}
+            guidance+="文档目录仅为最多8份预览，不代表全部固定范围。默认省略document_ids检索服务端全部范围；补查可使用本轮真实证据返回的文档编号，不能因目录未列出就推断资料不存在。"
         self.messages = [{"role": "system", "content": SYSTEM + '\n'+guidance+"\n本轮可用工具：" + c.encode({k:v for k,v in TOOLS.items() if k in self.allowed_tools})},
                          {"role": "user", "content": c.encode({"question": self.model_question,
                           "question_normalization": normalized_view,
@@ -490,10 +506,8 @@ class Run:
                           "database_source": {'connection_id': self.database_context.get('database_connection_id'), 'local_workspace': not self.database_context.get('database_connection_id')},
                           "source_vocabulary":self.database_context.get('source_vocabulary'),
                           "document_scope": {k: v for k, v in (self.document_context or {}).items() if k in {"document_id", "sha256", "page"}},
-                          "rag_scope": {k: v for k, v in (self.rag_scope or {}).items() if k in {'scope_type', 'documents'}},
-                          "document_catalog": [{'document_id':d['document_id'], 'name':s.doc_get(d['document_id'])['name'],
-                                                'sha256':d['sha256']} for d in (self.rag_scope or {}).get('documents', [])]})}]
-
+                          "rag_scope": prompt_scope,
+                          "document_catalog": prompt_catalog})}]
     def guard(self):
         if self.cancelled.is_set():
             raise InterruptedError("查询已取消")
@@ -610,7 +624,8 @@ class Run:
         active=self.evidence_packet()
         selected_ids=[span['id'] for span in active['spans']]
         evidence=[{'id':span['evidence_id'],'type':'document','source':span['source'],
-            'snippet':span['text'],'page':span['page'],'version':span['sha256'],
+            'snippet':span['text'],'document_id':span['origin']['document_id'],
+            'page':span['page'],'version':span['sha256'],
             'support_span_ids':[span['id']],'quality':span['extraction']} for span in active['spans']]
         retained={'status':'context_retained','evidence':evidence,'count':len(evidence),
             'page_continuation_candidates':active.get('page_continuation_candidates',[]),
@@ -1187,6 +1202,7 @@ class Run:
         for e in sources[:8]:
             item = {"id": e['id'], 'type': e['type'], 'source': e['source'],
                     'snippet': e.get('snippet', '') if e['type'] == 'document' and e.get('support_span_ids') else e.get('snippet', '')[:2000],
+                    'document_id': e.get('locator', {}).get('document_id'),
                     'page': e.get('locator', {}).get('page'), 'version': e.get('locator', {}).get('sha256')}
             if e['type'] == 'document' and e.get('support_span_ids'):
                 span = rag_grounding.bind_source(e)

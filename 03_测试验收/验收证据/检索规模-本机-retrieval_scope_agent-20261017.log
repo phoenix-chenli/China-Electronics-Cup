@@ -1,0 +1,19 @@
+test_two_hundred_documents_remain_searchable_beyond_prompt_preview (tests.test_retrieval_scope_agent.LargeCorpusAgentHTTP.test_two_hundred_documents_remain_searchable_beyond_prompt_preview) ... \\?\[原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:44: SyntaxWarning: invalid escape sequence '\.'
+  re_han_default = re.compile("([\u4E00-\u9FD5a-zA-Z0-9+#&\._%\-]+)", re.U)
+\\?\[原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:46: SyntaxWarning: invalid escape sequence '\s'
+  re_skip_default = re.compile("(\r\n|\s)", re.U)
+\\?\[原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\finalseg\__init__.py:78: SyntaxWarning: invalid escape sequence '\.'
+  re_skip = re.compile("([a-zA-Z0-9]+(?:\.\d+)?%?)")
+Building prefix dict from the default dictionary ...
+Loading model from cache [原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\rag-local-tests\jieba.cache
+Loading model cost 0.920 seconds.
+Prefix dict has been built successfully.
+ok
+test_non_document_query_has_no_synthetic_scope (tests.test_retrieval_scope_agent.ScopePreviewContracts.test_non_document_query_has_no_synthetic_scope) ... ok
+test_small_scope_keeps_its_whole_catalog (tests.test_retrieval_scope_agent.ScopePreviewContracts.test_small_scope_keeps_its_whole_catalog) ... ok
+test_thousand_source_metadata_is_bounded_without_mutating_scope (tests.test_retrieval_scope_agent.ScopePreviewContracts.test_thousand_source_metadata_is_bounded_without_mutating_scope) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 37.400s
+
+OK

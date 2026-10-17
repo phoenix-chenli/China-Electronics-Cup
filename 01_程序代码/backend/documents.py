@@ -64,8 +64,19 @@ def active_parse(c, did, sha):
 
 
 def current_parse_id(did, sha):
-    with s.conn() as c: row=active_parse(c,did,sha)
-    return row["id"] if row else None
+    with s.conn() as c:
+        return active_parse_id(c,did,sha)
+
+
+def active_parse_id(c, did, sha):
+    """Read only the identity; loading an entire parse is unnecessary here."""
+    pointer=c.execute('SELECT parse_id FROM ef_document_active_parses WHERE document_id=? AND sha256=?',(did,sha)).fetchone()
+    if pointer:
+        row=c.execute('SELECT id FROM ef_document_parses WHERE id=? AND document_id=? AND sha256=?',(pointer[0],did,sha)).fetchone()
+        if not row:raise ValueError('当前解析指针已损坏，未切换其他解析')
+        return row[0]
+    row=c.execute('SELECT id FROM ef_document_parses WHERE document_id=? AND sha256=? AND parser IN (?,?) ORDER BY created_at DESC,id DESC LIMIT 1',(did,sha,PARSER,LEGACY_PARSER)).fetchone()
+    return row[0] if row else None
 
 
 def version(did, sha=None):

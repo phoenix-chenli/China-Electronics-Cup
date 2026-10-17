@@ -1,0 +1,282 @@
+{
+  "date": "2026-10-17",
+  "base_commit": "d2e1efe1dcf98027031fc105be0b07dad3581410",
+  "backend_tests": {
+    "repository": 271,
+    "local": 254
+  },
+  "frontend_changed": false,
+  "source_verification": "Every tested backend/test file matches the staged Git blob after CRLF to LF normalization. Original measured raw-file hashes remain in the evidence.",
+  "tested_source_sha256": {
+    "01_程序代码/backend/agent.py": {
+      "tested_raw_sha256": "7827b5850c5ae66693bf71367224c28e6aeedb35e541e4821f5524365fb4b961",
+      "committed_lf_sha256": "5e96091dc8743df3fad38942c1f44761a802d03afe88fde057db0a408071cfbb"
+    },
+    "01_程序代码/backend/anthropic_vision.py": {
+      "tested_raw_sha256": "3e3c67704c4c5cfcc9c6a4d78ce6e51b0514f805b9b2e5696b69da84bff330c0",
+      "committed_lf_sha256": "3e3c67704c4c5cfcc9c6a4d78ce6e51b0514f805b9b2e5696b69da84bff330c0"
+    },
+    "01_程序代码/backend/chart_structure.py": {
+      "tested_raw_sha256": "779a1dcd5c7e203e8c9b4bcb0f2e19169108e7bc6618fcf8cb51c11849a10502",
+      "committed_lf_sha256": "779a1dcd5c7e203e8c9b4bcb0f2e19169108e7bc6618fcf8cb51c11849a10502"
+    },
+    "01_程序代码/backend/chinook_benchmark.py": {
+      "tested_raw_sha256": "4ad883306f06c48b4aa401351b730a16ca3cd529f43ea35a34acdd676743a050",
+      "committed_lf_sha256": "4ad883306f06c48b4aa401351b730a16ca3cd529f43ea35a34acdd676743a050"
+    },
+    "01_程序代码/backend/connections.py": {
+      "tested_raw_sha256": "5b1328e729ce0c93692f98cf08d8adfcda45fa8e8341da575d8172d48f0cc979",
+      "committed_lf_sha256": "5b1328e729ce0c93692f98cf08d8adfcda45fa8e8341da575d8172d48f0cc979"
+    },
+    "01_程序代码/backend/conversations.py": {
+      "tested_raw_sha256": "263a7f01993a9671723800045d1c53258c52cc31d03e7b9bb78343f13d2211d4",
+      "committed_lf_sha256": "263a7f01993a9671723800045d1c53258c52cc31d03e7b9bb78343f13d2211d4"
+    },
+    "01_程序代码/backend/counter_check.py": {
+      "tested_raw_sha256": "698ce6a9a94336e1eaec7416d98a6a8aae0704dd4e5582b8d5de7b4c2e47804f",
+      "committed_lf_sha256": "698ce6a9a94336e1eaec7416d98a6a8aae0704dd4e5582b8d5de7b4c2e47804f"
+    },
+    "01_程序代码/backend/database_answer.py": {
+      "tested_raw_sha256": "149e64cde2c6685a48f51d0c30e09e03d0b39b02e80e9d3a3d67386841be7223",
+      "committed_lf_sha256": "149e64cde2c6685a48f51d0c30e09e03d0b39b02e80e9d3a3d67386841be7223"
+    },
+    "01_程序代码/backend/database_query.py": {
+      "tested_raw_sha256": "fe47a814b8fb474b281702f9af7d68182893c1747a6525eef98720cee1a7561e",
+      "committed_lf_sha256": "fe47a814b8fb474b281702f9af7d68182893c1747a6525eef98720cee1a7561e"
+    },
+    "01_程序代码/backend/documents.py": {
+      "tested_raw_sha256": "20fd0e16d63746a4c09ea8ec620df09f641e44e072a8b7fffe868e695b215750",
+      "committed_lf_sha256": "20fd0e16d63746a4c09ea8ec620df09f641e44e072a8b7fffe868e695b215750"
+    },
+    "01_程序代码/backend/document_native.py": {
+      "tested_raw_sha256": "63274181fd28656dccd838cd790ee393488cc15a5a72bfa29fe9194370e117cd",
+      "committed_lf_sha256": "63274181fd28656dccd838cd790ee393488cc15a5a72bfa29fe9194370e117cd"
+    },
+    "01_程序代码/backend/document_providers.py": {
+      "tested_raw_sha256": "d9d1ae35033f0ccb7384223c467a3c067afb57fc5143d9d28b7d8d90b8f8f27f",
+      "committed_lf_sha256": "d9d1ae35033f0ccb7384223c467a3c067afb57fc5143d9d28b7d8d90b8f8f27f"
+    },
+    "01_程序代码/backend/document_quality.py": {
+      "tested_raw_sha256": "121b1ba139f9ca2df6cde4bcb19a85ac4f82fbe98d6722e3a215d66421d0f51e",
+      "committed_lf_sha256": "121b1ba139f9ca2df6cde4bcb19a85ac4f82fbe98d6722e3a215d66421d0f51e"
+    },
+    "01_程序代码/backend/document_review.py": {
+      "tested_raw_sha256": "2dabdbe01fe9d178c1fc9ed3c9d9277c29bf8ee81e6d2b94d7154775669012aa",
+      "committed_lf_sha256": "2dabdbe01fe9d178c1fc9ed3c9d9277c29bf8ee81e6d2b94d7154775669012aa"
+    },
+    "01_程序代码/backend/document_tasks.py": {
+      "tested_raw_sha256": "675b0113e652d50d0d494699db3fc60d156a2eac90ba36d224c2781577c8df91",
+      "committed_lf_sha256": "675b0113e652d50d0d494699db3fc60d156a2eac90ba36d224c2781577c8df91"
+    },
+    "01_程序代码/backend/docx_reader.py": {
+      "tested_raw_sha256": "f29afc4197ab59ff38e6efce7c97078224a853202b145d080193a2d33cd38584",
+      "committed_lf_sha256": "f29afc4197ab59ff38e6efce7c97078224a853202b145d080193a2d33cd38584"
+    },
+    "01_程序代码/backend/engine.py": {
+      "tested_raw_sha256": "d2cc48f53c681a30cdcd4bc0fda983e16fbc1c0ddf7899a7658110556b2544de",
+      "committed_lf_sha256": "d2cc48f53c681a30cdcd4bc0fda983e16fbc1c0ddf7899a7658110556b2544de"
+    },
+    "01_程序代码/backend/evaluation.py": {
+      "tested_raw_sha256": "cfb04d53f3b9a107a6cb93fac4068ce984d02b77235f28900f665e3a9f0b1470",
+      "committed_lf_sha256": "cfb04d53f3b9a107a6cb93fac4068ce984d02b77235f28900f665e3a9f0b1470"
+    },
+    "01_程序代码/backend/extensions.py": {
+      "tested_raw_sha256": "592b4bd79723f172a98e4cbec95f6fbd971c36254979818c9989dad635cccf41",
+      "committed_lf_sha256": "592b4bd79723f172a98e4cbec95f6fbd971c36254979818c9989dad635cccf41"
+    },
+    "01_程序代码/backend/formula_source.py": {
+      "tested_raw_sha256": "bdc168e8096fc06b57fced002a16bd04372c9ed8f034df26d00fa11aa08779a2",
+      "committed_lf_sha256": "bdc168e8096fc06b57fced002a16bd04372c9ed8f034df26d00fa11aa08779a2"
+    },
+    "01_程序代码/backend/main.py": {
+      "tested_raw_sha256": "379cbb1ee10f706f9e71d876f7a475002139c75437a05602ca3f6ef9f43e3519",
+      "committed_lf_sha256": "379cbb1ee10f706f9e71d876f7a475002139c75437a05602ca3f6ef9f43e3519"
+    },
+    "01_程序代码/backend/math_structure.py": {
+      "tested_raw_sha256": "f6cfe37217de18d3490b426b7c6ab68736040ef099615cb8b80913f09ccfd599",
+      "committed_lf_sha256": "0cfcf2207353510bcee3246c9107cb858319ecdd563754b5c74a7afd35e46d72"
+    },
+    "01_程序代码/backend/ocr.py": {
+      "tested_raw_sha256": "04535790da73e913e302819b0c7f57bbcb566cb597a4d5532332b5e8f02eb888",
+      "committed_lf_sha256": "04535790da73e913e302819b0c7f57bbcb566cb597a4d5532332b5e8f02eb888"
+    },
+    "01_程序代码/backend/ocr_structure.py": {
+      "tested_raw_sha256": "db146b7190d69c2d809a0629c83c2b412fd0f2f0ef082ae40dff9f110427d1e7",
+      "committed_lf_sha256": "7c386bf7466b0887b29b2a306df6df7735c959f9ad903c213e219cbf123cefea"
+    },
+    "01_程序代码/backend/page_preprocessing.py": {
+      "tested_raw_sha256": "f2029cb6d4d0fedada203ae932e027e7de860f5d6bc2add896765a5846552d5e",
+      "committed_lf_sha256": "f2029cb6d4d0fedada203ae932e027e7de860f5d6bc2add896765a5846552d5e"
+    },
+    "01_程序代码/backend/public_statistics.py": {
+      "tested_raw_sha256": "5827f2dda54698cc1e694b48e043114b04263fe5b0a77ff1660b7d3a5eda52fc",
+      "committed_lf_sha256": "5827f2dda54698cc1e694b48e043114b04263fe5b0a77ff1660b7d3a5eda52fc"
+    },
+    "01_程序代码/backend/query_normalize.py": {
+      "tested_raw_sha256": "1bd5ca7db3d8cdce6309836f3f804dfe10d3bbd0d14dfdf8808c3ab2a672dd61",
+      "committed_lf_sha256": "1bd5ca7db3d8cdce6309836f3f804dfe10d3bbd0d14dfdf8808c3ab2a672dd61"
+    },
+    "01_程序代码/backend/query_routing.py": {
+      "tested_raw_sha256": "15903cf20219c7b1751876c9207d3be5dfac37cfc9d1a7916573edb733a45e0a",
+      "committed_lf_sha256": "15903cf20219c7b1751876c9207d3be5dfac37cfc9d1a7916573edb733a45e0a"
+    },
+    "01_程序代码/backend/rag_candidates.py": {
+      "tested_raw_sha256": "3dbefd2a1767d1750e00f716dcf6b62f4afd65f2434b307513587079e199594c",
+      "committed_lf_sha256": "3dbefd2a1767d1750e00f716dcf6b62f4afd65f2434b307513587079e199594c"
+    },
+    "01_程序代码/backend/rag_completeness.py": {
+      "tested_raw_sha256": "27ce958baa9f10683481c074248ee6917e0366602551e6910e28d3cd7e83433c",
+      "committed_lf_sha256": "27ce958baa9f10683481c074248ee6917e0366602551e6910e28d3cd7e83433c"
+    },
+    "01_程序代码/backend/rag_grounding.py": {
+      "tested_raw_sha256": "bc7ab10fbfc2f81046827726f0628cefaab97517f76a6ffef20f550fdb32e0b5",
+      "committed_lf_sha256": "bc7ab10fbfc2f81046827726f0628cefaab97517f76a6ffef20f550fdb32e0b5"
+    },
+    "01_程序代码/backend/rag_index.py": {
+      "tested_raw_sha256": "113cff324bce9fc0c30c6a0fcd1bd45089322fad212d996038ebc2de788cb987",
+      "committed_lf_sha256": "9fbdeb0b35de13d00eb41e83eebe2ab691b1225f5b9f3ff03b8428af0c883a76"
+    },
+    "01_程序代码/backend/rag_providers.py": {
+      "tested_raw_sha256": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02",
+      "committed_lf_sha256": "f3452a4c14f85947b07fbdbe6efca7057f487c66c1516dd61e64d330b912ca02"
+    },
+    "01_程序代码/backend/rag_retrieval.py": {
+      "tested_raw_sha256": "286bbcaecf93cfc50b789f83dce1101639f8da4c02d4c2970d57ba438afb22bf",
+      "committed_lf_sha256": "7ac811d565d211d7a7940089b81fb94b65ee1f784d85cf840781bfef465f7201"
+    },
+    "01_程序代码/backend/scenarios.py": {
+      "tested_raw_sha256": "6f5bc3e8ff3b27e0aac7cfbbd254cce391e6c2272f89cf4d3ec3eeba0d0b44e8",
+      "committed_lf_sha256": "6f5bc3e8ff3b27e0aac7cfbbd254cce391e6c2272f89cf4d3ec3eeba0d0b44e8"
+    },
+    "01_程序代码/backend/seed.py": {
+      "tested_raw_sha256": "50fcefe4b03c303e1c5b0c66cc510f4389d2ec6d49a46d8e71c805923fc86bea",
+      "committed_lf_sha256": "50fcefe4b03c303e1c5b0c66cc510f4389d2ec6d49a46d8e71c805923fc86bea"
+    },
+    "01_程序代码/backend/settings.py": {
+      "tested_raw_sha256": "5e3ccc63a3ed3b8b14216688faf0b7fd23e74f416ccb788e282a263b911fde89",
+      "committed_lf_sha256": "5e3ccc63a3ed3b8b14216688faf0b7fd23e74f416ccb788e282a263b911fde89"
+    },
+    "01_程序代码/backend/sharing.py": {
+      "tested_raw_sha256": "c6feb52b0c66c2af4ead230b3528796a3dc4fa006e9c9b0a0830e20f2de3aa1c",
+      "committed_lf_sha256": "c6feb52b0c66c2af4ead230b3528796a3dc4fa006e9c9b0a0830e20f2de3aa1c"
+    },
+    "01_程序代码/backend/sql_guard.py": {
+      "tested_raw_sha256": "33fcf3995aa19e21c6c958d7a78e726d349af8d801696d9dc85bbd8d8bd0cd33",
+      "committed_lf_sha256": "33fcf3995aa19e21c6c958d7a78e726d349af8d801696d9dc85bbd8d8bd0cd33"
+    },
+    "01_程序代码/backend/store.py": {
+      "tested_raw_sha256": "410baf444cbe2da0174da79e327ddb1eb017ae4535ba6a82b3cce1db7b23bab3",
+      "committed_lf_sha256": "410baf444cbe2da0174da79e327ddb1eb017ae4535ba6a82b3cce1db7b23bab3"
+    },
+    "01_程序代码/backend/table_structure.py": {
+      "tested_raw_sha256": "13331880a6d18e9f1ce94b14338e2cd17f0cb2bd7f09257ae4c982f208fa5697",
+      "committed_lf_sha256": "13331880a6d18e9f1ce94b14338e2cd17f0cb2bd7f09257ae4c982f208fa5697"
+    },
+    "01_程序代码/backend/vault.py": {
+      "tested_raw_sha256": "82641fd63200c8fe4ecdc55215049068d66edd4b688039e5c34d5fe8ad5375ab",
+      "committed_lf_sha256": "82641fd63200c8fe4ecdc55215049068d66edd4b688039e5c34d5fe8ad5375ab"
+    },
+    "01_程序代码/backend/visual_formula.py": {
+      "tested_raw_sha256": "56babfe6aed55defca8280eb05af68e98f5a1b9d091f7612798018ae3ac77fd0",
+      "committed_lf_sha256": "56babfe6aed55defca8280eb05af68e98f5a1b9d091f7612798018ae3ac77fd0"
+    },
+    "03_测试验收/自动测试/tests/test_retrieval_scope_agent.py": {
+      "tested_raw_sha256": "ca6d4e291d2a28b927bf89b664e76c9f12f0226765346207283c2c9dbcb6a953",
+      "committed_lf_sha256": "ca6d4e291d2a28b927bf89b664e76c9f12f0226765346207283c2c9dbcb6a953"
+    },
+    "03_测试验收/自动测试/tests/test_retrieval_scale.py": {
+      "tested_raw_sha256": "f1a1741255200bd5396c65a7a222f2c54db90e58e033861402adeba5e3698f7a",
+      "committed_lf_sha256": "f1a1741255200bd5396c65a7a222f2c54db90e58e033861402adeba5e3698f7a"
+    },
+    "03_测试验收/自动测试/tests/test_rag_retrieval.py": {
+      "tested_raw_sha256": "2b56ec2489b670ddb81dbaace35a2a9fb7c0d561125b839e50c2c9408fc6d23d",
+      "committed_lf_sha256": "2b56ec2489b670ddb81dbaace35a2a9fb7c0d561125b839e50c2c9408fc6d23d"
+    },
+    "03_测试验收/自动测试/tests/test_rag_agent.py": {
+      "tested_raw_sha256": "0dead77cc42499084a49cd02ff83cdf202d15320e8f77954c7937f1ac00fc10d",
+      "committed_lf_sha256": "fd3d7ba2a9c85bbff7e9558837a85118d1fef6f74af7ffab55ff4e1780cc94e7"
+    },
+    "03_测试验收/自动测试/tests/test_rag_completeness.py": {
+      "tested_raw_sha256": "2863b10be431fc8dad47413f07db39642b83546320a172ac32c607c411945099",
+      "committed_lf_sha256": "2863b10be431fc8dad47413f07db39642b83546320a172ac32c607c411945099"
+    },
+    "03_测试验收/自动测试/tests/test_agent.py": {
+      "tested_raw_sha256": "785a34f86e7f9443939419b03838c77c142bf82d00b41ab151261de5084ef5ec",
+      "committed_lf_sha256": "785a34f86e7f9443939419b03838c77c142bf82d00b41ab151261de5084ef5ec"
+    },
+    "03_测试验收/自动测试/tests/test_rag_providers.py": {
+      "tested_raw_sha256": "3e9f059a730be158502f24d5000a64f235ec8d92dd4222070bad22bdcae235bf",
+      "committed_lf_sha256": "3e9f059a730be158502f24d5000a64f235ec8d92dd4222070bad22bdcae235bf"
+    },
+    "03_测试验收/自动测试/tests/test_document_reader.py": {
+      "tested_raw_sha256": "597d35aeca46a41effd941cf494f7391262884bc9755a5e97e74b7e85f45e162",
+      "committed_lf_sha256": "597d35aeca46a41effd941cf494f7391262884bc9755a5e97e74b7e85f45e162"
+    },
+    "03_测试验收/自动测试/tests/test_document_native.py": {
+      "tested_raw_sha256": "ddad88558b26e039250d038d592fab820ce9fd0bace356e08a701a9feb90d15f",
+      "committed_lf_sha256": "ddad88558b26e039250d038d592fab820ce9fd0bace356e08a701a9feb90d15f"
+    },
+    "03_测试验收/自动测试/tests/test_document_review.py": {
+      "tested_raw_sha256": "ef91086faa3f3ae334f08222b050272e1b6bc3ff16e13b8a61bc1f55222b6584",
+      "committed_lf_sha256": "fcf3b581c4f7f667cc1d890435409a8236f141036c6dcd948bedb894f160bd20"
+    },
+    "03_测试验收/自动测试/tests/test_table_rag.py": {
+      "tested_raw_sha256": "c498702a283283b1c3b1f23c2979de0c8f74dd2086e3b902d0a5b9efd3a9307c",
+      "committed_lf_sha256": "c498702a283283b1c3b1f23c2979de0c8f74dd2086e3b902d0a5b9efd3a9307c"
+    },
+    "03_测试验收/自动测试/tests/test_chart_evidence.py": {
+      "tested_raw_sha256": "92262ce2914fb703dd1932167ee0effebf554ab78bdd65e5f300cf05e9e93809",
+      "committed_lf_sha256": "92262ce2914fb703dd1932167ee0effebf554ab78bdd65e5f300cf05e9e93809"
+    },
+    "03_测试验收/自动测试/tests/test_grounding_protocol.py": {
+      "tested_raw_sha256": "78e53b11a361d92dfd3270dbb806a648eb69fa49cecd14fb74425d3f4979127a",
+      "committed_lf_sha256": "78e53b11a361d92dfd3270dbb806a648eb69fa49cecd14fb74425d3f4979127a"
+    }
+  },
+  "published_files_excluding_this_receipt": {
+    "01_程序代码/backend/agent.py": "5e96091dc8743df3fad38942c1f44761a802d03afe88fde057db0a408071cfbb",
+    "01_程序代码/backend/documents.py": "20fd0e16d63746a4c09ea8ec620df09f641e44e072a8b7fffe868e695b215750",
+    "01_程序代码/backend/rag_index.py": "9fbdeb0b35de13d00eb41e83eebe2ab691b1225f5b9f3ff03b8428af0c883a76",
+    "01_程序代码/backend/rag_retrieval.py": "7ac811d565d211d7a7940089b81fb94b65ee1f784d85cf840781bfef465f7201",
+    "05_比赛与交接/开发说明.md": "e8ba7b3ce6acbf83a05387fa883f73d24399b72d67917e9efbd1cdb6ba5fdad9",
+    "05_比赛与交接/当前进度.md": "ee74938bd4bbc4ffc45f243147d6164091965468ecd9991631edb0fdc6fc3475",
+    "05_比赛与交接/待办与优化.md": "fb38e24f3ce1054d2852471b433c64652c34170639235b024d0bacb993dcada7",
+    "01_程序代码/backend/rag_candidates.py": "3dbefd2a1767d1750e00f716dcf6b62f4afd65f2434b307513587079e199594c",
+    "03_测试验收/检索规模与效率优化验收-20261017.md": "d20106432dc436cb9fcc766ee6a1898a6ab368885f84a44ba3dcc4d6e096ed45",
+    "03_测试验收/自动测试/tests/test_retrieval_scale.py": "f1a1741255200bd5396c65a7a222f2c54db90e58e033861402adeba5e3698f7a",
+    "03_测试验收/自动测试/tests/test_retrieval_scope_agent.py": "ca6d4e291d2a28b927bf89b664e76c9f12f0226765346207283c2c9dbcb6a953",
+    "03_测试验收/自动测试/评估检索规模.py": "a035c466b0e193e9f0a823883605517213f6b023d55455c3da1893ba6005b1fd",
+    "03_测试验收/验收证据/检索规模-仓库副本-agent-20261017.log": "1326629cd74657030e29f716affba965cd5c62884972cc8c7f22316aa25379cb",
+    "03_测试验收/验收证据/检索规模-仓库副本-chart_evidence-20261017.log": "32d31bf9c818591d4cbc5c14bdcd75b8df3786d1297a926727b2ed7a71983dc1",
+    "03_测试验收/验收证据/检索规模-仓库副本-document_native-20261017.log": "933780e009b1f55ac9d935d4ba79c965b3472b755710210d6906383af6b675b1",
+    "03_测试验收/验收证据/检索规模-仓库副本-document_reader-20261017.log": "ec9e202d5829e3103aa6685a48010a923a221a05699a50b47d1b8c48c3701a7e",
+    "03_测试验收/验收证据/检索规模-仓库副本-document_review-20261017.log": "60b2ea8093020d6269505f7161b7646482c26b148a6e16621bfedd9cc20cca88",
+    "03_测试验收/验收证据/检索规模-仓库副本-grounding_protocol-20261017.log": "5f7bbe26adf185d5984f12d9826bcd2edf1267c422d4f6b456f9b925b53e8a7a",
+    "03_测试验收/验收证据/检索规模-仓库副本-rag_agent-20261017.log": "8223a71d34bc4891eff8277f36ffafb36c6041cfcdfa75e34c927de47dedcccc",
+    "03_测试验收/验收证据/检索规模-仓库副本-rag_completeness-20261017.log": "3f6776bb6a1fe3bcf724cd9479e4677790263e7bd1d777b31531a27167463d3f",
+    "03_测试验收/验收证据/检索规模-仓库副本-rag_providers-20261017.log": "e688489de38ea9f982432d366807d09a16e0480dc012b393afb0889e9df3d21b",
+    "03_测试验收/验收证据/检索规模-仓库副本-rag_retrieval-20261017.log": "4179f7cf0f093933646886537f5cbc1e488639db5dbb0ddfbdb4077eaeeaef07",
+    "03_测试验收/验收证据/检索规模-仓库副本-retrieval_scale-20261017.log": "f5cf6c25dd484aa72bbfaaff211f40edd26f39ae3a56d8d576c290d5fd4b0aac",
+    "03_测试验收/验收证据/检索规模-仓库副本-retrieval_scope_agent-20261017.log": "1c463c7d0abf0c7259989bd3017b462a21df5533de3c9d721b6551c641fa1de3",
+    "03_测试验收/验收证据/检索规模-仓库副本-table_rag-20261017.log": "a37aa7d09bd2bedb648ec05436046ebc3a85f751c9e7e8d436239f1fda57bd94",
+    "03_测试验收/验收证据/检索规模-回归与核验-20261017.json": "7f1a0943394328cd21688ca378a1b7d76989efe888709fc3410b9e80eb9747b6",
+    "03_测试验收/验收证据/检索规模-本机-agent-20261017.log": "89c70dbe6ce1b6112f180712d807397db42e3cc97108255f52d4a5be72be08b3",
+    "03_测试验收/验收证据/检索规模-本机-chart_evidence-20261017.log": "871fa34aae76efd1153daf885e108fc34c3ad6b753f7c2498489565fc95ce53a",
+    "03_测试验收/验收证据/检索规模-本机-document_native-20261017.log": "2f5d787bb69e4074c67f5a366e073d7fd8bbd96f613cd5c76510b4af5b5636f7",
+    "03_测试验收/验收证据/检索规模-本机-document_reader-20261017.log": "1de5bccb731fe15659c35ea18a8cb568b0a52d326037e45cceff561c2fb1aaa8",
+    "03_测试验收/验收证据/检索规模-本机-document_review-20261017.log": "daad3eaf02a0d36678e1b510fddfe405bd55da2596e7c17f78a9d67a648693e6",
+    "03_测试验收/验收证据/检索规模-本机-rag_agent-20261017.log": "13859b591128533533a61cdd09ecb6ccd0e2a34bb7f806d49267a0c67a9b4c5d",
+    "03_测试验收/验收证据/检索规模-本机-rag_completeness-20261017.log": "5c558fd7943e5dcbe047759adf285ea843b9e660946d400d8594829932875a08",
+    "03_测试验收/验收证据/检索规模-本机-rag_providers-20261017.log": "83da604b13cdf3d3bd379808cfe7f746ca95e2a9ea08ed8fd04b97c1c296282f",
+    "03_测试验收/验收证据/检索规模-本机-rag_retrieval-20261017.log": "8eee1986dd387217a10c4901fdcd44abadc95d8fc650b856c1688b086036374a",
+    "03_测试验收/验收证据/检索规模-本机-retrieval_scale-20261017.log": "31d8222b0191a108a5566f2310bb58af1720b3254e4003fbac6f1b5be7234a08",
+    "03_测试验收/验收证据/检索规模-本机-retrieval_scope_agent-20261017.log": "b258a6550a5532a5fb2d439355a7299f20347c21082adf1ae4ed7d8357286405",
+    "03_测试验收/验收证据/检索规模-本机-table_rag-20261017.log": "c3df568d61d44e4f1c71697467ebda58565e38a379ddad86987a0a7ce40d8553",
+    "03_测试验收/验收证据/检索规模-规模对照-20261017.json": "e4f6180981b1ffcecbdf79d18186f87fc4cf3b0742fc4520bca6b7de62d28d59"
+  },
+  "published_file_count_including_this_receipt": 40,
+  "benchmark_boundary": "Authored records and seeded 512-dimensional vectors; no external model calls or independent answer-quality claim.",
+  "private_runtime_data_included": false,
+  "rar_uploaded": false,
+  "release": false
+}

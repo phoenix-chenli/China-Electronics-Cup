@@ -1,0 +1,17 @@
+test_complete_selection_has_qualified_bindings_for_same_cell_ids_in_two_tables (tests.test_table_rag.TableRagTests.test_complete_selection_has_qualified_bindings_for_same_cell_ids_in_two_tables) ... ok
+test_corpus_table_gap_comes_from_frozen_generation_with_source_ids (tests.test_table_rag.TableRagTests.test_corpus_table_gap_comes_from_frozen_generation_with_source_ids) ... ok
+test_index_generation_exposes_oversized_row_gap_and_no_partial_relation (tests.test_table_rag.TableRagTests.test_index_generation_exposes_oversized_row_gap_and_no_partial_relation) ... ok
+test_overlapping_formula_and_row_preserve_both_whole_or_skip_both (tests.test_table_rag.TableRagTests.test_overlapping_formula_and_row_preserve_both_whole_or_skip_both) ... ok
+test_oversized_row_is_skipped_without_losing_adjacent_prose (tests.test_table_rag.TableRagTests.test_oversized_row_is_skipped_without_losing_adjacent_prose) ... ok
+test_partial_selection_cannot_carry_full_row_cell_bindings (tests.test_table_rag.TableRagTests.test_partial_selection_cannot_carry_full_row_cell_bindings) ... ok
+test_partial_selection_cannot_reclaim_whole_row_refs_or_answer_evidence (tests.test_table_rag.TableRagTests.test_partial_selection_cannot_reclaim_whole_row_refs_or_answer_evidence) ... ok
+test_pending_interval_does_not_allow_fragments_of_confirmed_row (tests.test_table_rag.TableRagTests.test_pending_interval_does_not_allow_fragments_of_confirmed_row) ... ok
+test_real_page_scope_reports_table_gap_and_keeps_only_adjacent_prose (tests.test_table_rag.TableRagTests.test_real_page_scope_reports_table_gap_and_keeps_only_adjacent_prose) ... ok
+test_row_stays_whole_after_near_budget_prose_with_source_offsets (tests.test_table_rag.TableRagTests.test_row_stays_whole_after_near_budget_prose_with_source_offsets) ... ok
+test_saved_complete_row_binding_reaches_authoritative_resolver_and_model_packet (tests.test_table_rag.TableRagTests.test_saved_complete_row_binding_reaches_authoritative_resolver_and_model_packet) ... ok
+test_short_complete_row_has_no_page_or_corpus_gap (tests.test_table_rag.TableRagTests.test_short_complete_row_has_no_page_or_corpus_gap) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.731s
+
+OK

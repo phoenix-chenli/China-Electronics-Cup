@@ -1,0 +1,16 @@
+test_cancel_before_call_and_during_transport_is_prompt (tests.test_rag_providers.RagProviderTests.test_cancel_before_call_and_during_transport_is_prompt) ... ok
+test_constant_probe_never_grants_readiness (tests.test_rag_providers.RagProviderTests.test_constant_probe_never_grants_readiness) ... ok
+test_embedding_actual_probe_dimension_and_input_order (tests.test_rag_providers.RagProviderTests.test_embedding_actual_probe_dimension_and_input_order) ... ok
+test_embedding_rejects_invalid_vectors_and_duplicate_indices (tests.test_rag_providers.RagProviderTests.test_embedding_rejects_invalid_vectors_and_duplicate_indices) ... ok
+test_invalid_batches_fail_before_http (tests.test_rag_providers.RagProviderTests.test_invalid_batches_fail_before_http) ... ok
+test_missing_models_never_download_on_describe (tests.test_rag_providers.RagProviderTests.test_missing_models_never_download_on_describe) ... ok
+test_remote_bulk_index_requires_both_permissions_before_transport (tests.test_rag_providers.RagProviderTests.test_remote_bulk_index_requires_both_permissions_before_transport) ... ok
+test_rerank_preserves_candidate_indices_and_raw_scores (tests.test_rag_providers.RagProviderTests.test_rerank_preserves_candidate_indices_and_raw_scores) ... ok
+test_revision_conflict_and_provider_identity_before_sending (tests.test_rag_providers.RagProviderTests.test_revision_conflict_and_provider_identity_before_sending) ... ok
+test_tampered_bundled_model_fails_without_installing (tests.test_rag_providers.RagProviderTests.test_tampered_bundled_model_fails_without_installing) ... ok
+test_wrong_rerank_probe_stays_disabled (tests.test_rag_providers.RagProviderTests.test_wrong_rerank_probe_stays_disabled) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 25.135s
+
+OK

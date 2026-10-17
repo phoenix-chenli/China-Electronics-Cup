@@ -330,9 +330,10 @@ def _build_document(document_id, cancelled=None):
     doc = s.doc_get(document_id)
     if doc["status"] in {"failed", "archived"}:
         return None
-    data = documents.layout(document_id, doc["sha256"])
+    documents.version(document_id,doc['sha256'])
     count, counting, budget = _counter()
-    identity = {"document_id": document_id, "sha256": doc["sha256"], "parse_id": data["parse_id"],
+    parse_id=documents.current_parse_id(document_id,doc['sha256'])
+    identity = {"document_id": document_id, "sha256": doc["sha256"], "parse_id": parse_id,
                 "chunker": CHUNKER_VERSION, "budget": budget, "counting": counting}
     generation_id = _hash(identity)
     with s.conn() as db:
@@ -341,12 +342,17 @@ def _build_document(document_id, cancelled=None):
         body = json.loads(existing["body"])
         with s.conn() as db:
             current = db.execute("SELECT sha256,status FROM documents WHERE id=?", (document_id,)).fetchone()
-            active=documents.active_parse(db,document_id,doc["sha256"])
-            if not current or current["sha256"] != doc["sha256"] or current["status"] not in {"ready","needs_review"} or not active or active["id"]!=data["parse_id"]:
+            active=documents.active_parse_id(db,document_id,doc["sha256"])
+            if not current or current["sha256"] != doc["sha256"] or current["status"] not in {"ready","needs_review"} or not active or active!=parse_id:
                 raise ValueError("文档在准备索引期间已变化，未激活旧索引")
             db.execute("UPDATE ef_rag_generations SET active=0 WHERE document_id=?", (document_id,))
             db.execute("UPDATE ef_rag_generations SET active=1 WHERE id=?", (generation_id,))
         return body
+    data=documents.layout(document_id,doc['sha256'])
+    if data['parse_id']!=parse_id:
+        # Layout may initialize the first parse. Recompute its frozen identity;
+        # subsequent publication still verifies the current pointer.
+        identity['parse_id']=data['parse_id'];generation_id=_hash(identity)
     chunks, missing = [], []
     for page in data["pages"]:
         _guard(cancelled)
@@ -419,9 +425,10 @@ def _active_generations():
 
 
 def _publish_lexical(cancelled=None):
+    from .rag_candidates import SCHEMA_VERSION, noise_grams
     config = lexical_config()
     generations = _active_generations()
-    content = {"generations": [{k: g[k] for k in ("document_id", "sha256", "parse_id", "generation_id")} for g in generations], "lexical_config": config}
+    content = {"generations": [{k: g[k] for k in ("document_id", "sha256", "parse_id", "generation_id")} for g in generations], "lexical_config": config, 'retrieval_schema':SCHEMA_VERSION}
     lid = _hash(content)
     filename = "rag_lexical_" + lid + ".sqlite"
     target = s.DATA / filename
@@ -437,17 +444,26 @@ def _publish_lexical(cancelled=None):
         with sqlite3.connect(staging, factory=s.ClosingConnection) as lexical:
             lexical.set_progress_handler(lambda: int(cancelled is not None and cancelled.is_set()), 1000)
             lexical.execute("CREATE VIRTUAL TABLE chunks USING fts5(chunk_id UNINDEXED, generation_id UNINDEXED, tokens, title_tokens, bigrams, tokenize='unicode61')")
+            lexical.execute("CREATE VIRTUAL TABLE noise USING fts5(chunk_id UNINDEXED, grams, tokenize='unicode61')")
+            lexical.execute('CREATE TABLE chunk_meta(chunk_id TEXT PRIMARY KEY,generation_id TEXT NOT NULL,usable INTEGER NOT NULL,page INTEGER NOT NULL,start INTEGER NOT NULL,end INTEGER NOT NULL,input_sha256 TEXT NOT NULL)')
+            lexical.execute('CREATE INDEX chunk_meta_scope ON chunk_meta(generation_id,usable,page,start,chunk_id,input_sha256)')
             for generation in generations:
                 _guard(cancelled)
-                with s.conn() as db:
-                    rows = db.execute("SELECT * FROM ef_rag_chunks WHERE generation_id=? ORDER BY page,start", (generation["generation_id"],)).fetchall()
-                for row in rows:
-                    _guard(cancelled)
-                    main, grams = lexical_tokens(row["text"])
-                    title, _ = lexical_tokens(row["title_path"])
-                    lexical.execute("INSERT INTO chunks VALUES (?,?,?,?,?)", (row["id"], row["generation_id"], " ".join(main), " ".join(title), " ".join(grams)))
+                with reader() as db:
+                    for row in db.execute("SELECT * FROM ef_rag_chunks WHERE generation_id=? ORDER BY page,start", (generation["generation_id"],)):
+                        _guard(cancelled)
+                        main, grams = lexical_tokens(row["text"])
+                        title, _ = lexical_tokens(row["title_path"])
+                        lexical.execute("INSERT INTO chunks VALUES (?,?,?,?,?)", (row["id"], row["generation_id"], " ".join(main), " ".join(title), " ".join(grams)))
+                        usable=json.loads(row['body']).get('quality',{}).get('table_complete') is not False
+                        title_tail=row['title_path'][-64:]
+                        vector_input=(title_tail+'\n' if title_tail else '')+row['text']
+                        input_sha=hashlib.sha256(vector_input.encode()).hexdigest()
+                        lexical.execute('INSERT INTO chunk_meta VALUES (?,?,?,?,?,?,?)',(row['id'],row['generation_id'],int(usable),row['page'],row['start'],row['end'],input_sha))
+                        lexical.execute('INSERT INTO noise VALUES (?,?)',(row['id'],' '.join(noise_grams(row['text']))))
             lexical.execute("INSERT INTO chunks(chunks) VALUES ('optimize')")
-            lexical.execute("PRAGMA user_version=1")
+            lexical.execute("INSERT INTO noise(noise) VALUES ('optimize')")
+            lexical.execute('PRAGMA user_version='+str(SCHEMA_VERSION))
         _guard(cancelled)
         sha = s.digest(staging)
         staging.replace(target)
@@ -501,10 +517,22 @@ def _check_index_snapshot(provider, document_ids, expected_preview, expected_pro
             row = db.execute("SELECT sha256,status FROM documents WHERE id=?", (source["id"],)).fetchone()
             if not row or row["status"] not in {"ready", "needs_review"} or row["sha256"] != source["sha256"]:
                 raise ValueError("文档版本或可用状态已变化，请重新预览索引范围")
-            parse = documents.active_parse(db,source["id"],source["sha256"])
+            parse = documents.active_parse_id(db,source["id"],source["sha256"])
             generation = db.execute("SELECT id FROM ef_rag_generations WHERE document_id=? AND active=1", (source["id"],)).fetchone()
-            if not parse or parse["id"] != source["parse_id"] or not generation or generation["id"] != source["generation_id"]:
+            if not parse or parse != source["parse_id"] or not generation or generation["id"] != source["generation_id"]:
                 raise ValueError("文档解析或切片代次已变化，请重新预览索引范围")
+
+
+def _chunk_batches(generations, cancelled=None, batch_size=16):
+    # Immutable generation rows can be streamed through a read-only cursor;
+    # no whole-corpus body list is retained during model calls.
+    with reader() as db:
+        for generation in generations:
+            cursor=db.execute("SELECT body FROM ef_rag_chunks WHERE generation_id=? ORDER BY page,start",(generation["generation_id"],))
+            while True:
+                _guard(cancelled);rows=cursor.fetchmany(batch_size)
+                if not rows:break
+                yield [json.loads(row["body"]) for row in rows]
 
 
 def _index_vectors(document_ids, remote_index_opt_in, cancelled, job, data_path, expected_preview=None, expected_provider=None):
@@ -524,51 +552,52 @@ def _index_vectors(document_ids, remote_index_opt_in, cancelled, job, data_path,
         _check_index_snapshot(provider, document_ids, expected_preview, expected_provider, cancelled)
         generations = [g for g in _active_generations() if document_ids is None or g["document_id"] in document_ids]
         fingerprint = provider["fingerprint"]
-        with s.conn() as db:
-            chunks = [json.loads(row["body"]) for g in generations for row in db.execute("SELECT body FROM ef_rag_chunks WHERE generation_id=? ORDER BY page,start", (g["generation_id"],)).fetchall()]
-        job["total"] = len(chunks); _set_job(job)
+        with reader() as db:
+            job["total"]=sum(db.execute("SELECT count(*) FROM ef_rag_chunks WHERE generation_id=?",(g["generation_id"],)).fetchone()[0] for g in generations)
+        job.update(reused_chunks=0,embedded_chunks=0,peak_chunk_batch=0);_set_job(job)
         import numpy as np
-        for offset in range(0, len(chunks), 16):
+        processed=0
+        for batch in _chunk_batches(generations,cancelled):
             _check_index_snapshot(provider, document_ids, expected_preview, expected_provider, cancelled)
-            batch = chunks[offset:offset+16]
+            job["peak_chunk_batch"]=max(job["peak_chunk_batch"],len(batch))
             from .rag_retrieval import embedding_input
-            inputs = [embedding_input(c) for c in batch]
-            cached = []
+            inputs=[embedding_input(c) for c in batch]
             with reader() as db:
-                for chunk, text in zip(batch, inputs):
-                    row = db.execute("SELECT dimension,input_sha256,vector FROM ef_rag_embeddings WHERE chunk_id=? AND fingerprint=?", (chunk["id"], fingerprint)).fetchone()
-                    if row and row["dimension"] == int(provider["dimension"]) and row["input_sha256"] == hashlib.sha256(text.encode()).hexdigest():
-                        vector = np.frombuffer(row["vector"], dtype="<f4")
-                        norm = np.linalg.norm(vector.astype(np.float64))
-                        if vector.size == int(provider["dimension"]) and np.isfinite(vector).all() and np.isfinite(norm) and norm > 1e-12:
-                            cached.append(True)
+                cached_rows={row["chunk_id"]:row for row in db.execute("SELECT chunk_id,dimension,input_sha256,vector FROM ef_rag_embeddings WHERE fingerprint=? AND chunk_id IN ("+','.join('?' for _ in batch)+")",[fingerprint]+[c["id"] for c in batch])}
+            pending=[]
+            for chunk,text in zip(batch,inputs):
+                _guard(cancelled);row=cached_rows.get(chunk["id"])
+                if row and row["dimension"]==int(provider["dimension"]) and row["input_sha256"]==hashlib.sha256(text.encode()).hexdigest():
+                    try:
+                        vector=np.frombuffer(row["vector"],dtype="<f4");norm=np.linalg.norm(vector.astype(np.float64))
+                        if vector.size==int(provider["dimension"]) and np.isfinite(vector).all() and np.isfinite(norm) and norm>1e-12:
+                            job["reused_chunks"]+=1
                             continue
-                    cached.append(False)
-            if all(cached):
-                job["processed"] = offset+len(batch); _set_job(job)
-                continue
-            response = rag_providers.embed(inputs, cancelled=cancelled, expected_fingerprint=fingerprint,
-                                           purpose="index", remote_index_opt_in=remote_index_opt_in)
-            _check_index_snapshot(provider, document_ids, expected_preview, expected_provider, cancelled)
-            vectors = np.asarray(response["vectors"], dtype=np.float32)
-            if vectors.ndim != 2 or vectors.shape != (len(batch), int(provider["dimension"])) or not np.isfinite(vectors).all():
-                raise ValueError("嵌入返回数量、维度或数值无效")
-            norms = np.linalg.norm(vectors.astype(np.float64), axis=1)
-            if not np.isfinite(norms).all() or np.any(norms <= 1e-12):
-                raise ValueError("嵌入返回零向量，未标记完成")
-            vectors /= norms[:, None]
-            if response.get("provider", {}).get("fingerprint", fingerprint) != fingerprint:
-                raise ValueError("嵌入模型在建索引期间变化，未混用向量")
-            with s.conn() as db:
-                for c, text, vector in zip(batch, inputs, vectors):
-                    db.execute("INSERT OR REPLACE INTO ef_rag_embeddings VALUES (?,?,?,?,?,?)", (c["id"], fingerprint, int(provider["dimension"]), hashlib.sha256(text.encode()).hexdigest(), vector.astype("<f4").tobytes(), s.now()))
-            job["processed"] = offset+len(batch); _set_job(job)
+                    except (TypeError,ValueError):
+                        pass
+                pending.append((chunk,text))
+            if pending:
+                response=rag_providers.embed([text for _,text in pending],cancelled=cancelled,expected_fingerprint=fingerprint,
+                    purpose="index",remote_index_opt_in=remote_index_opt_in)
+                _check_index_snapshot(provider, document_ids, expected_preview, expected_provider, cancelled)
+                vectors=np.asarray(response["vectors"],dtype=np.float32)
+                if vectors.shape!=(len(pending),int(provider["dimension"])) or not np.isfinite(vectors).all():
+                    raise ValueError("嵌入返回数量、维度或数值无效")
+                norms=np.linalg.norm(vectors.astype(np.float64),axis=1)
+                if not np.isfinite(norms).all() or np.any(norms<=1e-12):raise ValueError("嵌入返回零向量，未标记完成")
+                vectors/=norms[:,None]
+                if response.get("provider",{}).get("fingerprint",fingerprint)!=fingerprint:raise ValueError("嵌入模型在建索引期间变化，未混用向量")
+                with s.conn() as db:
+                    for (chunk,text),vector in zip(pending,vectors):
+                        db.execute("INSERT OR REPLACE INTO ef_rag_embeddings VALUES (?,?,?,?,?,?)",(chunk["id"],fingerprint,int(provider["dimension"]),hashlib.sha256(text.encode()).hexdigest(),vector.astype("<f4").tobytes(),s.now()))
+                job["embedded_chunks"]+=len(pending)
+            processed+=len(batch);job["processed"]=processed;_set_job(job)
         _check_index_snapshot(provider, document_ids, expected_preview, expected_provider, cancelled)
         with s.conn() as db:
             for generation in generations:
                 current = db.execute("SELECT sha256,status FROM documents WHERE id=?", (generation["document_id"],)).fetchone()
-                parse = documents.active_parse(db,generation["document_id"],generation["sha256"])
-                if not current or current["sha256"] != generation["sha256"] or current["status"] not in {"ready", "needs_review"} or not parse or parse["id"] != generation["parse_id"]:
+                parse = documents.active_parse_id(db,generation["document_id"],generation["sha256"])
+                if not current or current["sha256"] != generation["sha256"] or current["status"] not in {"ready", "needs_review"} or not parse or parse != generation["parse_id"]:
                     raise ValueError("发布索引前文档已变化，未标记完成")
                 generation.update(status="ready" if not generation["missing_pages"] else "degraded", vector_status="ready", embedding=provider, error=None)
                 db.execute("UPDATE ef_rag_generations SET status=?,body=? WHERE id=?", (generation["status"], _json(generation), generation["generation_id"]))
@@ -654,14 +683,13 @@ def index_preview(document_ids=None):
         for source in manifest["generations"]:
             if selected is not None and source["document_id"] not in selected:
                 continue
-            rows = [json.loads(row["body"]) for row in db.execute("SELECT body FROM ef_rag_chunks WHERE generation_id=?", (source["generation_id"],))]
-            from .rag_retrieval import embedding_input
-            characters = sum(len(embedding_input(chunk)) for chunk in rows)
+            counts=db.execute("SELECT count(*),coalesce(sum(length(text)),0),coalesce(sum(length(text)+min(length(title_path),64)+CASE WHEN length(title_path)>0 THEN 1 ELSE 0 END),0) FROM ef_rag_chunks WHERE generation_id=?",(source["generation_id"],)).fetchone()
+            characters=counts[2]
             doc = s.doc_get(source["document_id"])
             out.append({"id": source["document_id"], "name": doc["name"], "sha256": source["sha256"],
                         "parse_id": source["parse_id"], "generation_id": source["generation_id"],
-                        "chunks": len(rows), "characters": characters,
-                        "source_characters": sum(len(chunk["text"]) for chunk in rows)})
+                        "chunks": counts[0], "characters": characters,
+                        "source_characters": counts[1]})
     return {"document_ids": [d["id"] for d in out], "documents": out,
             "chunk_count": sum(d["chunks"] for d in out), "character_count": sum(d["characters"] for d in out),
             "lexical_generation": manifest["lexical_generation"]}
@@ -745,14 +773,23 @@ def validate_scope(scope, *, cancelled=None, deadline=None):
     if not isinstance(scope.get("documents"), list):
         raise ValueError("文档范围清单缺失")
     available = []
-    for source in scope["documents"]:
-        _guard(cancelled, deadline)
-        current = s.doc_get(source["document_id"])
-        if current["status"] == "archived":
-            continue
-        documents.version(source["document_id"], source["sha256"])
-        _guard(cancelled, deadline)
-        available.append(source)
+    # Reuse one catalog connection; still hash every original and check current
+    # revocation on every validation. No cross-query file-verification cache.
+    with reader() as db:
+        for source in scope["documents"]:
+            _guard(cancelled, deadline)
+            current=db.execute('SELECT status FROM documents WHERE id=?',(source['document_id'],)).fetchone()
+            if not current:s.doc_get(source['document_id'])
+            if current['status']=='archived':continue
+            sha=source['sha256']
+            if not isinstance(sha,str) or not re.fullmatch(r'[a-f0-9]{64}',sha):raise ValueError('无效的文档版本')
+            original=db.execute('SELECT format FROM ef_document_versions WHERE document_id=? AND sha256=?',(source['document_id'],sha)).fetchone()
+            if not original:raise ValueError('这个版本不属于当前文档')
+            path=s.VERSIONS/(sha+'.'+original['format'])
+            if not path.is_file():raise ValueError('原文件版本已缺失')
+            if s.digest(path)!=sha:raise ValueError('原件摘要不一致，已停止定位')
+            _guard(cancelled, deadline)
+            available.append(source)
     return available
 
 

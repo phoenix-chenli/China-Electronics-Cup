@@ -1,0 +1,37 @@
+test_attached_catalog_and_publication_are_read_only (tests.test_retrieval_scale.RetrievalScaleTests.test_attached_catalog_and_publication_are_read_only) ... \\?\[原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:44: SyntaxWarning: invalid escape sequence '\.'
+  re_han_default = re.compile("([\u4E00-\u9FD5a-zA-Z0-9+#&\._%\-]+)", re.U)
+\\?\[原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\__init__.py:46: SyntaxWarning: invalid escape sequence '\s'
+  re_skip_default = re.compile("(\r\n|\s)", re.U)
+\\?\[原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\.multimodal-runtime\runtime-cache\EvidenceFlow\runtime\59a078f0ab912b915b5d\jieba\finalseg\__init__.py:78: SyntaxWarning: invalid escape sequence '\.'
+  re_skip = re.compile("([a-zA-Z0-9]+(?:\.\d+)?%?)")
+Building prefix dict from the default dictionary ...
+Loading model from cache [原作者用户目录]\.codex\visualizations\2026\10\04\01a10760-0450-77a0-b49c-2f1d1780aea2\rag-local-tests\jieba.cache
+Loading model cost 0.529 seconds.
+Prefix dict has been built successfully.
+ok
+test_bm25_ranking_and_scores_match_full_scope_reference (tests.test_retrieval_scale.RetrievalScaleTests.test_bm25_ranking_and_scores_match_full_scope_reference) ... ok
+test_body_cache_evicts_and_rejects_out_of_scope_ids (tests.test_retrieval_scale.RetrievalScaleTests.test_body_cache_evicts_and_rejects_out_of_scope_ids) ... ok
+test_body_cache_respects_json_byte_budget (tests.test_retrieval_scale.RetrievalScaleTests.test_body_cache_respects_json_byte_budget) ... ok
+test_cancelled_search_closes_lazy_reader (tests.test_retrieval_scale.RetrievalScaleTests.test_cancelled_search_closes_lazy_reader) ... ok
+test_changed_chunk_body_does_not_override_published_input_hash (tests.test_retrieval_scale.RetrievalScaleTests.test_changed_chunk_body_does_not_override_published_input_hash) ... ok
+test_exact_vector_order_matches_reference_across_multiple_batches (tests.test_retrieval_scale.RetrievalScaleTests.test_exact_vector_order_matches_reference_across_multiple_batches) ... ok
+test_filtered_vector_plan_searches_selected_generations_before_vectors (tests.test_retrieval_scale.RetrievalScaleTests.test_filtered_vector_plan_searches_selected_generations_before_vectors) ... ok
+test_index_reuses_valid_rows_and_embeds_only_one_missing_input (tests.test_retrieval_scale.RetrievalScaleTests.test_index_reuses_valid_rows_and_embeds_only_one_missing_input) ... ok
+test_invalid_scope_still_reports_a_validation_error (tests.test_retrieval_scale.RetrievalScaleTests.test_invalid_scope_still_reports_a_validation_error) ... ok
+test_last_vector_is_checked_before_query_embedding (tests.test_retrieval_scale.RetrievalScaleTests.test_last_vector_is_checked_before_query_embedding) ... ok
+test_legacy_publication_keeps_its_original_frozen_scope (tests.test_retrieval_scale.RetrievalScaleTests.test_legacy_publication_keeps_its_original_frozen_scope) ... ok
+test_malformed_cached_blob_is_rebuilt_without_resending_valid_rows (tests.test_retrieval_scale.RetrievalScaleTests.test_malformed_cached_blob_is_rebuilt_without_resending_valid_rows) ... ok
+test_noise_preselection_loads_no_complete_bodies (tests.test_retrieval_scale.RetrievalScaleTests.test_noise_preselection_loads_no_complete_bodies) ... ok
+test_parse_identity_lookup_does_not_select_body (tests.test_retrieval_scale.RetrievalScaleTests.test_parse_identity_lookup_does_not_select_body) ... ok
+test_partial_corrupt_cache_reembeds_one_input (tests.test_retrieval_scale.RetrievalScaleTests.test_partial_corrupt_cache_reembeds_one_input) ... ok
+test_preview_character_count_matches_embedding_input_without_materialization (tests.test_retrieval_scale.RetrievalScaleTests.test_preview_character_count_matches_embedding_input_without_materialization) ... ok
+test_regular_query_never_materializes_all_scope_bodies (tests.test_retrieval_scale.RetrievalScaleTests.test_regular_query_never_materializes_all_scope_bodies) ... ok
+test_source_hash_is_still_checked_on_repeated_scope_preparation (tests.test_retrieval_scale.RetrievalScaleTests.test_source_hash_is_still_checked_on_repeated_scope_preparation) ... ok
+test_sql_progress_interruption_has_cancelled_stage (tests.test_retrieval_scale.RetrievalScaleTests.test_sql_progress_interruption_has_cancelled_stage) ... ok
+test_typo_transposition_survives_indexed_bigram_preselection (tests.test_retrieval_scale.RetrievalScaleTests.test_typo_transposition_survives_indexed_bigram_preselection) ... ok
+test_unchanged_scope_preparation_does_not_load_parse_body (tests.test_retrieval_scale.RetrievalScaleTests.test_unchanged_scope_preparation_does_not_load_parse_body) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 10.517s
+
+OK

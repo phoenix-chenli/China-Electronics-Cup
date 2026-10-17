@@ -15,6 +15,7 @@ from collections import Counter
 import heapq
 
 from . import documents, rag_index as index, store as s
+from .rag_candidates import ScopedChunks
 
 RECALL_LIMIT = 30
 RERANK_LIMIT = 30
@@ -25,6 +26,8 @@ RRF_K = 60
 
 def _noise_recall(query, candidates, cancelled=None, deadline=None):
     """Bounded spelling-tolerant recall only; original evidence is never rewritten."""
+    if isinstance(candidates,ScopedChunks):
+        candidates=candidates.noise_candidates(query)
     stop={'what','which','the','is','in','of','on','for','with','and','to','a','an','was','does','by','as','it','that','this'}
     terms=sorted(set(re.findall(r'[a-z0-9]{3,}|[\u4e00-\u9fff]{2,}',query.lower()))-stop,key=lambda t:(-len(t),t))[:24]
     if not terms:return []
@@ -61,44 +64,44 @@ def _noise_recall(query, candidates, cancelled=None, deadline=None):
 
 def _source_gaps(scope, cancelled=None, deadline=None, document_ids=None):
     gaps=[]
-    for source in scope['documents']:
-        _guard(cancelled,deadline)
-        if document_ids is not None and source['document_id'] not in document_ids:continue
-        if source.get('generation_id'):
-            with index.reader() as db:
+    with index.reader() as db:
+        for source in scope['documents']:
+            _guard(cancelled,deadline)
+            if document_ids is not None and source['document_id'] not in document_ids:continue
+            if source.get('generation_id'):
                 row=db.execute('SELECT body FROM ef_rag_generations WHERE id=?',(source['generation_id'],)).fetchone()
-            missing=json.loads(row['body']).get('missing_pages',[]) if row else []
-        else:
-            body=documents.layout(source['document_id'],source['sha256'],source['parse_id'])
-            missing=[]
-            for p in body['pages']:
-                if p['number']!=scope.get('page'):continue
-                if not p['text_available']:missing.append({'page':p['number'],'reason':'没有可用文字或结构待复核'})
-                elif any(obj.get('status')=='pending' for kind in ('formulas','tables','charts') for obj in p.get(kind,[])):
-                    missing.append({'page':p['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending'})
-                if scope.get('scope_type')!='selection' and any(len(b['text'])>index.CHUNK_TOKENS for b in index._formula_blocks(p)):
-                    missing.append({'page':p['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long'})
-                if scope.get('scope_type')!='selection' and any(b['table_row_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
-                    missing.append({'page':p['number'],'reason':'完整表格行超过检索片段窗口，请打开原表单独核验','reason_code':'source_table_row_too_long'})
-                if scope.get('scope_type')!='selection' and any(b['chart_point_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
-                    missing.append({'page':p['number'],'reason':'完整图点关系超过检索片段窗口，请打开原图单独核验','reason_code':'source_chart_point_too_long'})
-                if scope.get('scope_type')=='selection':
-                    start,end=scope['text_range']['start'],scope['text_range']['end']
-                    if any(b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in index._table_row_blocks(p)):
-                        missing.append({'page':p['number'],'reason':'选区只包含表格行的一部分，缺少完整对应关系','reason_code':'source_partial_table_row'})
-                    if any(b.get('chart_id') and b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in p.get('blocks',[])):
-                        missing.append({'page':p['number'],'reason':'选区只包含图点的一部分，缺少完整类别、系列及单位','reason_code':'source_partial_chart_point'})
-        for page in missing:
-            code=page.get('reason_code','source_text_missing')
-            actions={'source_formula_too_long':('inspect_original_formula','请打开该固定版本的完整公式原文进行核验'),
-                     'source_partial_table_row':('select_complete_table_row','请选择完整表格行，或打开原表同时核验多级表头与行名'),
-                     'source_table_row_too_long':('inspect_original_table','请打开该固定版本的原表核验整行及多级表头；检索未拆开这些对应关系'),
-                     'source_partial_chart_point':('select_complete_chart_point','请选择完整图点关系，或打开原图同时核验类别、系列、轴及单位'),
-                     'source_chart_point_too_long':('inspect_original_chart','请打开该固定版本的完整图表核验；检索未截断图点对应关系'),
-                     'source_structure_pending':('reparse_original','本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据')}
-            action,instruction=actions.get(code,('reparse_original','请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据'))
-            gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],
-                         'action':action,'reason_code':code,'instruction':instruction})
+                missing=json.loads(row['body']).get('missing_pages',[]) if row else []
+            else:
+                body=documents.layout(source['document_id'],source['sha256'],source['parse_id'])
+                missing=[]
+                for p in body['pages']:
+                    if p['number']!=scope.get('page'):continue
+                    if not p['text_available']:missing.append({'page':p['number'],'reason':'没有可用文字或结构待复核'})
+                    elif any(obj.get('status')=='pending' for kind in ('formulas','tables','charts') for obj in p.get(kind,[])):
+                        missing.append({'page':p['number'],'reason':'页面局部结构尚待核验','reason_code':'source_structure_pending'})
+                    if scope.get('scope_type')!='selection' and any(len(b['text'])>index.CHUNK_TOKENS for b in index._formula_blocks(p)):
+                        missing.append({'page':p['number'],'reason':'完整公式超过检索片段窗口，请打开原文单独核验','reason_code':'source_formula_too_long'})
+                    if scope.get('scope_type')!='selection' and any(b['table_row_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
+                        missing.append({'page':p['number'],'reason':'完整表格行超过检索片段窗口，请打开原表单独核验','reason_code':'source_table_row_too_long'})
+                    if scope.get('scope_type')!='selection' and any(b['chart_point_ids'] and len(p['text'][b['start']:b['end']])>index.CHUNK_TOKENS for b in index._atomic_blocks(p)):
+                        missing.append({'page':p['number'],'reason':'完整图点关系超过检索片段窗口，请打开原图单独核验','reason_code':'source_chart_point_too_long'})
+                    if scope.get('scope_type')=='selection':
+                        start,end=scope['text_range']['start'],scope['text_range']['end']
+                        if any(b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in index._table_row_blocks(p)):
+                            missing.append({'page':p['number'],'reason':'选区只包含表格行的一部分，缺少完整对应关系','reason_code':'source_partial_table_row'})
+                        if any(b.get('chart_id') and b['start']<end and b['end']>start and not (start<=b['start'] and end>=b['end']) for b in p.get('blocks',[])):
+                            missing.append({'page':p['number'],'reason':'选区只包含图点的一部分，缺少完整类别、系列及单位','reason_code':'source_partial_chart_point'})
+            for page in missing:
+                code=page.get('reason_code','source_text_missing')
+                actions={'source_formula_too_long':('inspect_original_formula','请打开该固定版本的完整公式原文进行核验'),
+                         'source_partial_table_row':('select_complete_table_row','请选择完整表格行，或打开原表同时核验多级表头与行名'),
+                         'source_table_row_too_long':('inspect_original_table','请打开该固定版本的原表核验整行及多级表头；检索未拆开这些对应关系'),
+                         'source_partial_chart_point':('select_complete_chart_point','请选择完整图点关系，或打开原图同时核验类别、系列、轴及单位'),
+                         'source_chart_point_too_long':('inspect_original_chart','请打开该固定版本的完整图表核验；检索未截断图点对应关系'),
+                         'source_structure_pending':('reparse_original','本页有局部结构待核验，请对照原件人工复核或重新解析；未核验结构不作为确定证据')}
+                action,instruction=actions.get(code,('reparse_original','请对这一固定原件页重新识别；只有空文本且无原图时无法恢复证据'))
+                gaps.append({**source,**page,'document_name':s.doc_get(source['document_id'])['name'],
+                             'action':action,'reason_code':code,'instruction':instruction})
     return gaps
 
 
@@ -119,12 +122,22 @@ def _stage(stages, name, fn, cancelled=None, trace=None, deadline=None):
     try:
         value = fn()
         _guard(cancelled, deadline)
-        stage.update(status="completed", count=len(value) if isinstance(value, list) else None)
+        stage.update(status="completed", count=len(value) if isinstance(value, (list,ScopedChunks)) else None)
         return value
     except InterruptedError:
         stage.update(status="cancelled", error="检索已取消")
         raise
     except Exception as exc:
+        # A SQLite progress handler reports interruption as OperationalError.
+        # Preserve cancellation/deadline semantics in the real stage trace.
+        try:
+            _guard(cancelled,deadline)
+        except InterruptedError:
+            stage.update(status='cancelled',error='检索已取消')
+            raise
+        except TimeoutError as timeout:
+            stage.update(status='failed',error=str(timeout))
+            raise
         stage.update(status="failed", error=str(exc)[:500])
         raise
     finally:
@@ -155,6 +168,7 @@ def _interrupted(cancelled, deadline):
 
 
 def _bm25(query, scope, candidates, cancelled=None, deadline=None):
+    if isinstance(candidates,ScopedChunks):return candidates.bm25(query,RECALL_LIMIT)
     if scope["scope_type"] in {"page", "selection"}:
         return _scope_bm25(query, candidates, cancelled, deadline)
     expression = index.match_query(query)
@@ -187,6 +201,7 @@ def embedding_input(chunk):
 
 
 def _dense(query, candidates, scope, cancelled=None, deadline=None):
+    if isinstance(candidates,ScopedChunks):return candidates.dense(query,scope,RECALL_LIMIT)
     from . import rag_providers
     import numpy as np
     provider = rag_providers.describe("embedding")
@@ -297,7 +312,8 @@ def _continuation(chunk, by_id):
     from .rag_grounding import native_sentence_tail
     tail=native_sentence_tail(chunk['text'])
     if not re.search(r'(?:增长|下降|减少|增加|达到|分别为|人均|同比|为|达|占|约|零售额|收入|余额|总额|总量|数量)\s*$',tail):return None
-    choices=[other for other in by_id.values() if all(other.get(key)==chunk.get(key) for key in ('document_id','sha256','parse_id'))
+    possible=by_id.continuation_candidates(chunk) if isinstance(by_id,ScopedChunks) else by_id.values()
+    choices=[other for other in possible if all(other.get(key)==chunk.get(key) for key in ('document_id','sha256','parse_id'))
              and other['page']==chunk['page']+1 and other['start']<=4
              and other.get('quality',{}).get('source_methods')==['pdf_native']
              and re.match(r'^\s*[-+]?\d[\d,.]*\s*(?:%|％|亿|万|元|人|个|家|吨|微克|所|倍)',other['text'])]
@@ -342,6 +358,21 @@ def _pack(ranked, by_id, scope, cancelled=None, deadline=None):
 
 
 def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_ids=None):
+    opened=[]
+    def load(shared_deadline):
+        if isinstance(scope,dict) and scope.get('scope_type') in {'document','corpus'}:
+            candidates=ScopedChunks(scope,document_ids,cancelled,shared_deadline)
+            opened.append(candidates)
+            if candidates.available:return candidates
+            candidates.close()
+        return index.chunks_for_scope(scope,cancelled=cancelled,deadline=shared_deadline)
+    try:
+        return _search(query,scope,cancelled=cancelled,trace=trace,deadline=deadline,document_ids=document_ids,candidate_loader=load)
+    finally:
+        for candidates in opened:candidates.close()
+
+
+def _search(query, scope, *, cancelled=None, trace=None, deadline=None, document_ids=None, candidate_loader=None):
     if not isinstance(query, str) or not query.strip() or len(query) > 2000:
         raise ValueError("文档检索问题需要 1–2000 个字符")
     started = time.monotonic()
@@ -349,16 +380,18 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_
     _guard(cancelled, deadline)
     index.initialize()
     stages, channels, errors = [], {}, []
-    candidates = _stage(stages, "scope", lambda: index.chunks_for_scope(scope, cancelled=cancelled, deadline=deadline), cancelled, trace, deadline)
     if document_ids is not None:
         allowed_ids = {d['document_id'] for d in scope.get('documents', [])}
         if (not isinstance(document_ids, list) or not 1 <= len(document_ids) <= 8
                 or not all(isinstance(d, str) and d in allowed_ids for d in document_ids)):
             raise ValueError('检索文档筛选必须来自本轮固定范围，不能扩大范围')
+    candidates = _stage(stages, "scope", lambda:candidate_loader(deadline) if candidate_loader else index.chunks_for_scope(scope, cancelled=cancelled, deadline=deadline), cancelled, trace, deadline)
+    if document_ids is not None and not isinstance(candidates,ScopedChunks):
         candidates = [c for c in candidates if c['document_id'] in document_ids]
     gaps=_stage(stages,'source_quality',lambda:_source_gaps(scope,cancelled,deadline,document_ids),cancelled,trace,deadline)
-    candidates=[c for c in candidates if c.get('quality',{}).get('table_complete') is not False]
-    by_id = {c["id"]: c for c in candidates}
+    if not isinstance(candidates,ScopedChunks):
+        candidates=[c for c in candidates if c.get('quality',{}).get('table_complete') is not False]
+    by_id = candidates if isinstance(candidates,ScopedChunks) else {c["id"]: c for c in candidates}
     if not candidates:
         return {"status": "insufficient", "evidence": [], "count": 0, "stages": stages,"source_gaps":gaps,
                 "index_manifest": scope, "retrieval": {"channels": {}, "errors": ["固定范围内没有可用文字，或来源已归档"], "duration_ms": round((time.monotonic()-started)*1000, 2)}}
@@ -422,5 +455,6 @@ def search(query, scope, *, cancelled=None, trace=None, deadline=None, document_
                           "preserved_lexical_candidate": protected_id,
                           "reranked": reranked, "ranked": ranked[:RERANK_LIMIT], "errors": errors,
                           "lexical_generation": scope.get("lexical_generation"), "rrf_k": RRF_K,
+                          'execution':dict(candidates.metrics) if isinstance(candidates,ScopedChunks) else {'mode':'page_selection_or_legacy'},
                           "duration_ms": round((time.monotonic()-started)*1000, 2),
                           "boundary": "排序分数只表示相关性；充分性和陈述支持由后续主流程核验"}}
