@@ -13,6 +13,15 @@ MAX_PACKET_CHARS = 24000
 MAX_CLAIMS = 12
 
 
+class UnsupportedValueFailure(ValueError):
+    """An answer asserted a value that no cited source witnesses.
+
+    Distinct from a protocol or judgment failure: the gate worked and refused to
+    publish the value. Once the answer-repair budget is spent this is reported as
+    a refusal carrying the gate's reason, not as a failed request.
+    """
+
+
 def retrieved_span_order(sources, retrieval):
     """Carry protected recall through the second, cross-source evidence pack."""
     lexical_id = retrieval.get('preserved_lexical_candidate')
@@ -493,23 +502,59 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None, ava
                                 or fact.get('query_provenance',{}).get('answer_contract',{}).get('period_years',[]))
                    if re.fullmatch(r'\d{4}',str(year))} & question_years
     scope_mentions = []
+    # A period the user wrote is scope framing, not a measurement — but only in a
+    # sentence that reports the period's content as absent. Restating "2026年" to
+    # say the corpus does not cover 2026 publishes no value, and requiring the
+    # year to appear in a cited filename failed exactly there (an uncovered
+    # period is named in no filename). Where the sentence instead attributes a
+    # value to that period, the year is a re-labelling of a measurement: a fact
+    # whose contract does not claim 2021 must not be presented as the 2021
+    # answer, so the gate still has to see the year.
+    absence = re.compile(r'未(?:覆盖|记载|收录|涉及|给出|提供|明确|披露|包含|约定)|'
+                         r'没有|缺少|未见|不详|无法|不能确定|无从|待定|另行通知')
+    def enclosing_sentence(match):
+        separators = '。！？\n'
+        start = max(numeric_text.rfind(c, 0, match.start()) for c in separators) + 1
+        ends = [numeric_text.find(c, match.end()) for c in separators]
+        ends = [x for x in ends if x != -1]
+        return numeric_text[start:min(ends) if ends else len(numeric_text)]
     def period_label(match):
-        if match[1] in source_years & question_years or match[1] in registered_years or match[1] in query_years:
-            scope_mentions.append({'text':match.group(),
-                'kind':'registered_document_period' if match[1] in registered_years else 'query_filter_period' if match[1] in query_years else 'question_period',
-                'status':'context_only','basis':'server_bound_publication' if match[1] in registered_years else 'SQL_expression_contract' if match[1] in query_years else 'question_and_source_name'})
-            return ''
-        return match.group()
-    numeric_text = re.sub(r'(?<!\d)(\d{4})\s*(?:年|(?=公报|统计公报|年度))',period_label,numeric_text)
+        year = match[1]
+        if year in registered_years:
+            kind, basis = 'registered_document_period', 'server_bound_publication'
+        elif year in query_years:
+            kind, basis = 'query_filter_period', 'SQL_expression_contract'
+        elif year in question_years and (year in source_years or absence.search(enclosing_sentence(match))):
+            kind = 'question_period'
+            basis = 'question_and_source_name' if year in source_years else 'question_absence_statement'
+        else:
+            return match.group()
+        scope_mentions.append({'text':match.group(),'kind':kind,'status':'context_only','basis':basis})
+        return ''
+    numeric_text = re.sub(r'(?<!\d)(\d{4})\s*(?:年|[春夏秋冬]|(?=公报|统计公报|年度))',period_label,numeric_text)
     def month_scope(match):
         if re.search(r'(?<!\d)'+re.escape(match[1])+r'\s*个月',question_text):
             scope_mentions.append({'text':match.group(),'kind':'question_month_scope','status':'context_only'})
             return ''
         return match.group()
     numeric_text = re.sub(r'(?<!\d)([1-9]\d?)\s*个月',month_scope,numeric_text)
+    def date_time_label(match):
+        # A date or clock time the user wrote is context. A refusal about an
+        # uncovered period has to restate that period to name the gap, and the
+        # digits inside it were otherwise gated as if the answer had measured
+        # something (a question's "7月10日" gated "10"; "07:40" gated "40").
+        if match.group() in question_text:
+            scope_mentions.append({'text':match.group(),'kind':'question_date_time',
+                'status':'context_only','basis':'question_text'})
+            return ''
+        return match.group()
+    numeric_text = re.sub(r'(?<!\d)\d{1,2}\s*月\s*\d{1,2}\s*日|(?<!\d)\d{1,2}\s*[:：]\s*\d{2}(?!\d)',date_time_label,numeric_text)
     # Names such as PM2.5 and MPEG-4 are categorical identifiers, not newly
-    # observed measurements. Only actual row strings or server registry labels
-    # can witness an identifier; arbitrary SQL aliases are not witnesses.
+    # observed measurements. Only actual row strings, server registry labels or
+    # the user's own question can witness an identifier; arbitrary SQL aliases
+    # are not witnesses. The question is included because an answer about an
+    # uncovered device must name that device to state the gap, and its label
+    # ("MC-8") otherwise entered the gate as the negative number -8.
     identifiers=set()
     for fact in pool.values():
         labels=[v for v in fact.get('row_values',{}).values() if isinstance(v,str)]
@@ -517,11 +562,14 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None, ava
             labels.extend(v for key,v in item.get('labels',{}).items() if key.endswith('_name') and isinstance(v,str))
         for label in labels:
             identifiers.update(re.findall(r'(?<![A-Za-z0-9])[A-Za-z]+(?:[._-]?\d+)+(?:\.\d+)*(?![A-Za-z0-9])',label))
+    question_identifiers=set(re.findall(r'(?<![A-Za-z0-9])[A-Za-z]+(?:[._-]?\d+)+(?:\.\d+)*(?![A-Za-z0-9])',question_text))
+    identifiers.update(question_identifiers)
     for identifier in sorted(identifiers,key=len,reverse=True):
         pattern=r'(?<![A-Za-z0-9])'+re.escape(identifier)+r'(?![A-Za-z0-9.])'
         if re.search(pattern,numeric_text):
             scope_mentions.append({'text':identifier,'kind':'source_registered_identifier','status':'context_only',
-                                   'basis':'actual_row_text_or_query_registry'})
+                                   'basis':'question_text' if identifier in question_identifiers
+                                           else 'actual_row_text_or_query_registry'})
             numeric_text=re.sub(pattern,'',numeric_text)
     numeric_text, boundary_mentions = zero_inference_boundaries(numeric_text, question)
     source_numbers=numbers('\n'.join(x['text'] for x in cited))
@@ -597,7 +645,7 @@ def synthesis(item, spans, delivered, selected_facts=None, *, question=None, ava
             bindings.append(fid);missing-=found
     if missing:
         values='、'.join(str(n)+('%' if percent else '') for n,percent in sorted(missing))
-        raise ValueError('综合陈述含原文未提供的数值：'+values+'。未披露的量应说明缺口，不能认定其数值；否定未披露值时用文字说明。需要计算时必须使用有来源的公式或SQL事实。')
+        raise UnsupportedValueFailure('综合陈述含原文未提供的数值：'+values+'。未披露的量应说明缺口，不能认定其数值；否定未披露值时用文字说明。需要计算时必须使用有来源的公式或SQL事实。')
     return {'text': text.strip(), 'support_span_ids': ids,'support_fact_ids':list(dict.fromkeys(declared+bindings)),
             'inference_boundary_mentions': boundary_mentions,
             'question_scope_mentions':scope_mentions,'table_unit_bindings':table_units,'chart_unit_bindings':chart_units,

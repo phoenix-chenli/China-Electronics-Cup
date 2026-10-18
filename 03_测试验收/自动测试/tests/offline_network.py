@@ -19,7 +19,10 @@ def install():
         try:return ipaddress.ip_address(host).is_loopback
         except (ValueError,TypeError):return False
     def check(sock,address):
-        if sock.family==socket.AF_UNIX:return
+        # Windows has no AF_UNIX at all, so an unguarded comparison raised
+        # AttributeError on every connection — including loopback — and took the
+        # HTTP fixtures of 15 modules down in setUpClass before a single request.
+        if getattr(socket,'AF_UNIX',None) is not None and sock.family==socket.AF_UNIX:return
         if not isinstance(address,tuple) or not allowed(address[0]):
             counts['external_blocked']+=1
             raise PermissionError('离线验收禁止连接外部网络；未发送模型请求')

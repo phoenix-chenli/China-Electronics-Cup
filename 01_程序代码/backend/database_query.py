@@ -689,7 +689,12 @@ def entity_ambiguities(question, snapshot, connection_id=None, expected_revision
         r"该(?:客户|专辑|曲目|歌曲|订单|产品|项目|设备|门店)|本(?:专辑|曲目|歌曲)", question)
     plural = re.search(r"所有|全部|每[个台位]|各[个台位]|分别|同名的?(?:都|全部)|两台|多台", question)
     identifier = re.search(r"(?:编号|\bid\b|\b\w+_id)\s*(?:为|是|[:：=])?\s*[A-Za-z0-9_-]+", question, re.I)
-    if not singular or plural or identifier:
+    # A question can single out one entity just by naming it ("播放列表 Music"),
+    # with no determiner. A quoted or Latin-alphabet token is a cheap signal that
+    # a proper name may be present; the probe below still decides, so a name that
+    # is unique in the tables produces nothing.
+    named = re.search(r"[\"'“”‘’][^\"'“”‘’]{2,}[\"'“”‘’]|[A-Za-z][A-Za-z0-9'’.&_-]{1,}", question)
+    if not (singular or named) or plural or identifier:
         return []
     if not isinstance(snapshot, dict) or snapshot.get("source", {}).get("connection_id") != connection_id:
         raise ValueError("实体消歧缺少当前源的字段快照")

@@ -1,13 +1,14 @@
 """Real HTTP orchestration contracts, using a scripted model, never quality claims."""
 import json
 import copy
+import threading
 import time
 import uuid
 import unittest
 from urllib.request import Request,urlopen
 from unittest.mock import patch
 from tests import test_agent as legacy
-from backend import rag_grounding as grounding, rag_index, rag_providers
+from backend import rag_grounding as grounding, rag_index, rag_providers, rag_completeness
 from backend.agent import MAX_CONTEXT_CHARS, Run
 
 
@@ -583,6 +584,39 @@ class RagAgentTest(unittest.TestCase):
         self.assertIn('现有证据不足',result['answer'])
         self.assertFalse(any(e['tool']=='database.query' for e in result['events']))
 
+    def test_requirements_call_overlaps_retrieval_instead_of_blocking_it(self):
+        # Retrieval does not consume the requirements checklist; only the
+        # assessment after it does. The model round-trip must overlap the
+        # retrieval stages rather than serialize in front of them, so a slow
+        # requirements reply is still in flight when search starts.
+        from backend import rag_retrieval
+        doc,_=self.source();self.setup_rag()
+        started,release,overlapped=threading.Event(),threading.Event(),threading.Event()
+        def slow_requirements(question,judge):
+            started.set()
+            if release.wait(3):overlapped.set()
+            parts=rag_completeness.question_parts(question)
+            return rag_completeness.validate_plan(
+                [{'text':'甲产品售后适用条件','independent':False}],
+                parts,grounding.ANSWER_KIND_CONTRACT)
+        real_search=rag_retrieval.search
+        def observing_search(*args,**kwargs):
+            # Only release the requirements reply once its worker is actually
+            # blocked, so this proves the two calls overlap.
+            started.wait(2)
+            release.set()
+            return real_search(*args,**kwargs)
+        # No scripted reply for model.requirements: the patched call replaces it.
+        self.script({'action':'tool','tool':'document.search','arguments':{'query':'甲产品售后发票'}},
+                    assessment,answer,support)
+        with patch.object(grounding,'requirements',slow_requirements), \
+             patch.object(rag_retrieval,'search',observing_search):
+            response=self.ask(doc)
+        self.assertEqual(response.status_code,200,response.text)
+        self.assertTrue(started.is_set())
+        self.assertTrue(overlapped.is_set())
+        self.assertEqual(response.json()['answer_status'],'supported')
+
     def test_synthesis_has_real_spans_review_and_timed_stages(self):
         doc,_=self.source();self.setup_rag()
         self.script({'action':'tool','tool':'document.search','arguments':{'query':'甲产品售后发票'}},required,assessment,answer,support)
@@ -633,6 +667,25 @@ class RagAgentTest(unittest.TestCase):
         self.assertEqual(len(result['agent']['answer_repairs']),1)
         self.assertEqual(len(legacy.ModelFixture.calls),5)
         self.assertEqual(len([e for e in result['events'] if e['tool']=='document.search']),1)
+
+    def test_a_repeated_unwitnessed_value_is_refused_rather_than_failing_the_request(self):
+        # Unlike an unknown citation, this failure is the value gate doing its
+        # job: the citation is real but the sentence asserts a number no source
+        # witnesses. One repair cannot remove a value the model keeps asserting,
+        # so the run must report a refusal carrying that reason, not a 400.
+        doc,_=self.source();self.setup_rag()
+        def unwitnessed(payload):
+            source=legacy.tool_results(payload)[-1]['result']['evidence'][0]
+            return {'action':'answer','claims':[{'kind':'synthesis','text':'甲产品的售后处理要求申请人提交发票，共 3 份。',
+                'support_span_ids':source['support_span_ids']}]}
+        self.script({'action':'tool','tool':'document.search','arguments':{'query':'售后发票'}},
+                    required,assessment,unwitnessed,unwitnessed)
+        response=self.ask(doc);self.assertEqual(response.status_code,200,response.text)
+        result=response.json()
+        self.assertEqual(result['answer_status'],'refused');self.assertEqual(result['claims'],[])
+        self.assertIn('原文未提供的数值',result['answer'])
+        self.assertEqual([e['status'] for e in result['events'] if e['tool']=='answer.verify'],['failed','failed'])
+        self.assertEqual(len(result['agent']['answer_repairs']),1)
 
     def test_many_candidates_fit_model_context_without_truncating_evidence(self):
         for index in range(36):self.source('甲产品售后处理要求申请人提交发票。辅助登记渠道'+str(index)+'。')

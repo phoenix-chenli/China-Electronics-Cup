@@ -26,10 +26,25 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def frozen_digest(path, declared):
+    """Compare a frozen text file against its declared digest on either checkout.
+
+    The manifests were frozen over LF. Git rewrites these text files to CRLF on a
+    Windows checkout, so a raw-bytes comparison fails on every file while the
+    content is unchanged. Accept exactly the LF and CRLF encodings of the same
+    bytes, as the Chinook runner already does; any real edit still fails here,
+    before a single request is sent.
+    """
+    raw = Path(path).read_bytes()
+    lf = raw.replace(b'\r\n', b'\n')
+    crlf = lf.replace(b'\n', b'\r\n')
+    return any(hashlib.sha256(form).hexdigest() == declared for form in (raw, lf, crlf))
+
+
 def validate(dataset_path=DEFAULT_DATASET):
     path = Path(dataset_path).resolve()
     checksum = path.with_suffix('.sha256')
-    if checksum.is_file() and digest(path) != checksum.read_text().split()[0]:
+    if checksum.is_file() and not frozen_digest(path, checksum.read_text().split()[0]):
         raise ValueError('评估清单已偏离冻结摘要')
     data = json.loads(path.read_text(encoding='utf-8'))
     if data.get('schema_version') != '1.0' or not data.get('synthetic'):
@@ -43,7 +58,7 @@ def validate(dataset_path=DEFAULT_DATASET):
         if Path(name).name != name or name in texts:
             raise ValueError('文档名重复或超出指定目录')
         source = source_root / name
-        if source.is_symlink() or digest(source) != document['sha256']:
+        if source.is_symlink() or not frozen_digest(source, document['sha256']):
             raise ValueError('冻结资料已改变：' + name)
         text = source.read_text(encoding='utf-8')
         if '公开合成 RAG 测试资料' not in text:
@@ -134,6 +149,27 @@ def prepare_documents(client, data, texts, import_missing):
     return selected
 
 
+def await_index(client, selected, timeout=300):
+    """Wait for the selected documents' vectors before measuring anything.
+
+    Importing publishes the keyword index immediately and builds vectors in a
+    background job. A query issued inside that window drops the dense channel
+    for whichever case runs first, which understates retrieval in the one run
+    we are about to compare against the next. Waiting costs nothing when the
+    index is already built and removes a source of run-to-run difference.
+    """
+    deadline = time.monotonic() + timeout
+    while True:
+        documents = {d['document_id']: d for d in client.request('/api/rag/status').get('documents', [])}
+        pending = sorted(name for name, did in selected.items()
+                         if (documents.get(did) or {}).get('vector_status') != 'ready')
+        if not pending:
+            return
+        if time.monotonic() > deadline:
+            raise ValueError('向量索引在等待时限内未就绪，本轮不测量：' + '、'.join(pending))
+        time.sleep(2)
+
+
 def normalized(text):
     return ''.join(str(text).split())
 
@@ -181,6 +217,7 @@ def execute(args, data, texts, summary):
         raise ValueError('请先在主问答设置中配置实际可用的生成模型并选择“知识库问答”；本 runner 不修改配置')
     providers = client.request('/api/rag/status').get('providers', {})
     selected = prepare_documents(client, data, texts, args.import_missing)
+    await_index(client, selected)
     cases = data['cases']
     if args.case_ids:
         wanted = set(args.case_ids.split(',')); cases = [c for c in cases if c['id'] in wanted]

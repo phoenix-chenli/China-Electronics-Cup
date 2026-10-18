@@ -9,6 +9,7 @@ import copy
 import hashlib
 import json
 import re
+import threading
 import time
 import uuid
 from decimal import Decimal, InvalidOperation
@@ -82,12 +83,14 @@ SYSTEM = """你是证流的主问答规划器。用中文规划并调用受限�
 工具调用格式：{action:"tool",tool:"工具名",arguments:{...}}。
 schema.inspect参数为空，或table_names字符串数组。
 database.schema参数为空，或table_names字符串数组。先读取结构，再生成SQL；表太多时按返回表清单选择相关表。
-database.query参数sql、params位置参数列表（SQL用?占位）、explanation中文关联/汇总说明。仅返回用户要求的列及粒度。
+database.query参数sql、params位置参数列表（SQL用?占位）、explanation中文关联/汇总说明。仅返回用户要求的列及粒度；写SQL前先确定问题要几个事实，SELECT 就只出这几列。
 用户明确只返回N列或用引号指定“列名依次为”时，最终SELECT必须严格保留这些列、别名与顺序；单位写进要求的别名，不附加单位列。不得在工具结果后删除列伪装满足要求；输出约束由执行前校验。
 用户未指定列名时，SELECT 的输出别名写成简短中文（如 艺术家数量、发票金额合计）。字段类型和模型别名不证明单位；只有本轮服务端字段说明、实际单位列或明确原文给出了单位时才写入别名。不得凭金额字段推断人民币、美元或净额，计数不能写成百分比。别名不得改变实际字段、筛选、关联或计算。
 只问计算结果时只投影计算列；要求分项与合计时在同一条SQL中一起返回。原文摘录通过document.search取得，不把source_quote等整页文字加入数值结果。仅查原值不算用户明确要求的差额、合计或比值时，问题尚未回答完整。
+最终SELECT的列集合必须正好等于问题要求的事实集合。多返回一列（编号、原始列、平均值、汇总值，或把同一数值再改写成一列可读文本）就是没有按要求作答，哪怕它"更便于核对"；只有问题明确要求核对、重算、差额或比重时，才额外返回参与计算的原始列。汇总、计数、排名本身不构成追加列的理由。
 source_vocabulary是当前公开资料的真实维度取值与定义，不是示例答案。优先按真实取值筛选；未给词表时，可用小型维度表的有限取值查询确认名称。不要把用户简称直接用于等号；必要时用LIKE匹配独特名称片段，空结果先核对取值。
 文本名称（曲名、专辑、客户、地区等）在库中的大小写可能与问题不同：按名称筛选一律用不区分大小写的比较（如 LOWER(列)=LOWER(?) 或 LIKE），不要用与问题完全相同的大小写做等值。因此这类查询返回0行时，先改用不区分大小写匹配复核，再判断是否真的无记录；不得直接当作“无资料”。
+维度实体的名称通常不是唯一键。仅当问题用某个具体名称做筛选（如“播放列表 Music 里有多少首”）时，才在SQL里按该名称分组、连同编号返回，确认只有一条；若同名多条，不得静默合并成一个数——要在结果与结论中分别给出各条的数值并说明共有几条（如“两个名为 Music 的播放列表，各 3290 首”），只有用户明确要求合计时才合计，并注明该合计来自几条同名记录。问题本身要求按名称分组列举或排名（如“曲目数最多的前十个播放列表”）时属于分组口径，同名行按分组结果照常分别列出，不附加编号列。
 词表已明确region_id与地区名的映射时，用该region_id直接筛选事实表；已给metric_id和指标名时直接使用该metric_id。仅为解析名称不再JOIN维度表。只有用户需要名称列或维度表另有必要条件时才关联；保持用户实际要求的输出列，不返回固定年份、来源注释等无关列。
 问题说“查询”“公布值”“比重是多少”而词表已有对应比重指标时，直接读取公布比重，不按显示人口或金额重新计算替换。只有用户明确要求计算、重算、比值或核对才进行算术，并区分计算值与公布值；用户指定小数位以外不自行改变数值精度。
 同一事实表需要比较多项指标时，优先按业务键分组做条件聚合。没有完整唯一键或验证关系的自连接不允许；不能反复重试相同的非法关联。
@@ -124,7 +127,7 @@ knowledge范围只使用文档；hybrid范围结合当前指定数据库与文�
 只选与问题相关的事实、摘录或有直接原文支持的综合结论，保持单位、实体、时间、模拟边界。不能用自由改写替代数值事实。
 最终数据结论只选择同一次查询的facts；需要跨表统计时用JOIN/CTE/子查询在一条SQL内完成，不混合不同查询的范围。
 数据库结果按问题要求排列行和列，确认过的单位写在列名中；原始值与所需差额、比例、排名在同一条SQL中一次返回，计算列按所需小数位ROUND，不追加无关元数据列。需要并排比较指标时用条件聚合，分别汇总一对多明细后再关联。
-涉及时长（曲目、音视频等以毫秒或秒计的数值）时，除原始数值列外，在同一SQL中再给一列自然说法“X分Y秒”（用整除与取余把分、秒拼成一列，单位写进列名，例如毫秒 401920 → “6分42秒”，不足一分钟写出“0分38秒”）；用户未指定单位时默认这种写法，不要只给毫秒。
+涉及时长（曲目、音视频等以毫秒或秒计的数值）时默认返回数据库原值，单位写进列名（如 时长_毫秒），不额外附加自然说法列。只有用户明确要求“X分Y秒”这类可读写法时才转换：在同一SQL中用整除与取余把分、秒拼成一列（毫秒 401920 → “6分42秒”，不足一分钟写出“0分38秒”），此时只给这一列，不再返回原始毫秒列。
 综合说明用于解释口径、适用条件和推断边界。可复述同一最终查询中已明确选择fact_id的原值。纯数据库回答可优先用kind为synthesis、text为简洁中文结论、support_fact_ids为同一次实际查询事实编号的格式；仍须经过服务端数字绑定和解释检查。文档综合结论必须引用直接支持对象、单位和口径的support_span_ids。不能自行计算、转换单位或引入未选择的数字。需要新差值、比值或小数位时先在SQL中计算并返回。数值按显示精度相符只能说明该精度下一致，不能据此断言原始差异来自四舍五入、修订或其他实际原因。
 没有证据时claims为空；不要捏造。business.query要求澄清时系统会直接向用户询问。
 工具失败时根据错误修正失败步骤，不必重复成功步骤。最后的来源和数值核验由系统执行。
@@ -424,6 +427,12 @@ class Run:
         self.rag_scope = self.database_context.get('rag_scope')
         self.spans, self.delivered_spans, self.latest_spans = {}, set(), []
         self.requirements, self.assessment, self.search_rounds = [], None, 0
+        # The requirements model call overlaps retrieval (see
+        # start_requirements); both threads record events and progress, so the
+        # run keeps one lock around those shared structures.
+        self.requirements_pending = None
+        self.requirements_error = None
+        self.state_lock = threading.RLock()
         self.completeness_repairs = 0
         self.retained_answer_items = []
         self.database_snapshot = None
@@ -471,7 +480,7 @@ class Run:
             guidance='本轮只使用固定范围文档，先检索document.search；不读取或查询销售数据库。'
         else:
             self.allowed_tools-={'business.query'}
-            guidance='本轮查询当前选定数据库。先database.schema再database.query，不切换到销售示例。用户需要比例、差值或汇总时，在database.query的SQL中完成计算，并在同一条SQL中返回原始值、计算结果和需要核对的公布值。不要先取数再用formula.calculate；SQL事实的untyped不是可自行更改的单位。'
+            guidance='本轮查询当前选定数据库。先database.schema再database.query，不切换到销售示例。用户明确要求比例、差值、重算或核对公布值时，在database.query的SQL中完成计算，并在同一条SQL中返回参与计算的原始列、计算结果和需要核对的公布值；仅仅是汇总、计数或排名不适用该要求，只返回问题要求的列。不要先取数再用formula.calculate；SQL事实的untyped不是可自行更改的单位。'
         first_tool='business.query' if scope=='sales' else 'document.search' if scope=='knowledge' else 'database.schema'
         first_args={'question':'完整业务问题'} if scope=='sales' else {'query':'当前问题关键词'} if scope=='knowledge' else {}
         guidance+='每次直接返回一个合法action。answer和clarify是action，不是tool。首次格式示例：'+c.encode({'action':'tool','tool':first_tool,'arguments':first_args})+'；示例文字需替换成实际用户问题。'
@@ -515,38 +524,50 @@ class Run:
             raise ValueError("智能体超过本轮总时限，未继续调用")
 
     def emit(self, label):
-        if self.progress:
-            self.progress({"stage": label, "events": copy.deepcopy(self.result["events"]),
-                           "agent": copy.deepcopy(self.result["agent"])})
+        if not self.progress:
+            return
+        # Snapshot under the lock; the requirements call may be finishing in
+        # another thread while retrieval emits. The callback itself runs outside
+        # it so a slow progress write cannot stall the model response.
+        with self.state_lock:
+            snapshot = {"stage": label, "events": copy.deepcopy(self.result["events"]),
+                        "agent": copy.deepcopy(self.result["agent"])}
+        self.progress(snapshot)
 
     def step(self, tool, label, fn, inputs=None):
         self.guard()
-        event = {"step_id": "agent-" + str(len(self.result["events"]) + 1), "tool": tool,
-                 "label": label, "status": "running", "started_at": s.now(), "duration_ms": None,
-                 "summary": "正在执行", "inputs": inputs or {}}
-        self.result["events"].append(event)
+        with self.state_lock:
+            event = {"step_id": "agent-" + str(len(self.result["events"]) + 1), "tool": tool,
+                     "label": label, "status": "running", "started_at": s.now(), "duration_ms": None,
+                     "summary": "正在执行", "inputs": inputs or {}}
+            self.result["events"].append(event)
         self.emit(label)
         started = time.monotonic()
         try:
             value = fn()
             self.guard()
-            event.update(status="completed", summary="执行完成")
-            if isinstance(value, dict):
-                if value.get('cached'):
-                    event['summary'] = '复用本轮已核对的结果'
-                event["outputs"] = self.trace_output(value)
+            with self.state_lock:
+                event.update(status="completed", summary="执行完成")
+                if isinstance(value, dict):
+                    if value.get('cached'):
+                        event['summary'] = '复用本轮已核对的结果'
+                    event["outputs"] = self.trace_output(value)
             return value
         except InterruptedError:
-            event.update(status="cancelled", summary="查询已取消")
+            with self.state_lock:
+                event.update(status="cancelled", summary="查询已取消")
             raise
         except (ValueError, HTTPException) as exc:
-            event.update(status="failed", summary=str(exc.detail) if isinstance(exc, HTTPException) else str(exc))
+            with self.state_lock:
+                event.update(status="failed", summary=str(exc.detail) if isinstance(exc, HTTPException) else str(exc))
             raise
         except Exception as exc:
-            event.update(status="failed", summary="步骤未完成，请检查服务或数据", error_type=type(exc).__name__)
+            with self.state_lock:
+                event.update(status="failed", summary="步骤未完成，请检查服务或数据", error_type=type(exc).__name__)
             raise ValueError("步骤未完成，请检查服务或数据") from None
         finally:
-            event.update(duration_ms=round((time.monotonic() - started) * 1000, 2), finished_at=s.now())
+            with self.state_lock:
+                event.update(duration_ms=round((time.monotonic() - started) * 1000, 2), finished_at=s.now())
             self.emit(label)
 
     @staticmethod
@@ -718,10 +739,11 @@ class Run:
 
     def judge(self, tool, label, system, payload):
         self.guard()
-        if self.calls >= getattr(self,'model_call_limit',MAX_MODEL_CALLS):
-            raise ValueError('模型调用次数达到上限，未跳过证据检查')
-        self.calls += 1
-        self.result['agent']['calls'] = self.calls
+        with self.state_lock:
+            if self.calls >= getattr(self,'model_call_limit',MAX_MODEL_CALLS):
+                raise ValueError('模型调用次数达到上限，未跳过证据检查')
+            self.calls += 1
+            self.result['agent']['calls'] = self.calls
         def call():
             d = c.ready(self.connection['id'], {'text'})
             if d['revision'] != self.connection['revision']:
@@ -729,29 +751,78 @@ class Run:
             d = dict(d, timeout=min(d['timeout'], max(.01, MAX_SECONDS - (time.monotonic() - self.start))))
             response = c.chat(d, [{'role': 'system', 'content': system},
                 {'role': 'user', 'content': c.encode(payload)}], max_tokens=3000, cancelled=self.cancelled,json_mode=True)
-            self.result['agent']['model'] = response['model']
-            usage = self.result['agent']['usage']
-            for key, value in response.get('usage', {}).items():
-                usage[key] = usage.get(key, 0) + value
+            with self.state_lock:
+                self.result['agent']['model'] = response['model']
+                usage = self.result['agent']['usage']
+                for key, value in response.get('usage', {}).items():
+                    usage[key] = usage.get(key, 0) + value
             try:
                 body=rag_grounding.object_response(response['text'])
             except ValueError as exc:
-                self.result['agent'].setdefault('evidence_protocol_errors',[]).append({
-                    'tool':tool,'detail':str(exc),'response_characters':len(response['text']),
-                    'response_sha256':hashlib.sha256(response['text'].encode()).hexdigest(),
-                    'finish_reason':response.get('finish_reason')})
+                with self.state_lock:
+                    self.result['agent'].setdefault('evidence_protocol_errors',[]).append({
+                        'tool':tool,'detail':str(exc),'response_characters':len(response['text']),
+                        'response_sha256':hashlib.sha256(response['text'].encode()).hexdigest(),
+                        'finish_reason':response.get('finish_reason')})
                 raise
             return {**body, 'model': response['model'],
                     'usage': response.get('usage', {})}
         try:
             value=self.step(tool, label, call, {'call': self.calls, 'input_characters': len(c.encode(payload))})
         except ValueError as exc:
-            self.judgment_errors[tool]=str(exc)
+            with self.state_lock:
+                self.judgment_errors[tool]=str(exc)
             raise
-        self.judgment_errors.pop(tool,None)
+        with self.state_lock:
+            self.judgment_errors.pop(tool,None)
         return value
 
+    def start_requirements(self):
+        """Issue the requirements call without blocking retrieval.
+
+        Retrieval does not depend on the fact checklist; only the assessment
+        that runs after it does. Starting it first lets the model round-trip
+        overlap reranking and packing, which is the largest block of local
+        compute in a document search. The call still counts against the same
+        model budget and records the same event from the worker thread.
+        """
+        if self.requirements or self.requirements_pending is not None:
+            return
+        ready = threading.Event()
+        box = {}
+        def work():
+            try:
+                box['value'] = rag_grounding.requirements(self.result['question'], self.judge)
+            except BaseException as exc:
+                box['error'] = exc
+            finally:
+                ready.set()
+        threading.Thread(target=work, name='evidenceflow-rag-requirements', daemon=True).start()
+        self.requirements_pending = (ready, box)
+
+    def settle_requirements(self):
+        """Wait for an in-flight requirements call and store its outcome."""
+        pending = self.requirements_pending
+        if pending is None:
+            return
+        ready, box = pending
+        ready.wait()
+        self.requirements_pending = None
+        if 'error' in box:
+            exc = box['error']
+            self.requirements_error = exc
+            if isinstance(exc, ValueError):
+                self.judgment_errors['model.requirements'] = str(exc)
+        else:
+            self.requirements = box['value']
+            self.judgment_errors.pop('model.requirements', None)
+
     def ensure_requirements(self):
+        self.settle_requirements()
+        if self.requirements_error is not None:
+            exc = self.requirements_error
+            self.requirements_error = None
+            raise exc
         if not self.requirements:
             try:
                 self.requirements = rag_grounding.requirements(self.result['question'], self.judge)
@@ -828,20 +899,22 @@ class Run:
             self.rag_scope = rag_index.freeze_scope(document_context=self.document_context)
             self.result['query_spec']['rag_scope'] = copy.deepcopy(self.rag_scope)
         if self.rag_enabled:
-            self.ensure_requirements()
+            self.start_requirements()
         self.search_rounds += 1
-        parent = next((e['step_id'] for e in reversed(self.result['events']) if e['tool'] == 'document.search'), None)
+        with self.state_lock:
+            parent = next((e['step_id'] for e in reversed(self.result['events']) if e['tool'] == 'document.search'), None)
         tracked={}
         def trace(stage):
             key=stage['stage']
-            event=tracked.get(key)
-            if event is None:
-                event={'step_id':'retrieval-'+str(len(self.result['events'])+1),'parent_step_id':parent,
-                       'tool':'document.'+key,'label':key,'summary':''}
-                tracked[key]=event
-                self.result['events'].append(event)
-            event.update(stage)
-            event['summary']=stage.get('error') or ('返回'+str(stage['count'])+'项' if 'count' in stage else stage['status'])
+            with self.state_lock:
+                event=tracked.get(key)
+                if event is None:
+                    event={'step_id':'retrieval-'+str(len(self.result['events'])+1),'parent_step_id':parent,
+                           'tool':'document.'+key,'label':key,'summary':''}
+                    tracked[key]=event
+                    self.result['events'].append(event)
+                event.update(stage)
+                event['summary']=stage.get('error') or ('返回'+str(stage['count'])+'项' if 'count' in stage else stage['status'])
             self.emit('文档检索：'+key)
         value = rag_retrieval.search(query, self.rag_scope, cancelled=self.cancelled,trace=trace,
                                      deadline=self.start+MAX_SECONDS, document_ids=document_ids)
@@ -933,8 +1006,9 @@ class Run:
                 else:
                     choices = '、'.join('/'.join(f'{key}={item.get(key)}' for key in issue['key_fields']) for item in candidates)
                     if issue['truncated']:
-                        choices += ' 等；仅列部分候选'
-                    title = f'“{issue["name"]}”在库中有多条同名记录，需要先指明是哪一条：请补充 {"/".join(issue["key_fields"])} 或给出其他可区分的条件（候选：{choices}）。'
+                        choices += ' 等；仅列部分记录'
+                    title = (f'“{issue["name"]}”在库中有 {len(candidates)} 条同名记录，但没有可用于区分的字段；'
+                             f'请指明按哪一条统计，或说明要几条分别给出（编号：{choices}）。')
                 self.result.update(status='needs_clarification', answer_status='needs_clarification',
                     clarification={'title': title, 'fields': []}, headline=title, answer=title,
                     clarification_reason='ambiguous_entity', ambiguity=ambiguities)
@@ -1640,6 +1714,15 @@ class Run:
                     if isinstance(exc,EvidenceJudgmentFailure):
                         raise
                     if repairs >= 1:
+                        if isinstance(exc, rag_grounding.UnsupportedValueFailure):
+                            # The gate did its job and one repair did not remove
+                            # the unwitnessed value, so no further attempt can
+                            # change the outcome. That is a refusal to publish,
+                            # not a broken request: report it with the gate's
+                            # reason instead of failing the call. A verifier or
+                            # protocol failure still raises through refuse().
+                            self.refuse('本轮未能给出有来源支持的确定结论，未发布答案。', [str(exc)])
+                            return self.finish()
                         raise
                     repairs += 1
                     qid=(self.result.get('database_query') or {}).get('query_id')

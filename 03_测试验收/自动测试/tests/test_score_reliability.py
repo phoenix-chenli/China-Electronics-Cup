@@ -163,6 +163,27 @@ class ScoreReliabilityTests(unittest.TestCase):
         self.assertEqual(findings[0]['label_fields'], ['sites'])
         self.assertEqual({item['sites'] for item in findings[0]['candidates']}, {'东站', '西站'})
 
+    def test_a_named_entity_with_no_distinguishing_field_still_reports_the_duplicate(self):
+        # A question can single out one entity by naming it ("播放列表 Music") with
+        # no determiner; the name carries the singularity. When the duplicates have
+        # no distinguishing column the finding still surfaces, so the model cannot
+        # silently sum two same-named records into one number.
+        cid = self.database()
+        with closing(sqlite3.connect(self.database_path)) as db:
+            db.executescript('''
+                CREATE TABLE playlists(playlist_id INTEGER PRIMARY KEY, name TEXT);
+                INSERT INTO playlists VALUES (1,'Music'),(2,'Music'),(3,'Movies');
+            ''')
+            db.commit()
+        snapshot = query.inspect(cid)
+        findings = query.entity_ambiguities('播放列表 Music 里有多少首曲目？', snapshot, cid)
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0]['name'], 'Music')
+        self.assertEqual(findings[0]['label_fields'], [])
+        self.assertEqual({item['playlist_id'] for item in findings[0]['candidates']}, {1, 2})
+        # A unique name in the same question must not be reported.
+        self.assertEqual(query.entity_ambiguities('播放列表 Movies 里有多少首曲目？', snapshot, cid), [])
+
     def test_explicit_key_and_all_entities_do_not_trigger_singular_guard(self):
         cid = self.database()
         snapshot = query.inspect(cid)
