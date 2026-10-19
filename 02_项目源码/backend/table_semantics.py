@@ -5,6 +5,7 @@ Rows/columns are one-based source coordinates, not necessarily SQL row numbers.
 """
 from __future__ import annotations
 
+import math
 import re
 
 VERSION = 'table-semantics-v1'
@@ -13,6 +14,8 @@ MAX_CELLS = 2048
 MAX_TEXT = 24000
 MAX_CONTEXT = 6
 MAX_HEADER_ROWS = 8
+MAX_OCR_CANDIDATE_TEXT = 256
+MAX_OCR_CANDIDATE_CHARACTERS = 4096
 UNIT = re.compile(r'(?:单位|Unit[s]?)\s*[:：]\s*([^\n;；]{1,48})', re.I)
 INLINE_UNIT = re.compile(r'[（(]\s*(亿元|万元|元|人民币元|美元|万元人民币|%|％|百分比|percent|percentage|万人|人|吨|千克|公斤|kg|t|km|公里|平方米|万元/人|元/吨|天|小时|年|月)\s*[）)]', re.I)
 CAPTION = re.compile(r'^\s*(?:表\s*[一二三四五六七八九十\d]+|Table\s*\d+)\s*[.．:：、\-]?', re.I)
@@ -60,6 +63,46 @@ def _anchor(cell, position):
     return out
 
 
+def _ocr_cell_audit(original, remaining):
+    """Bound observations, without promoting reread alternatives to cell values."""
+    audit, used, truncated = {}, 0, False
+    if original.get('offset_basis') == 'ocr_cell_block':
+        audit['offset_basis'] = 'ocr_cell_block'
+    if isinstance(original.get('verification'), str):
+        audit['verification'] = original['verification'][:96]
+    for key in ('ocr_disagreement', 'requires_review'):
+        if type(original.get(key)) is bool:
+            audit[key] = original[key]
+    for key in ('confidence', 'crop_ocr_confidence'):
+        value = original.get(key)
+        if isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and 0 <= value <= 1:
+            audit[key] = value
+    box = original.get('text_bbox')
+    if (isinstance(box, (list, tuple)) and len(box) == 4
+            and all(isinstance(n, (int, float)) and not isinstance(n, bool) and math.isfinite(n) and 0 <= n <= 1 for n in box)
+            and box[0] < box[2] and box[1] < box[3]):
+        audit['text_bbox'] = list(box)
+    candidates = original.get('ocr_candidates')
+    if isinstance(candidates, list):
+        kept = []
+        truncated = len(candidates) > 4
+        for value in candidates[:4]:
+            if not isinstance(value, str):
+                truncated = True
+                continue
+            allowance = min(MAX_OCR_CANDIDATE_TEXT, max(0, remaining-used))
+            if len(value) > allowance:
+                truncated = True
+            if allowance:
+                kept.append(value[:allowance])
+                used += len(kept[-1])
+        if kept:
+            audit['ocr_candidates'] = kept
+    if truncated:
+        audit['candidate_audit_truncated'] = True
+    return audit, used, truncated
+
+
 def build_table_semantics(region, *, format, source_position=None, before=(), after=(), explicit_header_rows=()):
     """Return one source-local semantic record. Role detection is never certainty."""
     position = dict(source_position or {})
@@ -69,12 +112,17 @@ def build_table_semantics(region, *, format, source_position=None, before=(), af
         position.setdefault('bbox', region['bbox'])
     reasons = list(region.get('review_reasons', []))
     cells, characters, truncated = [], 0, bool(region.get('truncated'))
+    audit_characters, audit_truncated = 0, False
     for original in region.get('cells', []):
         cell = {k: original[k] for k in ('row', 'col', 'text', 'rowspan', 'colspan', 'covered_by', 'bbox', 'start', 'end', 'source_text') if k in original}
         size = len(_text(cell.get('text'))) + len(_text(cell.get('source_text')))
         if len(cells) >= MAX_CELLS or characters + size > MAX_TEXT:
             truncated = True
             break
+        audit, used, limited = _ocr_cell_audit(original, MAX_OCR_CANDIDATE_CHARACTERS-audit_characters)
+        cell.update(audit)
+        audit_characters += used
+        audit_truncated |= limited
         # Coverage points to its real anchor and never becomes an independent value.
         if cell.get('covered_by'):
             if cell.get('text') is not None:
@@ -94,6 +142,13 @@ def build_table_semantics(region, *, format, source_position=None, before=(), af
     if explicit and not explicit_available:
         reasons.append('显式表头超出语义窗口，未补猜完整表头')
     top_rows = sorted({c['row'] for c in cells})[:MAX_HEADER_ROWS]
+    hint = region.get('header_rows')
+    if (not headers and region.get('extraction') == 'ocr_layout' and isinstance(hint, list)
+            and 0 < len(hint) <= MAX_HEADER_ROWS and all(type(r) is int for r in hint)
+            and hint == list(range(1, len(hint)+1)) and len(hint) < count
+            and all(any(c['row'] == r for c in cells) for r in hint)):
+        headers, basis = list(hint), 'inferred'
+        reasons.append('无框布局提供连续前导表头候选，需对照原表确认；未标为显式表头')
     if not headers:
         # Only a contiguous leading text block followed by a numeric data row is
         # a header candidate. All-text business tables stay unknown.
@@ -182,7 +237,9 @@ def build_table_semantics(region, *, format, source_position=None, before=(), af
                                 'role': 'row_key' if serial_column else 'row_label_candidate', 'evidence': _anchor(c, position)})
     if truncated:
         reasons.append('语义元数据达到预算，仅保留标明范围内的原始单元格与上下文')
-    return {'schema_version': VERSION, 'table_name': region['table_name'], 'format': format,
+    if audit_truncated:
+        reasons.append('OCR复读候选达到审计预算，完整候选须对照原始表格区域；候选未替换原格值')
+    result = {'schema_version': VERSION, 'table_name': region['table_name'], 'format': format,
             'page': position.get('page'), 'sheet': position.get('sheet'), 'source_position': position,
             'row_count': count, 'column_count': width, 'header_rows': headers, 'header_basis': basis,
             'columns': columns, 'cells': cells, 'row_headers': row_headers,
@@ -192,6 +249,14 @@ def build_table_semantics(region, *, format, source_position=None, before=(), af
             'limits': {'max_cells': MAX_CELLS, 'max_cell_text_characters': MAX_TEXT,
                        'max_context_characters': 4000, 'max_header_rows': MAX_HEADER_ROWS},
             'interpretation_note': '表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。'}
+    for key in ('extraction', 'structure_basis'):
+        if isinstance(region.get(key), str):
+            result[key] = region[key][:160]
+    if type(region.get('sql_eligible')) is bool:
+        result['sql_eligible'] = region['sql_eligible']
+    if audit_truncated:
+        result['candidate_audit_truncated'] = True
+    return result
 
 
 def page_context(region, siblings, page):

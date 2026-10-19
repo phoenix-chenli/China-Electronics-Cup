@@ -106,7 +106,14 @@ def line_blocks(words):
 def table_candidates(image, words):
     if len(words) < 3:
         return []
-    tables = detect_grid(image, words, allow_open_outer=True)
+    from .ocr_ruled import detect_merged_tables
+    from .ocr_layout import detect_layout_tables
+    merged = detect_merged_tables(image, words)
+    def duplicated(table):
+        a=table['bbox'];area=(a[2]-a[0])*(a[3]-a[1])
+        return any(max(0,min(a[2],b['bbox'][2])-max(a[0],b['bbox'][0])) *
+                   max(0,min(a[3],b['bbox'][3])-max(a[1],b['bbox'][1])) >= .8*area for b in merged)
+    tables = [t for t in detect_grid(image, words, allow_open_outer=True) if not duplicated(t)]
     for table in tables:
         ambiguous = table.pop('_requires_cell_ocr', False)
         table.update(verification='page_ocr_geometry', requires_review=True,
@@ -120,7 +127,57 @@ def table_candidates(image, words):
             value, _ = line_blocks(own)
             cell.update(text=value or None, verification='page_ocr_geometry', requires_review=True)
             table['rows'][cell['row']-1][cell['col']-1] = value or None
-    return tables
+    ruled=merged+tables
+    return ruled+detect_layout_tables(image,words,ruled_tables=ruled)
+
+
+def table_text_blocks(image, words, tables):
+    """One original-word block per actual cell; never locate repeated values by text."""
+    if not tables:
+        return line_blocks(words)
+    owners={};remaining=[];all_cells=[];bins={}
+    eps_x,eps_y=4/image.width,4/image.height
+    for ti,table in enumerate(tables):
+        for cell in table['cells']:
+            if not cell.get('covered_by'):
+                all_cells.append((ti,cell))
+                a=cell['bbox']
+                for y in range(max(0,int(a[1]*64)),min(63,int(a[3]*64))+1):
+                    for x in range(max(0,int(a[0]*64)),min(63,int(a[2]*64))+1):
+                        bins.setdefault((x,y),[]).append((ti,cell))
+    for word in words:
+        b=word['bbox'];cx,cy=(b[0]+b[2])/2,(b[1]+b[3])/2
+        matches=[]
+        for ti,cell in bins.get((min(63,int(cx*64)),min(63,int(cy*64))),[]):
+            a=cell['bbox']
+            if (a[0]<=cx<a[2] and a[1]<=cy<a[3] and a[0]-eps_x<=b[0] and a[1]-eps_y<=b[1]
+                    and b[2]<=a[2]+eps_x and b[3]<=a[3]+eps_y):
+                matches.append((ti,cell))
+        if len(matches)==1:
+            ti,cell=matches[0];owners.setdefault((ti,cell['row'],cell['col']),[]).append(word)
+        else:
+            remaining.append(word)
+    _,blocks=line_blocks(remaining)
+    links=[]
+    for ti,cell in all_cells:
+        own=owners.get((ti,cell['row'],cell['col']),[])
+        if not own:
+            # Preserve an earlier machine observation without manufacturing an
+            # exact text anchor; downstream treats its relationship as unknown.
+            continue
+        value,parts=line_blocks(own)
+        cell['text']=value or None
+        tables[ti]['rows'][cell['row']-1][cell['col']-1]=value or None
+        box=[min(w['bbox'][0] for w in own),min(w['bbox'][1] for w in own),
+             max(w['bbox'][2] for w in own),max(w['bbox'][3] for w in own)]
+        block=dict(text=value,bbox=box,confidence=min(w['confidence'] for w in own),
+                   kind='formula_candidate' if any(c in value for c in '=∑∫√≤≥') else 'text')
+        blocks.append(block);links.append((cell,block))
+        cell['text_bbox']=box[:]
+    text,blocks=text_blocks(blocks)
+    for cell,block in links:
+        cell.update(start=block['start'],end=block['end'],offset_basis='ocr_cell_block')
+    return text,blocks
 
 
 def cell_crops(image, tables):
@@ -130,7 +187,7 @@ def cell_crops(image, tables):
     for table in tables:
         for cell in table['cells']:
             # Empty observations remain unknown, not zero or proof of blank.
-            if not cell.get('text'):
+            if not cell.get('text') or cell.get('covered_by'):
                 continue
             if len(jobs) >= MAX_CELL_CROPS:
                 return jobs, True

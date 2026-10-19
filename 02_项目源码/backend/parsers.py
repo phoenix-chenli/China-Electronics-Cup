@@ -17,7 +17,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from . import table_semantics, document_structure, formula_structure
 
-PARSER_VERSION = "zhiheng-multimodal-3.4"
+PARSER_VERSION = "zhiheng-multimodal-3.5"
 MAX_OCR_PAGES = 40
 MAX_DOCUMENT_SECONDS = 180
 PDF_PAGE_TIMEOUT = 20
@@ -249,9 +249,16 @@ def _save_regions(result, regions, destination):
     _region_semantics(result, regions)
     if not regions:
         return
+    eligible=[r for r in regions if r.get('sql_eligible') is not False and r.get('extraction')!='ocr_layout']
+    if len(eligible)<len(regions):
+        result['warnings'].append('无框布局表格仅为待核验关系候选，尚未作为可计算数据表导入；请先对照原件确认')
+        for region in regions:
+            if region not in eligible:region.pop('rows',None)
+    if not eligible:
+        return
     writer = TableWriter(destination)
     try:
-        for region in regions:
+        for region in eligible:
             rows = region.pop("rows")
             writer.add(region["table_name"], [f"列{i + 1}" for i in range(region["column_count"])], rows)
     finally:
@@ -261,8 +268,8 @@ def _save_regions(result, regions, destination):
     result["warnings"].extend(notices)
     result["metadata"]["table_row_note"] = "PDF / 图片表格保留全部原始行，列名为列1、列2等；表头与合并覆盖空值未转成业务数据，计算前需确认表头、单位和合计行。"
     result["warnings"].append(result["metadata"]["table_row_note"])
-    if any(r["extraction"] == "ocr_grid" for r in regions):
-        result["warnings"].append("扫描表格根据真实格线定位；单元格文字来自 OCR，数字及空格须对照原件复核")
+    if any(r["extraction"] in {"ocr_grid","ocr_layout"} for r in regions):
+        result["warnings"].append("扫描表格保留格线或布局候选来源；单元格文字来自 OCR，数字及对应关系须对照原件复核")
 
 
 def _region_semantics(result, regions):
@@ -615,8 +622,8 @@ def parse_image(path, destination, progress, cancelled=lambda: False):
     result.update(pages=[current], page_count=1, summary=f"{width} × {height} 像素 · {len(recognized['text']):,} 字符", warnings=recognized["quality"]["warnings"][:])
     result["metadata"] = dict(width=width, height=height, exif_orientation=orientation, ocr_performed=not recognized["quality"]["blank"],
                               page_unit="physical_page", outline=[], quality_summary=_quality_metadata([current]),
-                              complexity={"multi_column_pages": [], "merged_table_count": 0, "formula_candidates": sum(b["kind"] == "formula_candidate" for b in current["blocks"]),
-                                          "notes": ["OCR 仅保留公式候选文字，未验证公式。", "无可靠闭合格线时不生成数据表。"]})
+                              complexity={"multi_column_pages": [], "merged_table_count": sum(bool(t.get('has_merged_cells')) for t in recognized['tables']), "formula_candidates": sum(b["kind"] == "formula_candidate" for b in current["blocks"]),
+                                          "notes": ["OCR 仅保留公式候选文字，未验证公式。", "无框布局仅保留待核验关系候选，不直接生成可计算数据表。"]})
     for i, region in enumerate(recognized["tables"]):
         region.update(table_name=f"图片表{i + 1}", page=1)
     _save_regions(result, recognized["tables"], destination)

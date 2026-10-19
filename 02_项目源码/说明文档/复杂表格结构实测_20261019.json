@@ -1,0 +1,1081 @@
+{
+  "parser_version": "zhiheng-multimodal-3.5",
+  "code_sha256": {
+    "backend/ocr_adapter.py": "e330d6b676841257ef58e7b28fde20070124909093b99ddd7a36e53708eb9c2f",
+    "backend/ocr_tesseract.py": "b39c91d3a4babae575b6db582081b1e56fd70693232901f82370e6d4e041e8cd",
+    "backend/ocr_layout.py": "4d22d58f31a4dcffac48798052fba642d8172610f26e0d118d1c09c808ed19d7",
+    "backend/ocr_ruled.py": "41c9fa0c54b07ff55489171b6d4e3664602bf8729cac6a10a1c17996ce7a8ac8",
+    "backend/ocr_orientation.py": "1e3fcd3a1d737e1404d97464dbedba4a270b5a3c22dbc67bc8dda5363b4624bc",
+    "backend/parsers.py": "5ce8019d1cff2eb59a138f9d03e3d16ed80ef300dbe5cec51195b72ba0527f6d",
+    "backend/table_semantics.py": "e6566f0dea3819bfc25e383ff033517a9844e18e049347ee8e3aaef450d4246e",
+    "backend/table_context.py": "c538d828e47c3e0efbcefbe7409cdd539739f7314826c460db443ccaae063c08",
+    "backend/answer_service.py": "674850c87ac21433f94668167181ccf8d9d1a966cb972c862fb5fcf028ca09fc"
+  },
+  "code_changed_during_run": false,
+  "model_chat_api_calls": 0,
+  "records": [
+    {
+      "source_id": "B10",
+      "physical_page": 43,
+      "condition": "original",
+      "hits": 5,
+      "denominator": 5,
+      "tables": []
+    },
+    {
+      "source_id": "B10",
+      "physical_page": 43,
+      "condition": "rotate90",
+      "hits": 5,
+      "denominator": 5,
+      "tables": []
+    },
+    {
+      "source_id": "B10",
+      "physical_page": 43,
+      "condition": "downsample50",
+      "hits": 5,
+      "denominator": 5,
+      "tables": []
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 84,
+      "condition": "original",
+      "hits": 5,
+      "denominator": 5,
+      "tables": [
+        {
+          "rows": 12,
+          "columns": 9,
+          "extraction": "ocr_grid",
+          "merged_anchors": [
+            {
+              "row": 1,
+              "col": 1,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "rowspan": 1,
+              "colspan": 2
+            },
+            {
+              "row": 1,
+              "col": 4,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 5,
+              "rowspan": 1,
+              "colspan": 2
+            },
+            {
+              "row": 1,
+              "col": 7,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 8,
+              "rowspan": 1,
+              "colspan": 2
+            }
+          ],
+          "exact_offset_cells": 102,
+          "nonempty_cells": 102,
+          "sql_eligible": true,
+          "requires_review": true
+        }
+      ]
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 84,
+      "condition": "rotate90",
+      "hits": 4,
+      "denominator": 5,
+      "tables": [
+        {
+          "rows": 12,
+          "columns": 9,
+          "extraction": "ocr_grid",
+          "merged_anchors": [
+            {
+              "row": 1,
+              "col": 1,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "rowspan": 1,
+              "colspan": 2
+            },
+            {
+              "row": 1,
+              "col": 4,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 5,
+              "rowspan": 1,
+              "colspan": 2
+            },
+            {
+              "row": 1,
+              "col": 7,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 8,
+              "rowspan": 1,
+              "colspan": 2
+            }
+          ],
+          "exact_offset_cells": 102,
+          "nonempty_cells": 102,
+          "sql_eligible": true,
+          "requires_review": true
+        }
+      ]
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 84,
+      "condition": "downsample50",
+      "hits": 2,
+      "denominator": 5,
+      "tables": [
+        {
+          "rows": 12,
+          "columns": 9,
+          "extraction": "ocr_grid",
+          "merged_anchors": [
+            {
+              "row": 1,
+              "col": 1,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "rowspan": 1,
+              "colspan": 2
+            },
+            {
+              "row": 1,
+              "col": 4,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 5,
+              "rowspan": 1,
+              "colspan": 2
+            },
+            {
+              "row": 1,
+              "col": 7,
+              "rowspan": 2,
+              "colspan": 1
+            },
+            {
+              "row": 1,
+              "col": 8,
+              "rowspan": 1,
+              "colspan": 2
+            }
+          ],
+          "exact_offset_cells": 100,
+          "nonempty_cells": 100,
+          "sql_eligible": true,
+          "requires_review": true
+        }
+      ]
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 268,
+      "condition": "original",
+      "hits": 5,
+      "denominator": 5,
+      "tables": [
+        {
+          "rows": 15,
+          "columns": 3,
+          "extraction": "ocr_grid",
+          "merged_anchors": [
+            {
+              "row": 2,
+              "col": 1,
+              "rowspan": 12,
+              "colspan": 1
+            }
+          ],
+          "exact_offset_cells": 34,
+          "nonempty_cells": 34,
+          "sql_eligible": true,
+          "requires_review": true
+        }
+      ]
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 268,
+      "condition": "rotate90",
+      "hits": 5,
+      "denominator": 5,
+      "tables": [
+        {
+          "rows": 15,
+          "columns": 3,
+          "extraction": "ocr_grid",
+          "merged_anchors": [
+            {
+              "row": 2,
+              "col": 1,
+              "rowspan": 12,
+              "colspan": 1
+            }
+          ],
+          "exact_offset_cells": 34,
+          "nonempty_cells": 34,
+          "sql_eligible": true,
+          "requires_review": true
+        }
+      ]
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 268,
+      "condition": "downsample50",
+      "hits": 3,
+      "denominator": 5,
+      "tables": [
+        {
+          "rows": 15,
+          "columns": 3,
+          "extraction": "ocr_grid",
+          "merged_anchors": [
+            {
+              "row": 2,
+              "col": 1,
+              "rowspan": 12,
+              "colspan": 1
+            }
+          ],
+          "exact_offset_cells": 24,
+          "nonempty_cells": 24,
+          "sql_eligible": true,
+          "requires_review": true
+        }
+      ]
+    }
+  ],
+  "numeric_cells_against_native_original": [
+    {
+      "condition": "original",
+      "matched": 89,
+      "denominator": 90,
+      "structure_available": true,
+      "mismatches": [
+        {
+          "row": 9,
+          "col": 3,
+          "expected": "4.17",
+          "observed": "417",
+          "match": false
+        }
+      ]
+    },
+    {
+      "condition": "rotate90",
+      "matched": 79,
+      "denominator": 90,
+      "structure_available": true,
+      "mismatches": [
+        {
+          "row": 3,
+          "col": 2,
+          "expected": "1.73",
+          "observed": ".73",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "expected": "1.75",
+          "observed": "75",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "expected": "1.78",
+          "observed": ".78",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "expected": "1.80",
+          "observed": "80",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 2,
+          "expected": "1.83",
+          "observed": "83",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 2,
+          "expected": "1.86",
+          "observed": "86",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 2,
+          "expected": "1.89",
+          "observed": "89",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 3,
+          "expected": "4.17",
+          "observed": "417",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 2,
+          "expected": "1.92",
+          "observed": "92",
+          "match": false
+        },
+        {
+          "row": 11,
+          "col": 2,
+          "expected": "1.95",
+          "observed": "95",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 2,
+          "expected": "1.99",
+          "observed": ".99",
+          "match": false
+        }
+      ]
+    },
+    {
+      "condition": "downsample50",
+      "matched": 23,
+      "denominator": 90,
+      "structure_available": true,
+      "mismatches": [
+        {
+          "row": 3,
+          "col": 2,
+          "expected": "1.73",
+          "observed": "173",
+          "match": false
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "expected": "3.33",
+          "observed": "| 3.33",
+          "match": false
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "expected": "2.02",
+          "observed": null,
+          "match": false
+        },
+        {
+          "row": 3,
+          "col": 8,
+          "expected": "2.56",
+          "observed": "256",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "expected": "71",
+          "observed": "fal",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "expected": "1.75",
+          "observed": "175",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "expected": "3.45",
+          "observed": "| 3.45",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "expected": "81",
+          "observed": "at",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "expected": "2.06",
+          "observed": null,
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 7,
+          "expected": "91",
+          "observed": "1",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 8,
+          "expected": "2.65",
+          "observed": "265",
+          "match": false
+        },
+        {
+          "row": 4,
+          "col": 9,
+          "expected": "11.1",
+          "observed": "114",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "expected": "72",
+          "observed": "7",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "expected": "1.78",
+          "observed": "178",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "expected": "3.57",
+          "observed": "| 357",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "expected": "2.11",
+          "observed": "2a",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 6,
+          "expected": "5.56",
+          "observed": "856",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 7,
+          "expected": "92",
+          "observed": "2",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 8,
+          "expected": "2.75",
+          "observed": "275",
+          "match": false
+        },
+        {
+          "row": 5,
+          "col": 9,
+          "expected": "12.5",
+          "observed": "125",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "expected": "1.80",
+          "observed": "180",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 3,
+          "expected": "3.70",
+          "observed": "| 370",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 4,
+          "expected": "83",
+          "observed": "3",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 5,
+          "expected": "2.15",
+          "observed": "215",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 6,
+          "expected": "5.88",
+          "observed": "588",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 7,
+          "expected": "93",
+          "observed": "%",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 8,
+          "expected": "2.87",
+          "observed": "287",
+          "match": false
+        },
+        {
+          "row": 6,
+          "col": 9,
+          "expected": "14.3",
+          "observed": "143",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 2,
+          "expected": "1.83",
+          "observed": "183",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 3,
+          "expected": "3.84",
+          "observed": "| 3.84",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 4,
+          "expected": "84",
+          "observed": "a4",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 5,
+          "expected": "2.20",
+          "observed": "220",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 6,
+          "expected": "6.25",
+          "observed": "625",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 7,
+          "expected": "94",
+          "observed": "4",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 8,
+          "expected": "3.00",
+          "observed": "300",
+          "match": false
+        },
+        {
+          "row": 7,
+          "col": 9,
+          "expected": "16.7",
+          "observed": "167",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 2,
+          "expected": "1.86",
+          "observed": "186",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 3,
+          "expected": "4.0",
+          "observed": "| 40",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 5,
+          "expected": "2.25",
+          "observed": "225",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 6,
+          "expected": "6.67",
+          "observed": "667",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 7,
+          "expected": "95",
+          "observed": "5",
+          "match": false
+        },
+        {
+          "row": 8,
+          "col": 8,
+          "expected": "3.16",
+          "observed": "316",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 2,
+          "expected": "1.89",
+          "observed": "189",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 3,
+          "expected": "4.17",
+          "observed": "| 4.17",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 5,
+          "expected": "2.31",
+          "observed": "2st",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 7,
+          "expected": "96",
+          "observed": "%6",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 8,
+          "expected": "3.37",
+          "observed": "337",
+          "match": false
+        },
+        {
+          "row": 9,
+          "col": 9,
+          "expected": "25.0",
+          "observed": "250",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 1,
+          "expected": "77",
+          "observed": "7",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 2,
+          "expected": "1.92",
+          "observed": "192",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 3,
+          "expected": "4.35",
+          "observed": "| 435",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 4,
+          "expected": "87",
+          "observed": "a7",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 5,
+          "expected": "2.37",
+          "observed": "2a7",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 7,
+          "expected": "97",
+          "observed": "7",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 8,
+          "expected": "3.63",
+          "observed": "363",
+          "match": false
+        },
+        {
+          "row": 10,
+          "col": 9,
+          "expected": "33.3",
+          "observed": "| 333",
+          "match": false
+        },
+        {
+          "row": 11,
+          "col": 2,
+          "expected": "1.95",
+          "observed": "195",
+          "match": false
+        },
+        {
+          "row": 11,
+          "col": 3,
+          "expected": "4.55",
+          "observed": "| 455",
+          "match": false
+        },
+        {
+          "row": 11,
+          "col": 5,
+          "expected": "2.43",
+          "observed": "243",
+          "match": false
+        },
+        {
+          "row": 11,
+          "col": 6,
+          "expected": "8.33",
+          "observed": "833",
+          "match": false
+        },
+        {
+          "row": 11,
+          "col": 8,
+          "expected": "4.01",
+          "observed": "401",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 2,
+          "expected": "1.99",
+          "observed": "199",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 3,
+          "expected": "4.76",
+          "observed": "| 476",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 5,
+          "expected": "2.49",
+          "observed": "249",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 7,
+          "expected": "99",
+          "observed": "9",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 8,
+          "expected": "4.68",
+          "observed": "468",
+          "match": false
+        },
+        {
+          "row": 12,
+          "col": 9,
+          "expected": "100",
+          "observed": "| 100",
+          "match": false
+        }
+      ]
+    }
+  ],
+  "synthetic_controls": [
+    {
+      "name": "table",
+      "input_sha256": "273dd7bc9947c9a99673eb6653f971f97821ade78debedb7c8570b47065c41c6",
+      "table_count": 1,
+      "sql_tables": 0,
+      "elapsed_seconds": 1.083,
+      "shapes": [
+        [
+          6,
+          5
+        ]
+      ],
+      "rows": [
+        [
+          [
+            null,
+            "Current",
+            null,
+            "Prior",
+            null
+          ],
+          [
+            "Region",
+            "Quantity",
+            "Change",
+            "Quantity",
+            "Change"
+          ],
+          [
+            "North",
+            "12.25",
+            "-1.50",
+            "11.75",
+            "0.25"
+          ],
+          [
+            "Central",
+            "23.50",
+            "2.75",
+            "21.25",
+            null
+          ],
+          [
+            "South",
+            "34.75",
+            "0.00",
+            "30.25",
+            "3.50"
+          ],
+          [
+            "West",
+            "45.25",
+            "-2.25",
+            "44.50",
+            "1.75"
+          ]
+        ]
+      ],
+      "sql_eligible": [
+        false
+      ]
+    },
+    {
+      "name": "prices",
+      "input_sha256": "ae7aa4a91965dbcf69ed28bba0fb5f35ad4e54714401e059fbf1aeab16918c26",
+      "table_count": 0,
+      "sql_tables": 0,
+      "elapsed_seconds": 0.626,
+      "shapes": [],
+      "rows": [],
+      "sql_eligible": []
+    },
+    {
+      "name": "contents",
+      "input_sha256": "2c80a0a15f61e5a2fdb8e631ab4720d36f7b848cf7e163294b7ffdcdf9104c92",
+      "table_count": 0,
+      "sql_tables": 0,
+      "elapsed_seconds": 0.639,
+      "shapes": [],
+      "rows": [],
+      "sql_eligible": []
+    },
+    {
+      "name": "prose",
+      "input_sha256": "e841e742eb3db725cd9ed0f451378c2c3919259c6c803bdbb6b7580054ca6b52",
+      "table_count": 0,
+      "sql_tables": 0,
+      "elapsed_seconds": 0.783,
+      "shapes": [],
+      "rows": [],
+      "sql_eligible": []
+    }
+  ],
+  "boundary": "Development geometry, literal cell fidelity and evidence binding; not LLM answer accuracy. Native PDF reference was loaded only after every OCR run completed.",
+  "schema_version": "zhiheng-table-structure-acceptance.v1",
+  "date": "2026-10-19",
+  "base_commit": "57ddc8b9451678014edc1bedc6b742e0f63c7104",
+  "environment": {
+    "os": "Windows 11 x64",
+    "python": "3.14.7",
+    "ocr": "Tesseract 5.4.0.20240606",
+    "language": "eng",
+    "eng_sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+    "OMP_THREAD_LIMIT": 2
+  },
+  "evidence_context": [
+    {
+      "condition": "original",
+      "has_table": true,
+      "truncated": false,
+      "selected": [
+        [
+          "R3C2"
+        ]
+      ],
+      "characters": 5953,
+      "retained_cells": 27,
+      "all_cells_have_row_col": true
+    },
+    {
+      "condition": "rotate90",
+      "has_table": true,
+      "truncated": false,
+      "selected": [
+        [
+          "R3C2"
+        ]
+      ],
+      "characters": 4922,
+      "retained_cells": 27,
+      "all_cells_have_row_col": true
+    },
+    {
+      "condition": "downsample50",
+      "has_table": true,
+      "truncated": true,
+      "selected": [
+        []
+      ],
+      "characters": 190,
+      "retained_cells": 0,
+      "all_cells_have_row_col": true
+    }
+  ],
+  "conditions": {
+    "original": {
+      "pages": 3,
+      "hits": 15,
+      "denominator": 15,
+      "failed_pages": 0,
+      "elapsed_seconds": 6.876
+    },
+    "rotate90": {
+      "pages": 3,
+      "hits": 14,
+      "denominator": 15,
+      "failed_pages": 0,
+      "elapsed_seconds": 15.009
+    },
+    "downsample50": {
+      "pages": 3,
+      "hits": 10,
+      "denominator": 15,
+      "failed_pages": 0,
+      "elapsed_seconds": 3.988
+    }
+  },
+  "input_verification": {
+    "all_9_images_match_frozen_hashes": true,
+    "all_4_control_images_unchanged": true,
+    "protocol_sha256": "4dea09e946736f0e1e352317e80cfdaf255de1d295b7138ef9e3b2972e77cfb9"
+  },
+  "synthetic_control_fidelity": {
+    "numeric_cells": [
+      15,
+      15
+    ],
+    "row_labels": [
+      4,
+      4
+    ],
+    "missing_cells_preserved_unknown": 1,
+    "negative_controls": [
+      3,
+      3
+    ]
+  },
+  "tests": {
+    "passed": 388,
+    "deselected": 1,
+    "deselected_test": "compile_lock_wait_is_part_of_initialization_timeout",
+    "reason": "Existing Darwin-only os.getuid simulation cannot run on Windows; not counted as passed."
+  },
+  "frontend_build": {
+    "typescript": "passed",
+    "vite": "6.4.4",
+    "dist_files": 66,
+    "output_bytes_unchanged": true
+  },
+  "artifacts_sha256": {
+    "full_acceptance_summary": "5726a9eccaf1f605c3bb06e6eb4192db5689b642ee73bc8c350f4f8c2bfc9aec",
+    "real_ocr_results": "32387db435c768b46920f366001e69bac52bb3a58461cbccc3732cce33b8a3fb",
+    "control_specification_and_first_run": "9ee969035ce64b6f8f1ae40d74595128874f9b316301d3824d5b1dba311f55a9"
+  },
+  "limitations": [
+    "Only the frozen 3 development pages and synthetic controls; not a held-out benchmark.",
+    "Table geometry and exact offsets do not certify OCR text or business meaning.",
+    "P84 numeric fidelity is 89/90 original, 79/90 rotated and 23/90 downsampled; original 4.17 remained 417.",
+    "P84 header VCF is still misread by whole-page OCR; crop candidates never overwrite main values.",
+    "Downsampled P84 context exceeds the evidence budget and safely has no selected cells.",
+    "Unruled tables remain inferred review candidates and cannot create SQL data.",
+    "No external model API, end-to-end answer accuracy evaluation, or Python 3.13 compatibility run."
+  ]
+}

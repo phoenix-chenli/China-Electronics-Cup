@@ -43,6 +43,45 @@ def _cell_box_match(cell_box, block_box):
             and cell_box[1] <= (block_box[1] + block_box[3]) / 2 < cell_box[3])
 
 
+def _ocr_offsets(cells, page_text):
+    """Validate producer-supplied offsets, never discover a cell by its value."""
+    valid, intervals, invalid = {}, [], set()
+    for cell in cells:
+        if cell.get('offset_basis') != 'ocr_cell_block' or cell.get('covered_by'):
+            continue
+        start, end, value = cell.get('start'), cell.get('end'), cell.get('text')
+        identifier = cell.get('cell_id')
+        if (not identifier or type(start) is not int or type(end) is not int
+                or not isinstance(value, str) or not value.strip()
+                or not 0 <= start < end <= len(page_text) or page_text[start:end] != value):
+            continue
+        if identifier in valid:
+            invalid.add(identifier)
+        valid[identifier] = (start, end)
+        intervals.append((start, end, identifier))
+    furthest, owner = -1, None
+    for start, end, identifier in sorted(intervals):
+        if start < furthest:
+            invalid.update((owner, identifier))
+        if end > furthest:
+            furthest, owner = end, identifier
+    return {identifier: interval for identifier, interval in valid.items() if identifier not in invalid}
+
+
+def _ocr_span_covered(offsets, page_text, start, end):
+    """A broad legacy box is harmless only inside exact, original cell text."""
+    if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(page_text):
+        return False
+    intervals = sorted((max(start, left), min(end, right)) for left, right in offsets.values()
+                       if left < end and start < right)
+    cursor = start
+    for left, right in intervals:
+        if page_text[cursor:left].strip():
+            return False
+        cursor = max(cursor, right)
+    return bool(intervals) and not page_text[cursor:end].strip()
+
+
 def _budget(tables, max_chars, *, has_table=None):
     if isinstance(max_chars, bool) or not isinstance(max_chars, int) or max_chars < 128:
         raise ValueError('表格证据预算至少为128字符')
@@ -65,7 +104,7 @@ def _budget(tables, max_chars, *, has_table=None):
     return result
 
 
-def _project(table, selected_ids, selected_rows, *, selection_state, extra_reasons=()):
+def _project(table, selected_ids, selected_rows, *, selection_state, extra_reasons=(), verified_ocr_offsets=None, page_text=None):
     cells = table.get('cells') or []
     by_id = {c['cell_id']: c for c in cells if isinstance(c, dict) and c.get('cell_id')}
     header_rows = set(table.get('header_rows') or [])
@@ -92,7 +131,8 @@ def _project(table, selected_ids, selected_rows, *, selection_state, extra_reaso
     reasons = list(dict.fromkeys([*table.get('review_reasons', []), *extra_reasons]))
     keys = ('schema_version', 'table_name', 'format', 'page', 'sheet', 'source_position',
             'row_count', 'column_count', 'header_rows', 'header_basis', 'columns',
-            'units', 'caption', 'footnotes', 'context', 'interpretation_note')
+            'units', 'caption', 'footnotes', 'context', 'interpretation_note',
+            'extraction', 'structure_basis', 'sql_eligible', 'candidate_audit_truncated')
     result = {key: copy.deepcopy(table[key]) for key in keys if key in table}
     result.update(cells=[copy.deepcopy(c) for c in cells if c.get('cell_id') in needed],
                   row_headers=copy.deepcopy(selected_row_headers), selected_cell_ids=selected_ids,
@@ -120,6 +160,75 @@ def _project(table, selected_ids, selected_rows, *, selection_state, extra_reaso
             seen.add(key)
     if 'context' in result:
         result['context'] = context
+    if verified_ocr_offsets:
+        # This is a prompt projection only. Source cells retain their full
+        # geometry and OCR diagnostics. Exact source offsets, verified against
+        # this page before projecting, already locate the other retained cells.
+        verified = verified_ocr_offsets
+        selected = set(selected_ids)
+        for cell in result['cells']:
+            anchor = cell.get('covered_by')
+            covered = (isinstance(anchor, (list, tuple)) and len(anchor) == 2
+                       and f'R{anchor[0]}C{anchor[1]}' in verified)
+            if cell.get('cell_id') not in verified and not covered:
+                continue
+            if cell.get('cell_id') not in selected:
+                cell.pop('bbox', None)
+            for key in ('text_bbox', 'offset_basis', 'confidence', 'crop_ocr_confidence',
+                        'verification', 'requires_review'):
+                cell.pop(key, None)
+            if cell.get('rowspan') == 1:
+                cell.pop('rowspan')
+            if cell.get('colspan') == 1:
+                cell.pop('colspan')
+            if cell.get('covered_by') is None:
+                cell.pop('covered_by', None)
+        def compact_anchor(record):
+            anchor = record.get('evidence') or {}
+            key = f"R{anchor.get('row')}C{anchor.get('col')}"
+            exact = verified.get(key) == (anchor.get('start'), anchor.get('end'))
+            if not exact and page_text is not None:
+                start, end = anchor.get('start'), anchor.get('end')
+                exact = (type(start) is int and type(end) is int and 0 <= start < end <= len(page_text)
+                         and isinstance(record.get('text'), str) and page_text[start:end] == record['text'])
+            if exact:
+                anchor.pop('bbox', None)
+                if anchor.get('page_unit') == (result.get('source_position') or {}).get('page_unit'):
+                    anchor.pop('page_unit', None)
+        for column in result.get('columns') or []:
+            for header in column.get('header_path') or []:
+                compact_anchor(header)
+                anchor = header.get('evidence') or {}
+                for key in ('row', 'col'):
+                    if key in anchor and header.get(key) == anchor[key]:
+                        header.pop(key, None)  # Exact coordinates remain in evidence.
+            if column.get('role_basis') == result.get('header_basis'):
+                column.pop('role_basis', None)
+            path = column.get('header_path') or []
+            if column.get('label') == ' / '.join(str(p.get('text', '')) for p in path):
+                column.pop('label', None)  # The full ordered path is retained.
+        for record in [*(result.get('row_headers') or []), *(result.get('units') or []),
+                       *(result.get('context') or []), *(result.get('footnotes') or []),
+                       *([result['caption']] if isinstance(result.get('caption'), dict) else [])]:
+            compact_anchor(record)
+        # The complete source table, rather than this one selected row, defines
+        # the positional range. Replace its duplicate box only when every
+        # observed main cell has a verified original interval.
+        observed = [c for c in cells if not c.get('covered_by') and str(c.get('text') or '').strip()]
+        if observed and all(c.get('cell_id') in verified for c in observed):
+            position = result.get('source_position') or {}
+            position.setdefault('start', min(s[0] for s in verified.values()))
+            position.setdefault('end', max(s[1] for s in verified.values()))
+            position.pop('bbox', None)
+        for key in ('sheet', 'footnotes', 'row_headers'):
+            if result.get(key) in (None, []):
+                result.pop(key, None)
+        if result.get('truncated') is False:
+            result.pop('truncated')  # The enclosing context retains its flag.
+        # Generic parser descriptors stay in full source metadata. The prompt
+        # retains every cell coordinate and the actual review/role constraints.
+        result.pop('interpretation_note', None)
+        result.pop('schema_version', None)
     if table.get('recovery_origin') == 'on_demand_preserved_grid_no_ocr':
         # Late-table rows share the same immutable grid as their source. Keep
         # exact table/page/row/column identity; do not repeat cell boxes and
@@ -268,6 +377,7 @@ def table_text_spans(source, page, text_length=None, *, current_page=None):
         if table.get('page', position.get('page')) != page:
             continue
         cells = table.get('cells') or []
+        ocr_offsets = _ocr_offsets(cells, page_text)
         hint_parts = [str((table.get('caption') or {}).get('text', ''))]
         hint_parts.extend(str(p.get('text', '')) for column in table.get('columns') or []
                           for p in column.get('header_path') or [])
@@ -288,10 +398,14 @@ def table_text_spans(source, page, text_length=None, *, current_page=None):
             if located:
                 spans = [(c['start'], c['end']) for c in row_cells
                          if isinstance(c.get('start'), int) and isinstance(c.get('end'), int)
-                         and 0 <= c['start'] < c['end'] <= limit]
+                         and 0 <= c['start'] < c['end'] <= limit
+                         and (c.get('offset_basis') != 'ocr_cell_block' or c.get('cell_id') in ocr_offsets)]
             else:
-                spans = [(b['start'], b['end']) for b in table_blocks
-                         if any(_cell_box_match(c.get('bbox'), b['bbox']) for c in row_cells)]
+                spans = [ocr_offsets[c['cell_id']] for c in row_cells
+                         if c.get('cell_id') in ocr_offsets and ocr_offsets[c['cell_id']][1] <= limit]
+                spans.extend((b['start'], b['end']) for b in table_blocks
+                         if any(c.get('offset_basis') != 'ocr_cell_block'
+                                and _cell_box_match(c.get('bbox'), b['bbox']) for c in row_cells))
             if spans:
                 row_spans.append({'start': min(s[0] for s in spans), 'end': max(s[1] for s in spans),
                                   'row': row, 'table_name': table.get('table_name'),
@@ -305,11 +419,16 @@ def table_text_spans(source, page, text_length=None, *, current_page=None):
             row_spans.extend({'start': b['start'], 'end': b['end'], 'row': None,
                               'table_name': table.get('table_name'), 'retrieval_hint': hint,
                               'table_identity': identity}
-                             for b in table_blocks if not any(_cell_box_match(c.get('bbox'), b['bbox']) for c in cells))
+                             for b in table_blocks
+                             if not _ocr_span_covered(ocr_offsets, page_text, b['start'], b['end'])
+                             and not any(c.get('offset_basis') != 'ocr_cell_block'
+                                         and _cell_box_match(c.get('bbox'), b['bbox']) for c in cells))
         if located:
             region = {'start': position['start'], 'end': min(position['end'], limit)}
         elif table_blocks:
             region = {'start': min(b['start'] for b in table_blocks), 'end': max(b['end'] for b in table_blocks)}
+        elif ocr_offsets:
+            region = {'start': min(s[0] for s in ocr_offsets.values()), 'end': min(limit, max(s[1] for s in ocr_offsets.values()))}
         else:
             continue
         if region['start'] < region['end']:
@@ -325,16 +444,21 @@ def context_for_span(source, page, start, end, max_chars=DEFAULT_MAX_CHARS):
         raise ValueError('表格引用需要有效页码和精确文本范围')
     metadata = source.get('metadata') or {}
     current = next((p for p in source.get('pages', []) if p.get('number') == page), {})
-    boxes = [b['bbox'] for b in current.get('blocks', [])
-             if b.get('bbox') and _span(b, start, end)]
+    page_text = current.get('text') or ''
+    cited_blocks = [b for b in current.get('blocks', []) if b.get('bbox') and _span(b, start, end)]
+    boxes = [b['bbox'] for b in cited_blocks]
     semantics = _page_semantics(source, page)
     out, known = [], set()
     for table in semantics:
         position = table.get('source_position') or {}
         if table.get('page', position.get('page')) != page:
             continue
-        matched = [c for c in table.get('cells', [])
-                   if _span(c, start, end) or any(_cell_box_match(c.get('bbox'), box) for box in boxes)]
+        cells = table.get('cells', [])
+        ocr_offsets = _ocr_offsets(cells, page_text)
+        matched = [c for c in cells if c.get('offset_basis') == 'ocr_cell_block'
+                   and c.get('cell_id') in ocr_offsets and _span(c, start, end)]
+        matched.extend(c for c in cells if c.get('offset_basis') != 'ocr_cell_block'
+                       and (_span(c, start, end) or any(_cell_box_match(c.get('bbox'), box) for box in boxes)))
         intersects = bool(matched or _span(position, start, end)
                           or any(_overlap(position.get('bbox'), box) for box in boxes))
         if not intersects and not boxes and not isinstance(position.get('start'), int) and not any(
@@ -347,10 +471,14 @@ def context_for_span(source, page, start, end, max_chars=DEFAULT_MAX_CHARS):
             continue
         known.add(table.get('table_name'))
         projection = _project(table, {c.get('cell_id') for c in matched}, {c['row'] for c in matched},
-                              selection_state='source_span', extra_reasons=[] if matched else ['引用落在表区，但没有可定位的源单元格'])
-        ambiguous_boxes = any(_overlap(position.get('bbox'), box)
-                              and not any(_cell_box_match(c.get('bbox'), box) for c in table.get('cells', []))
-                              for box in boxes)
+                              selection_state='source_span', extra_reasons=[] if matched else ['引用落在表区，但没有可定位的源单元格'],
+                              verified_ocr_offsets=ocr_offsets, page_text=page_text)
+        ambiguous_boxes = any(_overlap(position.get('bbox'), b['bbox'])
+                              and not _ocr_span_covered(ocr_offsets, page_text,
+                                                       max(start, b['start']), min(end, b['end']))
+                              and not any(c.get('offset_basis') != 'ocr_cell_block'
+                                          and _cell_box_match(c.get('bbox'), b['bbox']) for c in cells)
+                              for b in cited_blocks)
         if not projection['selected_cell_ids'] or ambiguous_boxes:
             # A text span on a header/covered cell is not an aggregate SQL
             # scope and cannot turn into unstructured ordinary prose evidence.

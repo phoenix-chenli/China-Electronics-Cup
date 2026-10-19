@@ -61,3 +61,7 @@ def remap_result(blocks, tables, rotation):
         table['bbox'] = inverse_box(table['bbox'], rotation)
         for cell in table.get('cells', []):
             cell['bbox'] = inverse_box(cell['bbox'], rotation)
+            if cell.get('text_bbox'):
+                cell['text_bbox'] = inverse_box(cell['text_bbox'], rotation)
+        for word in table.get('unassigned_words', []):
+            word['bbox'] = inverse_box(word['bbox'], rotation)

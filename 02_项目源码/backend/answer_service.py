@@ -55,7 +55,7 @@ def _ocr_tables_in_scope(source, table_name=None):
     selected = []
     for name in names:
         matching = [r for r in regions if r.get('table_name') == name]
-        if any(r.get('extraction') == 'ocr_grid' for r in matching):
+        if any(r.get('extraction') in {'ocr_grid','ocr_layout'} for r in matching):
             selected.append(name)
         elif _has_ocr(source) and not matching:
             # Missing old-parser lineage cannot certify that a table was native.

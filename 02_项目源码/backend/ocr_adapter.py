@@ -61,7 +61,7 @@ def recognize(image, timeout=35, cancelled=None):
         raise OCRError('此系统未安装可用本地 OCR；请安装 Tesseract 及中文语言包，或使用明确授权的原页视觉读取。原件仍可保留。')
     if image.width * image.height > MAX_INPUT_PIXELS:
         raise OCRError('图片超过本地 OCR 像素预算')
-    from .ocr_tesseract import input_dpi, parse_tsv, line_blocks, table_candidates, cell_crops, retain_cell_candidates
+    from .ocr_tesseract import input_dpi, parse_tsv, line_blocks, table_candidates, table_text_blocks, cell_crops, retain_cell_candidates
     from .ocr_orientation import reading_quality, choose_orientation, remap_result
     dpi = input_dpi(image)
     quality = quality_metrics(image)
@@ -160,6 +160,7 @@ def recognize(image, timeout=35, cancelled=None):
         corrected=image.rotate(rotation,expand=True) if rotation else image
         tables=table_candidates(corrected,words) if deadline-time.monotonic()>.1 else []
         if tables:
+            text,blocks=table_text_blocks(corrected,words,tables)
             quality['visual_review_required']=True
             jobs,truncated=cell_crops(corrected,tables)
             audit.update(status='skipped_budget',crop_count=len(jobs),truncated=truncated)
@@ -182,7 +183,7 @@ def recognize(image, timeout=35, cancelled=None):
                     audit['status']='candidate_failed'
                     quality['warnings'].append('表格局部复读未完整完成；保留整页候选，不以失败推断空单元格')
             if truncated:quality['warnings'].append('逐格复读达到数量或像素预算，未复读单元格仍须核验')
-            quality['warnings'].append('表格仅依据实际格线及文字框生成待复核候选；未确认表头、行名、数值和单位')
+            quality['warnings'].append('表格依据真实格线或注明来源的词框布局生成待复核候选；未确认表头、行名、数值和单位')
         else:
             quality['warnings'].append('未取得可靠表格网格；仅保留文字，不表示原件没有表格')
         remap_result(blocks,tables,rotation)
