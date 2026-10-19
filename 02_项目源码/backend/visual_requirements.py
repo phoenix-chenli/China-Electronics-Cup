@@ -19,7 +19,7 @@ def observe_chart_page(source, page_number, image_parts, *, timeout=35):
         return 0.0
     try:
         from PIL import Image
-        from .ocr_native import recognize
+        from .ocr_adapter import recognize
         encoded = next(p['image_url']['url'] for p in image_parts if p.get('type') == 'image_url')
         if not encoded.startswith('data:image/jpeg;base64,') or len(encoded) > 3_000_000:
             raise ValueError('原页像素无效')
@@ -46,9 +46,16 @@ def observe_chart_page(source, page_number, image_parts, *, timeout=35):
         quality.setdefault('warnings', []).extend(observed_quality.get('warnings', []))
         # Commit only after the complete optional result has been validated.
         # The native page text and its offsets are never replaced with OCR.
-        page.update(chart_observations=copy.deepcopy(result['blocks']), quality=quality,
-                    chart_ocr={'status': 'observed', 'observation_count': len(result['blocks']),
+        # The adapter owns rotation and maps geometry back to the original page.
+        # A rejected OCR candidate must never become chart evidence, even if a
+        # future adapter retains rejected blocks alongside its unreadable status.
+        observations = result['blocks'] if result.get('extraction') != 'unreadable' else []
+        page.update(chart_observations=copy.deepcopy(observations), quality=quality,
+                    chart_ocr={'status': 'observed' if observations else 'unreadable',
+                               'observation_count': len(observations),
                                'rotation_correction': observed_quality.get('rotation_correction', 0)})
+        if isinstance(observed_quality.get('orientation'), dict):
+            page['chart_ocr']['orientation'] = copy.deepcopy(observed_quality['orientation'])
     except Exception as exc:
         page['chart_ocr']['reason'] = type(exc).__name__
     elapsed = time.monotonic() - started

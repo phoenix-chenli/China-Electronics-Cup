@@ -1,7 +1,7 @@
 {
   "schema_version": "zhiheng-source-handoff.v1",
   "purpose": "F8-012匿名作品源码、构建、模型许可与可迁移输入",
-  "created_at_utc": "2026-10-19T06:17:38.484309+00:00",
+  "created_at_utc": "2026-10-19T06:57:01.158446+00:00",
   "archive_root": "F8-012-代码",
   "verification_boundary": "文件完整性与可迁移资产校验；实机、质量与场景结果按各自记录提供。",
   "excluded": [
@@ -275,13 +275,18 @@
     },
     {
       "path": "backend/ocr_adapter.py",
-      "bytes": 9075,
-      "sha256": "67214b85ad453af9a43171f94e6d9b8223e4d29aca8f52e270e0dbbf5fcb0240"
+      "bytes": 13423,
+      "sha256": "878339ea001f1f8056bd39fa6e8da0615c59304b6041a0773bca6a12f659089f"
     },
     {
       "path": "backend/ocr_native.py",
       "bytes": 25569,
       "sha256": "61e2f850a90783d31984851d929dcc7fe2db47e19c4abb865fbbcf0fb7ae8266"
+    },
+    {
+      "path": "backend/ocr_orientation.py",
+      "bytes": 3101,
+      "sha256": "196bc633ed65f0c27a9bb6b27d2d3733ebb089a099fb3e7127cbd4da3bafe168"
     },
     {
       "path": "backend/ocr_preprocess.py",
@@ -296,7 +301,7 @@
     {
       "path": "backend/parsers.py",
       "bytes": 69423,
-      "sha256": "bae9616962a513886a6e1353c72bad7a04e35299ffecdaeab8c02225f4418484"
+      "sha256": "7485e543aed45a5b8d27e79f84f651ef1287c520426dc9686a31f25845b2bd24"
     },
     {
       "path": "backend/pdf_extract.py",
@@ -555,8 +560,8 @@
     },
     {
       "path": "backend/visual_requirements.py",
-      "bytes": 4641,
-      "sha256": "6a8e2ae6d9c1e9805189352725ad95012c92caa17b68e4aadaf6c9f1e92a4f2f"
+      "bytes": 5193,
+      "sha256": "34ff06c61d8c07ebbbcf895b891945c30c28c7e0ead4904c9d3479615dda3437"
     },
     {
       "path": "docs/API_CONTRACT.md",
@@ -2105,8 +2110,8 @@
     },
     {
       "path": "tests/test_chart_ocr.py",
-      "bytes": 8488,
-      "sha256": "630906442e2b6b15a6b28cf57fc5c42a12d765f6831f7a9f2d80a4b3a80de35e"
+      "bytes": 11284,
+      "sha256": "d36c7a37f43829fa7b051e6042ab2d4e0952259f44cdc886fcf03a157a9e246d"
     },
     {
       "path": "tests/test_chart_ratio_protocol.py",
@@ -2532,6 +2537,11 @@
       "path": "tests/test_ocr_adapter.py",
       "bytes": 3068,
       "sha256": "f35db47d8deecfc3be4e9d8c94cbac2769cda7d78a1f0550f05fd890b7667f98"
+    },
+    {
+      "path": "tests/test_ocr_orientation.py",
+      "bytes": 14414,
+      "sha256": "8fe50d6937d0fb5bef5d987920917221b38d8b20af4271f8cf5e7870e90297f4"
     },
     {
       "path": "tests/test_ocr_preprocess.py",
@@ -4395,8 +4405,18 @@
     },
     {
       "path": "说明文档/OCR报告针对性修复_20261019.md",
-      "bytes": 2433,
-      "sha256": "5d8579f500bda360f29fca3d7ed8e5e61d52eb7a3003188fa73e4f347ecef983"
+      "bytes": 2845,
+      "sha256": "0a6cbe15fe8b75c6dbf85d3d4429249e5fecf6ab397317dcaf9c882c75ff6b2a"
+    },
+    {
+      "path": "说明文档/OCR方向纠正实测_20261019.json",
+      "bytes": 23285,
+      "sha256": "ca106825623fceb74c80807354655d8c4f2ef0c9064063d07070c6e23230aa2e"
+    },
+    {
+      "path": "说明文档/OCR方向纠正验收_20261019.md",
+      "bytes": 2570,
+      "sha256": "7d0fa8757a0cfd5f7591523ef1ea734c7469979f7643027269c000fc9b3fecd1"
     },
     {
       "path": "说明文档/变更与回退说明.md",

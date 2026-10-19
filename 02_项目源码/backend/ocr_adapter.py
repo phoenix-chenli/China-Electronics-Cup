@@ -62,6 +62,7 @@ def recognize(image, timeout=35, cancelled=None):
     if image.width * image.height > MAX_INPUT_PIXELS:
         raise OCRError('图片超过本地 OCR 像素预算')
     from .ocr_tesseract import input_dpi, parse_tsv, line_blocks, table_candidates, cell_crops, retain_cell_candidates
+    from .ocr_orientation import reading_quality, choose_orientation, remap_result
     dpi = input_dpi(image)
     quality = quality_metrics(image)
     audit = {'status':'not_applicable','extra_ocr_calls':0,'crop_count':0,
@@ -69,6 +70,11 @@ def recognize(image, timeout=35, cancelled=None):
     quality.update(ocr_engine='tesseract', rotation_correction=0, preprocessing_applied=False,
                    input_dpi=list(dpi) if dpi else None, dpi_source='image_metadata' if dpi else 'engine_default',
                    text_normalization='cjk_interword_spaces', cell_review=audit)
+    orientation = {'status':'not_started', 'selected_rotation':None, 'attempts':[],
+                   'ambiguous':False, 'budget_exhausted':False, 'max_candidates':4,
+                   'coordinate_frame':'original_image', 'reading_order':'corrected_image',
+                   'diagnostic_note':'方向和引擎评分仅用于选择机器候选，不证明内容正确。'}
+    quality['orientation'] = orientation
     def execute(arguments, limit):
         remaining = min(limit, deadline-time.monotonic())
         if remaining <= .05:
@@ -92,6 +98,7 @@ def recognize(image, timeout=35, cancelled=None):
             '+'.join(capability['tesseract']['languages'])]
         if dpi:arguments.extend(['--dpi',str(dpi[0])])
         arguments.append('tsv')
+        primary_started=time.monotonic()
         try:
             response=execute(arguments,35)
         except InterruptedError:
@@ -104,12 +111,57 @@ def recognize(image, timeout=35, cancelled=None):
             pages, records=parse_tsv(response.stdout,{1:image.size})
         except (ValueError,KeyError,TypeError,UnicodeError,csv.Error) as exc:
             raise OCRError('Tesseract 返回的 TSV 文字坐标格式无效或为空，请检查语言及 TSV 配置') from exc
-        words=pages[1];text,blocks=line_blocks(words)
-        quality.update(tsv_records=records,word_observations=len(words))
-        tables=table_candidates(image,words) if deadline-time.monotonic()>.1 else []
+        first = dict(rotation=0, words=pages[1], records=records, quality=reading_quality(pages[1],image.size))
+        candidates = [first]
+        orientation['attempts'].append(dict(rotation=0,status='completed',elapsed_ms=round((time.monotonic()-primary_started)*1000),**first['quality']))
+        if not first['quality']['strong'] and not quality['blank']:
+            for rotation in (90,270,180):
+                if deadline-time.monotonic()<1:
+                    orientation['budget_exhausted']=True
+                    break
+                rotated=image.rotate(rotation,expand=True)
+                rotated_dpi=dpi[::-1] if dpi and rotation in (90,270) else dpi
+                rotated_path=Path(folder)/f'rotation-{rotation}.png'
+                rotated.convert('RGB').save(rotated_path,**({'dpi':rotated_dpi} if rotated_dpi else {}))
+                command=arguments.copy();command[1]=str(rotated_path)
+                if rotated_dpi:command[command.index('--dpi')+1]=str(rotated_dpi[0])
+                candidate_started=time.monotonic()
+                try:
+                    result=execute(command,8)
+                    observed,count=parse_tsv(result.stdout,{1:rotated.size})
+                    candidate=dict(rotation=rotation,words=observed[1],records=count,
+                                   quality=reading_quality(observed[1],rotated.size))
+                    candidates.append(candidate)
+                    orientation['attempts'].append(dict(rotation=rotation,status='completed',elapsed_ms=round((time.monotonic()-candidate_started)*1000),**candidate['quality']))
+                except InterruptedError:
+                    raise
+                except (OCRError,OSError,subprocess.TimeoutExpired,ValueError,TypeError,KeyError,UnicodeError,csv.Error) as exc:
+                    orientation['attempts'].append(dict(rotation=rotation,status='timeout' if isinstance(exc,subprocess.TimeoutExpired) else 'failed',
+                        elapsed_ms=round((time.monotonic()-candidate_started)*1000),error_type=type(exc).__name__))
+                    if deadline-time.monotonic()<1:orientation['budget_exhausted']=True
+        selected,ambiguous=choose_orientation(candidates)
+        orientation['ambiguous']=ambiguous
+        if selected is None:
+            orientation['status']='blank' if quality['blank'] and not pages[1] else 'unreadable'
+            quality.update(visual_review_required=not quality['blank'],ocr_mean_confidence=None,
+                           elapsed_ms=round((time.monotonic()-started)*1000),
+                           rejected_text_characters=sum(c['quality']['text_characters'] for c in candidates))
+            if orientation['status']!='blank':
+                quality['warnings'].append('方向候选均未达到文字可用条件；低质文字、坐标和表格未作为正文发布，请核对原图或重试')
+            return dict(text='',blocks=[],tables=[],quality=quality,extraction='unreadable')
+        rotation=selected['rotation'];words=selected['words'];text,blocks=line_blocks(words)
+        orientation.update(status='corrected' if rotation else 'kept_original',selected_rotation=rotation)
+        quality.update(rotation_correction=rotation,tsv_records=selected['records'],word_observations=len(words))
+        if rotation:quality['warnings'].append(f'本地OCR按逆时针 {rotation}° 纠正方向；文字与单元格定位已映射回原图，仍须核验')
+        if ambiguous:
+            quality['visual_review_required']=True
+            quality['warnings'].append('存在接近的可读方向候选；保留确定性选择，方向及内容仍需对照原图')
+        if orientation['budget_exhausted']:quality['warnings'].append('部分方向候选受时间预算限制未完成；所选机器结果仍须核验')
+        corrected=image.rotate(rotation,expand=True) if rotation else image
+        tables=table_candidates(corrected,words) if deadline-time.monotonic()>.1 else []
         if tables:
             quality['visual_review_required']=True
-            jobs,truncated=cell_crops(image,tables)
+            jobs,truncated=cell_crops(corrected,tables)
             audit.update(status='skipped_budget',crop_count=len(jobs),truncated=truncated)
             if jobs and deadline-time.monotonic()>=1:
                 paths=[]
@@ -133,6 +185,7 @@ def recognize(image, timeout=35, cancelled=None):
             quality['warnings'].append('表格仅依据实际格线及文字框生成待复核候选；未确认表头、行名、数值和单位')
         else:
             quality['warnings'].append('未取得可靠表格网格；仅保留文字，不表示原件没有表格')
+        remap_result(blocks,tables,rotation)
     quality.update(ocr_mean_confidence=sum(b['confidence'] for b in blocks)/len(blocks) if blocks else None,
                    elapsed_ms=round((time.monotonic()-started)*1000))
     quality['warnings'].append('Tesseract文字与坐标为机器识别候选，未验证业务数值。')
