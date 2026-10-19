@@ -1,9 +1,9 @@
 {
   "schema_version": "zhiheng-source-handoff.v1",
-  "purpose": "知衡完整可迁移源码、构建、模型许可、业务资料及隔离评测输入",
+  "purpose": "F8-012匿名作品源码、构建、模型许可与可迁移输入",
   "created_at_utc": "2026-10-19T06:17:38.484309+00:00",
-  "archive_root": "知衡作品",
-  "verification_boundary": "文件完整性与可迁移资产校验，不证明Windows实机、模型准确率或本轮端到端成绩。",
+  "archive_root": "F8-012-代码",
+  "verification_boundary": "文件完整性与可迁移资产校验；实机、质量与场景结果按各自记录提供。",
   "excluded": [
     "私人运行目录与密钥",
     "虚拟环境与node_modules",
@@ -20,8 +20,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5635,
-      "sha256": "eb11214c9930e54e355137a669f2a68aaf0ce93c4a34843d860cbffc6d6ea61a"
+      "bytes": 5686,
+      "sha256": "611f0f2cc08005a3cf2f52760874528b05c377c4be9f2f4a911d184163fd2867"
     },
     {
       "path": "backend/__init__.py",
@@ -287,6 +287,11 @@
       "path": "backend/ocr_preprocess.py",
       "bytes": 4567,
       "sha256": "857103cfe796ada339484628db02f5bd3d12f7222deeb229554508570d1aa296"
+    },
+    {
+      "path": "backend/ocr_tesseract.py",
+      "bytes": 7424,
+      "sha256": "9c8c66cc02bd6c3fa1436fb549d2bde5a3eccebc28b5e761ab451a8d61686013"
     },
     {
       "path": "backend/parsers.py",
@@ -570,8 +575,8 @@
     },
     {
       "path": "docs/资料来源说明.md",
-      "bytes": 6670,
-      "sha256": "47e7c2d90d984eee2b22b5faef79a319743e839d43972f1d38d006b731c7c362"
+      "bytes": 6698,
+      "sha256": "c0d10cf0ac5a2dd14317d25b7da91be244a58281d15c1cea73e3e5405101fd29"
     },
     {
       "path": "evaluation/README.md",
@@ -2525,13 +2530,18 @@
     },
     {
       "path": "tests/test_ocr_adapter.py",
-      "bytes": 1921,
-      "sha256": "906aa6cf7da709ec9a4b30d6149475867d6ff8c8ba73b46ace8a42153aff8855"
+      "bytes": 3068,
+      "sha256": "f35db47d8deecfc3be4e9d8c94cbac2769cda7d78a1f0550f05fd890b7667f98"
     },
     {
       "path": "tests/test_ocr_preprocess.py",
       "bytes": 10975,
       "sha256": "ea742a5a3d6138094a86f28f2235f3ec655d2f94ab94c6e7bae80980f8764f2c"
+    },
+    {
+      "path": "tests/test_ocr_tesseract.py",
+      "bytes": 7290,
+      "sha256": "6817822cc2c32feb2a9ceb91d7561fd29c814726914949f14722d82330aefe2b"
     },
     {
       "path": "tests/test_package_handoff.py",
@@ -4060,8 +4070,8 @@
     },
     {
       "path": "评测材料/初赛20题/评审阅读.md",
-      "bytes": 4954,
-      "sha256": "0dddf4b1ec9548ae159946a87b80f766bf36841c3fc296d99f03bde45b58c1be"
+      "bytes": 5017,
+      "sha256": "7f7a163e736ab73b3763020b9954ccc173bb781dd1baa552621c092b8c22adc7"
     },
     {
       "path": "评测材料/初赛20题/输入/chinook.sqlite",
@@ -4384,19 +4394,24 @@
       "sha256": "6339aa312c4c44a3f99b2636ff187663fb302dba405982b5bc29869f96fe2a76"
     },
     {
+      "path": "说明文档/OCR报告针对性修复_20261019.md",
+      "bytes": 2433,
+      "sha256": "5d8579f500bda360f29fca3d7ed8e5e61d52eb7a3003188fa73e4f347ecef983"
+    },
+    {
       "path": "说明文档/变更与回退说明.md",
       "bytes": 2306,
       "sha256": "87acfccb4bf722ffaca9e3b40bc07fd9127b1b921c2a952bc87c3501ba8b60b0"
     },
     {
       "path": "说明文档/复杂资料库使用与复现.md",
-      "bytes": 5270,
-      "sha256": "bd1fb3a38d0ade38bb6527314ccc9a600e78946b6282046e5d73ec4a992bcebd"
+      "bytes": 5276,
+      "sha256": "d007e28911a9866e7b9dff5574bfc02f89211a935d31d9d0e45cfb25a3a1d60a"
     },
     {
       "path": "说明文档/快速启动与环境说明.md",
-      "bytes": 6691,
-      "sha256": "3abebb044d45782f6d3943fa5b2b2abb6e2ba0de0bcc4d94af82cef4f613d91a"
+      "bytes": 6717,
+      "sha256": "223bd53d5a5ff0e8e711132e7439886a8704558ce01166c4f295f69d877a9d2f"
     },
     {
       "path": "说明文档/新UI使用说明.md",
@@ -4405,8 +4420,8 @@
     },
     {
       "path": "说明文档/源码打包说明.md",
-      "bytes": 2306,
-      "sha256": "7733387a5b760ca7e1f21557b47c07e00e0ddd411cdcf6e4be7cf4a095e2afb1"
+      "bytes": 2262,
+      "sha256": "662f4ca5663fc06ea336257a131a528a39ebe92ce74111c64bea371d5e54483b"
     },
     {
       "path": "说明文档/跨项目资料复用.md",
@@ -4422,21 +4437,6 @@
       "path": "首次准备.cmd",
       "bytes": 223,
       "sha256": "f91452549bd312fb99c01d071e42653f954f6d5e7307c2e3f152866e79bed5fa"
-    },
-    {
-      "path": "backend/ocr_tesseract.py",
-      "bytes": 7424,
-      "sha256": "9c8c66cc02bd6c3fa1436fb549d2bde5a3eccebc28b5e761ab451a8d61686013"
-    },
-    {
-      "path": "tests/test_ocr_tesseract.py",
-      "bytes": 7290,
-      "sha256": "6817822cc2c32feb2a9ceb91d7561fd29c814726914949f14722d82330aefe2b"
-    },
-    {
-      "path": "说明文档/OCR报告针对性修复_20261019.md",
-      "bytes": 4026,
-      "sha256": "e21cf1d1da1a63c6434161f3cd951f57965004314070047b699abc2c3a8845b8"
     }
   ]
 }
