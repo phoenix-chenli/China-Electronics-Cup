@@ -316,22 +316,32 @@ def run(args) -> int:
         if process.poll() is not None:
             print(f'服务未能启动，请查看日志：{log_path}')
             return 1
-        identity = process_identity(process.pid, args.port)
+        info = health(args.port)
+        # The process answering /api/health is the one that owns the service.
+        # On Windows the venv launcher starts the interpreter as a child, so
+        # that pid differs from the one Popen returned; POSIX symlinks make
+        # them the same process. Identity is verified against the OS either way.
+        identity = process_identity(info.get('pid'), args.port) if is_ours(info) else None
         if identity:
             (RUNTIME / 'server-instance.json').write_text(json.dumps({'identity':identity,'token':token}, ensure_ascii=False), encoding='utf-8')
-        info = health(args.port)
-        if is_ours(info) and info.get('pid') == process.pid:
-            identity = process_identity(process.pid, args.port)
-            if not identity:
-                continue
-            print(f'知衡已启动：{url}\n运行目录：{RUNTIME}\n服务进程：{process.pid}')
+            print(f'知衡已启动：{url}\n运行目录：{RUNTIME}\n服务进程：{identity["pid"]}')
             if not args.no_browser:
                 webbrowser.open(url)
             return 0
         time.sleep(.2)
-    identity = process_identity(process.pid, args.port)
-    if identity:
-        terminate(identity)
+    if process.poll() is None:
+        psutil = process_tools()
+        try:
+            launcher = psutil.Process(process.pid)
+            targets = launcher.children(recursive=True) + [launcher]
+        except psutil.Error:
+            targets = []
+        for target in targets:
+            try:
+                target.terminate()
+            except psutil.Error:
+                pass
+        psutil.wait_procs(targets, timeout=8)
     print(f'启动未能确认，已结束本次可识别进程。请查看：{log_path}')
     return 1
 
