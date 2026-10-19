@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "[临时验证目录]\formula-tests.py", line 12, in <module>
-    suite=unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:] or ['tests.test_ocr_structure','tests.test_document_native','tests.test_rag_retrieval']);v=unittest.TextTestRunner(verbosity=2).run(suite);sys.exit(not v.wasSuccessful())
-  File "unittest\loader.py", line 207, in loadTestsFromNames
-  File "unittest\loader.py", line 137, in loadTestsFromName
-  File "[仓库工作副本]\03_测试验收\自动测试\tests\test_table_rag.py", line 141
-    self.assertEqual(generation['chunker'], 'source-spans-v6-atomic-chart-points')
-IndentationError: unexpected indent

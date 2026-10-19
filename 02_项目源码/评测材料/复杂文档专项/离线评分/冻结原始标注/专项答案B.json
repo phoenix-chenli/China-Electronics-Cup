@@ -1,0 +1,1033 @@
+{
+  "dataset_id": "real_documents_B24_v1",
+  "frozen_at": "2026-10-18T08:51:04.036326+00:00",
+  "purpose": "真实原件专项开发与验收；非官方隐藏集、非通用能力排名",
+  "question_count": 18,
+  "source_count": 9,
+  "language": "zh-CN",
+  "reference_language": "en",
+  "model_api_calls_for_authoring": 0,
+  "product_retrieval_used_for_authoring": false,
+  "gold_answer_source": "仅官方原PDF、物理页文本和抽样页面目视核对",
+  "model_results": null,
+  "freeze_rule": "不得根据产品检索或模型回答删题、改题、缩小分母；确有原件勘误须记录版本及原因。",
+  "source_freeze": [
+    {
+      "id": "B01",
+      "sha256": "3c4ef4ad700cfd64444677404956ec2237bb5e24e31f7e591b1767526ec0b2c9",
+      "pages": 138
+    },
+    {
+      "id": "B02",
+      "sha256": "1261936f3985477e85c694f27dd8ffd56ca95130e44f3f1bbc64d30de540e2b2",
+      "pages": 80
+    },
+    {
+      "id": "B03",
+      "sha256": "0135196976fc613fa7e0129776e9fd74ead03e6cc3a37bab65803d5484140974",
+      "pages": 82
+    },
+    {
+      "id": "B04",
+      "sha256": "da491ea2d042a857b146e5ae0531b81a7833d9cae1080ca24630a50d5f6fcd32",
+      "pages": 132
+    },
+    {
+      "id": "B05",
+      "sha256": "def9cbd98d40f56dd78c508ae4564ce2afabfe6c1ab8d74c458353009f3083a6",
+      "pages": 168
+    },
+    {
+      "id": "B08",
+      "sha256": "e82259182509bbf730830d7d706352cc12535a72e7625804450200e8f9dd2e50",
+      "pages": 449
+    },
+    {
+      "id": "B10",
+      "sha256": "7289711f09f47b7d80f159d7b7ab839d9a692fa373e15dbd0543616871377da9",
+      "pages": 436
+    },
+    {
+      "id": "B11",
+      "sha256": "45872c75488960e62f1ff4367353f547bb1228d5644e1825aacf2faa1841ec75",
+      "pages": 332
+    },
+    {
+      "id": "B12",
+      "sha256": "817207c4a175025dd6d347f4ecb8a976992a32e7c59dd99bf66cbbb4c518a4d7",
+      "pages": 86
+    }
+  ],
+  "answer_key_visibility": "只供评审/评分器，不导入业务知识库，不发送给被测模型",
+  "answers": [
+    {
+      "id": "RD-B01-01",
+      "source_ids": [
+        "B01"
+      ],
+      "physical_pages": [
+        92
+      ],
+      "evidence": [
+        {
+          "source_id": "B01",
+          "physical_page": 92,
+          "exact_quote": "Overall Thermodynamic Balance",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B01",
+          "physical_page": 92,
+          "exact_quote": "4007 hp",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "在例题稳态闭系统且动能、位能不变的假设下，热源供热加泵功等于移出的热量。",
+        "泵功率为1.0×10^7 Btu/hr；按手册换算约4007 hp，方向是输入系统。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "泵功率",
+          "expected": 10000000,
+          "unit": "Btu/hr",
+          "absolute_tolerance": 1
+        },
+        {
+          "label": "泵功率",
+          "expected": 4007,
+          "unit": "hp",
+          "absolute_tolerance": 5
+        }
+      ],
+      "conditions": [
+        "仅复核原手册例题；不是现场装置的实际运行建议。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B01-02",
+      "source_ids": [
+        "B01"
+      ],
+      "physical_pages": [
+        112,
+        113
+      ],
+      "evidence": [
+        {
+          "source_id": "B01",
+          "physical_page": 113,
+          "exact_quote": "typical power cycle",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B01",
+          "physical_page": 113,
+          "exact_quote": "40%",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "图29中实际循环沿1-2-3-4进行等压加热，平均加热温度低于最高温度，其可用能量面积小于同温度边界Carnot循环的二分之一。",
+        "1992年手册示例给出化石燃料电厂约40%、核电厂约31%；不能将其写成2026年所有电厂的当前统计值。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "化石燃料电厂典型效率",
+          "expected": 40,
+          "unit": "%",
+          "absolute_tolerance": 0.1
+        },
+        {
+          "label": "核电厂典型效率",
+          "expected": 31,
+          "unit": "%",
+          "absolute_tolerance": 0.1
+        }
+      ],
+      "conditions": [
+        "限图29讨论的水工质、约2000 psia或以下的示例条件。",
+        "引用的是1992年归档手册，不是新测性能。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B02-01",
+      "source_ids": [
+        "B02"
+      ],
+      "physical_pages": [
+        29,
+        30
+      ],
+      "evidence": [
+        {
+          "source_id": "B02",
+          "physical_page": 29,
+          "exact_quote": "Conduction Through a Slab",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B02",
+          "physical_page": 30,
+          "exact_quote": "694°F",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "使用平板稳态导热关系ΔT=Q̇Δx/(kA)，厚度1 in=1/12 ft。",
+        "代入得到694.44°F左右的温差，手册取约694°F；不是绝对温度，也不是694°C。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "温差",
+          "expected": 694.444444,
+          "unit": "°F",
+          "absolute_tolerance": 1
+        },
+        {
+          "label": "厚度",
+          "expected": 0.08333333333333333,
+          "unit": "ft",
+          "absolute_tolerance": 0.0001
+        }
+      ],
+      "conditions": [
+        "保持原例的一维平板导热条件和英制单位。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B02-02",
+      "source_ids": [
+        "B02"
+      ],
+      "physical_pages": [
+        49
+      ],
+      "evidence": [
+        {
+          "source_id": "B02",
+          "physical_page": 49,
+          "exact_quote": "Emissivity",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B02",
+          "physical_page": 49,
+          "exact_quote": "net flow of heat is from hot to cold",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "灰体辐射率写为Q̇=εσAT^4，ε无量纲且不大于1；本卷公式温度使用绝对温标°R。",
+        "两个高于绝对零度、相互可见的物体都辐射能量，热物体向冷物体传递更多，净热流仍由热到冷。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "发射率最大值",
+          "expected": 1,
+          "unit": "无量纲",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "需区分单个物体发出的辐射与两物体净换热量。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B03-01",
+      "source_ids": [
+        "B03"
+      ],
+      "physical_pages": [
+        36,
+        37
+      ],
+      "evidence": [
+        {
+          "source_id": "B03",
+          "physical_page": 36,
+          "exact_quote": "Continuity Equation - Multiple Outlets",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B03",
+          "physical_page": 37,
+          "exact_quote": "0.349 ft",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "入口质量流量等于两出口质量流量之和，先由10 in支管面积和流速算其质量流量，再用500减去该量。",
+        "8 in支管面积约0.349 ft²，10 in支管面积约0.545 ft²，余量除以ρA8得到约7.3 ft/s。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "8in支管流速",
+          "expected": 7.3,
+          "unit": "ft/s",
+          "absolute_tolerance": 0.1
+        }
+      ],
+      "conditions": [
+        "稳态且各支管水密度相同；直径换算成英尺后再求截面积。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B03-02",
+      "source_ids": [
+        "B03"
+      ],
+      "physical_pages": [
+        57
+      ],
+      "evidence": [
+        {
+          "source_id": "B03",
+          "physical_page": 57,
+          "exact_quote": "Typical Values",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B03",
+          "physical_page": 57,
+          "exact_quote": "Gate Valve",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "Gate Valve全开Leq/D=10，50%开度为150，均为无量纲。",
+        "Leq=(Leq/D)D；管径10 in时分别为100 in和1500 in，后者为前者15倍。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "全开Leq/D",
+          "expected": 10,
+          "unit": "无量纲",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "半开Leq/D",
+          "expected": 150,
+          "unit": "无量纲",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "全开等效长度",
+          "expected": 100,
+          "unit": "in",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "半开等效长度",
+          "expected": 1500,
+          "unit": "in",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "倍数",
+          "expected": 15,
+          "unit": "倍",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "读取Gate Valve子行，而非Globe Valve或75%/25%开度。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B04-01",
+      "source_ids": [
+        "B04"
+      ],
+      "physical_pages": [
+        20,
+        24
+      ],
+      "evidence": [
+        {
+          "source_id": "B04",
+          "physical_page": 20,
+          "exact_quote": "Electrical Resistance-Temperature Curves",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B04",
+          "physical_page": 24,
+          "exact_quote": "reference junction",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "图1约400°C时电阻由高到低为Nickel、Copper、Platinum；只比较该图的对应温区。",
+        "RTD利用金属电阻随温度变化；热电偶利用两种金属、测量接点与参考接点的温差产生电压信号，不能将二者测量机理混同。"
+      ],
+      "numeric_constraints": [],
+      "conditions": [
+        "曲线比较只要求正确排序，不将读图近似值当精确标定值。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B04-02",
+      "source_ids": [
+        "B04"
+      ],
+      "physical_pages": [
+        77
+      ],
+      "evidence": [
+        {
+          "source_id": "B04",
+          "physical_page": 77,
+          "exact_quote": "Steam Generator Level System",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B04",
+          "physical_page": 77,
+          "exact_quote": "density",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "独立压力信号用于反映饱和温度变化，电路据此修正参考腿水与蒸汽发生器介质的密度差。",
+        "饱和压力和温度上升使蒸汽发生器水密度下降，相同ΔP对应更高液位，因此补偿后液位指示应增大。"
+      ],
+      "numeric_constraints": [],
+      "conditions": [
+        "题设限定饱和状态与同一ΔP，不等同于说所有液位仪都只需要压力补偿。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B05-01",
+      "source_ids": [
+        "B05"
+      ],
+      "physical_pages": [
+        141
+      ],
+      "evidence": [
+        {
+          "source_id": "B05",
+          "physical_page": 141,
+          "exact_quote": "Response of Proportional",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B05",
+          "physical_page": 141,
+          "exact_quote": "Plus Reset Control",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "图中PI输出在t0前约30%，t0瞬间约40%，t1约50%，t2约60%；t0至t1和t1至t2各2 min。",
+        "比例作用在误差出现时立即改变输出，之后固定误差对应固定比例输出；积分/reset作用持续积累误差，所以PI输出继续上升并用于消除残余偏差。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "t0前输出",
+          "expected": 30,
+          "unit": "%",
+          "absolute_tolerance": 1
+        },
+        {
+          "label": "t0刚发生输出",
+          "expected": 40,
+          "unit": "%",
+          "absolute_tolerance": 1
+        },
+        {
+          "label": "t1输出",
+          "expected": 50,
+          "unit": "%",
+          "absolute_tolerance": 1
+        },
+        {
+          "label": "t2输出",
+          "expected": 60,
+          "unit": "%",
+          "absolute_tolerance": 1
+        },
+        {
+          "label": "相邻标记间隔",
+          "expected": 2,
+          "unit": "min",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "图示值为读图结果；不由线性文本抽取的缺失值推测。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null,
+      "answer_basis": "数值来自已目视核对的原PDF图22；不是API生成或产品检索结果。"
+    },
+    {
+      "id": "RD-B05-02",
+      "source_ids": [
+        "B05"
+      ],
+      "physical_pages": [
+        119,
+        120
+      ],
+      "evidence": [
+        {
+          "source_id": "B05",
+          "physical_page": 120,
+          "exact_quote": "Cooling water flow rate is the manipulated variable",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "受控量是冷却器出口润滑油温度，操纵量是冷却水流量，反馈元件是温度变送器。",
+        "温度控制器将实测油温与设定值比较；油温偏高时使温控阀向开启方向移动，增加冷却水流量以降低油温。",
+        "油在管内、水在壳侧，二者通过管壁换热而不直接接触；图中交叉斜线标识气动控制信号。"
+      ],
+      "numeric_constraints": [],
+      "conditions": [
+        "依图9给定的具体回路回答，不把油流量误当操纵量。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B08-01",
+      "source_ids": [
+        "B08"
+      ],
+      "physical_pages": [
+        273,
+        274,
+        277
+      ],
+      "evidence": [
+        {
+          "source_id": "B08",
+          "physical_page": 273,
+          "exact_quote": "October 2005 to September",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B08",
+          "physical_page": 277,
+          "exact_quote": "Influent and effluent averages",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "设计能力7 MGD，2005年10月至2006年9月研究期平均实际流量4.12 MGD。",
+        "TN进水31.2 mg/L、出水2.14 mg/L；TP进水5.8 mg/L、出水0.26 mg/L。",
+        "这些是案例研究期平均值；许可表中的年度负荷或月均限值、最大月/最大周值不能替代它们。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "设计流量",
+          "expected": 7,
+          "unit": "MGD",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "平均流量",
+          "expected": 4.12,
+          "unit": "MGD",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "进水TN",
+          "expected": 31.2,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "出水TN",
+          "expected": 2.14,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "进水TP",
+          "expected": 5.8,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "出水TP",
+          "expected": 0.26,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        }
+      ],
+      "conditions": [
+        "研究期2005-10至2006-09；物理页273–277，位于单份完整原件第200页以后。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B08-02",
+      "source_ids": [
+        "B08"
+      ],
+      "physical_pages": [
+        33,
+        34
+      ],
+      "evidence": [
+        {
+          "source_id": "B08",
+          "physical_page": 34,
+          "exact_quote": "CW = cost from CAPDETWorks",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "Fermenter无过滤改造资本单价$0.18/(gpd能力)，O&M为$7/MG处理水。",
+        "单点投药无过滤资本单价$0.03/(gpd能力)，O&M为$91/MG处理水；投药方案资本单价低，发酵方案O&M单价低。",
+        "CW表示CAPDETWorks成本估算，不是一个真实厂名；不得将估算值冒充实际厂运行记录，也不能把资本费用与年运行总费用直接相减。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "Fermenter资本单价",
+          "expected": 0.18,
+          "unit": "USD/gpd",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "Fermenter运行单价",
+          "expected": 7,
+          "unit": "USD/MG",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "投药资本单价",
+          "expected": 0.03,
+          "unit": "USD/gpd",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "投药运行单价",
+          "expected": 91,
+          "unit": "USD/MG",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "表内合并目标单元格：TP0.5 mg/L、初始TP5 mg/L、10 MGD。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B10-01",
+      "source_ids": [
+        "B10"
+      ],
+      "physical_pages": [
+        43
+      ],
+      "evidence": [
+        {
+          "source_id": "B10",
+          "physical_page": 43,
+          "exact_quote": "without filtering or adjusting the pH",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B10",
+          "physical_page": 43,
+          "exact_quote": "Equation 2.2",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "UVT%=100×10^(−A)，A=0.10时约79.43%。",
+        "A与UVT必须在同一波长和光程条件下对应；本题是254 nm和1 cm。",
+        "对UV消毒应用，指南要求样品反映实际待处理水，不预先过滤、不调pH；不能直接套用另一个标准方法的样品预处理。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "UVT",
+          "expected": 79.432823,
+          "unit": "%",
+          "absolute_tolerance": 0.1
+        }
+      ],
+      "conditions": [
+        "采用2006年指南的UV消毒应用条件，不据此给出现场合规认证。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B10-02",
+      "source_ids": [
+        "B10"
+      ],
+      "physical_pages": [
+        212,
+        213,
+        214
+      ],
+      "evidence": [
+        {
+          "source_id": "B10",
+          "physical_page": 214,
+          "exact_quote": "one sleeve per reactor",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "OCC或不清洗初始按每月检查，OMC或OMCC初始每6个月检查。",
+        "每台反应器先查一根套管；多排/多组灯装置按每组一根。发现污垢或损伤应检查其余套管，检查UV传感器窗口，并按需要增加清洗或补充人工清洗。",
+        "频次是建议起点，应根据投运后的污垢、UV强度变化与厂家要求调整；不能写成不附条件的永久法定频次。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "OCC/不清洗检查间隔",
+          "expected": 1,
+          "unit": "month",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "OMC/OMCC检查间隔",
+          "expected": 6,
+          "unit": "month",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "初查套管数量",
+          "expected": 1,
+          "unit": "根/反应器或灯组",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "跨表与正文核对；答案证据均位于物理页200之后。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B11-01",
+      "source_ids": [
+        "B11"
+      ],
+      "physical_pages": [
+        67
+      ],
+      "evidence": [
+        {
+          "source_id": "B11",
+          "physical_page": 67,
+          "exact_quote": "The recovery as defined under the rule does not account",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "flux=Qp/Am=20 gfd，recovery=Qp/Qf=0.8，即80%。",
+        "本指南该定义未扣除反洗/化学清洗等维护用途的产水，也未计入维护期间损失的产量。",
+        "给定流量和面积是本题假设计算，不是原手册某座厂的实测数据。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "flux",
+          "expected": 20,
+          "unit": "gfd",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "recovery",
+          "expected": 80,
+          "unit": "%",
+          "absolute_tolerance": 0.01
+        }
+      ],
+      "conditions": [
+        "gfd为gallons/(ft²·day)，与gpd总流量区分。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B11-02",
+      "source_ids": [
+        "B11"
+      ],
+      "physical_pages": [
+        268
+      ],
+      "evidence": [
+        {
+          "source_id": "B11",
+          "physical_page": 268,
+          "exact_quote": "Schedule of Training Events",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "施工和调试培训合计24–86 h；Control System为4–24 h，Chemical Cleaning（含演示）为4–16 h。",
+        "投运后与三个月后的开放交流各为1–3 days，不是1–3 h；不得不换单位就加到24–86 h。",
+        "区间上限对应更复杂系统及操作人员较不熟悉的情形，不是任意取平均值。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "培训总时长下限",
+          "expected": 24,
+          "unit": "h",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "培训总时长上限",
+          "expected": 86,
+          "unit": "h",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "Control System下限",
+          "expected": 4,
+          "unit": "h",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "Control System上限",
+          "expected": 24,
+          "unit": "h",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "Chemical Cleaning下限",
+          "expected": 4,
+          "unit": "h",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "Chemical Cleaning上限",
+          "expected": 16,
+          "unit": "h",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "每次交流下限",
+          "expected": 1,
+          "unit": "day",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "每次交流上限",
+          "expected": 3,
+          "unit": "day",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "物理页268；不要混用表头hours和两行days。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B12-01",
+      "source_ids": [
+        "B12"
+      ],
+      "physical_pages": [
+        27,
+        28
+      ],
+      "evidence": [
+        {
+          "source_id": "B12",
+          "physical_page": 27,
+          "exact_quote": "most conservative (lowest) RED values",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B12",
+          "physical_page": 28,
+          "exact_quote": "divided by the",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "先对每个进出水样本对计算log I=log10(N0/N)，再用相应日的准直光束dose-response曲线求RED。",
+        "同一天的曲线不能合并时，应选择产生最低RED的最保守曲线。",
+        "VF=BRED×(1+UVal/100)=1.44，Validated Dose=RED/VF≈27.78 mJ/cm²；不能乘VF。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "VF",
+          "expected": 1.44,
+          "unit": "无量纲",
+          "absolute_tolerance": 0.001
+        },
+        {
+          "label": "Validated Dose",
+          "expected": 27.777778,
+          "unit": "mJ/cm²",
+          "absolute_tolerance": 0.02
+        }
+      ],
+      "conditions": [
+        "给定数字是本题计算条件；只核对该工具包列示的基本关系，不据此声称装置已获得消毒信用。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    },
+    {
+      "id": "RD-B12-02",
+      "source_ids": [
+        "B12"
+      ],
+      "physical_pages": [
+        75
+      ],
+      "evidence": [
+        {
+          "source_id": "B12",
+          "physical_page": 75,
+          "exact_quote": "at least every 5 minutes",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B12",
+          "physical_page": 75,
+          "exact_quote": "eligible credit",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "流量、UV强度等剂量监测参数至少每5 min监测一次；告警记录间隔不大于5 min并持续至告警条件纠正。",
+        "Target Log Inactivation应至少达到系统要求提供的灭活水平，同时不得高于批准文件中允许的eligible credit。",
+        "以2022年工作表说明及批准信息为准，不将一个阈值同时当作最低要求和最高可申请值。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "最大采集/记录间隔",
+          "expected": 5,
+          "unit": "min",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "需同时满足要求值≤目标值≤批准eligible credit。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null
+    }
+  ],
+  "scope_adjustment": {
+    "reason": "user_requested_completed_sources_only",
+    "parent_file_sha256": "dd84d4d875a62eda370fbb3fa7d8ef01feffdc99d3657290af7ae3dfc75a20b8",
+    "selected_case_ids": [
+      "RD-B01-01",
+      "RD-B01-02",
+      "RD-B02-01",
+      "RD-B02-02",
+      "RD-B03-01",
+      "RD-B03-02",
+      "RD-B04-01",
+      "RD-B04-02",
+      "RD-B05-01",
+      "RD-B05-02",
+      "RD-B08-01",
+      "RD-B08-02",
+      "RD-B10-01",
+      "RD-B10-02",
+      "RD-B11-01",
+      "RD-B11-02",
+      "RD-B12-01",
+      "RD-B12-02"
+    ],
+    "case_contents_changed": false,
+    "not_selected_by_retrieval_results": true
+  }
+}

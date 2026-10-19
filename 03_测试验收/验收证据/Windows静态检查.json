@@ -1,7 +1,0 @@
-{
-  "target": "Windows 10/11 x64; Python 3.13.6",
-  "packages": 34,
-  "missing_or_incompatible_dependencies": [],
-  "python_syntax": "passed",
-  "windows_runtime_tested": false
-}

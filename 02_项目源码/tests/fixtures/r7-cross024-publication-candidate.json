@@ -1,0 +1,80 @@
+{
+  "case_id": "cross-024",
+  "run_sha256": "4041f596a45e81358832bb91679e4bb9de104056f1d10f52307d95fa42af537f",
+  "record_sha256": "56daa16f2871a1aa5c4a38be5fe8127b55a2e3e12602796ebc7839fc750df30d",
+  "receipt_sha256": "1076908bf2c4f174f30d57c405f5d0ac09b4c6a51e22045fbe33759d0f1435ae",
+  "question": "用电更正通知的签发能证明绿色改造征求意见稿已正式施行吗？",
+  "candidate": {
+    "candidate_index": 1,
+    "text": "用电更正通知的签发不能证明绿色改造征求意见稿已正式施行。根据《青湾港绿色改造方案征求意见稿》原文，该文件为2025年6月10日公开征求意见稿，意见反馈截止6月30日；截至本稿日期，尚不能据此认定方案已经正式施行或任何项目已经获得补助，如后续正式文件与本稿不同应以正式文件为准，且本稿没有附正式文件（E2、E4）。而《计量更正通知》签发于2025年7月3日，仅涉及青湾港7月1日用电日报数据的复核更正（由2160kWh更正为2610kWh），属于独立的计量业务记录（E5）。两份资料分属不同来源组（G1与G2），计量更正通知的内容未提及绿色改造方案的施行状态，其签发不能作为该征求意见稿已转为正式施行文件的证据。",
+    "evidence_ids": [
+      "E2",
+      "E4",
+      "E5"
+    ],
+    "calculation_ids": []
+  },
+  "evidence": [
+    {
+      "id": "E2",
+      "label": "第 2 逻辑节",
+      "kind": "text",
+      "source_id": "e25af4259655473cb54800d2033c320d",
+      "source_name": "policy_consultation.docx",
+      "sha256": "09f913425009033b9bd9ca41b2d15d8ec63c314c03a2beccf0b50b8ce1643c63",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 2,
+      "page_label": "第 2 逻辑节",
+      "quote": "一 文件性质\n青湾港绿色改造方案为2025年6月10日公开征求意见稿，意见反馈截止6月30日。\n拟议补助对象为完成验收的小型岸电项目，不包括尚未开工项目。",
+      "start": 0,
+      "end": 77
+    },
+    {
+      "id": "E4",
+      "label": "第 4 逻辑节",
+      "kind": "text",
+      "source_id": "e25af4259655473cb54800d2033c320d",
+      "source_name": "policy_consultation.docx",
+      "sha256": "09f913425009033b9bd9ca41b2d15d8ec63c314c03a2beccf0b50b8ce1643c63",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 4,
+      "page_label": "第 4 逻辑节",
+      "quote": "三 适用限制\n截至本稿日期，尚不能据此认定方案已经正式施行或任何项目已经获得补助。\n反馈渠道为站内书面意见箱，未公布电子邮箱。\n如后续正式文件与本稿不同，应以正式文件为准；本稿没有附正式文件。",
+      "start": 0,
+      "end": 96
+    },
+    {
+      "id": "E5",
+      "label": "第 1 页",
+      "kind": "text",
+      "source_id": "b487476eda394dae9775e50d75660ec5",
+      "source_name": "revision_note.pdf",
+      "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 1,
+      "page_label": "第 1 页",
+      "quote": "计量更正通知\n本通知签发于2025年7月3日，引用的原始日报日期为2025年7月1日。\n青湾港7月1日用电日报初始记为2160kWh，经电表原始底数复核后更正为2610kW\nh。\n更正只涉及7月1日，不涉及7月2日。旧值为转录错误，须保留更正链但不作当前值。\n7月2日已确认用电量为2400kWh。两日日报均为全站用电，不是单台泵用电。\n原始物理页 1",
+      "start": 30,
+      "end": 206
+    }
+  ],
+  "sources": [
+    {
+      "id": "e25af4259655473cb54800d2033c320d",
+      "name": "policy_consultation.docx",
+      "sha256": "09f913425009033b9bd9ca41b2d15d8ec63c314c03a2beccf0b50b8ce1643c63",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "revision": "e07686f9a54b654982701f5344471ec54256902aee2e3bf143044b945c471a87",
+      "semantic_revision": "cc8bc13e026f65c92e57c1a631fad29156d0e5f4e8c06c5052d0cf7981e720d2"
+    },
+    {
+      "id": "b487476eda394dae9775e50d75660ec5",
+      "name": "revision_note.pdf",
+      "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "revision": "03e5c464d08b42eaff3e3de9733929547de2079a30517ab49b34a34c431b38b1",
+      "semantic_revision": "1f5055de09200e7bb19d10f8a819a716ca809bd2c66f0a2af1cb936dcb413c0e"
+    }
+  ],
+  "boundary": "Exact saved received candidate and source evidence from a real API run on controlled synthetic documents; not a new model outcome. No answer key included."
+}

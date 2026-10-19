@@ -1,25 +1,15 @@
+**/.runtime*/
+**/.venv/
+**/venv/
 **/node_modules/
 **/__pycache__/
+**/.pytest_cache/
+**/.cache/
+**/*.pyc
+**/*.pyo
+**/*.tsbuildinfo
 **/.DS_Store
-.venv/
-02_数据资料/运行数据/*
-!02_数据资料/运行数据/说明.md
-03_测试验收/临时运行/
-*.rar
-06_运行环境/RAG模型包.zip
-06_运行环境/OCR模型包.zip
-06_运行环境/Windows_x64/第三方依赖.zip
-
-# Do not commit machine-local credentials or generated runtime data.
-**/.private/
 **/.env
 **/.env.*
-!**/.env.example
-**/connections.key
-**/*.pem
-**/*.key
-**/*.db-wal
-**/*.db-shm
-
-# Personal registration remains local.
-05_比赛与交接/杭州电子科技大学_赛题8_团队报名表.docx
+**/model.json
+**/本机配置_不提交/

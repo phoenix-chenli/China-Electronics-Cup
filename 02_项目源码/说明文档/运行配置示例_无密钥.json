@@ -1,0 +1,16 @@
+{
+  "provider": "填写服务商名称",
+  "endpoint": "https://api.example.invalid/v1",
+  "api_key": "在本机填写，不随比赛包提交",
+  "models": {
+    "table": "填写支持JSON输出的真实模型ID",
+    "document": "填写支持图像与JSON输出的真实模型ID",
+    "verify": "填写支持图像与JSON输出的真实模型ID"
+  },
+  "available_models": [
+    "填写支持JSON输出的真实模型ID",
+    "填写支持图像与JSON输出的真实模型ID"
+  ],
+  "timeout": 90,
+  "vision_timeout": 180
+}

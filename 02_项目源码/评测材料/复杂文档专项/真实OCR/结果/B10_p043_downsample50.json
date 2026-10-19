@@ -1,0 +1,909 @@
+{
+  "pages": [
+    {
+      "number": 1,
+      "title": "原始图片",
+      "text": "2. Overview of UV Disinfection\nFigure 2.4. Scattering of Light\nBack\nTarget\nScaltered\nPathogens\nLight\nIncident\nLight\nForward\nScattered\nLight\n90° Scat tered Light\nStandard Method 5910B （APHA et al. 1998） calls for filltering the sample through a\nAzss data is provided in Section 3.4.4.1. Although Standard Methods defines this measurement as\nUV absorption, this manual refers to it as UV absorbance because the latter term is widely used\nUV Transmittance （UVT） has also been used extensively in the literature when\ndescribing the behavior of UV light.UVT is the percentage of light passing through material\n（e.g.， a water sample or quartz） over a specified distance. The UVT can be calculated using\nBeer's law （Equation 2.1）：\n% UVT=100*-\nEquation 2.1\nUVT = UV transmittance at a specified wavelength （e.g.， 254 nm） and pathlength\n（e.g.，1cm）\n/ = Intensity of light transmitted through the sample ［milliwatt per centimcter\nsquared （mW/cm？）］\n= Intensity of light incident on the sample （mW/cm-）\nlo\nUVT can also be calculated by relating it to UV absorbance using Equation 2.2：\n% UVT =100*10-4\nEquation 2.2\nwhere\nUVT = UV transmittance at a specified wavelength （e.g.， 254 nm） and pathlength\n（c.g.，1cm）\nA = UV absorbance at a specified wavelength and pathlength （unitless）\nUV Disinfection Guidance Manual\n2-5\nNovember 2006\nFor the Final LT2ESWTR",
+      "char_count": 1339,
+      "has_image": true,
+      "blocks": [
+        {
+          "text": "2. Overview of UV Disinfection",
+          "bbox": [
+            0.392765,
+            0.048,
+            0.607235,
+            0.058
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 0,
+          "end": 30
+        },
+        {
+          "text": "Figure 2.4. Scattering of Light",
+          "bbox": [
+            0.359173,
+            0.096,
+            0.640827,
+            0.114
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 31,
+          "end": 62
+        },
+        {
+          "text": "Back",
+          "bbox": [
+            0.377261,
+            0.148,
+            0.418605,
+            0.164
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "text": "Target",
+          "bbox": [
+            0.640827,
+            0.154,
+            0.684755,
+            0.168
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "text": "Scaltered",
+          "bbox": [
+            0.366925,
+            0.162,
+            0.426357,
+            0.178
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 75,
+          "end": 84
+        },
+        {
+          "text": "Pathogens",
+          "bbox": [
+            0.630491,
+            0.168,
+            0.69509,
+            0.18
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "text": "Light",
+          "bbox": [
+            0.377261,
+            0.178,
+            0.416021,
+            0.192
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 95,
+          "end": 100
+        },
+        {
+          "text": "Incident",
+          "bbox": [
+            0.289406,
+            0.192,
+            0.343669,
+            0.208
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 101,
+          "end": 109
+        },
+        {
+          "text": "Light",
+          "bbox": [
+            0.297158,
+            0.206,
+            0.335917,
+            0.222
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 110,
+          "end": 115
+        },
+        {
+          "text": "Forward",
+          "bbox": [
+            0.63046,
+            0.237937,
+            0.684785,
+            0.254063
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 116,
+          "end": 123
+        },
+        {
+          "text": "Scattered",
+          "bbox": [
+            0.627793,
+            0.249772,
+            0.687453,
+            0.268228
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 124,
+          "end": 133
+        },
+        {
+          "text": "Light",
+          "bbox": [
+            0.638243,
+            0.266,
+            0.679587,
+            0.282
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 134,
+          "end": 139
+        },
+        {
+          "text": "90° Scat tered Light",
+          "bbox": [
+            0.45478,
+            0.276,
+            0.568475,
+            0.29
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 140,
+          "end": 160
+        },
+        {
+          "text": "Standard Method 5910B （APHA et al. 1998） calls for filltering the sample through a",
+          "bbox": [
+            0.170543,
+            0.332,
+            0.837209,
+            0.352
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 161,
+          "end": 243
+        },
+        {
+          "text": "Azss data is provided in Section 3.4.4.1. Although Standard Methods defines this measurement as",
+          "bbox": [
+            0.116279,
+            0.402,
+            0.883721,
+            0.42
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 244,
+          "end": 339
+        },
+        {
+          "text": "UV absorption, this manual refers to it as UV absorbance because the latter term is widely used",
+          "bbox": [
+            0.113695,
+            0.42,
+            0.868217,
+            0.44
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 340,
+          "end": 435
+        },
+        {
+          "text": "UV Transmittance （UVT） has also been used extensively in the literature when",
+          "bbox": [
+            0.175711,
+            0.474,
+            0.808786,
+            0.492
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 436,
+          "end": 512
+        },
+        {
+          "text": "describing the behavior of UV light.UVT is the percentage of light passing through material",
+          "bbox": [
+            0.118863,
+            0.488,
+            0.842377,
+            0.508
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 513,
+          "end": 604
+        },
+        {
+          "text": "（e.g.， a water sample or quartz） over a specified distance. The UVT can be calculated using",
+          "bbox": [
+            0.111111,
+            0.506,
+            0.834625,
+            0.528
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 605,
+          "end": 696
+        },
+        {
+          "text": "Beer's law （Equation 2.1）：",
+          "bbox": [
+            0.118863,
+            0.526,
+            0.328165,
+            0.542
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 697,
+          "end": 723
+        },
+        {
+          "text": "% UVT=100*-",
+          "bbox": [
+            0.175448,
+            0.56106,
+            0.325844,
+            0.58894
+          ],
+          "confidence": 0.3,
+          "kind": "formula_candidate",
+          "start": 724,
+          "end": 735
+        },
+        {
+          "text": "Equation 2.1",
+          "bbox": [
+            0.777623,
+            0.571438,
+            0.883875,
+            0.590562
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 736,
+          "end": 748
+        },
+        {
+          "text": "UVT = UV transmittance at a specified wavelength （e.g.， 254 nm） and pathlength",
+          "bbox": [
+            0.211886,
+            0.64,
+            0.875969,
+            0.658
+          ],
+          "confidence": 0.5,
+          "kind": "formula_candidate",
+          "start": 749,
+          "end": 827
+        },
+        {
+          "text": "（e.g.，1cm）",
+          "bbox": [
+            0.291886,
+            0.657576,
+            0.385116,
+            0.672424
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 828,
+          "end": 838
+        },
+        {
+          "text": "/ = Intensity of light transmitted through the sample ［milliwatt per centimcter",
+          "bbox": [
+            0.211886,
+            0.674,
+            0.878553,
+            0.692
+          ],
+          "confidence": 0.5,
+          "kind": "formula_candidate",
+          "start": 839,
+          "end": 918
+        },
+        {
+          "text": "squared （mW/cm？）］",
+          "bbox": [
+            0.289406,
+            0.688,
+            0.452196,
+            0.71
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 919,
+          "end": 936
+        },
+        {
+          "text": "= Intensity of light incident on the sample （mW/cm-）",
+          "bbox": [
+            0.255661,
+            0.705815,
+            0.697914,
+            0.729952
+          ],
+          "confidence": 0.5,
+          "kind": "formula_candidate",
+          "start": 937,
+          "end": 989
+        },
+        {
+          "text": "lo",
+          "bbox": [
+            0.211886,
+            0.71,
+            0.232558,
+            0.726
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 990,
+          "end": 992
+        },
+        {
+          "text": "UVT can also be calculated by relating it to UV absorbance using Equation 2.2：",
+          "bbox": [
+            0.118863,
+            0.744,
+            0.74677,
+            0.762
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 993,
+          "end": 1071
+        },
+        {
+          "text": "% UVT =100*10-4",
+          "bbox": [
+            0.178295,
+            0.778,
+            0.343669,
+            0.794
+          ],
+          "confidence": 0.3,
+          "kind": "formula_candidate",
+          "start": 1072,
+          "end": 1087
+        },
+        {
+          "text": "Equation 2.2",
+          "bbox": [
+            0.777603,
+            0.779362,
+            0.883896,
+            0.798638
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 1088,
+          "end": 1100
+        },
+        {
+          "text": "where",
+          "bbox": [
+            0.175679,
+            0.821917,
+            0.227422,
+            0.834083
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 1101,
+          "end": 1106
+        },
+        {
+          "text": "UVT = UV transmittance at a specified wavelength （e.g.， 254 nm） and pathlength",
+          "bbox": [
+            0.21447,
+            0.838,
+            0.875969,
+            0.858
+          ],
+          "confidence": 0.5,
+          "kind": "formula_candidate",
+          "start": 1107,
+          "end": 1185
+        },
+        {
+          "text": "（c.g.，1cm）",
+          "bbox": [
+            0.294466,
+            0.857558,
+            0.387705,
+            0.872442
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 1186,
+          "end": 1196
+        },
+        {
+          "text": "A = UV absorbance at a specified wavelength and pathlength （unitless）",
+          "bbox": [
+            0.211886,
+            0.872,
+            0.821705,
+            0.892
+          ],
+          "confidence": 0.5,
+          "kind": "formula_candidate",
+          "start": 1197,
+          "end": 1266
+        },
+        {
+          "text": "UV Disinfection Guidance Manual",
+          "bbox": [
+            0.116279,
+            0.926,
+            0.348837,
+            0.94
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 1267,
+          "end": 1298
+        },
+        {
+          "text": "2-5",
+          "bbox": [
+            0.485788,
+            0.926,
+            0.514212,
+            0.942
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 1299,
+          "end": 1302
+        },
+        {
+          "text": "November 2006",
+          "bbox": [
+            0.775194,
+            0.926,
+            0.883721,
+            0.94
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 1303,
+          "end": 1316
+        },
+        {
+          "text": "For the Final LT2ESWTR",
+          "bbox": [
+            0.118863,
+            0.942,
+            0.29199,
+            0.954
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 1317,
+          "end": 1339
+        }
+      ],
+      "quality": {
+        "contrast": 47.31,
+        "grayscale_range": 255,
+        "sharpness": 5481.77,
+        "dark_pixel_ratio": 0.0627,
+        "blank": false,
+        "warnings": [
+          "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.5436,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 32,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 3111
+      },
+      "extraction": "ocr"
+    }
+  ],
+  "tables": [],
+  "warnings": [
+    "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+  ],
+  "metadata": {
+    "width": 773,
+    "height": 1000,
+    "exif_orientation": 1,
+    "ocr_performed": true,
+    "page_unit": "physical_page",
+    "outline": [],
+    "quality_summary": {
+      "native_pages": 0,
+      "ocr_pages": 1,
+      "ocr_comparison_pages": 0,
+      "unreadable_pages": 0,
+      "warning_pages": [
+        1
+      ],
+      "ocr_confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+      "processing_truncated": false,
+      "missing_page_note": "仅检查文件实际包含的页面；无法据此判断纸质原稿是否缺页。"
+    },
+    "complexity": {
+      "multi_column_pages": [],
+      "merged_table_count": 0,
+      "formula_candidates": 7,
+      "notes": [
+        "OCR 仅保留公式候选文字，未验证公式。",
+        "无可靠闭合格线时不生成数据表。"
+      ]
+    },
+    "table_regions": [],
+    "table_semantics": [],
+    "table_semantics_truncated": false,
+    "formula_structures": [
+      {
+        "id": "F1",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "% UVT=100*-",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 724,
+          "end": 735,
+          "bbox": [
+            0.175448,
+            0.56106,
+            0.325844,
+            0.58894
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      },
+      {
+        "id": "F2",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "UVT = UV transmittance at a specified wavelength （e.g.， 254 nm） and pathlength",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 749,
+          "end": 827,
+          "bbox": [
+            0.211886,
+            0.64,
+            0.875969,
+            0.658
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      },
+      {
+        "id": "F3",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "/ = Intensity of light transmitted through the sample ［milliwatt per centimcter",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 839,
+          "end": 918,
+          "bbox": [
+            0.211886,
+            0.674,
+            0.878553,
+            0.692
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      },
+      {
+        "id": "F4",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "= Intensity of light incident on the sample （mW/cm-）",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 937,
+          "end": 989,
+          "bbox": [
+            0.255661,
+            0.705815,
+            0.697914,
+            0.729952
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      },
+      {
+        "id": "F5",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "% UVT =100*10-4",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 1072,
+          "end": 1087,
+          "bbox": [
+            0.178295,
+            0.778,
+            0.343669,
+            0.794
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      },
+      {
+        "id": "F6",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "UVT = UV transmittance at a specified wavelength （e.g.， 254 nm） and pathlength",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 1107,
+          "end": 1185,
+          "bbox": [
+            0.21447,
+            0.838,
+            0.875969,
+            0.858
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      },
+      {
+        "id": "F7",
+        "schema_version": "zhiheng-formula-1",
+        "origin": "ocr_text",
+        "text": "A = UV absorbance at a specified wavelength and pathlength （unitless）",
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "start": 1197,
+          "end": 1266,
+          "bbox": [
+            0.211886,
+            0.872,
+            0.821705,
+            0.892
+          ]
+        },
+        "structure_status": "unknown",
+        "tree": null,
+        "computation_ast": null,
+        "computation_status": "unavailable",
+        "verified": false,
+        "requires_review": true,
+        "execution_eligible": false,
+        "truncated": false,
+        "issues": [
+          "two_dimensional_formula_structure_not_verified"
+        ],
+        "parameter_candidates": []
+      }
+    ],
+    "formula_structures_truncated": false,
+    "document_structure": {
+      "schema_version": "zhiheng-document-2",
+      "page_unit": "physical_page",
+      "headings": [],
+      "toc_entries": [],
+      "excluded_spans": [],
+      "page_labels": [
+        {
+          "physical_page": 1,
+          "printed_page_label": null,
+          "basis": "unknown"
+        }
+      ],
+      "issues": [],
+      "truncated": false,
+      "structure_status": "unknown",
+      "note": "目录与页眉页脚仅旁挂标注；原文字未删除。候选标题不是已核验的完整目录。"
+    },
+    "document_profiles": {
+      "schema_version": "zhiheng-document-2",
+      "complexity": {
+        "kind": "rule_estimate",
+        "score": 28,
+        "scale": [
+          0,
+          100
+        ],
+        "features": {
+          "pages": 1,
+          "formula_count": 7,
+          "table_count": 0,
+          "merged_table_count": 0,
+          "multi_column_pages": [],
+          "heading_count": 0
+        },
+        "note": "结构处理负担估计，不是文档质量、答案正确率或OCR准确率。"
+      },
+      "quality": {
+        "kind": "observed_diagnostics",
+        "pages": [
+          {
+            "page": 1,
+            "status": "observed",
+            "observations": {
+              "contrast": 47.31,
+              "sharpness": 5481.77,
+              "grayscale_range": 255,
+              "blank": false,
+              "rotation_correction": 0,
+              "skew_degrees": 0.0,
+              "ocr_mean_confidence": 0.5436,
+              "low_confidence_blocks": 32
+            },
+            "flags": [
+              "ocr_uncertain"
+            ],
+            "warnings": [
+              "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+            ],
+            "not_assessed": []
+          }
+        ],
+        "accuracy_estimate": null,
+        "note": "仅报告实际测量与识别不确定性；无图像测量的DOCX不推断清晰度。"
+      },
+      "processing_plan": [
+        {
+          "page": 1,
+          "suggested_action": "targeted_high_resolution_review",
+          "basis": [
+            "ocr_uncertain"
+          ],
+          "executed": false
+        }
+      ]
+    },
+    "table_continuations": {
+      "links": [],
+      "pending": [],
+      "truncated": false,
+      "note": "每页原表、原行和单位独立保留；关联不授权跨表求和或自动继承表头。"
+    },
+    "normalization_candidates": {
+      "schema_version": "search-variants-1",
+      "items": [],
+      "truncated": false,
+      "source_modified": false,
+      "conversion_scope": "finite_orthographic_map_not_full_dictionary"
+    },
+    "processing_history": [
+      {
+        "method": "png_import",
+        "parser_version": "zhiheng-multimodal-3.2",
+        "elapsed_ms": 3205,
+        "status": "parsed",
+        "processing_truncated": false
+      }
+    ]
+  },
+  "page_count": 1,
+  "summary": "773 × 1000 像素 · 1,339 字符",
+  "data_path": null
+}

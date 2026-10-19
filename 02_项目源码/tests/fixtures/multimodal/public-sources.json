@@ -1,0 +1,100 @@
+[
+  {
+    "file": "石景山区2024年统计公报.pdf",
+    "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+    "metadata": {
+      "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+      "source_group": "shijingshan_stats_2024",
+      "derived_from": null,
+      "quality_notes": [
+        "PDF内部标题年份为2022，正文为2024，以正文为准。",
+        "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+      ],
+      "publication_status": "preliminary_statistics"
+    }
+  },
+  {
+    "file": "人形机器人产业方案2024_征求意见稿.docx",
+    "sha256": "702065300f18f4df269631ae63c182e769574ed7f5f21bd735c358f2975666e8",
+    "metadata": {
+      "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/ztzl/Y2021/policyDocs/zxzj/202510/P020240828542953434709.docx",
+      "source_group": "shijingshan_robot_consultation_2024",
+      "derived_from": null,
+      "quality_notes": [],
+      "publication_status": "public_consultation_draft"
+    }
+  },
+  {
+    "file": "人形机器人产业方案2024_起草说明.docx",
+    "sha256": "c2e73986fe4bfc5ceaed0525b4be04f052230fce5e31228e1d0c0002153ec975",
+    "metadata": {
+      "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/ztzl/Y2021/policyDocs/zxzj/202510/P020240828532086679775.docx",
+      "source_group": "shijingshan_robot_consultation_2024",
+      "derived_from": null,
+      "quality_notes": [],
+      "publication_status": "public_consultation_draft"
+    }
+  },
+  {
+    "file": "石景山区2024年产业指标_原表转录.csv",
+    "sha256": "6947827bf709534396c1440ae54fabe9c90310480603cf088e0764eb1955d9fc",
+    "metadata": {
+      "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+      "source_group": "shijingshan_stats_2024",
+      "derived_from": "石景山区2024年统计公报.pdf#page=2",
+      "quality_notes": [
+        "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+      ]
+    }
+  },
+  {
+    "file": "石景山区统计公报_第2页原表.png",
+    "sha256": "77cddc6ce84e3fe6de7ae1a13d9df7d99747f77bff26c9c56e4be2987bb6aa18",
+    "metadata": {
+      "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+      "source_group": "shijingshan_stats_2024",
+      "derived_from": "石景山区2024年统计公报.pdf#page=2",
+      "quality_notes": [
+        "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+      ]
+    }
+  },
+  {
+    "file": "2024年新津区国民经济和社会发展统计公报.pdf",
+    "sha256": "97072a795a58fed0d2622fc7a03450332d82294f98817dc8e2d3bd1f2bc3187b",
+    "metadata": {
+      "origin": "https://www.xinjin.gov.cn/gkml/uploadfiles/1607625547318407176/14914465512502067202024%E5%B9%B4%E6%96%B0%E6%B4%A5%E5%8C%BA%E5%9B%BD%E6%B0%91%E7%BB%8F%E6%B5%8E%E5%92%8C%E7%A4%BE%E4%BC%9A%E5%8F%91%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%85%AC%E6%8A%A5.pdf",
+      "source_group": "xinjin_stats_2024",
+      "derived_from": null,
+      "note": "既有公开资料包原件/明确同源转换件，非新增独立来源",
+      "quality_notes": [
+        "内部PDF标题元数据陈旧，按正文确认年份"
+      ],
+      "publication_status": "preliminary_statistics"
+    }
+  },
+  {
+    "file": "新津区2024年统计公报原文摘录_转换展示件.docx",
+    "sha256": "2480ad21113de3487fc5f8f8880c818307e498174ff9caaa9fe1c84f8dd654b2",
+    "metadata": {
+      "origin": "https://www.xinjin.gov.cn/gkml/uploadfiles/1607625547318407176/14914465512502067202024%E5%B9%B4%E6%96%B0%E6%B4%A5%E5%8C%BA%E5%9B%BD%E6%B0%91%E7%BB%8F%E6%B5%8E%E5%92%8C%E7%A4%BE%E4%BC%9A%E5%8F%91%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%85%AC%E6%8A%A5.pdf",
+      "source_group": "xinjin_stats_2024",
+      "derived_from": "2024年新津区国民经济和社会发展统计公报.pdf",
+      "note": "既有公开资料包原件/明确同源转换件，非新增独立来源",
+      "quality_notes": [
+        "内部PDF标题元数据陈旧，按正文确认年份"
+      ],
+      "publication_status": "preliminary_statistics"
+    }
+  },
+  {
+    "file": "2024生态环境公报_原页7_47_101_137_扫描摘录.pdf",
+    "sha256": "51a986d222977db56352adec07d6eb88a31ecd41187a169e4fd0ed5f9f8dfe7a",
+    "metadata": {
+      "origin": "https://www.mee.gov.cn/hjzl/sthjzk/zghjzkgb/202506/P020250604527010717462.pdf",
+      "source_group": "mee_environment_2024",
+      "derived_from": "2024中国生态环境状况公报_完整扫描原件.pdf#pages=7,47,101,137",
+      "note": "150页原件的4页原页摘录，未改原页内容。摘录页1/2/3/4对应原页7/47/101/137。"
+    }
+  }
+]

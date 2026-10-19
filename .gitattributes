@@ -1,30 +1,5 @@
-# This repository freezes byte-exact SHA-256 digests for datasets, document
-# originals and model packs, and several modules refuse to load when a digest no
-# longer matches (public_statistics.install, documents.version, rag_providers._verify,
-# the evaluators' frozen sets). Git for Windows defaults to core.autocrlf=true,
-# which rewrites LF to CRLF on checkout and breaks those digests on an otherwise
-# clean clone. Normalising every text file to LF keeps the working tree
-# byte-identical to the committed blob on every platform.
-* text=auto eol=lf
-
-# This acceptance record was committed with CRLF. Leave its bytes exactly as
-# they are rather than rewriting a frozen evidence file.
-03_测试验收/验收证据/智能体主流程验收.json -text
-
-# Digests are frozen over these bytes too, so state the binary rule explicitly
-# instead of relying on content detection for an executable or an archive.
-*.exe -text
-*.dll -text
-*.pyd -text
-*.cat -text
-*.zip -text
-*.db -text
-*.sqlite -text
-*.pdf -text
-*.png -text
-*.jpg -text
-*.jpeg -text
-*.webp -text
-*.docx -text
-*.xlsx -text
-*.sha256 -text
+# Preserve the byte-exact data/source manifests on all platforms.
+* -text
+*.onnx filter=lfs diff=lfs merge=lfs -text
+*.rar filter=lfs diff=lfs merge=lfs -text
+"01_初赛提交/03_作品原始文件.zip" filter=lfs diff=lfs merge=lfs -text

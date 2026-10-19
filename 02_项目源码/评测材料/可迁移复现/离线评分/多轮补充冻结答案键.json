@@ -1,0 +1,597 @@
+{
+  "plan_sha256": "020db33f68d470ed6c41bf3da8131c27edfc9999f8e141759f017776d63f344e",
+  "gold": {
+    "ctx03-t1": {
+      "status": "needs_clarification",
+      "require_evidence": false,
+      "require_text_review": true,
+      "require_context_review": true,
+      "chain_id": "ctx03",
+      "turn_index": 1,
+      "review_requirements": {
+        "facts": [
+          "原件有东店员工1与西店员工2两位张伟，必须提出可回答的对象澄清，不随机选取或合并"
+        ],
+        "context_conditions": [
+          "姓名歧义未解决"
+        ],
+        "forbidden": [
+          "随机选一位",
+          "把两人静默合并"
+        ],
+        "source_pages": [],
+        "interpretation_origin": "model_interpretation is not user confirmation"
+      },
+      "key_provenance": {
+        "path": "evaluation/context_cases.py",
+        "sha256": "a873ebb73e84f5f316146ef6725985a021b22e8e3eab12664d9954cb5238ce94",
+        "case_id": "ctx03-t1"
+      },
+      "source_sha256": {
+        "boundary": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff"
+      }
+    },
+    "ctx03-t2": {
+      "status": "completed",
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "chain_id": "ctx03",
+      "turn_index": 2,
+      "review_requirements": {
+        "facts": [],
+        "context_conditions": [
+          "员工2西店张伟",
+          "工时SUM",
+          "无年份限制"
+        ],
+        "forbidden": [],
+        "source_pages": [],
+        "interpretation_origin": "model_interpretation is not user confirmation"
+      },
+      "reference_sql": "SELECT SUM(CAST(hours AS REAL)) FROM worklogs WHERE staff_id=2",
+      "reference_columns": [
+        "SUM(CAST(hours AS REAL))"
+      ],
+      "rows": [
+        [
+          2.0
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "key_provenance": {
+        "path": "evaluation/context_cases.py",
+        "sha256": "a873ebb73e84f5f316146ef6725985a021b22e8e3eab12664d9954cb5238ce94",
+        "case_id": "ctx03-t2"
+      },
+      "source_sha256": {
+        "boundary": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff"
+      }
+    },
+    "ctx03-t3": {
+      "status": "completed",
+      "chain_id": "ctx03",
+      "turn_index": 3,
+      "reference_sql": "SELECT SUM(CAST(hours AS REAL)) AS total_hours FROM worklogs WHERE staff_id=1",
+      "reference_parameters": [],
+      "reference_columns": [
+        "total_hours"
+      ],
+      "rows": [
+        [
+          3.0
+        ]
+      ],
+      "ordered": true,
+      "tolerance": 0.005,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "boundary": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff"
+      },
+      "review_requirements": {
+        "facts": [
+          "东店员工1张伟已知登记工时3.0小时；原始记录1.5、0.5、1.0。"
+        ],
+        "context_conditions": [
+          "员工由2改为1，region由西店改为东店",
+          "仍按worklogs.hours求和，无年份限制",
+          "NULL未知不补零继续保留"
+        ],
+        "forbidden": [
+          "保留西店筛选造成空结果",
+          "将两位张伟合并",
+          "擅自增加年份限制"
+        ],
+        "sql_scope": "Actual staff.id/region and worklogs.staff_id must match; 2024 restriction only when asked, via worklogs.order_id=orders.id and orders.day. Results must agree with final answer.",
+        "provenance": "Controlled synthetic fixture, not production employee data."
+      }
+    },
+    "ctx03-t4": {
+      "status": "completed",
+      "chain_id": "ctx03",
+      "turn_index": 4,
+      "reference_sql": "SELECT SUM(CAST(w.hours AS REAL)) AS total_hours FROM worklogs w JOIN orders o ON o.id=w.order_id WHERE w.staff_id=1 AND o.day>='2024-01-01' AND o.day<'2025-01-01'",
+      "reference_parameters": [],
+      "reference_columns": [
+        "total_hours"
+      ],
+      "rows": [
+        [
+          2.0
+        ]
+      ],
+      "ordered": true,
+      "tolerance": 0.005,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "boundary": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff"
+      },
+      "review_requirements": {
+        "facts": [
+          "员工1，2024关联订单1的两条登记1.5与0.5，合计2.0小时。"
+        ],
+        "context_conditions": [
+          "刚才这位指员工1东店张伟",
+          "年份限制作用于关联orders.day",
+          "仍统计登记工时，不能按订单去重后只剩一条",
+          "未要求订单status筛选"
+        ],
+        "forbidden": [
+          "误用员工2",
+          "擅自沿用跨源链2025或已完成条件",
+          "把重复同订单的两次有效工时登记去重"
+        ],
+        "sql_scope": "Actual staff.id/region and worklogs.staff_id must match; 2024 restriction only when asked, via worklogs.order_id=orders.id and orders.day. Results must agree with final answer.",
+        "provenance": "Controlled synthetic fixture, not production employee data."
+      }
+    },
+    "ctx03-t5": {
+      "status": "completed",
+      "chain_id": "ctx03",
+      "turn_index": 5,
+      "reference_sql": "SELECT SUM(CAST(hours AS REAL)) AS total_hours FROM worklogs WHERE staff_id=1",
+      "reference_parameters": [],
+      "reference_columns": [
+        "total_hours"
+      ],
+      "rows": [
+        [
+          3.0
+        ]
+      ],
+      "ordered": true,
+      "tolerance": 0.005,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "boundary": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff"
+      },
+      "review_requirements": {
+        "facts": [
+          "恢复员工1全部记录，合计3.0小时。"
+        ],
+        "context_conditions": [
+          "只撤销2024限制，保留员工1东店",
+          "无年份限制",
+          "SUM工时、NULL未知口径保留"
+        ],
+        "forbidden": [
+          "撤销到员工2",
+          "仍限制2024",
+          "混入其他对话链条件"
+        ],
+        "sql_scope": "Actual staff.id/region and worklogs.staff_id must match; 2024 restriction only when asked, via worklogs.order_id=orders.id and orders.day. Results must agree with final answer.",
+        "provenance": "Controlled synthetic fixture, not production employee data."
+      }
+    },
+    "ctx03-t6": {
+      "status": "completed",
+      "chain_id": "ctx03",
+      "turn_index": 6,
+      "reference_sql": "SELECT s.id,s.name,s.region,SUM(CAST(w.hours AS REAL)) AS known_hours,SUM(CASE WHEN w.hours IS NULL THEN 1 ELSE 0 END) AS missing_records FROM staff s JOIN worklogs w ON w.staff_id=s.id WHERE s.id IN (1,2) GROUP BY s.id,s.name,s.region ORDER BY s.id",
+      "reference_parameters": [],
+      "reference_columns": [
+        "id",
+        "name",
+        "region",
+        "known_hours",
+        "missing_records"
+      ],
+      "rows": [
+        [
+          1,
+          "张伟",
+          "东店",
+          3.0,
+          0
+        ],
+        [
+          2,
+          "张伟",
+          "西店",
+          2.0,
+          1
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "boundary": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff"
+      },
+      "review_requirements": {
+        "facts": [
+          "员工1东店张伟3.0小时、0条缺失；员工2西店张伟2.0小时、1条缺失。",
+          "已知工时合计东店比西店多1.0小时。",
+          "西店缺失工时未知；不能断言包含未知值后的真实总工时差也是1.0小时。"
+        ],
+        "context_conditions": [
+          "当前员工1无年份限制",
+          "第2轮指员工2西店无年份限制",
+          "比较两个已知SUM而不是补零后的完整工时"
+        ],
+        "forbidden": [
+          "只返回当前员工",
+          "仍带2024条件",
+          "把NULL填0或宣称完整总工时差已确定"
+        ],
+        "sql_scope": "Actual staff.id/region and worklogs.staff_id must match; 2024 restriction only when asked, via worklogs.order_id=orders.id and orders.day. Results must agree with final answer.",
+        "provenance": "Controlled synthetic fixture, not production employee data."
+      }
+    },
+    "acceptance-rag-chain-t1": {
+      "status": "completed",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 1,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+      },
+      "review_requirements": {
+        "facts": [
+          "最低库存8件；严格低于8件提出采购申请。",
+          "恰好8件无需触发采购。"
+        ],
+        "context_conditions": [
+          "仅harbor.docx来源",
+          "主题密封圈库存采购触发条件"
+        ],
+        "forbidden": [
+          "把条件写成小于等于8件",
+          "把提出申请写成自动采购或已采购"
+        ],
+        "source_pages": [
+          3
+        ],
+        "source_locations": [
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 49,
+            "end": 83,
+            "quote": "密封圈最低库存为8件；低于8件时提出采购申请，等于8件无需触发采购。",
+            "quote_sha256": "51b835f382845152afee2b66feb01d48f961ed17187b1bfb03d20a2e346b8ba3"
+          }
+        ],
+        "provenance": "本手册是受控合成验收材料；DOCX引用页码是逻辑节，不是物理页。",
+        "sufficiency": "事实必须由本次harbor来源支持；假设、推断、无证据范围明确区分。"
+      }
+    },
+    "acceptance-rag-chain-t2": {
+      "status": "completed",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 2,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+      },
+      "review_requirements": {
+        "facts": [
+          "月末实盘11件；电子台账12件。",
+          "按实盘11件与阈值8件比较，不触发采购申请。",
+          "差额1件尚未查明，不得直接认定遗失。"
+        ],
+        "context_conditions": [
+          "那指密封圈",
+          "刚才规则为严格低于8件",
+          "实际盘点与台账区分"
+        ],
+        "forbidden": [
+          "使用台账12件代替实盘11件",
+          "把差额1件直接认定丢失或报废"
+        ],
+        "source_pages": [
+          3,
+          3
+        ],
+        "source_locations": [
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 49,
+            "end": 83,
+            "quote": "密封圈最低库存为8件；低于8件时提出采购申请，等于8件无需触发采购。",
+            "quote_sha256": "51b835f382845152afee2b66feb01d48f961ed17187b1bfb03d20a2e346b8ba3"
+          },
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 84,
+            "end": 123,
+            "quote": "月末实盘密封圈为11件，电子台账为12件；差额1件尚未查明，不得直接认定遗失。",
+            "quote_sha256": "db9509b9d1fd409698877e8f3fee240a018fa6acaedeaab2f33ed2cdff542de5"
+          }
+        ],
+        "provenance": "本手册是受控合成验收材料；DOCX引用页码是逻辑节，不是物理页。",
+        "sufficiency": "事实必须由本次harbor来源支持；假设、推断、无证据范围明确区分。"
+      }
+    },
+    "acceptance-rag-chain-t3": {
+      "status": "completed",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 3,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+      },
+      "review_requirements": {
+        "facts": [
+          "用户假设实盘7件；因7低于8，应提出采购申请。",
+          "假设不是文档原始事实；文档原始实盘仍是11件。"
+        ],
+        "context_conditions": [
+          "假设只替换实盘数量",
+          "规则仍严格低于8件",
+          "保持同一来源和密封圈对象"
+        ],
+        "forbidden": [
+          "宣称原文实盘7件",
+          "把7件写回来源事实",
+          "把采购申请当成采购完成"
+        ],
+        "source_pages": [
+          3,
+          3
+        ],
+        "source_locations": [
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 49,
+            "end": 83,
+            "quote": "密封圈最低库存为8件；低于8件时提出采购申请，等于8件无需触发采购。",
+            "quote_sha256": "51b835f382845152afee2b66feb01d48f961ed17187b1bfb03d20a2e346b8ba3"
+          },
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 84,
+            "end": 123,
+            "quote": "月末实盘密封圈为11件，电子台账为12件；差额1件尚未查明，不得直接认定遗失。",
+            "quote_sha256": "db9509b9d1fd409698877e8f3fee240a018fa6acaedeaab2f33ed2cdff542de5"
+          }
+        ],
+        "provenance": "本手册是受控合成验收材料；DOCX引用页码是逻辑节，不是物理页。",
+        "sufficiency": "事实必须由本次harbor来源支持；假设、推断、无证据范围明确区分。"
+      }
+    },
+    "acceptance-rag-chain-t4": {
+      "status": "completed",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 4,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+      },
+      "review_requirements": {
+        "facts": [
+          "撤销7件，恢复实盘11件、台账12件。",
+          "不触发采购申请。",
+          "差额1件尚未查明，不能直接认定遗失。"
+        ],
+        "context_conditions": [
+          "清除本链7件假设",
+          "仍是密封圈月末原始记录"
+        ],
+        "forbidden": [
+          "继续使用7件",
+          "把撤销视为恢复8件阈值作为库存",
+          "把差额当成确定遗失"
+        ],
+        "source_pages": [
+          3,
+          3
+        ],
+        "source_locations": [
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 49,
+            "end": 83,
+            "quote": "密封圈最低库存为8件；低于8件时提出采购申请，等于8件无需触发采购。",
+            "quote_sha256": "51b835f382845152afee2b66feb01d48f961ed17187b1bfb03d20a2e346b8ba3"
+          },
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 84,
+            "end": 123,
+            "quote": "月末实盘密封圈为11件，电子台账为12件；差额1件尚未查明，不得直接认定遗失。",
+            "quote_sha256": "db9509b9d1fd409698877e8f3fee240a018fa6acaedeaab2f33ed2cdff542de5"
+          }
+        ],
+        "provenance": "本手册是受控合成验收材料；DOCX引用页码是逻辑节，不是物理页。",
+        "sufficiency": "事实必须由本次harbor来源支持；假设、推断、无证据范围明确区分。"
+      }
+    },
+    "acceptance-rag-chain-t5": {
+      "status": "completed",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 5,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+      },
+      "review_requirements": {
+        "facts": [
+          "版本V2.1；2025年3月1日签发；只适用于青湾港试验站。",
+          "资料不足以确认其他试验站规则或V2.2版本规则，不得推广。",
+          "无V2.2资料不等于证明V2.2不存在或规则不同。"
+        ],
+        "context_conditions": [
+          "以上指前四轮同一库存结论",
+          "保持只用harbor来源；不引入外部版本",
+          "当前有效事实仍为原始记录，假设已撤销"
+        ],
+        "forbidden": [
+          "捏造V2.2内容",
+          "把签发日写成实施日或最新更新日",
+          "将规则推广为所有试验站通用"
+        ],
+        "source_pages": [
+          5
+        ],
+        "source_locations": [
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 5,
+            "start": 7,
+            "end": 42,
+            "quote": "本手册版本为V2.1，于2025年3月1日签发，只适用于青湾港试验站。",
+            "quote_sha256": "1a24e21dbdb0f01fe07b5a1ec2b8a6eb5d05f5e4a7fda92dc08864913455ebb9"
+          }
+        ],
+        "provenance": "本手册是受控合成验收材料；DOCX引用页码是逻辑节，不是物理页。",
+        "sufficiency": "事实必须由本次harbor来源支持；假设、推断、无证据范围明确区分。"
+      }
+    },
+    "acceptance-rag-chain-t6": {
+      "status": "completed",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 6,
+      "require_evidence": true,
+      "require_text_review": true,
+      "require_context_review": true,
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+      },
+      "review_requirements": {
+        "facts": [
+          "当前实盘11件，台账12件；当前不触发采购。",
+          "最低库存8件，严格低于8件申请，等于8件不触发。",
+          "差额1件尚未查明，不得直接认定遗失。",
+          "依据V2.1、2025年3月1日签发，仅青湾港试验站适用；其他站点和V2.2未确认。",
+          "7件情景假设已撤销，不是当前库存。"
+        ],
+        "context_conditions": [
+          "第6轮引用第1、2、4、5轮状态",
+          "无活跃7件假设",
+          "所有已确认事实与适用边界均保留"
+        ],
+        "forbidden": [
+          "漏掉严格低于边界",
+          "把7件继续视为当前库存",
+          "给不存在的V2.2确定结论"
+        ],
+        "source_pages": [
+          3,
+          3,
+          5
+        ],
+        "source_locations": [
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 49,
+            "end": 83,
+            "quote": "密封圈最低库存为8件；低于8件时提出采购申请，等于8件无需触发采购。",
+            "quote_sha256": "51b835f382845152afee2b66feb01d48f961ed17187b1bfb03d20a2e346b8ba3"
+          },
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 3,
+            "start": 84,
+            "end": 123,
+            "quote": "月末实盘密封圈为11件，电子台账为12件；差额1件尚未查明，不得直接认定遗失。",
+            "quote_sha256": "db9509b9d1fd409698877e8f3fee240a018fa6acaedeaab2f33ed2cdff542de5"
+          },
+          {
+            "source_id": "harbor",
+            "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.2",
+            "location_kind": "DOCX logical section; not physical page",
+            "logical_page": 5,
+            "start": 7,
+            "end": 42,
+            "quote": "本手册版本为V2.1，于2025年3月1日签发，只适用于青湾港试验站。",
+            "quote_sha256": "1a24e21dbdb0f01fe07b5a1ec2b8a6eb5d05f5e4a7fda92dc08864913455ebb9"
+          }
+        ],
+        "provenance": "本手册是受控合成验收材料；DOCX引用页码是逻辑节，不是物理页。",
+        "sufficiency": "事实必须由本次harbor来源支持；假设、推断、无证据范围明确区分。"
+      }
+    }
+  },
+  "chain_acceptance": {
+    "all_turns_required": true,
+    "rule": "同一连续会话的6轮均需正确、完整、有真实来源、上下文与条件状态正确；澄清轮以正确提出可回答澄清为成功。不得以6个独立问答拼接代替整链。",
+    "metrics": [
+      "逐轮正确数/6",
+      "整链全对=6/6且父子会话连续",
+      "首次尝试整链全对率；修复后最终整链全对率分别列示",
+      "引用覆盖、假设/撤销状态、平均与总耗时、角色请求及token"
+    ],
+    "failure_policy": "任何一轮失败保留该尝试；修复后从仍有效的最近成功父记录继续或重跑受影响后缀，不能测试后删除题或换成容易通过的题；报告注明复用与重跑。",
+    "no_api_at_design": true
+  },
+  "visibility": "local independent review only",
+  "portable_copy_note": "仅将源码前缀改为包内相对路径；历史答案键未改，原件SHA-256：883f246ced613d7d9420c050430acdbd7f1a15a21865215bda7c92e09f91f4ab"
+}

@@ -1,0 +1,753 @@
+{
+  "suite_sha256": "389eb82dd8ae93168d2e153b040455faca5767de23c5306cffc6c75659a58a07",
+  "cases": {
+    "sql-001": {
+      "status": "completed",
+      "rows": [
+        [
+          3503
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT COUNT(*) FROM Track",
+      "reference_parameters": [],
+      "reference_columns": [
+        "COUNT(*)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "count",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-003": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "撤离为连续三次短鸣",
+          "到岗为一次长鸣"
+        ],
+        "source_pages": {
+          "harbor": [
+            2
+          ]
+        },
+        "qualifiers": [
+          "DOCX索引为逻辑节，不冒充物理分页"
+        ],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-004": {
+      "status": "completed",
+      "rows": [
+        [
+          2328.6
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT ROUND(SUM(Total),2) FROM Invoice",
+      "reference_parameters": [],
+      "reference_columns": [
+        "ROUND(SUM(Total),2)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "sum",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-008": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "成功18次，失败2次",
+          "分母为全部启动次数"
+        ],
+        "source_pages": {
+          "harbor": [
+            4
+          ]
+        },
+        "qualifiers": [
+          "DOCX索引为逻辑节，不冒充物理分页"
+        ],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-006": {
+      "status": "completed",
+      "rows": [
+        [
+          "Argentina",
+          1
+        ],
+        [
+          "Australia",
+          1
+        ],
+        [
+          "Austria",
+          1
+        ],
+        [
+          "Belgium",
+          1
+        ],
+        [
+          "Brazil",
+          5
+        ],
+        [
+          "Canada",
+          8
+        ],
+        [
+          "Chile",
+          1
+        ],
+        [
+          "Czech Republic",
+          2
+        ],
+        [
+          "Denmark",
+          1
+        ],
+        [
+          "Finland",
+          1
+        ],
+        [
+          "France",
+          5
+        ],
+        [
+          "Germany",
+          4
+        ],
+        [
+          "Hungary",
+          1
+        ],
+        [
+          "India",
+          2
+        ],
+        [
+          "Ireland",
+          1
+        ],
+        [
+          "Italy",
+          1
+        ],
+        [
+          "Netherlands",
+          1
+        ],
+        [
+          "Norway",
+          1
+        ],
+        [
+          "Poland",
+          1
+        ],
+        [
+          "Portugal",
+          2
+        ],
+        [
+          "Spain",
+          1
+        ],
+        [
+          "Sweden",
+          1
+        ],
+        [
+          "USA",
+          13
+        ],
+        [
+          "United Kingdom",
+          3
+        ]
+      ],
+      "ordered": true,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT Country,COUNT(*) FROM Customer GROUP BY Country ORDER BY Country",
+      "reference_parameters": [],
+      "reference_columns": [
+        "Country",
+        "COUNT(*)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "group_count",
+        "ordering",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-012": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "每断面3个独立水样",
+          "复测不增加独立水样数"
+        ],
+        "source_pages": {
+          "river": [
+            1,
+            2
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-009": {
+      "status": "completed",
+      "rows": [
+        [
+          977
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT COUNT(*) FROM Track WHERE Composer IS NULL",
+      "reference_parameters": [],
+      "reference_columns": [
+        "COUNT(*)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "null",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-020": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "断面编号、采样时间、仪器批次"
+        ],
+        "source_pages": {
+          "river": [
+            5
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-014": {
+      "status": "completed",
+      "rows": [
+        [
+          260
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT COUNT(*) FROM Track WHERE Milliseconds>600000",
+      "reference_parameters": [],
+      "reference_columns": [
+        "COUNT(*)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "unit_conversion",
+        "strict_range",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-023": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "温升7.5摄氏度，室温22摄氏度"
+        ],
+        "source_pages": {
+          "equipment": [
+            1
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-017": {
+      "status": "completed",
+      "rows": [
+        [
+          10
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT COUNT(*) FROM Customer WHERE Company IS NOT NULL",
+      "reference_parameters": [],
+      "reference_columns": [
+        "COUNT(*)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "not_null",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-028": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "RX-9B、C12、青石"
+        ],
+        "source_pages": {
+          "equipment": [
+            1
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-020": {
+      "status": "completed",
+      "rows": [
+        [
+          202,
+          210
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT SUM(CASE WHEN BillingState IS NULL THEN 1 ELSE 0 END),COUNT(BillingState) FROM Invoice",
+      "reference_parameters": [],
+      "reference_columns": [
+        "SUM(CASE WHEN BillingState IS NULL THEN 1 ELSE 0 END)",
+        "COUNT(BillingState)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "conditional_count",
+        "null",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-032": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "不含；单程常住地到主要工作地点"
+        ],
+        "source_pages": {
+          "sample": [
+            1
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-041": {
+      "status": "completed",
+      "rows": [
+        [
+          "USA",
+          523.06
+        ],
+        [
+          "Canada",
+          303.96
+        ],
+        [
+          "France",
+          195.1
+        ],
+        [
+          "Brazil",
+          190.1
+        ],
+        [
+          "Germany",
+          156.48
+        ]
+      ],
+      "ordered": true,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT BillingCountry, ROUND(SUM(Total),2) AS revenue FROM Invoice GROUP BY BillingCountry ORDER BY revenue DESC,BillingCountry LIMIT 5",
+      "reference_parameters": [],
+      "reference_columns": [
+        "BillingCountry",
+        "revenue"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_complex",
+        "aggregate",
+        "ranking",
+        "legacy_development_reference",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      },
+      "legacy_reference_id": "chinook_01"
+    },
+    "rag-038": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "不包括；仅完成验收的小型岸电项目"
+        ],
+        "source_pages": {
+          "draft": [
+            2
+          ]
+        },
+        "qualifiers": [
+          "DOCX索引为逻辑节，不冒充物理分页"
+        ],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-051": {
+      "status": "completed",
+      "rows": [
+        [
+          21,
+          "Various Artists",
+          56
+        ],
+        [
+          22,
+          "Led Zeppelin",
+          114
+        ],
+        [
+          50,
+          "Metallica",
+          112
+        ],
+        [
+          58,
+          "Deep Purple",
+          92
+        ],
+        [
+          82,
+          "Faith No More",
+          52
+        ],
+        [
+          90,
+          "Iron Maiden",
+          213
+        ],
+        [
+          100,
+          "Lenny Kravitz",
+          57
+        ],
+        [
+          118,
+          "Pearl Jam",
+          67
+        ],
+        [
+          149,
+          "Lost",
+          92
+        ],
+        [
+          150,
+          "U2",
+          135
+        ],
+        [
+          152,
+          "Van Halen",
+          52
+        ],
+        [
+          156,
+          "The Office",
+          53
+        ]
+      ],
+      "ordered": false,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT ar.ArtistId,ar.Name,COUNT(DISTINCT t.TrackId) FROM Artist ar JOIN Album a ON a.ArtistId=ar.ArtistId JOIN Track t ON t.AlbumId=a.AlbumId GROUP BY ar.ArtistId,ar.Name HAVING COUNT(DISTINCT t.TrackId)>50 AND EXISTS(SELECT 1 FROM Album a2 JOIN Track t2 ON t2.AlbumId=a2.AlbumId JOIN InvoiceLine il ON il.TrackId=t2.TrackId WHERE a2.ArtistId=ar.ArtistId)",
+      "reference_parameters": [],
+      "reference_columns": [
+        "ArtistId",
+        "Name",
+        "COUNT(DISTINCT t.TrackId)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_complex",
+        "nested",
+        "correlated",
+        "having",
+        "grain",
+        "legacy_development_reference",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      },
+      "legacy_reference_id": "chinook_11"
+    },
+    "rag-044": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "2025年7月3日签发",
+          "涉及7月1日日报"
+        ],
+        "source_pages": {
+          "revision": [
+            1
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    },
+    "sql-074": {
+      "status": "completed",
+      "rows": [
+        [
+          1,
+          "Music",
+          335
+        ],
+        [
+          2,
+          "Movies",
+          0
+        ],
+        [
+          3,
+          "TV Shows",
+          12
+        ],
+        [
+          4,
+          "Audiobooks",
+          0
+        ],
+        [
+          5,
+          "90’s Music",
+          151
+        ],
+        [
+          6,
+          "Audiobooks",
+          0
+        ],
+        [
+          7,
+          "Movies",
+          0
+        ],
+        [
+          8,
+          "Music",
+          335
+        ],
+        [
+          9,
+          "Music Videos",
+          1
+        ],
+        [
+          10,
+          "TV Shows",
+          12
+        ],
+        [
+          11,
+          "Brazilian Music",
+          14
+        ],
+        [
+          12,
+          "Classical",
+          73
+        ],
+        [
+          13,
+          "Classical 101 - Deep Cuts",
+          25
+        ],
+        [
+          14,
+          "Classical 101 - Next Steps",
+          25
+        ],
+        [
+          15,
+          "Classical 101 - The Basics",
+          25
+        ],
+        [
+          16,
+          "Grunge",
+          7
+        ],
+        [
+          17,
+          "Heavy Metal Classic",
+          19
+        ],
+        [
+          18,
+          "On-The-Go 1",
+          1
+        ]
+      ],
+      "ordered": true,
+      "tolerance": 0.005,
+      "reference_sql": "SELECT p.PlaylistId,p.Name,COUNT(DISTINCT t.AlbumId) FROM Playlist p LEFT JOIN PlaylistTrack pt ON pt.PlaylistId=p.PlaylistId LEFT JOIN Track t ON t.TrackId=pt.TrackId GROUP BY p.PlaylistId,p.Name ORDER BY p.PlaylistId",
+      "reference_parameters": [],
+      "reference_columns": [
+        "PlaylistId",
+        "Name",
+        "COUNT(DISTINCT t.AlbumId)"
+      ],
+      "require_evidence": true,
+      "require_text_review": true,
+      "grading_scope": "exact result rows with duplicate/null/order preservation; professional text/semantic description scored separately",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_complex",
+        "left_join",
+        "many_to_many",
+        "distinct",
+        "public_teaching"
+      ],
+      "review_requirements": {
+        "sql_scope": "Read the actual question and reference SQL; aliases may differ but columns/values may not be omitted.",
+        "provenance": "Selected database and source revision must match; no invented units or business definitions."
+      }
+    },
+    "rag-049": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "唐溪、顾衡",
+          "不能由审核复核职责推断操作员"
+        ],
+        "source_pages": {
+          "revision": [
+            2
+          ]
+        },
+        "qualifiers": [],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true
+    }
+  },
+  "review_policy": "每臂逐条记录绑定正确性、完整性、依据；原始未复核基线不能凭终态算成功。"
+}

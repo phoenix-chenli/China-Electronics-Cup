@@ -1,0 +1,154 @@
+{
+  "backend_targeted": "487 passed",
+  "frontend_targeted": "106 passed",
+  "build": "tsc and Vite passed",
+  "broad_run_before_final_boundary_patch": {
+    "passed": 3815,
+    "failed_preexisting_policy_expectations": 16,
+    "skipped": 10,
+    "baseline_comparison": "All 16 failing test ids also fail against unchanged baseline; three earlier OCR baseline failures passed with local native access."
+  },
+  "live_requests": 13,
+  "live_tests": [
+    {
+      "kind": "candidate engine",
+      "status": "completed",
+      "requests": 5,
+      "result": "10.00元"
+    },
+    {
+      "kind": "running workbench API",
+      "id": "9b6649646c4a4325b667c4ce38b06f28",
+      "status": "completed",
+      "requests": 8,
+      "elapsed_ms": 54723,
+      "result": "10.00元"
+    }
+  ],
+  "browser": {
+    "new_result_and_basis_visible": true,
+    "new_checked_badge_visible": true,
+    "old_rule_only_answer_not_checked": true
+  },
+  "source_file_count": 23,
+  "source_lines_added": 1568,
+  "source_lines_removed": 38,
+  "report_and_ppt_changes": 0,
+  "source_file_deltas": [
+    {
+      "path": "backend/answer_composer.py",
+      "added": 12,
+      "removed": 3
+    },
+    {
+      "path": "backend/answer_contract.py",
+      "added": 16,
+      "removed": 0
+    },
+    {
+      "path": "backend/answer_service.py",
+      "added": 6,
+      "removed": 7
+    },
+    {
+      "path": "backend/calculation_requirements.py",
+      "added": 397,
+      "removed": 0
+    },
+    {
+      "path": "backend/completeness.py",
+      "added": 1,
+      "removed": 0
+    },
+    {
+      "path": "backend/conversion_rules.py",
+      "added": 108,
+      "removed": 0
+    },
+    {
+      "path": "backend/cross_source_engine.py",
+      "added": 13,
+      "removed": 1
+    },
+    {
+      "path": "backend/document_engine.py",
+      "added": 6,
+      "removed": 1
+    },
+    {
+      "path": "backend/formula_engine.py",
+      "added": 14,
+      "removed": 6
+    },
+    {
+      "path": "backend/user_scenarios.py",
+      "added": 62,
+      "removed": 2
+    },
+    {
+      "path": "frontend/src/AnswerReading.tsx",
+      "added": 19,
+      "removed": 5
+    },
+    {
+      "path": "frontend/src/ConversationFlow.tsx",
+      "added": 3,
+      "removed": 3
+    },
+    {
+      "path": "frontend/src/answerPresentation.ts",
+      "added": 18,
+      "removed": 0
+    },
+    {
+      "path": "frontend/src/answerPublication.ts",
+      "added": 76,
+      "removed": 0
+    },
+    {
+      "path": "frontend/src/researchTypes.ts",
+      "added": 2,
+      "removed": 2
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "frontend/tests/answerPresentation.test.mjs",
+      "added": 17,
+      "removed": 1
+    },
+    {
+      "path": "frontend/tests/answerPublication.test.mjs",
+      "added": 108,
+      "removed": 0
+    },
+    {
+      "path": "frontend/tests/answerRendering.test.mjs",
+      "added": 57,
+      "removed": 5
+    },
+    {
+      "path": "frontend/tests/workbenchInteraction.test.mjs",
+      "added": 4,
+      "removed": 1
+    },
+    {
+      "path": "tests/test_calculation_answer_regression.py",
+      "added": 186,
+      "removed": 0
+    },
+    {
+      "path": "tests/test_calculation_requirements.py",
+      "added": 349,
+      "removed": 0
+    },
+    {
+      "path": "tests/test_conversion_rules.py",
+      "added": 92,
+      "removed": 0
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "石景山区2024年统计公报.pdf",
+    "file": "石景山区2024年统计公报.pdf",
+    "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+    "license": "公开发布，未声明开放许可证；保留官方机构及出处",
+    "note": "官方原始字节，12页原生PDF；2024年数据为初步统计数。文件内标题元数据陈旧，标题以正文首页为准。",
+    "source_group": "shijingshan_stats_2024",
+    "derived_from": null,
+    "source_type": "official_original",
+    "publication_status": "preliminary_statistics",
+    "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+    "quality_notes": [
+      "PDF内部标题年份为2022，正文为2024，以正文为准。",
+      "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+    ]
+  },
+  {
+    "name": "人形机器人产业方案2024_征求意见稿.docx",
+    "file": "人形机器人产业方案2024_征求意见稿.docx",
+    "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/ztzl/Y2021/policyDocs/zxzj/202510/P020240828542953434709.docx",
+    "license": "公开发布，未声明开放许可证；保留官方机构及出处",
+    "note": "官方原生Word附件；2024年公开征求意见材料，未核实后续正式版本，不表示正式生效政策或已完成任务。Word按逻辑段落阅读。",
+    "source_group": "shijingshan_robot_consultation_2024",
+    "derived_from": null,
+    "source_type": "official_original",
+    "publication_status": "public_consultation_draft",
+    "sha256": "702065300f18f4df269631ae63c182e769574ed7f5f21bd735c358f2975666e8",
+    "quality_notes": []
+  },
+  {
+    "name": "人形机器人产业方案2024_起草说明.docx",
+    "file": "人形机器人产业方案2024_起草说明.docx",
+    "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/ztzl/Y2021/policyDocs/zxzj/202510/P020240828532086679775.docx",
+    "license": "公开发布，未声明开放许可证；保留官方机构及出处",
+    "note": "官方原生Word附件；2024年公开征求意见材料，未核实后续正式版本，不表示正式生效政策或已完成任务。Word按逻辑段落阅读。",
+    "source_group": "shijingshan_robot_consultation_2024",
+    "derived_from": null,
+    "source_type": "official_original",
+    "publication_status": "public_consultation_draft",
+    "sha256": "c2e73986fe4bfc5ceaed0525b4be04f052230fce5e31228e1d0c0002153ec975",
+    "quality_notes": []
+  },
+  {
+    "name": "石景山区2024年产业指标_原表转录.csv",
+    "file": "石景山区2024年产业指标_原表转录.csv",
+    "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+    "license": "沿用原文公开发布状态，未声明开放许可证；转换件不扩大授权",
+    "note": "由统计公报第2页表1逐值转录；19行、57个数值已与原文和原页图核对。合计、产业、行业为不同层级，不可混合求和。pct列保存百分数数值，例如6.5表示6.5%。不是官方发布CSV。",
+    "source_group": "shijingshan_stats_2024",
+    "derived_from": "石景山区2024年统计公报.pdf#page=2",
+    "source_type": "table_transcription",
+    "sha256": "6947827bf709534396c1440ae54fabe9c90310480603cf088e0764eb1955d9fc",
+    "quality_notes": [
+      "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+    ]
+  },
+  {
+    "name": "石景山区统计公报_第2页原表.png",
+    "file": "石景山区统计公报_第2页原表.png",
+    "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+    "license": "沿用原文公开发布状态，未声明开放许可证；转换件不扩大授权",
+    "note": "同一PDF第2页的既有页图，不是新增独立来源。用于本地文字识别与原件对照；识别结果及质量提示以实际解析记录为准。",
+    "source_group": "shijingshan_stats_2024",
+    "derived_from": "石景山区2024年统计公报.pdf#page=2",
+    "source_type": "pdf_page_render",
+    "sha256": "77cddc6ce84e3fe6de7ae1a13d9df7d99747f77bff26c9c56e4be2987bb6aa18",
+    "quality_notes": [
+      "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+    ]
+  }
+]

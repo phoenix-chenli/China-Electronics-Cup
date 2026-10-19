@@ -1,0 +1,106 @@
+{
+  "schema_version": "zhiheng.complex-elements-evidence.v1",
+  "scope": "只读复用真实原件核验、既有原页图片与冻结OCR记录；未重跑OCR或模型API",
+  "page_unit": "PDF物理页，1起算，包括封面目录；目录结构树本身不强行指定物理页",
+  "elements": [
+    {
+      "element": "图与曲线",
+      "examples": [
+        {
+          "source_id": "工程A03",
+          "physical_page": 260,
+          "location": "Figure C1",
+          "original_evidence": "浅基础设计流程图，区分岩土与结构设计步骤",
+          "verification": "既有A03_流程图260.png及冻结答案人工原页核对"
+        },
+        {
+          "source_id": "B05",
+          "physical_page": 141,
+          "location": "Figure 22，Proportional Plus Reset",
+          "original_evidence": "包含误差阶跃及PI输出随t0、t1、t2变化的多子图曲线",
+          "verification": "既有B05_p141.png与复杂元素核验.json"
+        }
+      ],
+      "product_recovery": "已标注图中事实；原件具备不等于产品恢复图形关系，最终图形问答待API实测"
+    },
+    {
+      "element": "多级或合并表格",
+      "examples": [
+        {
+          "source_id": "B11",
+          "physical_page": 84,
+          "location": "表2.1 Summary of VCF Values for a NF/RO System Modeled as a PFR；页下方2.5.2.2 Crossflow Model",
+          "original_evidence": "三组Recovery与VCF并列列组及合并表头",
+          "verification": "既有原页B11_p084.png本轮目视复核与真实OCR记录；旧复杂元素核验.json中的2.5.5.2为录入错误，以原页2.5.2.2为准"
+        },
+        {
+          "source_id": "B11",
+          "physical_page": 268,
+          "location": "Table 8.1 Schedule of Training Events",
+          "original_evidence": "培训阶段合并单元格，前部hours与后部days混合单位",
+          "verification": "既有原页B11_p268.png与真实OCR记录"
+        }
+      ],
+      "product_recovery": "第84页三条件均锚点5/5但结构表0；第268页原始/旋转各2张表，降采样1张且1单元格两路OCR不一致；未证明表格关系完整正确"
+    },
+    {
+      "element": "公式",
+      "examples": [
+        {
+          "source_id": "B10",
+          "physical_page": 43,
+          "location": "Equation 2.1和2.2",
+          "original_evidence": "UVT与A的指数及对数关系，含254 nm和光程条件",
+          "verification": "既有原页B10_p043.png与真实OCR记录"
+        }
+      ],
+      "product_recovery": "B10原始/旋转锚点命中5/5，降采样漏0.45；仅锚点检查，分式、上下标及变量关系未据此判为正确"
+    },
+    {
+      "element": "页眉页脚",
+      "examples": [
+        {
+          "source_id": "B10",
+          "physical_page": 214,
+          "location": "页眉及页脚，正文6.3.2.1所在页",
+          "original_evidence": "页眉6. Start-up and Operation of UV Facilities；页脚UV Disinfection Guidance Manual、For the Final LT2ESWTR、6-18、November 2006",
+          "verification": "2026-10-18复用B10_p214.png目视核对，非依据重复行猜测"
+        }
+      ],
+      "product_recovery": "本表证明原件位置与页码区别；未以原件存在宣称PDF页眉页脚语义已恢复。DOCX受控页眉页脚夹具另测，不计真实PDF覆盖"
+    },
+    {
+      "element": "章节层次超过3级",
+      "examples": [
+        {
+          "source_id": "B10",
+          "physical_page": 214,
+          "location": "6.3.2.1 Fouling",
+          "original_evidence": "真实正文的四级标题，不是引用其他规范的编号",
+          "verification": "既有复杂元素核验.json与B10_p214.png再次目视确认"
+        }
+      ],
+      "product_recovery": "B10真实正文四级标题已核实；产品父子层级与正文锚定仍按实际解析结果独立判断，不以原件标题直接宣称恢复成功"
+    },
+    {
+      "element": "PDF自定义结构角色",
+      "examples": [
+        {
+          "source_id": "B10",
+          "physical_page": null,
+          "location": "PDF Catalog /StructTreeRoot /RoleMap，文档级字典，无单一物理页",
+          "original_evidence": "/UVGM Fourth Level 4.1.1.1、/UVGM Table Column Headers、/UVGM Table Caption、/header及/footer映射/P；/Subscript及/Superscript映射/Span；/Shape与/InlineShape映射/Figure",
+          "verification": "2026-10-18以pypdf读取保留原件的RoleMap字典；仅核角色声明，未从声明推断页内角色实例或业务标签语义"
+        }
+      ],
+      "product_recovery": "仅确认原件声明自定义结构角色；不属于已验证业务自定义标签，不宣称产品理解其业务语义，不拿受控DOCX标签夹具替代真实原件证据"
+    }
+  ],
+  "boundaries": [
+    "本表为保留的2965页原件中抽样定位，不是逐页人工审查。",
+    "图中位置、表格归属与公式结构需回看原页，纯文本关键词命中不足以通过",
+    "AASHTO等外部引用编号不计本文档章节深度",
+    "PDF RoleMap声明与业务自定义标签语义是不同概念"
+  ],
+  "scope_adjustment": "按用户要求只保留指定12份的证据；另只读核验当前B10的RoleMap声明，未迁移已排除原件的角色，也未证明业务标签理解。"
+}

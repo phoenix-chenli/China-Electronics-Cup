@@ -1,0 +1,4684 @@
+{
+  "run_sha256": "f8a166e011f98e28f26013cd361d83d4f7ac9de83b0e2c504f7da0ac66632452",
+  "cases": [
+    {
+      "id": "cross-005",
+      "split": "development",
+      "tags": [
+        "controlled_synthetic",
+        "cross",
+        "cross_source",
+        "scope_join",
+        "provenance"
+      ],
+      "started_at": "2026-10-18T01:48:50.243974+00:00",
+      "source_sha256": {
+        "revision": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+        "tariff": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99"
+      },
+      "record": {
+        "id": "56b06cc6fb504a8da5b339454b09631f",
+        "project_id": "98f48122fa5f42fdb901d851bc8cf6c6",
+        "request_id": "f3addaf9-cd57-42b8-acf8-c2684dd975e0",
+        "question": "7月1日全站2610kWh能直接当泵P-17用电量吗？",
+        "source_id": "4cfac49afd184faa9ca656bf2ece6461",
+        "source_name": "revision_note.pdf",
+        "source_sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "mode": "multi_source",
+        "table_name": null,
+        "status": "insufficient_evidence",
+        "stage": "依据不足",
+        "created_at": "2026-10-18T01:48:50.254+00:00",
+        "updated_at": "2026-10-18T01:49:09.551+00:00",
+        "elapsed_ms": 19294,
+        "models": {
+          "table": "qwen3.8-max"
+        },
+        "error": null,
+        "warnings": [],
+        "result": {
+          "text": "本次跨资料结果未通过口径核对，请补充条件或换一种方式提问。",
+          "claims": [],
+          "evidence": [
+            {
+              "id": "E1",
+              "label": "第 1 页",
+              "kind": "text",
+              "source_id": "4cfac49afd184faa9ca656bf2ece6461",
+              "source_name": "revision_note.pdf",
+              "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "page": 1,
+              "page_label": "第 1 页",
+              "quote": "计量更正通知\n本通知签发于2025年7月3日，引用的原始日报日期为2025年7月1日。\n青湾港7月1日用电日报初始记为2160kWh，经电表原始底数复核后更正为2610kW\nh。\n更正只涉及7月1日，不涉及7月2日。旧值为转录错误，须保留更正链但不作当前值。\n7月2日已确认用电量为2400kWh。两日日报均为全站用电，不是单台泵用电。\n原始物理页 1",
+              "start": 30,
+              "end": 206
+            },
+            {
+              "id": "E2",
+              "label": "第 2 页",
+              "kind": "text",
+              "source_id": "4cfac49afd184faa9ca656bf2ece6461",
+              "source_name": "revision_note.pdf",
+              "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "page": 2,
+              "page_label": "第 2 页",
+              "quote": "版本和遗漏\n当前生效计量修订号为REV-03；REV-02标记为撤回。\n审核人为唐溪，复核人为顾衡。两人职责不等同于设备操作员。\n本文件没有提供电价和含税电费，不能根据用电量单独算出费用。\n附表注明日界线为当地时间00:00到24:00，非交班周期。\n原始物理页 2",
+              "start": 30,
+              "end": 163
+            },
+            {
+              "id": "E3",
+              "kind": "table",
+              "source_id": "8026452ffa6140e99d26a8d9254e70f2",
+              "source_name": "energy_tariff.csv",
+              "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "数据表",
+              "label": "energy_tariff.csv · 数据表",
+              "lineage": "row",
+              "row_numbers": [
+                1,
+                2,
+                3
+              ],
+              "columns": [
+                "时段",
+                "对象",
+                "用电量",
+                "电价",
+                "计量单位",
+                "价格单位",
+                "适用范围"
+              ],
+              "rows": [
+                [
+                  "2025-07-01",
+                  "全站",
+                  "2610",
+                  "0.65",
+                  "kWh",
+                  "元/kWh",
+                  "不含税"
+                ],
+                [
+                  "2025-07-02",
+                  "全站",
+                  "2400",
+                  "0.70",
+                  "kWh",
+                  "元/kWh",
+                  "不含税"
+                ],
+                [
+                  "2025-07-01",
+                  "泵P-17",
+                  "180",
+                  "0.65",
+                  "kWh",
+                  "元/kWh",
+                  "不含税"
+                ]
+              ],
+              "total_rows": null,
+              "stale": false,
+              "note": "所列行号对应原表稳定行序；仅列出前20个结果的来源位置。",
+              "table_quality": [],
+              "semantic_revision": "91017fb91e43b37db3a87c17f7ea8d1006c5151b22aa6ee41d0aececfaaa43a6",
+              "query_result": {
+                "columns": [
+                  "时段",
+                  "对象",
+                  "用电量",
+                  "电价",
+                  "计量单位",
+                  "价格单位",
+                  "适用范围"
+                ],
+                "rows": [
+                  [
+                    "2025-07-01",
+                    "全站",
+                    "2610",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ],
+                  [
+                    "2025-07-02",
+                    "全站",
+                    "2400",
+                    "0.70",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ],
+                  [
+                    "2025-07-01",
+                    "泵P-17",
+                    "180",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": false
+              },
+              "query": {
+                "sql": "SELECT * FROM \"数据表\" WHERE \"对象\" LIKE '%P-17%' OR \"对象\" LIKE '%全站%' OR \"用电量\" LIKE '%2610%'",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "时段": "数据表.时段",
+                "对象": "数据表.对象",
+                "用电量": "数据表.用电量",
+                "电价": "数据表.电价",
+                "计量单位": "数据表.计量单位",
+                "价格单位": "数据表.价格单位",
+                "适用范围": "数据表.适用范围"
+              },
+              "supporting_evidence_ids": [],
+              "original_columns": [
+                "ROWID",
+                "价格单位",
+                "对象",
+                "时段",
+                "用电量",
+                "电价",
+                "计量单位",
+                "适用范围"
+              ],
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "f3cd4a3e1667de9cedf489c18c3e2102a35656b63119e5abaed48a7fd5f50473",
+                "context_alias": "QCf3cd4a3e1667",
+                "query_fingerprint": "64d20a3bc115a322ca829fbba12a24d5cb887272c74f2bbda2da00ef9d807c6b",
+                "source": {
+                  "source_id": "8026452ffa6140e99d26a8d9254e70f2",
+                  "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "91017fb91e43b37db3a87c17f7ea8d1006c5151b22aa6ee41d0aececfaaa43a6"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "时段"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "对象"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "用电量"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "电价"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "计量单位"
+                  },
+                  {
+                    "column_index": 5,
+                    "label": "价格单位"
+                  },
+                  {
+                    "column_index": 6,
+                    "label": "适用范围"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-01"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "全站"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2610"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.65"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R1C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-02"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "全站"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2400"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.70"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R2C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-01"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "泵P-17"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "180"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.65"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Qf3cd4a3e1667:R3C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            }
+          ],
+          "notes": [],
+          "steps": [
+            {
+              "id": "S1",
+              "title": "查找原文",
+              "kind": "search",
+              "depends_on": [],
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ],
+              "summary": "检索原文，取得2段依据。",
+              "search": {
+                "source_id": "4cfac49afd184faa9ca656bf2ece6461",
+                "query": "全站 2610 P-17 泵",
+                "query_bindings": [],
+                "page": null,
+                "truncated": false
+              }
+            },
+            {
+              "id": "S2",
+              "title": "查询数据",
+              "kind": "sql",
+              "depends_on": [],
+              "evidence_ids": [
+                "E3"
+              ],
+              "summary": "只读查询返回3行。",
+              "query": {
+                "sql": "SELECT * FROM \"数据表\" WHERE \"对象\" LIKE '%P-17%' OR \"对象\" LIKE '%全站%' OR \"用电量\" LIKE '%2610%'",
+                "parameters": [],
+                "columns": [
+                  "时段",
+                  "对象",
+                  "用电量",
+                  "电价",
+                  "计量单位",
+                  "价格单位",
+                  "适用范围"
+                ],
+                "rows": [
+                  [
+                    "2025-07-01",
+                    "全站",
+                    "2610",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ],
+                  [
+                    "2025-07-02",
+                    "全站",
+                    "2400",
+                    "0.70",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ],
+                  [
+                    "2025-07-01",
+                    "泵P-17",
+                    "180",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ]
+                ],
+                "returned_rows": 3,
+                "truncated": false,
+                "used_tables": [
+                  "数据表"
+                ],
+                "parameter_bindings": []
+              },
+              "query_fingerprint": "1801e730b93260546cd88f2be583e797f4328663ea8117178d722012ccba5804"
+            }
+          ],
+          "calculations": [],
+          "source_groups": [
+            {
+              "group_id": "G1",
+              "source_ids": [
+                "4cfac49afd184faa9ca656bf2ece6461",
+                "8026452ffa6140e99d26a8d9254e70f2"
+              ]
+            }
+          ],
+          "diagnostics": {
+            "tool_errors": [
+              {
+                "kind": "query_fact",
+                "message": "query_fact不能混入计算、旧绑定或其他字段",
+                "available_evidence_ids": [
+                  "E1",
+                  "E2",
+                  "E3"
+                ],
+                "available_calculation_ids": [],
+                "claim_index": 1,
+                "repair_guidance": "实际SQL输出事实优先每格一条query_fact候选。以下两种单位选择互斥，所有ID均须从当前query_result_context复制。context_id优先填该上下文明示的短context_alias，完整context_id也兼容；未知标识不自动纠错。\n单位格示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[\"同一行对象格ID\",\"同一行完整时期格ID\"],\"unit_cell_id\":\"同一行真实单位格ID\"}}\n列映射示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[],\"unit_from_column\":true}}\nunit_from_column仅在该目标输出列已有column_units.unit和非空source_columns时可用，必须布尔true；无单位依据时两种字段均省略。query_fact内不能自填unit/text/statement/value/行列号。控制器复制真实列名、完整值和显式选择的实体/单位生成待核验候选，不替你选择对象或推测范围。多行结果的entity_cells必须唯一定位该行，保留完整对象/时期/必要口径。\n同一claim若额外附带text，只作未信任审计并完全忽略，不作为正文、关系说明或覆盖依据；请直接只交query_fact。比较、差异原因等额外结论另用有真实依据的普通claim，不能依赖被忽略text表达必答项。复杂原表仍用table_bindings，普通正文用text+evidence_ids；计算结论单独text+calculation_ids，只述已执行K结果及必要对象/口径，所需输入来源另列query_fact。历史query_bindings仍兼容，但不得同时混用旧绑定。query_fact不能证明不存在、全量排名或总体范围，全部候选仍须独立关系和覆盖复核。\n"
+              },
+              {
+                "kind": "query_fact",
+                "message": "query_fact不能混入计算、旧绑定或其他字段",
+                "available_evidence_ids": [
+                  "E1",
+                  "E2",
+                  "E3"
+                ],
+                "available_calculation_ids": [],
+                "claim_index": 1,
+                "repair_guidance": "实际SQL输出事实优先每格一条query_fact候选。以下两种单位选择互斥，所有ID均须从当前query_result_context复制。context_id优先填该上下文明示的短context_alias，完整context_id也兼容；未知标识不自动纠错。\n单位格示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[\"同一行对象格ID\",\"同一行完整时期格ID\"],\"unit_cell_id\":\"同一行真实单位格ID\"}}\n列映射示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[],\"unit_from_column\":true}}\nunit_from_column仅在该目标输出列已有column_units.unit和非空source_columns时可用，必须布尔true；无单位依据时两种字段均省略。query_fact内不能自填unit/text/statement/value/行列号。控制器复制真实列名、完整值和显式选择的实体/单位生成待核验候选，不替你选择对象或推测范围。多行结果的entity_cells必须唯一定位该行，保留完整对象/时期/必要口径。\n同一claim若额外附带text，只作未信任审计并完全忽略，不作为正文、关系说明或覆盖依据；请直接只交query_fact。比较、差异原因等额外结论另用有真实依据的普通claim，不能依赖被忽略text表达必答项。复杂原表仍用table_bindings，普通正文用text+evidence_ids；计算结论单独text+calculation_ids，只述已执行K结果及必要对象/口径，所需输入来源另列query_fact。历史query_bindings仍兼容，但不得同时混用旧绑定。query_fact不能证明不存在、全量排名或总体范围，全部候选仍须独立关系和覆盖复核。\n"
+              },
+              {
+                "kind": "query_fact",
+                "message": "query_fact不能混入计算、旧绑定或其他字段",
+                "available_evidence_ids": [
+                  "E1",
+                  "E2",
+                  "E3"
+                ],
+                "available_calculation_ids": [],
+                "claim_index": 1,
+                "repair_guidance": "实际SQL输出事实优先每格一条query_fact候选。以下两种单位选择互斥，所有ID均须从当前query_result_context复制。context_id优先填该上下文明示的短context_alias，完整context_id也兼容；未知标识不自动纠错。\n单位格示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[\"同一行对象格ID\",\"同一行完整时期格ID\"],\"unit_cell_id\":\"同一行真实单位格ID\"}}\n列映射示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[],\"unit_from_column\":true}}\nunit_from_column仅在该目标输出列已有column_units.unit和非空source_columns时可用，必须布尔true；无单位依据时两种字段均省略。query_fact内不能自填unit/text/statement/value/行列号。控制器复制真实列名、完整值和显式选择的实体/单位生成待核验候选，不替你选择对象或推测范围。多行结果的entity_cells必须唯一定位该行，保留完整对象/时期/必要口径。\n同一claim若额外附带text，只作未信任审计并完全忽略，不作为正文、关系说明或覆盖依据；请直接只交query_fact。比较、差异原因等额外结论另用有真实依据的普通claim，不能依赖被忽略text表达必答项。复杂原表仍用table_bindings，普通正文用text+evidence_ids；计算结论单独text+calculation_ids，只述已执行K结果及必要对象/口径，所需输入来源另列query_fact。历史query_bindings仍兼容，但不得同时混用旧绑定。query_fact不能证明不存在、全量排名或总体范围，全部候选仍须独立关系和覆盖复核。\n"
+              }
+            ],
+            "rejections": [
+              {
+                "stage": "candidate_validation",
+                "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                "kind": "query_fact",
+                "claim_index": 1,
+                "repair_guidance": "实际SQL输出事实优先每格一条query_fact候选。以下两种单位选择互斥，所有ID均须从当前query_result_context复制。context_id优先填该上下文明示的短context_alias，完整context_id也兼容；未知标识不自动纠错。\n单位格示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[\"同一行对象格ID\",\"同一行完整时期格ID\"],\"unit_cell_id\":\"同一行真实单位格ID\"}}\n列映射示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[],\"unit_from_column\":true}}\nunit_from_column仅在该目标输出列已有column_units.unit和非空source_columns时可用，必须布尔true；无单位依据时两种字段均省略。query_fact内不能自填unit/text/statement/value/行列号。控制器复制真实列名、完整值和显式选择的实体/单位生成待核验候选，不替你选择对象或推测范围。多行结果的entity_cells必须唯一定位该行，保留完整对象/时期/必要口径。\n同一claim若额外附带text，只作未信任审计并完全忽略，不作为正文、关系说明或覆盖依据；请直接只交query_fact。比较、差异原因等额外结论另用有真实依据的普通claim，不能依赖被忽略text表达必答项。复杂原表仍用table_bindings，普通正文用text+evidence_ids；计算结论单独text+calculation_ids，只述已执行K结果及必要对象/口径，所需输入来源另列query_fact。历史query_bindings仍兼容，但不得同时混用旧绑定。query_fact不能证明不存在、全量排名或总体范围，全部候选仍须独立关系和覆盖复核。\n"
+              },
+              {
+                "stage": "candidate_validation",
+                "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                "kind": "query_fact",
+                "claim_index": 1,
+                "repair_guidance": "实际SQL输出事实优先每格一条query_fact候选。以下两种单位选择互斥，所有ID均须从当前query_result_context复制。context_id优先填该上下文明示的短context_alias，完整context_id也兼容；未知标识不自动纠错。\n单位格示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[\"同一行对象格ID\",\"同一行完整时期格ID\"],\"unit_cell_id\":\"同一行真实单位格ID\"}}\n列映射示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[],\"unit_from_column\":true}}\nunit_from_column仅在该目标输出列已有column_units.unit和非空source_columns时可用，必须布尔true；无单位依据时两种字段均省略。query_fact内不能自填unit/text/statement/value/行列号。控制器复制真实列名、完整值和显式选择的实体/单位生成待核验候选，不替你选择对象或推测范围。多行结果的entity_cells必须唯一定位该行，保留完整对象/时期/必要口径。\n同一claim若额外附带text，只作未信任审计并完全忽略，不作为正文、关系说明或覆盖依据；请直接只交query_fact。比较、差异原因等额外结论另用有真实依据的普通claim，不能依赖被忽略text表达必答项。复杂原表仍用table_bindings，普通正文用text+evidence_ids；计算结论单独text+calculation_ids，只述已执行K结果及必要对象/口径，所需输入来源另列query_fact。历史query_bindings仍兼容，但不得同时混用旧绑定。query_fact不能证明不存在、全量排名或总体范围，全部候选仍须独立关系和覆盖复核。\n"
+              },
+              {
+                "stage": "candidate_validation",
+                "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                "kind": "query_fact",
+                "claim_index": 1,
+                "repair_guidance": "实际SQL输出事实优先每格一条query_fact候选。以下两种单位选择互斥，所有ID均须从当前query_result_context复制。context_id优先填该上下文明示的短context_alias，完整context_id也兼容；未知标识不自动纠错。\n单位格示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[\"同一行对象格ID\",\"同一行完整时期格ID\"],\"unit_cell_id\":\"同一行真实单位格ID\"}}\n列映射示例：{\"query_fact\":{\"evidence_id\":\"E1\",\"context_id\":\"当前上下文ID\",\"cell_id\":\"目标格ID\",\"entity_cells\":[],\"unit_from_column\":true}}\nunit_from_column仅在该目标输出列已有column_units.unit和非空source_columns时可用，必须布尔true；无单位依据时两种字段均省略。query_fact内不能自填unit/text/statement/value/行列号。控制器复制真实列名、完整值和显式选择的实体/单位生成待核验候选，不替你选择对象或推测范围。多行结果的entity_cells必须唯一定位该行，保留完整对象/时期/必要口径。\n同一claim若额外附带text，只作未信任审计并完全忽略，不作为正文、关系说明或覆盖依据；请直接只交query_fact。比较、差异原因等额外结论另用有真实依据的普通claim，不能依赖被忽略text表达必答项。复杂原表仍用table_bindings，普通正文用text+evidence_ids；计算结论单独text+calculation_ids，只述已执行K结果及必要对象/口径，所需输入来源另列query_fact。历史query_bindings仍兼容，但不得同时混用旧绑定。query_fact不能证明不存在、全量排名或总体范围，全部候选仍须独立关系和覆盖复核。\n"
+              }
+            ],
+            "candidate_attempts": [
+              {
+                "projection_version": 2,
+                "attempt_id": "A2",
+                "round": 2,
+                "stage": "candidate_validation",
+                "scope": "candidate_attempt",
+                "validation_status": "rejected",
+                "publication_status": "not_adopted",
+                "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                "claim_index": 1,
+                "original_claim_count": 1,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "不能。7月1日全站2610kWh是全站用电量，不是单台泵用电；同日泵P-17的实际用电量为180kWh。",
+                    "query_fact": {
+                      "evidence_id": "E3",
+                      "context_id": "QCf3cd4a3e1667",
+                      "cell_id": "Qf3cd4a3e1667:R3C3",
+                      "entity_cells": [
+                        "Qf3cd4a3e1667:R3C1",
+                        "Qf3cd4a3e1667:R3C2"
+                      ]
+                    },
+                    "evidence_ids": [
+                      "E1",
+                      "E3"
+                    ],
+                    "calculation_ids": []
+                  }
+                ],
+                "omitted_claims": 0,
+                "truncated": false,
+                "redacted": false,
+                "original_lengths": {},
+                "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                "error_kind": "query_fact"
+              },
+              {
+                "projection_version": 2,
+                "attempt_id": "A3",
+                "round": 3,
+                "stage": "candidate_validation",
+                "scope": "candidate_attempt",
+                "validation_status": "rejected",
+                "publication_status": "not_adopted",
+                "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                "claim_index": 1,
+                "original_claim_count": 1,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "不能。7月1日全站2610kWh是全站用电量，不是单台泵用电；同日泵P-17的实际用电量为180kWh。",
+                    "query_fact": {
+                      "evidence_id": "E3",
+                      "context_id": "QCf3cd4a3e1667",
+                      "cell_id": "Qf3cd4a3e1667:R3C3",
+                      "entity_cells": [
+                        "Qf3cd4a3e1667:R3C1",
+                        "Qf3cd4a3e1667:R3C2"
+                      ]
+                    },
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": []
+                  }
+                ],
+                "omitted_claims": 0,
+                "truncated": false,
+                "redacted": false,
+                "original_lengths": {},
+                "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                "error_kind": "query_fact"
+              },
+              {
+                "projection_version": 2,
+                "attempt_id": "A4",
+                "round": 4,
+                "stage": "candidate_validation",
+                "scope": "candidate_attempt",
+                "validation_status": "rejected",
+                "publication_status": "not_adopted",
+                "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                "claim_index": 1,
+                "original_claim_count": 1,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "不能。7月1日全站2610kWh是全站用电量，不是单台泵用电；同日泵P-17的实际用电量为180kWh。",
+                    "query_fact": {
+                      "evidence_id": "E3",
+                      "context_id": "QCf3cd4a3e1667",
+                      "cell_id": "Qf3cd4a3e1667:R3C3",
+                      "entity_cells": [
+                        "Qf3cd4a3e1667:R3C1",
+                        "Qf3cd4a3e1667:R3C2"
+                      ]
+                    },
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": []
+                  }
+                ],
+                "omitted_claims": 0,
+                "truncated": false,
+                "redacted": false,
+                "original_lengths": {},
+                "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                "error_kind": "query_fact"
+              }
+            ],
+            "protocol_recoveries": [],
+            "audit_sequence": 3,
+            "audit_history": [
+              {
+                "sequence": 1,
+                "kind": "candidate_rejected",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A2",
+                  "round": 2,
+                  "stage": "candidate_validation",
+                  "scope": "candidate_attempt",
+                  "validation_status": "rejected",
+                  "publication_status": "not_adopted",
+                  "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                  "claim_index": 1,
+                  "original_claim_count": 1,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "不能。7月1日全站2610kWh是全站用电量，不是单台泵用电；同日泵P-17的实际用电量为180kWh。",
+                      "query_fact": {
+                        "evidence_id": "E3",
+                        "context_id": "QCf3cd4a3e1667",
+                        "cell_id": "Qf3cd4a3e1667:R3C3",
+                        "entity_cells": [
+                          "Qf3cd4a3e1667:R3C1",
+                          "Qf3cd4a3e1667:R3C2"
+                        ]
+                      },
+                      "evidence_ids": [
+                        "E1",
+                        "E3"
+                      ],
+                      "calculation_ids": []
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                  "error_kind": "query_fact"
+                }
+              },
+              {
+                "sequence": 2,
+                "kind": "candidate_rejected",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A3",
+                  "round": 3,
+                  "stage": "candidate_validation",
+                  "scope": "candidate_attempt",
+                  "validation_status": "rejected",
+                  "publication_status": "not_adopted",
+                  "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                  "claim_index": 1,
+                  "original_claim_count": 1,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "不能。7月1日全站2610kWh是全站用电量，不是单台泵用电；同日泵P-17的实际用电量为180kWh。",
+                      "query_fact": {
+                        "evidence_id": "E3",
+                        "context_id": "QCf3cd4a3e1667",
+                        "cell_id": "Qf3cd4a3e1667:R3C3",
+                        "entity_cells": [
+                          "Qf3cd4a3e1667:R3C1",
+                          "Qf3cd4a3e1667:R3C2"
+                        ]
+                      },
+                      "evidence_ids": [
+                        "E1"
+                      ],
+                      "calculation_ids": []
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                  "error_kind": "query_fact"
+                }
+              },
+              {
+                "sequence": 3,
+                "kind": "candidate_rejected",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A4",
+                  "round": 4,
+                  "stage": "candidate_validation",
+                  "scope": "candidate_attempt",
+                  "validation_status": "rejected",
+                  "publication_status": "not_adopted",
+                  "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                  "claim_index": 1,
+                  "original_claim_count": 1,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "不能。7月1日全站2610kWh是全站用电量，不是单台泵用电；同日泵P-17的实际用电量为180kWh。",
+                      "query_fact": {
+                        "evidence_id": "E3",
+                        "context_id": "QCf3cd4a3e1667",
+                        "cell_id": "Qf3cd4a3e1667:R3C3",
+                        "entity_cells": [
+                          "Qf3cd4a3e1667:R3C1",
+                          "Qf3cd4a3e1667:R3C2"
+                        ]
+                      },
+                      "evidence_ids": [
+                        "E1"
+                      ],
+                      "calculation_ids": []
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "query_fact不能混入计算、旧绑定或其他字段",
+                  "error_kind": "query_fact"
+                }
+              }
+            ],
+            "received_reviews": [],
+            "rejected_calculation_actions": [],
+            "calculation_action_rejection_count": 0,
+            "calculation_action_omissions": 0,
+            "candidate_audit_count": 3,
+            "received_review_count": 0,
+            "candidate_history_truncated": false,
+            "review_history_truncated": false
+          },
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "未发布未经复核的数值结论"
+            ],
+            "reason": "review",
+            "negative_review": false,
+            "tool_actions": 2,
+            "planner_rounds": 4,
+            "planning_progress": {
+              "productive_rounds": 1,
+              "recovery_rounds": 2,
+              "consecutive_no_progress": 2,
+              "max_consecutive_no_progress": 3,
+              "mechanical_repair_advances": 0,
+              "mechanical_repair_audit": [
+                {
+                  "advance": false,
+                  "ranks": [
+                    100
+                  ],
+                  "gains": [
+                    {
+                      "claim_index": 1,
+                      "before": 0,
+                      "after": 100
+                    }
+                  ]
+                },
+                {
+                  "advance": false,
+                  "ranks": [
+                    0
+                  ],
+                  "gains": []
+                },
+                {
+                  "advance": false,
+                  "ranks": [
+                    0
+                  ],
+                  "gains": []
+                }
+              ],
+              "mechanical_repair_audit_truncated": false,
+              "mechanical_rank_meaning": "有限协议检查高水位，不是事实正确率或置信度；不跳过独立核验"
+            }
+          },
+          "completeness": {
+            "version": "explicit-coverage-v1",
+            "status": "unknown",
+            "complete": null,
+            "items": [
+              {
+                "id": "Q1",
+                "text": "7月1日全站2610kWh能直接当泵P-17用电量吗？",
+                "status": "unknown",
+                "claim_ids": [],
+                "evidence_ids": []
+              }
+            ],
+            "meaning": "明确分项的模型覆盖判断；缺少逐项结果时未知，不是准确率或人工验收。",
+            "validation_errors": [
+              {
+                "field": "coverage",
+                "code": "missing_field"
+              }
+            ]
+          },
+          "coverage_claims": [],
+          "retrieval_audit": {
+            "4cfac49afd184faa9ca656bf2ece6461": {
+              "index_generation": "80f927d29a69ef7c1e26c0ac1ad0f677ba38bd829c94699f5760b3f637d646c3",
+              "cache_hit": true,
+              "mode": "hybrid",
+              "version": {
+                "chunker": "anchored-rows-headings900-overlap120-v3",
+                "embedding": {
+                  "algorithm": "e5-prefix-mean-l2-all-windows512-stride64-v1",
+                  "dimension": 384,
+                  "license": "MIT",
+                  "model": "Xenova/multilingual-e5-small",
+                  "revision": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+                  "tokenizer_sha256": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39",
+                  "weights_sha256": "f80102d3f2a1229f387d3c81909990d8945513e347b0eab049f7de3c6f98c193"
+                },
+                "lexical": "bm25-variants-search-variants-1",
+                "source": {
+                  "id": "4cfac49afd184faa9ca656bf2ece6461",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "revision": "6720b46d34526b297b8abf304fa2a421159003d4d9d46b8d982299512863cd25",
+                  "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21"
+                }
+              },
+              "coverage": {
+                "fallback_reason": null,
+                "first_indexed_position": {
+                  "page": 1,
+                  "start": 30
+                },
+                "full_vector_scan": true,
+                "indexed_characters": 309,
+                "indexed_page_count": 2,
+                "last_indexed_position": {
+                  "end": 163,
+                  "page": 2
+                },
+                "parsed_page_count": 2,
+                "parser_processing_truncated": false,
+                "parser_warnings": [],
+                "resumed_chunks": 0,
+                "source_extraction_limits": {
+                  "max_document_seconds": 180,
+                  "max_image_pixels": 40000000,
+                  "max_ocr_pages": 40,
+                  "max_page_seconds": 20,
+                  "max_pages": 500
+                }
+              },
+              "scan_truncated": false,
+              "searches": [
+                {
+                  "query": "全站 2610 P-17 泵",
+                  "focus": null,
+                  "mode_requested": "hybrid",
+                  "mode_used": "hybrid",
+                  "fallback_reason": null,
+                  "indexed_chunks": 2,
+                  "vector_rows_scanned": 2,
+                  "lexical_candidate_count": 1,
+                  "vector_candidate_count": 2,
+                  "candidate_limit": 32,
+                  "query_terms_truncated": false,
+                  "lexical_query_variants": [
+                    "全站 2610 P-17 泵"
+                  ],
+                  "query_normalization_scope": "search_only",
+                  "query_characters_truncated": false,
+                  "selected_chunk_ids": [
+                    "p1:30-206",
+                    "p2:30-163"
+                  ],
+                  "excluded_chunk_ids": [],
+                  "selected_pages_filter": null,
+                  "eligible_chunks": 2,
+                  "scan_truncated": false,
+                  "scope": {
+                    "project_id": "98f48122fa5f42fdb901d851bc8cf6c6",
+                    "source_ids": [
+                      "4cfac49afd184faa9ca656bf2ece6461"
+                    ]
+                  },
+                  "reranker": null,
+                  "elapsed_ms": 19.59
+                }
+              ]
+            }
+          },
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "unavailable",
+            "model_calls": 0,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {},
+            "normalized_question": null,
+            "intent_review": {
+              "status": "not_available"
+            },
+            "protocol_attempts": [],
+            "reason": "no_verified_published_facts"
+          },
+          "trace": [
+            {
+              "stage": "检查来源版本",
+              "elapsed_ms": 0
+            },
+            {
+              "stage": "正在关联资料与查找依据",
+              "elapsed_ms": 8
+            },
+            {
+              "stage": "正在关联资料与查找依据",
+              "elapsed_ms": 3506
+            },
+            {
+              "stage": "正在关联资料与查找依据",
+              "elapsed_ms": 7605
+            },
+            {
+              "stage": "正在关联资料与查找依据",
+              "elapsed_ms": 15697
+            },
+            {
+              "stage": "依据不足",
+              "elapsed_ms": 19294
+            }
+          ],
+          "answer_plan": {
+            "version": "answer-plan-1",
+            "kind": "missing_evidence",
+            "mode": "multi_source",
+            "claim_order": [],
+            "assumptions_added": false
+          },
+          "display_blocks": [
+            {
+              "id": "coverage-gap",
+              "kind": "coverage_gap",
+              "items": [
+                {
+                  "question_id": "Q1",
+                  "question_text": "7月1日全站2610kWh能直接当泵P-17用电量吗？",
+                  "coverage_status": "unknown"
+                }
+              ],
+              "text": "当前已读取的资料尚不足以形成可核验的完整答案。",
+              "original_source_absence_claimed": false
+            }
+          ],
+          "composition_audit": {
+            "version": "exact-answer-composition-1",
+            "method": "lossless_published_fact_projection",
+            "original_text": "本次跨资料结果未通过口径核对，请补充条件或换一种方式提问。",
+            "original_text_sha256": "ee92e849017af2a71865019e4f92cdcea8ba47c5ef7f444cc7430f6483e1090c",
+            "new_model_calls": 0,
+            "semantic_rewrite_performed": false,
+            "publication_basis": "terminal_engine_published_claims",
+            "issues": [],
+            "status": "ready",
+            "checks": {
+              "all_published_claims_preserved": true,
+              "claim_texts_exactly_preserved": true,
+              "fact_citations_adjacent": true,
+              "rejected_audit_content_excluded": true,
+              "numeric_entities_years_qualifiers_unchanged": true
+            }
+          },
+          "schema_version": "zhiheng.answer-result.v1",
+          "result_tables": [],
+          "coverage": {
+            "version": "explicit-coverage-v1",
+            "status": "unknown",
+            "complete": null,
+            "items": [
+              {
+                "id": "Q1",
+                "text": "7月1日全站2610kWh能直接当泵P-17用电量吗？",
+                "status": "unknown",
+                "claim_ids": [],
+                "evidence_ids": []
+              }
+            ],
+            "meaning": "明确分项的模型覆盖判断；缺少逐项结果时未知，不是准确率或人工验收。",
+            "validation_errors": [
+              {
+                "field": "coverage",
+                "code": "missing_field"
+              }
+            ]
+          },
+          "evidence_graph": {
+            "schema_version": "zhiheng.evidence-graph.v1",
+            "nodes": [
+              {
+                "id": "source:4cfac49afd184faa9ca656bf2ece6461",
+                "kind": "source",
+                "source_id": "4cfac49afd184faa9ca656bf2ece6461",
+                "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+                "parser_version": "zhiheng-multimodal-3.1"
+              },
+              {
+                "id": "evidence:E1",
+                "kind": "evidence",
+                "evidence_id": "E1",
+                "precision": "text_span",
+                "page": 1,
+                "table_name": null
+              },
+              {
+                "id": "evidence:E2",
+                "kind": "evidence",
+                "evidence_id": "E2",
+                "precision": "text_span",
+                "page": 2,
+                "table_name": null
+              },
+              {
+                "id": "source:8026452ffa6140e99d26a8d9254e70f2",
+                "kind": "source",
+                "source_id": "8026452ffa6140e99d26a8d9254e70f2",
+                "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+                "parser_version": "zhiheng-multimodal-3.1"
+              },
+              {
+                "id": "evidence:E3",
+                "kind": "evidence",
+                "evidence_id": "E3",
+                "precision": "query_scope",
+                "page": null,
+                "table_name": "数据表"
+              }
+            ],
+            "edges": [
+              {
+                "source": "source:4cfac49afd184faa9ca656bf2ece6461",
+                "target": "evidence:E1",
+                "relation": "supports"
+              },
+              {
+                "source": "source:4cfac49afd184faa9ca656bf2ece6461",
+                "target": "evidence:E2",
+                "relation": "supports"
+              },
+              {
+                "source": "source:8026452ffa6140e99d26a8d9254e70f2",
+                "target": "evidence:E3",
+                "relation": "supports"
+              }
+            ],
+            "unresolved": [],
+            "source_groups": [
+              {
+                "group_id": "G1",
+                "source_ids": [
+                  "4cfac49afd184faa9ca656bf2ece6461",
+                  "8026452ffa6140e99d26a8d9254e70f2"
+                ]
+              }
+            ]
+          }
+        },
+        "parent_answer_id": null,
+        "conversation_id": "56b06cc6fb504a8da5b339454b09631f",
+        "turn_index": 1,
+        "normalized_question": null,
+        "intent": null,
+        "source_ids": [
+          "4cfac49afd184faa9ca656bf2ece6461",
+          "8026452ffa6140e99d26a8d9254e70f2"
+        ],
+        "sources": [
+          {
+            "id": "4cfac49afd184faa9ca656bf2ece6461",
+            "name": "revision_note.pdf",
+            "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "6720b46d34526b297b8abf304fa2a421159003d4d9d46b8d982299512863cd25",
+            "semantic_revision": "7f55e0a09bd924ff42d89e4f55b8603dcd2c83f956b35eb56704a0118fc17ed9"
+          },
+          {
+            "id": "8026452ffa6140e99d26a8d9254e70f2",
+            "name": "energy_tariff.csv",
+            "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "378736db9619802c54927d04d9f4716111db42a69a32e02c98b07ff0d1a4d44f",
+            "semantic_revision": "91017fb91e43b37db3a87c17f7ea8d1006c5151b22aa6ee41d0aececfaaa43a6"
+          }
+        ],
+        "schema_version": "zhiheng.answer.v6",
+        "context_revision": "cef884d91323e5cfb7ff9fabaf1a2ec0f2e7523b2f8dac6a04cf9d29e22b4c13",
+        "source_revisions": [
+          {
+            "id": "4cfac49afd184faa9ca656bf2ece6461",
+            "name": "revision_note.pdf",
+            "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "6720b46d34526b297b8abf304fa2a421159003d4d9d46b8d982299512863cd25",
+            "semantic_revision": "7f55e0a09bd924ff42d89e4f55b8603dcd2c83f956b35eb56704a0118fc17ed9"
+          },
+          {
+            "id": "8026452ffa6140e99d26a8d9254e70f2",
+            "name": "energy_tariff.csv",
+            "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "378736db9619802c54927d04d9f4716111db42a69a32e02c98b07ff0d1a4d44f",
+            "semantic_revision": "91017fb91e43b37db3a87c17f7ea8d1006c5151b22aa6ee41d0aececfaaa43a6"
+          }
+        ],
+        "suggestions": [],
+        "suggestion_state": "hidden",
+        "context_patch": [],
+        "expected_context_revision": null,
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "56b06cc6fb504a8da5b339454b09631f",
+          "branch_parent_id": null,
+          "source_revisions": [
+            {
+              "id": "4cfac49afd184faa9ca656bf2ece6461",
+              "name": "revision_note.pdf",
+              "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "6720b46d34526b297b8abf304fa2a421159003d4d9d46b8d982299512863cd25",
+              "semantic_revision": "7f55e0a09bd924ff42d89e4f55b8603dcd2c83f956b35eb56704a0118fc17ed9"
+            },
+            {
+              "id": "8026452ffa6140e99d26a8d9254e70f2",
+              "name": "energy_tariff.csv",
+              "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "378736db9619802c54927d04d9f4716111db42a69a32e02c98b07ff0d1a4d44f",
+              "semantic_revision": "91017fb91e43b37db3a87c17f7ea8d1006c5151b22aa6ee41d0aececfaaa43a6"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "cef884d91323e5cfb7ff9fabaf1a2ec0f2e7523b2f8dac6a04cf9d29e22b4c13"
+        },
+        "usage": [
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 151,
+            "prompt_tokens": 7298,
+            "total_tokens": 7449
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 146,
+            "prompt_tokens": 10623,
+            "total_tokens": 10769
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 143,
+            "prompt_tokens": 11439,
+            "total_tokens": 11582
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 143,
+            "prompt_tokens": 11911,
+            "total_tokens": 12054
+          }
+        ],
+        "model_attempts": [
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 3438,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 3440
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 4095,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 4095
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 8079,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 8081
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 1,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 3584,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 3586
+          }
+        ]
+      },
+      "execution_events": [
+        {
+          "id": "56b06cc6fb504a8da5b339454b09631f:1",
+          "sequence": 1,
+          "kind": "created",
+          "answer_id": "56b06cc6fb504a8da5b339454b09631f",
+          "status": "queued",
+          "stage": "等待处理",
+          "at": "2026-10-18T01:48:50.254+00:00",
+          "elapsed_ms": 0,
+          "since_previous_event_ms": 0
+        },
+        {
+          "id": "56b06cc6fb504a8da5b339454b09631f:2",
+          "sequence": 2,
+          "kind": "transition",
+          "answer_id": "56b06cc6fb504a8da5b339454b09631f",
+          "status": "running",
+          "stage": "检查来源版本",
+          "at": "2026-10-18T01:48:50.256+00:00",
+          "elapsed_ms": 0,
+          "since_previous_event_ms": 2
+        },
+        {
+          "id": "56b06cc6fb504a8da5b339454b09631f:3",
+          "sequence": 3,
+          "kind": "transition",
+          "answer_id": "56b06cc6fb504a8da5b339454b09631f",
+          "status": "running",
+          "stage": "正在关联资料与查找依据",
+          "at": "2026-10-18T01:48:50.264+00:00",
+          "elapsed_ms": 8,
+          "since_previous_event_ms": 8
+        },
+        {
+          "id": "56b06cc6fb504a8da5b339454b09631f:4",
+          "sequence": 4,
+          "kind": "transition",
+          "answer_id": "56b06cc6fb504a8da5b339454b09631f",
+          "status": "insufficient_evidence",
+          "stage": "依据不足",
+          "at": "2026-10-18T01:49:09.551+00:00",
+          "elapsed_ms": 19294,
+          "since_previous_event_ms": 19287,
+          "output_summary": {
+            "claims": 0,
+            "evidence": 3,
+            "calculations": 0,
+            "verification": "limited"
+          }
+        }
+      ],
+      "elapsed_ms": 19524
+    },
+    {
+      "id": "cross-009",
+      "split": "development",
+      "tags": [
+        "controlled_synthetic",
+        "cross",
+        "cross_source",
+        "scope_join",
+        "provenance"
+      ],
+      "started_at": "2026-10-18T01:51:02.368043+00:00",
+      "source_sha256": {
+        "harbor": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+        "stations": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046"
+      },
+      "record": {
+        "id": "cf912b94c57b46d890e12429f7dabffa",
+        "project_id": "98f48122fa5f42fdb901d851bc8cf6c6",
+        "request_id": "f68ba1d7-238a-45e3-b828-1af60a2342ac",
+        "question": "青湾港42次巡检和东岸同名站30次是否属于同一个站？",
+        "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+        "source_name": "harbor_operations.docx",
+        "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "mode": "multi_source",
+        "table_name": null,
+        "status": "completed",
+        "stage": "回答完成",
+        "created_at": "2026-10-18T01:51:02.377+00:00",
+        "updated_at": "2026-10-18T01:52:22.550+00:00",
+        "elapsed_ms": 80170,
+        "models": {
+          "table": "qwen3.8-max",
+          "verify": "qwen3.8-max",
+          "document": "kimi-k3"
+        },
+        "error": null,
+        "warnings": [],
+        "result": {
+          "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。\n\n「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。\n\n「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+          "claims": [
+            {
+              "id": "C1",
+              "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+              "evidence_ids": [
+                "E1"
+              ],
+              "query_bindings": [
+                {
+                  "evidence_id": "E1",
+                  "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                  "cell_id": "Q6e468bf68477:R3C1",
+                  "row_index": 2,
+                  "column_index": 0,
+                  "column_label": "station_id",
+                  "value": "C01",
+                  "entity_cells": [
+                    "Q6e468bf68477:R3C2",
+                    "Q6e468bf68477:R3C3"
+                  ],
+                  "statement": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                  "entity_values": [
+                    {
+                      "cell_id": "Q6e468bf68477:R3C2",
+                      "column_index": 1,
+                      "column_label": "name",
+                      "value": "青湾港"
+                    },
+                    {
+                      "cell_id": "Q6e468bf68477:R3C3",
+                      "column_index": 2,
+                      "column_label": "bank",
+                      "value": "南岸"
+                    }
+                  ],
+                  "source": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                  },
+                  "query_fingerprint": "b83019bd3d55a29b9b404cd5f5f9aa1cd169285480c24fe584e8bad286d17c1b",
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "semantic_review_required": true
+                }
+              ],
+              "context_annotations": [
+                {
+                  "type": "query_output_binding",
+                  "evidence_id": "E1",
+                  "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                  "cell_id": "Q6e468bf68477:R3C1",
+                  "statement_start": 0,
+                  "statement_end": 45,
+                  "localization_scope": "query_output_not_original_cell"
+                }
+              ]
+            },
+            {
+              "id": "C2",
+              "text": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+              "evidence_ids": [
+                "E2"
+              ],
+              "query_bindings": [
+                {
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R3C3",
+                  "row_index": 2,
+                  "column_index": 2,
+                  "column_label": "checks",
+                  "value": 42,
+                  "entity_cells": [
+                    "Q01d20c3953b6:R3C1",
+                    "Q01d20c3953b6:R3C2"
+                  ],
+                  "unit": "次",
+                  "unit_column": "unit",
+                  "statement": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                  "entity_values": [
+                    {
+                      "cell_id": "Q01d20c3953b6:R3C1",
+                      "column_index": 0,
+                      "column_label": "station_id",
+                      "value": "C01"
+                    },
+                    {
+                      "cell_id": "Q01d20c3953b6:R3C2",
+                      "column_index": 1,
+                      "column_label": "period",
+                      "value": "2025-02"
+                    }
+                  ],
+                  "source": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                  },
+                  "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "semantic_review_required": true
+                }
+              ],
+              "context_annotations": [
+                {
+                  "type": "query_output_binding",
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R3C3",
+                  "statement_start": 0,
+                  "statement_end": 60,
+                  "localization_scope": "query_output_not_original_cell"
+                }
+              ]
+            },
+            {
+              "id": "C3",
+              "text": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+              "evidence_ids": [
+                "E2"
+              ],
+              "query_bindings": [
+                {
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R1C3",
+                  "row_index": 0,
+                  "column_index": 2,
+                  "column_label": "checks",
+                  "value": 30,
+                  "entity_cells": [
+                    "Q01d20c3953b6:R1C1",
+                    "Q01d20c3953b6:R1C2"
+                  ],
+                  "unit": "次",
+                  "unit_column": "unit",
+                  "statement": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                  "entity_values": [
+                    {
+                      "cell_id": "Q01d20c3953b6:R1C1",
+                      "column_index": 0,
+                      "column_label": "station_id",
+                      "value": "A01"
+                    },
+                    {
+                      "cell_id": "Q01d20c3953b6:R1C2",
+                      "column_index": 1,
+                      "column_label": "period",
+                      "value": "2025-02"
+                    }
+                  ],
+                  "source": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                  },
+                  "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "semantic_review_required": true
+                }
+              ],
+              "context_annotations": [
+                {
+                  "type": "query_output_binding",
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R1C3",
+                  "statement_start": 0,
+                  "statement_end": 60,
+                  "localization_scope": "query_output_not_original_cell"
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "55f03ca549cb43f68855750a3374b73a",
+              "source_name": "station_register.sqlite",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "stations",
+              "label": "station_register.sqlite · stations",
+              "lineage": "row",
+              "row_numbers": [
+                1,
+                2,
+                3
+              ],
+              "columns": [
+                "station_id",
+                "name",
+                "bank"
+              ],
+              "rows": [
+                [
+                  "A01",
+                  "同名站",
+                  "东岸"
+                ],
+                [
+                  "B01",
+                  "同名站",
+                  "西岸"
+                ],
+                [
+                  "C01",
+                  "青湾港",
+                  "南岸"
+                ]
+              ],
+              "total_rows": null,
+              "stale": false,
+              "note": "所列行号对应原表稳定行序；仅列出前20个结果的来源位置。",
+              "table_quality": [],
+              "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+              "query_result": {
+                "columns": [
+                  "station_id",
+                  "name",
+                  "bank"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "同名站",
+                    "东岸"
+                  ],
+                  [
+                    "B01",
+                    "同名站",
+                    "西岸"
+                  ],
+                  [
+                    "C01",
+                    "青湾港",
+                    "南岸"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"station_id\", \"name\", \"bank\" FROM \"stations\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "station_id": "stations.station_id",
+                "name": "stations.name",
+                "bank": "stations.bank"
+              },
+              "supporting_evidence_ids": [],
+              "original_columns": [
+                "ROWID",
+                "bank",
+                "name",
+                "station_id"
+              ],
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                "context_alias": "QC6e468bf68477",
+                "query_fingerprint": "b83019bd3d55a29b9b404cd5f5f9aa1cd169285480c24fe584e8bad286d17c1b",
+                "source": {
+                  "source_id": "55f03ca549cb43f68855750a3374b73a",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "station_id"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "name"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "bank"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q6e468bf68477:R1C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01"
+                      },
+                      {
+                        "cell_id": "Q6e468bf68477:R1C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "同名站"
+                      },
+                      {
+                        "cell_id": "Q6e468bf68477:R1C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "东岸"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q6e468bf68477:R2C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01"
+                      },
+                      {
+                        "cell_id": "Q6e468bf68477:R2C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "同名站"
+                      },
+                      {
+                        "cell_id": "Q6e468bf68477:R2C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "西岸"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q6e468bf68477:R3C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01"
+                      },
+                      {
+                        "cell_id": "Q6e468bf68477:R3C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "青湾港"
+                      },
+                      {
+                        "cell_id": "Q6e468bf68477:R3C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "南岸"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "55f03ca549cb43f68855750a3374b73a",
+              "source_name": "station_register.sqlite",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "inspections",
+              "label": "station_register.sqlite · inspections",
+              "lineage": "row",
+              "row_numbers": [
+                1,
+                2,
+                3
+              ],
+              "columns": [
+                "station_id",
+                "period",
+                "checks",
+                "rechecks",
+                "unit"
+              ],
+              "rows": [
+                [
+                  "A01",
+                  "2025-02",
+                  30,
+                  2,
+                  "次"
+                ],
+                [
+                  "B01",
+                  "2025-02",
+                  45,
+                  4,
+                  "次"
+                ],
+                [
+                  "C01",
+                  "2025-02",
+                  42,
+                  3,
+                  "次"
+                ]
+              ],
+              "total_rows": null,
+              "stale": false,
+              "note": "所列行号对应原表稳定行序；仅列出前20个结果的来源位置。",
+              "table_quality": [],
+              "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+              "query_result": {
+                "columns": [
+                  "station_id",
+                  "period",
+                  "checks",
+                  "rechecks",
+                  "unit"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "2025-02",
+                    30,
+                    2,
+                    "次"
+                  ],
+                  [
+                    "B01",
+                    "2025-02",
+                    45,
+                    4,
+                    "次"
+                  ],
+                  [
+                    "C01",
+                    "2025-02",
+                    42,
+                    3,
+                    "次"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"station_id\", \"period\", \"checks\", \"rechecks\", \"unit\" FROM \"inspections\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "station_id": "inspections.station_id",
+                "period": "inspections.period",
+                "checks": "inspections.checks",
+                "rechecks": "inspections.rechecks",
+                "unit": "inspections.unit"
+              },
+              "supporting_evidence_ids": [],
+              "original_columns": [
+                "ROWID",
+                "checks",
+                "period",
+                "rechecks",
+                "station_id",
+                "unit"
+              ],
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                "context_alias": "QC01d20c3953b6",
+                "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                "source": {
+                  "source_id": "55f03ca549cb43f68855750a3374b73a",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "station_id"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "period"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "checks"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "rechecks"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "unit"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q01d20c3953b6:R1C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01"
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R1C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R1C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 30
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R1C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 2
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R1C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q01d20c3953b6:R2C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01"
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R2C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R2C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 45
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R2C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 4
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R2C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q01d20c3953b6:R3C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01"
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R3C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R3C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 42
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R3C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 3
+                      },
+                      {
+                        "cell_id": "Q01d20c3953b6:R3C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            },
+            {
+              "id": "E3",
+              "label": "第 1 逻辑节",
+              "kind": "text",
+              "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+              "source_name": "harbor_operations.docx",
+              "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "page": 1,
+              "page_label": "第 1 逻辑节",
+              "quote": "青湾港试验站运行手册\n受控合成验收资料 机构地点人物均属虚构 不代表实际业务统计",
+              "start": 0,
+              "end": 40
+            },
+            {
+              "id": "E4",
+              "label": "第 2 逻辑节",
+              "kind": "text",
+              "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+              "source_name": "harbor_operations.docx",
+              "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "page": 2,
+              "page_label": "第 2 逻辑节",
+              "quote": "一 值班和授权\n青湾港试验站的夜班交接时间为21:30。白班负责人是林澄，夜班负责人是许舟。\n只有站长与安全员共同签字才能恢复停机设备。值班人员只能提出复机申请。\n紧急撤离信号为连续三次短鸣，普通到岗提示是一次长鸣。",
+              "start": 0,
+              "end": 108
+            },
+            {
+              "id": "E5",
+              "label": "第 4 逻辑节",
+              "kind": "text",
+              "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+              "source_name": "harbor_operations.docx",
+              "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "page": 4,
+              "page_label": "第 4 逻辑节",
+              "quote": "三 统计与例外\n2025年2月试验站完成42次巡检，其中3次复检已计入42次，不得另加。\n成功启动为18次，失败启动为2次；本手册把成功率定义为成功次数除以全部启动次数。\n物料费用980元不含运输费，运输费120元另列。未记录税额。",
+              "start": 0,
+              "end": 116
+            },
+            {
+              "id": "E6",
+              "label": "第 5 逻辑节",
+              "kind": "text",
+              "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+              "source_name": "harbor_operations.docx",
+              "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "page": 5,
+              "page_label": "第 5 逻辑节",
+              "quote": "四 资料使用\n本手册版本为V2.1，于2025年3月1日签发，只适用于青湾港试验站。\n维修工单号WO-0078为字符串标识，不是78次维修。\n记录中的NA表示未采集，空白表示未填报；两者均不得补成0。",
+              "start": 0,
+              "end": 100
+            }
+          ],
+          "notes": [],
+          "steps": [
+            {
+              "id": "S1",
+              "title": "查询数据",
+              "kind": "sql",
+              "depends_on": [],
+              "evidence_ids": [
+                "E1"
+              ],
+              "summary": "只读查询返回3行。",
+              "query": {
+                "sql": "SELECT \"station_id\", \"name\", \"bank\" FROM \"stations\"",
+                "parameters": [],
+                "columns": [
+                  "station_id",
+                  "name",
+                  "bank"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "同名站",
+                    "东岸"
+                  ],
+                  [
+                    "B01",
+                    "同名站",
+                    "西岸"
+                  ],
+                  [
+                    "C01",
+                    "青湾港",
+                    "南岸"
+                  ]
+                ],
+                "returned_rows": 3,
+                "truncated": false,
+                "used_tables": [
+                  "stations"
+                ],
+                "parameter_bindings": []
+              },
+              "query_fingerprint": "fe60d0d756c8960b539ee2f94952f2ffacbaedea5ec2a324c8d9b20ffa4d1da9"
+            },
+            {
+              "id": "S2",
+              "title": "查询数据",
+              "kind": "sql",
+              "depends_on": [],
+              "evidence_ids": [
+                "E2"
+              ],
+              "summary": "只读查询返回3行。",
+              "query": {
+                "sql": "SELECT \"station_id\", \"period\", \"checks\", \"rechecks\", \"unit\" FROM \"inspections\"",
+                "parameters": [],
+                "columns": [
+                  "station_id",
+                  "period",
+                  "checks",
+                  "rechecks",
+                  "unit"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "2025-02",
+                    30,
+                    2,
+                    "次"
+                  ],
+                  [
+                    "B01",
+                    "2025-02",
+                    45,
+                    4,
+                    "次"
+                  ],
+                  [
+                    "C01",
+                    "2025-02",
+                    42,
+                    3,
+                    "次"
+                  ]
+                ],
+                "returned_rows": 3,
+                "truncated": false,
+                "used_tables": [
+                  "inspections"
+                ],
+                "parameter_bindings": []
+              },
+              "query_fingerprint": "2b99471530378b2f79711750555aa7a25f9d12b1cb911c5159ceefd812a9576f"
+            },
+            {
+              "id": "S3",
+              "title": "查找原文",
+              "kind": "search",
+              "depends_on": [],
+              "evidence_ids": [
+                "E3",
+                "E4",
+                "E5",
+                "E6"
+              ],
+              "summary": "检索原文，取得4段依据。",
+              "search": {
+                "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+                "query": "青湾港 东岸 巡检 同名站",
+                "query_bindings": [],
+                "page": null,
+                "truncated": true
+              }
+            }
+          ],
+          "diagnostics": {
+            "tool_errors": [],
+            "rejections": [],
+            "candidate_attempts": [],
+            "protocol_recoveries": [],
+            "audit_sequence": 4,
+            "audit_history": [
+              {
+                "sequence": 1,
+                "kind": "query_fact_rendered",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A2",
+                  "round": 2,
+                  "stage": "query_fact_rendered",
+                  "scope": "query_fact_rendering",
+                  "validation_status": "mechanical_candidate",
+                  "publication_status": "not_adopted",
+                  "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                  "claim_index": 1,
+                  "original_claim_count": 1,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                      "query_fact": {
+                        "evidence_id": "E1",
+                        "context_id": "QC6e468bf68477",
+                        "cell_id": "Q6e468bf68477:R3C1",
+                        "entity_cells": [
+                          "Q6e468bf68477:R3C2",
+                          "Q6e468bf68477:R3C3"
+                        ]
+                      },
+                      "evidence_ids": [
+                        "E1"
+                      ],
+                      "calculation_ids": []
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "控制器按显式结果格选择生成候选；仍需完整事实、关系与覆盖复核。",
+                  "render_policy": "explicit-query-fact-v2",
+                  "candidate_index": 1,
+                  "source_text_is_verbatim": false,
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "projection_truncated": false,
+                  "resolved_context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                  "context_reference_kind": "alias",
+                  "ignored_model_text": {
+                    "text": "青湾港42次巡检和东岸同名站30次不属于同一个站。根据stations表，青湾港的station_id为C01，位于南岸；东岸同名站的station_id为A01，名称为",
+                    "publication_status": "ignored_untrusted",
+                    "used_for_claim_or_coverage": false,
+                    "original_length": 85,
+                    "original_sha256": "8a3910ebd1c7e3a8483f379c034012d6037081040561bca00729d6af4d626f19",
+                    "redacted": false,
+                    "truncated": false,
+                    "original_lengths": {}
+                  },
+                  "source_binding": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+                    "query_fingerprint": "b83019bd3d55a29b9b404cd5f5f9aa1cd169285480c24fe584e8bad286d17c1b"
+                  }
+                }
+              },
+              {
+                "sequence": 2,
+                "kind": "query_fact_rendered",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A2",
+                  "round": 2,
+                  "stage": "query_fact_rendered",
+                  "scope": "query_fact_rendering",
+                  "validation_status": "mechanical_candidate",
+                  "publication_status": "not_adopted",
+                  "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                  "claim_index": 1,
+                  "original_claim_count": 1,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                      "query_fact": {
+                        "evidence_id": "E2",
+                        "context_id": "QC01d20c3953b6",
+                        "cell_id": "Q01d20c3953b6:R3C3",
+                        "unit_cell_id": "Q01d20c3953b6:R3C5",
+                        "entity_cells": [
+                          "Q01d20c3953b6:R3C1",
+                          "Q01d20c3953b6:R3C2"
+                        ]
+                      },
+                      "evidence_ids": [
+                        "E2"
+                      ],
+                      "calculation_ids": []
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "控制器按显式结果格选择生成候选；仍需完整事实、关系与覆盖复核。",
+                  "render_policy": "explicit-query-fact-v2",
+                  "candidate_index": 2,
+                  "source_text_is_verbatim": false,
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "projection_truncated": false,
+                  "resolved_context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "context_reference_kind": "alias",
+                  "ignored_model_text": {
+                    "text": "根据inspections表，station_id为C01的青湾港站在2025-02期间巡检（checks）为42次。",
+                    "publication_status": "ignored_untrusted",
+                    "used_for_claim_or_coverage": false,
+                    "original_length": 59,
+                    "original_sha256": "a86c31096cfa94daf019f0489a6eb72e9f42f4f599822340fcdac2dcf788b2dc",
+                    "redacted": false,
+                    "truncated": false,
+                    "original_lengths": {}
+                  },
+                  "source_binding": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+                    "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2"
+                  }
+                }
+              },
+              {
+                "sequence": 3,
+                "kind": "query_fact_rendered",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A2",
+                  "round": 2,
+                  "stage": "query_fact_rendered",
+                  "scope": "query_fact_rendering",
+                  "validation_status": "mechanical_candidate",
+                  "publication_status": "not_adopted",
+                  "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                  "claim_index": 1,
+                  "original_claim_count": 1,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                      "query_fact": {
+                        "evidence_id": "E2",
+                        "context_id": "QC01d20c3953b6",
+                        "cell_id": "Q01d20c3953b6:R1C3",
+                        "unit_cell_id": "Q01d20c3953b6:R1C5",
+                        "entity_cells": [
+                          "Q01d20c3953b6:R1C1",
+                          "Q01d20c3953b6:R1C2"
+                        ]
+                      },
+                      "evidence_ids": [
+                        "E2"
+                      ],
+                      "calculation_ids": []
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "控制器按显式结果格选择生成候选；仍需完整事实、关系与覆盖复核。",
+                  "render_policy": "explicit-query-fact-v2",
+                  "candidate_index": 3,
+                  "source_text_is_verbatim": false,
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "projection_truncated": false,
+                  "resolved_context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "context_reference_kind": "alias",
+                  "ignored_model_text": {
+                    "text": "根据inspections表，station_id为A01的东岸同名站在2025-02期间巡检（checks）为30次。",
+                    "publication_status": "ignored_untrusted",
+                    "used_for_claim_or_coverage": false,
+                    "original_length": 60,
+                    "original_sha256": "535f1ffff6de52ee5a6d18adc02acf2821a91ff73d5bff13a48470ef70974dbf",
+                    "redacted": false,
+                    "truncated": false,
+                    "original_lengths": {}
+                  },
+                  "source_binding": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+                    "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2"
+                  }
+                }
+              },
+              {
+                "sequence": 4,
+                "kind": "independent_review_received",
+                "record": {
+                  "projection_version": 2,
+                  "attempt_id": "A2",
+                  "round": 2,
+                  "stage": "semantic_review_received",
+                  "scope": "candidate_attempt",
+                  "validation_status": "independent_review_received",
+                  "publication_status": "audit_only",
+                  "notice": "候选及已收到的独立复核，仅供诊断；回调不发布事实或支持依据。",
+                  "claim_index": 1,
+                  "original_claim_count": 3,
+                  "claims": [
+                    {
+                      "candidate_index": 1,
+                      "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                      "evidence_ids": [
+                        "E1"
+                      ],
+                      "calculation_ids": [],
+                      "query_bindings": [
+                        {
+                          "binding_index": 1,
+                          "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                          "cell_id": "Q6e468bf68477:R3C1",
+                          "row_index": 2,
+                          "column_index": 0,
+                          "column_label": "station_id",
+                          "value": "C01",
+                          "statement": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                          "entity_cells": [
+                            "Q6e468bf68477:R3C2",
+                            "Q6e468bf68477:R3C3"
+                          ],
+                          "evidence_id": "E1"
+                        }
+                      ],
+                      "omitted_query_bindings": 0
+                    },
+                    {
+                      "candidate_index": 2,
+                      "text": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                      "evidence_ids": [
+                        "E2"
+                      ],
+                      "calculation_ids": [],
+                      "query_bindings": [
+                        {
+                          "binding_index": 1,
+                          "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                          "cell_id": "Q01d20c3953b6:R3C3",
+                          "row_index": 2,
+                          "column_index": 2,
+                          "column_label": "checks",
+                          "value": 42,
+                          "statement": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                          "unit": "次",
+                          "unit_column": "unit",
+                          "entity_cells": [
+                            "Q01d20c3953b6:R3C1",
+                            "Q01d20c3953b6:R3C2"
+                          ],
+                          "evidence_id": "E2"
+                        }
+                      ],
+                      "omitted_query_bindings": 0
+                    },
+                    {
+                      "candidate_index": 3,
+                      "text": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                      "evidence_ids": [
+                        "E2"
+                      ],
+                      "calculation_ids": [],
+                      "query_bindings": [
+                        {
+                          "binding_index": 1,
+                          "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                          "cell_id": "Q01d20c3953b6:R1C3",
+                          "row_index": 0,
+                          "column_index": 2,
+                          "column_label": "checks",
+                          "value": 30,
+                          "statement": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                          "unit": "次",
+                          "unit_column": "unit",
+                          "entity_cells": [
+                            "Q01d20c3953b6:R1C1",
+                            "Q01d20c3953b6:R1C2"
+                          ],
+                          "evidence_id": "E2"
+                        }
+                      ],
+                      "omitted_query_bindings": 0
+                    }
+                  ],
+                  "omitted_claims": 0,
+                  "truncated": false,
+                  "redacted": false,
+                  "original_lengths": {},
+                  "reason": "已收到独立复核，仅保存审计，发布决定仍由原核验规则作出。",
+                  "review": {
+                    "supported": true,
+                    "answer_complete": true,
+                    "conflict": false,
+                    "visual_supported": null,
+                    "claims": [
+                      {
+                        "id": "C1",
+                        "supported": true
+                      },
+                      {
+                        "id": "C2",
+                        "supported": true
+                      },
+                      {
+                        "id": "C3",
+                        "supported": true
+                      }
+                    ],
+                    "claims_present": true,
+                    "table_relations": [],
+                    "table_relations_present": true,
+                    "chart_relations": [],
+                    "chart_relations_present": false,
+                    "query_relations": [
+                      {
+                        "id": "C1",
+                        "supported": true
+                      },
+                      {
+                        "id": "C2",
+                        "supported": true
+                      },
+                      {
+                        "id": "C3",
+                        "supported": true
+                      }
+                    ],
+                    "query_relations_present": true,
+                    "operation_relations": [],
+                    "operation_relations_present": false,
+                    "coverage_present": true,
+                    "coverage_statuses": [
+                      "answered"
+                    ],
+                    "negative_supported": null,
+                    "clarification_supported": null
+                  }
+                }
+              }
+            ],
+            "received_reviews": [
+              {
+                "projection_version": 2,
+                "attempt_id": "A2",
+                "round": 2,
+                "stage": "semantic_review_received",
+                "scope": "candidate_attempt",
+                "validation_status": "independent_review_received",
+                "publication_status": "audit_only",
+                "notice": "候选及已收到的独立复核，仅供诊断；回调不发布事实或支持依据。",
+                "claim_index": 1,
+                "original_claim_count": 3,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                        "cell_id": "Q6e468bf68477:R3C1",
+                        "row_index": 2,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01",
+                        "statement": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                        "entity_cells": [
+                          "Q6e468bf68477:R3C2",
+                          "Q6e468bf68477:R3C3"
+                        ],
+                        "evidence_id": "E1"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 2,
+                    "text": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                    "evidence_ids": [
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                        "cell_id": "Q01d20c3953b6:R3C3",
+                        "row_index": 2,
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 42,
+                        "statement": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                        "unit": "次",
+                        "unit_column": "unit",
+                        "entity_cells": [
+                          "Q01d20c3953b6:R3C1",
+                          "Q01d20c3953b6:R3C2"
+                        ],
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 3,
+                    "text": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                    "evidence_ids": [
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                        "cell_id": "Q01d20c3953b6:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 30,
+                        "statement": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                        "unit": "次",
+                        "unit_column": "unit",
+                        "entity_cells": [
+                          "Q01d20c3953b6:R1C1",
+                          "Q01d20c3953b6:R1C2"
+                        ],
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  }
+                ],
+                "omitted_claims": 0,
+                "truncated": false,
+                "redacted": false,
+                "original_lengths": {},
+                "reason": "已收到独立复核，仅保存审计，发布决定仍由原核验规则作出。",
+                "review": {
+                  "supported": true,
+                  "answer_complete": true,
+                  "conflict": false,
+                  "visual_supported": null,
+                  "claims": [
+                    {
+                      "id": "C1",
+                      "supported": true
+                    },
+                    {
+                      "id": "C2",
+                      "supported": true
+                    },
+                    {
+                      "id": "C3",
+                      "supported": true
+                    }
+                  ],
+                  "claims_present": true,
+                  "table_relations": [],
+                  "table_relations_present": true,
+                  "chart_relations": [],
+                  "chart_relations_present": false,
+                  "query_relations": [
+                    {
+                      "id": "C1",
+                      "supported": true
+                    },
+                    {
+                      "id": "C2",
+                      "supported": true
+                    },
+                    {
+                      "id": "C3",
+                      "supported": true
+                    }
+                  ],
+                  "query_relations_present": true,
+                  "operation_relations": [],
+                  "operation_relations_present": false,
+                  "coverage_present": true,
+                  "coverage_statuses": [
+                    "answered"
+                  ],
+                  "negative_supported": null,
+                  "clarification_supported": null
+                }
+              }
+            ],
+            "rejected_calculation_actions": [],
+            "calculation_action_rejection_count": 0,
+            "calculation_action_omissions": 0,
+            "candidate_audit_count": 0,
+            "received_review_count": 1,
+            "candidate_history_truncated": false,
+            "review_history_truncated": false
+          },
+          "calculations": [],
+          "source_groups": [
+            {
+              "group_id": "G1",
+              "source_ids": [
+                "a4663705ed494a2aa25324f675a5a8c8"
+              ]
+            },
+            {
+              "group_id": "G2",
+              "source_ids": [
+                "55f03ca549cb43f68855750a3374b73a"
+              ]
+            }
+          ],
+          "verification": {
+            "status": "passed",
+            "checks": [
+              "引用来自所选资料的精确原文或实际只读查询",
+              "跨步骤依赖使用已执行结果",
+              "公式参数、量纲与Decimal计算通过检查",
+              "关联、口径与答案完整性经单独模型调用复核；不等同于人工业务核验"
+            ],
+            "semantic_review": true,
+            "visual_review": false,
+            "tool_actions": 3,
+            "chart_relations": [],
+            "operation_relations": [],
+            "query_relations": [
+              {
+                "id": "C1",
+                "supported": true
+              },
+              {
+                "id": "C2",
+                "supported": true
+              },
+              {
+                "id": "C3",
+                "supported": true
+              }
+            ],
+            "planner_rounds": 2,
+            "planning_progress": {
+              "productive_rounds": 2,
+              "recovery_rounds": 0,
+              "consecutive_no_progress": 0,
+              "max_consecutive_no_progress": 3,
+              "mechanical_repair_advances": 0,
+              "mechanical_repair_audit": [
+                {
+                  "advance": false,
+                  "ranks": [
+                    100,
+                    100,
+                    100
+                  ],
+                  "gains": [
+                    {
+                      "claim_index": 1,
+                      "before": 0,
+                      "after": 100
+                    },
+                    {
+                      "claim_index": 2,
+                      "before": 0,
+                      "after": 100
+                    },
+                    {
+                      "claim_index": 3,
+                      "before": 0,
+                      "after": 100
+                    }
+                  ]
+                }
+              ],
+              "mechanical_repair_audit_truncated": false,
+              "mechanical_rank_meaning": "有限协议检查高水位，不是事实正确率或置信度；不跳过独立核验"
+            },
+            "same_origin_is_independent": false
+          },
+          "completeness": {
+            "version": "explicit-coverage-v1",
+            "status": "assessed",
+            "complete": true,
+            "items": [
+              {
+                "id": "Q1",
+                "text": "青湾港42次巡检和东岸同名站30次是否属于同一个站？",
+                "status": "answered",
+                "claim_ids": [
+                  "C1",
+                  "C2",
+                  "C3"
+                ],
+                "evidence_ids": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            ],
+            "meaning": "明确分项的模型覆盖判断；缺少逐项结果时未知，不是准确率或人工验收。"
+          },
+          "coverage_claims": [
+            {
+              "id": "C1",
+              "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+              "evidence_ids": [
+                "E1"
+              ],
+              "query_bindings": [
+                {
+                  "evidence_id": "E1",
+                  "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                  "cell_id": "Q6e468bf68477:R3C1",
+                  "row_index": 2,
+                  "column_index": 0,
+                  "column_label": "station_id",
+                  "value": "C01",
+                  "entity_cells": [
+                    "Q6e468bf68477:R3C2",
+                    "Q6e468bf68477:R3C3"
+                  ],
+                  "statement": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+                  "entity_values": [
+                    {
+                      "cell_id": "Q6e468bf68477:R3C2",
+                      "column_index": 1,
+                      "column_label": "name",
+                      "value": "青湾港"
+                    },
+                    {
+                      "cell_id": "Q6e468bf68477:R3C3",
+                      "column_index": 2,
+                      "column_label": "bank",
+                      "value": "南岸"
+                    }
+                  ],
+                  "source": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                  },
+                  "query_fingerprint": "b83019bd3d55a29b9b404cd5f5f9aa1cd169285480c24fe584e8bad286d17c1b",
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "semantic_review_required": true
+                }
+              ],
+              "context_annotations": [
+                {
+                  "type": "query_output_binding",
+                  "evidence_id": "E1",
+                  "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                  "cell_id": "Q6e468bf68477:R3C1",
+                  "statement_start": 0,
+                  "statement_end": 45,
+                  "localization_scope": "query_output_not_original_cell"
+                }
+              ],
+              "scope": "coverage_attempt",
+              "publication_status": "published",
+              "published_claim_ids": [
+                "C1"
+              ],
+              "citations": [
+                {
+                  "id": "E1",
+                  "kind": "table",
+                  "source_id": "55f03ca549cb43f68855750a3374b73a",
+                  "source_name": "station_register.sqlite",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "table_name": "stations",
+                  "label": "station_register.sqlite · stations",
+                  "lineage": "row",
+                  "row_numbers": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "columns": [
+                    "station_id",
+                    "name",
+                    "bank"
+                  ],
+                  "rows": [
+                    [
+                      "A01",
+                      "同名站",
+                      "东岸"
+                    ],
+                    [
+                      "B01",
+                      "同名站",
+                      "西岸"
+                    ],
+                    [
+                      "C01",
+                      "青湾港",
+                      "南岸"
+                    ]
+                  ],
+                  "total_rows": null,
+                  "stale": false,
+                  "note": "所列行号对应原表稳定行序；仅列出前20个结果的来源位置。",
+                  "table_quality": [],
+                  "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+                  "query_result": {
+                    "columns": [
+                      "station_id",
+                      "name",
+                      "bank"
+                    ],
+                    "rows": [
+                      [
+                        "A01",
+                        "同名站",
+                        "东岸"
+                      ],
+                      [
+                        "B01",
+                        "同名站",
+                        "西岸"
+                      ],
+                      [
+                        "C01",
+                        "青湾港",
+                        "南岸"
+                      ]
+                    ],
+                    "truncated": false,
+                    "selection_required_for_scalar": true
+                  },
+                  "query": {
+                    "sql": "SELECT \"station_id\", \"name\", \"bank\" FROM \"stations\"",
+                    "parameters": []
+                  },
+                  "column_units": {},
+                  "direct_columns": {
+                    "station_id": "stations.station_id",
+                    "name": "stations.name",
+                    "bank": "stations.bank"
+                  },
+                  "supporting_evidence_ids": [],
+                  "original_columns": [
+                    "ROWID",
+                    "bank",
+                    "name",
+                    "station_id"
+                  ],
+                  "query_result_context": {
+                    "schema_version": "query-result-context-v1",
+                    "kind": "query_result",
+                    "usable": true,
+                    "context_id": "6e468bf684776e93eb6a89a85ed8ee08918f38dc0e867798f25619395eb262dc",
+                    "context_alias": "QC6e468bf68477",
+                    "query_fingerprint": "b83019bd3d55a29b9b404cd5f5f9aa1cd169285480c24fe584e8bad286d17c1b",
+                    "source": {
+                      "source_id": "55f03ca549cb43f68855750a3374b73a",
+                      "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                      "parser_version": "zhiheng-multimodal-3.1",
+                      "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                    },
+                    "localization_scope": "query_output_not_original_cell",
+                    "columns": [
+                      {
+                        "column_index": 0,
+                        "label": "station_id"
+                      },
+                      {
+                        "column_index": 1,
+                        "label": "name"
+                      },
+                      {
+                        "column_index": 2,
+                        "label": "bank"
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "row_index": 0,
+                        "cells": [
+                          {
+                            "cell_id": "Q6e468bf68477:R1C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "A01"
+                          },
+                          {
+                            "cell_id": "Q6e468bf68477:R1C2",
+                            "column_index": 1,
+                            "column_label": "name",
+                            "value": "同名站"
+                          },
+                          {
+                            "cell_id": "Q6e468bf68477:R1C3",
+                            "column_index": 2,
+                            "column_label": "bank",
+                            "value": "东岸"
+                          }
+                        ]
+                      },
+                      {
+                        "row_index": 1,
+                        "cells": [
+                          {
+                            "cell_id": "Q6e468bf68477:R2C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "B01"
+                          },
+                          {
+                            "cell_id": "Q6e468bf68477:R2C2",
+                            "column_index": 1,
+                            "column_label": "name",
+                            "value": "同名站"
+                          },
+                          {
+                            "cell_id": "Q6e468bf68477:R2C3",
+                            "column_index": 2,
+                            "column_label": "bank",
+                            "value": "西岸"
+                          }
+                        ]
+                      },
+                      {
+                        "row_index": 2,
+                        "cells": [
+                          {
+                            "cell_id": "Q6e468bf68477:R3C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "C01"
+                          },
+                          {
+                            "cell_id": "Q6e468bf68477:R3C2",
+                            "column_index": 1,
+                            "column_label": "name",
+                            "value": "青湾港"
+                          },
+                          {
+                            "cell_id": "Q6e468bf68477:R3C3",
+                            "column_index": 2,
+                            "column_label": "bank",
+                            "value": "南岸"
+                          }
+                        ]
+                      }
+                    ],
+                    "row_count": 3,
+                    "query_result_truncated": false,
+                    "projection_truncated": false,
+                    "omitted_rows": 0,
+                    "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+                  }
+                }
+              ],
+              "calculation_records": []
+            },
+            {
+              "id": "C2",
+              "text": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+              "evidence_ids": [
+                "E2"
+              ],
+              "query_bindings": [
+                {
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R3C3",
+                  "row_index": 2,
+                  "column_index": 2,
+                  "column_label": "checks",
+                  "value": 42,
+                  "entity_cells": [
+                    "Q01d20c3953b6:R3C1",
+                    "Q01d20c3953b6:R3C2"
+                  ],
+                  "unit": "次",
+                  "unit_column": "unit",
+                  "statement": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+                  "entity_values": [
+                    {
+                      "cell_id": "Q01d20c3953b6:R3C1",
+                      "column_index": 0,
+                      "column_label": "station_id",
+                      "value": "C01"
+                    },
+                    {
+                      "cell_id": "Q01d20c3953b6:R3C2",
+                      "column_index": 1,
+                      "column_label": "period",
+                      "value": "2025-02"
+                    }
+                  ],
+                  "source": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                  },
+                  "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "semantic_review_required": true
+                }
+              ],
+              "context_annotations": [
+                {
+                  "type": "query_output_binding",
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R3C3",
+                  "statement_start": 0,
+                  "statement_end": 60,
+                  "localization_scope": "query_output_not_original_cell"
+                }
+              ],
+              "scope": "coverage_attempt",
+              "publication_status": "published",
+              "published_claim_ids": [
+                "C2"
+              ],
+              "citations": [
+                {
+                  "id": "E2",
+                  "kind": "table",
+                  "source_id": "55f03ca549cb43f68855750a3374b73a",
+                  "source_name": "station_register.sqlite",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "table_name": "inspections",
+                  "label": "station_register.sqlite · inspections",
+                  "lineage": "row",
+                  "row_numbers": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "columns": [
+                    "station_id",
+                    "period",
+                    "checks",
+                    "rechecks",
+                    "unit"
+                  ],
+                  "rows": [
+                    [
+                      "A01",
+                      "2025-02",
+                      30,
+                      2,
+                      "次"
+                    ],
+                    [
+                      "B01",
+                      "2025-02",
+                      45,
+                      4,
+                      "次"
+                    ],
+                    [
+                      "C01",
+                      "2025-02",
+                      42,
+                      3,
+                      "次"
+                    ]
+                  ],
+                  "total_rows": null,
+                  "stale": false,
+                  "note": "所列行号对应原表稳定行序；仅列出前20个结果的来源位置。",
+                  "table_quality": [],
+                  "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+                  "query_result": {
+                    "columns": [
+                      "station_id",
+                      "period",
+                      "checks",
+                      "rechecks",
+                      "unit"
+                    ],
+                    "rows": [
+                      [
+                        "A01",
+                        "2025-02",
+                        30,
+                        2,
+                        "次"
+                      ],
+                      [
+                        "B01",
+                        "2025-02",
+                        45,
+                        4,
+                        "次"
+                      ],
+                      [
+                        "C01",
+                        "2025-02",
+                        42,
+                        3,
+                        "次"
+                      ]
+                    ],
+                    "truncated": false,
+                    "selection_required_for_scalar": true
+                  },
+                  "query": {
+                    "sql": "SELECT \"station_id\", \"period\", \"checks\", \"rechecks\", \"unit\" FROM \"inspections\"",
+                    "parameters": []
+                  },
+                  "column_units": {},
+                  "direct_columns": {
+                    "station_id": "inspections.station_id",
+                    "period": "inspections.period",
+                    "checks": "inspections.checks",
+                    "rechecks": "inspections.rechecks",
+                    "unit": "inspections.unit"
+                  },
+                  "supporting_evidence_ids": [],
+                  "original_columns": [
+                    "ROWID",
+                    "checks",
+                    "period",
+                    "rechecks",
+                    "station_id",
+                    "unit"
+                  ],
+                  "query_result_context": {
+                    "schema_version": "query-result-context-v1",
+                    "kind": "query_result",
+                    "usable": true,
+                    "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                    "context_alias": "QC01d20c3953b6",
+                    "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                    "source": {
+                      "source_id": "55f03ca549cb43f68855750a3374b73a",
+                      "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                      "parser_version": "zhiheng-multimodal-3.1",
+                      "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                    },
+                    "localization_scope": "query_output_not_original_cell",
+                    "columns": [
+                      {
+                        "column_index": 0,
+                        "label": "station_id"
+                      },
+                      {
+                        "column_index": 1,
+                        "label": "period"
+                      },
+                      {
+                        "column_index": 2,
+                        "label": "checks"
+                      },
+                      {
+                        "column_index": 3,
+                        "label": "rechecks"
+                      },
+                      {
+                        "column_index": 4,
+                        "label": "unit"
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "row_index": 0,
+                        "cells": [
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "A01"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C2",
+                            "column_index": 1,
+                            "column_label": "period",
+                            "value": "2025-02"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C3",
+                            "column_index": 2,
+                            "column_label": "checks",
+                            "value": 30
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C4",
+                            "column_index": 3,
+                            "column_label": "rechecks",
+                            "value": 2
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C5",
+                            "column_index": 4,
+                            "column_label": "unit",
+                            "value": "次"
+                          }
+                        ]
+                      },
+                      {
+                        "row_index": 1,
+                        "cells": [
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "B01"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C2",
+                            "column_index": 1,
+                            "column_label": "period",
+                            "value": "2025-02"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C3",
+                            "column_index": 2,
+                            "column_label": "checks",
+                            "value": 45
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C4",
+                            "column_index": 3,
+                            "column_label": "rechecks",
+                            "value": 4
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C5",
+                            "column_index": 4,
+                            "column_label": "unit",
+                            "value": "次"
+                          }
+                        ]
+                      },
+                      {
+                        "row_index": 2,
+                        "cells": [
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "C01"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C2",
+                            "column_index": 1,
+                            "column_label": "period",
+                            "value": "2025-02"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C3",
+                            "column_index": 2,
+                            "column_label": "checks",
+                            "value": 42
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C4",
+                            "column_index": 3,
+                            "column_label": "rechecks",
+                            "value": 3
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C5",
+                            "column_index": 4,
+                            "column_label": "unit",
+                            "value": "次"
+                          }
+                        ]
+                      }
+                    ],
+                    "row_count": 3,
+                    "query_result_truncated": false,
+                    "projection_truncated": false,
+                    "omitted_rows": 0,
+                    "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+                  }
+                }
+              ],
+              "calculation_records": []
+            },
+            {
+              "id": "C3",
+              "text": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+              "evidence_ids": [
+                "E2"
+              ],
+              "query_bindings": [
+                {
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R1C3",
+                  "row_index": 0,
+                  "column_index": 2,
+                  "column_label": "checks",
+                  "value": 30,
+                  "entity_cells": [
+                    "Q01d20c3953b6:R1C1",
+                    "Q01d20c3953b6:R1C2"
+                  ],
+                  "unit": "次",
+                  "unit_column": "unit",
+                  "statement": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+                  "entity_values": [
+                    {
+                      "cell_id": "Q01d20c3953b6:R1C1",
+                      "column_index": 0,
+                      "column_label": "station_id",
+                      "value": "A01"
+                    },
+                    {
+                      "cell_id": "Q01d20c3953b6:R1C2",
+                      "column_index": 1,
+                      "column_label": "period",
+                      "value": "2025-02"
+                    }
+                  ],
+                  "source": {
+                    "source_id": "55f03ca549cb43f68855750a3374b73a",
+                    "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                    "parser_version": "zhiheng-multimodal-3.1",
+                    "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                  },
+                  "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                  "localization_scope": "query_output_not_original_cell",
+                  "query_result_truncated": false,
+                  "semantic_review_required": true
+                }
+              ],
+              "context_annotations": [
+                {
+                  "type": "query_output_binding",
+                  "evidence_id": "E2",
+                  "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                  "cell_id": "Q01d20c3953b6:R1C3",
+                  "statement_start": 0,
+                  "statement_end": 60,
+                  "localization_scope": "query_output_not_original_cell"
+                }
+              ],
+              "scope": "coverage_attempt",
+              "publication_status": "published",
+              "published_claim_ids": [
+                "C3"
+              ],
+              "citations": [
+                {
+                  "id": "E2",
+                  "kind": "table",
+                  "source_id": "55f03ca549cb43f68855750a3374b73a",
+                  "source_name": "station_register.sqlite",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "table_name": "inspections",
+                  "label": "station_register.sqlite · inspections",
+                  "lineage": "row",
+                  "row_numbers": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "columns": [
+                    "station_id",
+                    "period",
+                    "checks",
+                    "rechecks",
+                    "unit"
+                  ],
+                  "rows": [
+                    [
+                      "A01",
+                      "2025-02",
+                      30,
+                      2,
+                      "次"
+                    ],
+                    [
+                      "B01",
+                      "2025-02",
+                      45,
+                      4,
+                      "次"
+                    ],
+                    [
+                      "C01",
+                      "2025-02",
+                      42,
+                      3,
+                      "次"
+                    ]
+                  ],
+                  "total_rows": null,
+                  "stale": false,
+                  "note": "所列行号对应原表稳定行序；仅列出前20个结果的来源位置。",
+                  "table_quality": [],
+                  "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c",
+                  "query_result": {
+                    "columns": [
+                      "station_id",
+                      "period",
+                      "checks",
+                      "rechecks",
+                      "unit"
+                    ],
+                    "rows": [
+                      [
+                        "A01",
+                        "2025-02",
+                        30,
+                        2,
+                        "次"
+                      ],
+                      [
+                        "B01",
+                        "2025-02",
+                        45,
+                        4,
+                        "次"
+                      ],
+                      [
+                        "C01",
+                        "2025-02",
+                        42,
+                        3,
+                        "次"
+                      ]
+                    ],
+                    "truncated": false,
+                    "selection_required_for_scalar": true
+                  },
+                  "query": {
+                    "sql": "SELECT \"station_id\", \"period\", \"checks\", \"rechecks\", \"unit\" FROM \"inspections\"",
+                    "parameters": []
+                  },
+                  "column_units": {},
+                  "direct_columns": {
+                    "station_id": "inspections.station_id",
+                    "period": "inspections.period",
+                    "checks": "inspections.checks",
+                    "rechecks": "inspections.rechecks",
+                    "unit": "inspections.unit"
+                  },
+                  "supporting_evidence_ids": [],
+                  "original_columns": [
+                    "ROWID",
+                    "checks",
+                    "period",
+                    "rechecks",
+                    "station_id",
+                    "unit"
+                  ],
+                  "query_result_context": {
+                    "schema_version": "query-result-context-v1",
+                    "kind": "query_result",
+                    "usable": true,
+                    "context_id": "01d20c3953b600b9c2394fc92d57d5b85b69c17b8685a168e2c35a8a86cde5f0",
+                    "context_alias": "QC01d20c3953b6",
+                    "query_fingerprint": "86f014ff7cb114406dc1383e2151a1015010d27d65dc6e63ea20366b319371d2",
+                    "source": {
+                      "source_id": "55f03ca549cb43f68855750a3374b73a",
+                      "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                      "parser_version": "zhiheng-multimodal-3.1",
+                      "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+                    },
+                    "localization_scope": "query_output_not_original_cell",
+                    "columns": [
+                      {
+                        "column_index": 0,
+                        "label": "station_id"
+                      },
+                      {
+                        "column_index": 1,
+                        "label": "period"
+                      },
+                      {
+                        "column_index": 2,
+                        "label": "checks"
+                      },
+                      {
+                        "column_index": 3,
+                        "label": "rechecks"
+                      },
+                      {
+                        "column_index": 4,
+                        "label": "unit"
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "row_index": 0,
+                        "cells": [
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "A01"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C2",
+                            "column_index": 1,
+                            "column_label": "period",
+                            "value": "2025-02"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C3",
+                            "column_index": 2,
+                            "column_label": "checks",
+                            "value": 30
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C4",
+                            "column_index": 3,
+                            "column_label": "rechecks",
+                            "value": 2
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R1C5",
+                            "column_index": 4,
+                            "column_label": "unit",
+                            "value": "次"
+                          }
+                        ]
+                      },
+                      {
+                        "row_index": 1,
+                        "cells": [
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "B01"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C2",
+                            "column_index": 1,
+                            "column_label": "period",
+                            "value": "2025-02"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C3",
+                            "column_index": 2,
+                            "column_label": "checks",
+                            "value": 45
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C4",
+                            "column_index": 3,
+                            "column_label": "rechecks",
+                            "value": 4
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R2C5",
+                            "column_index": 4,
+                            "column_label": "unit",
+                            "value": "次"
+                          }
+                        ]
+                      },
+                      {
+                        "row_index": 2,
+                        "cells": [
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C1",
+                            "column_index": 0,
+                            "column_label": "station_id",
+                            "value": "C01"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C2",
+                            "column_index": 1,
+                            "column_label": "period",
+                            "value": "2025-02"
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C3",
+                            "column_index": 2,
+                            "column_label": "checks",
+                            "value": 42
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C4",
+                            "column_index": 3,
+                            "column_label": "rechecks",
+                            "value": 3
+                          },
+                          {
+                            "cell_id": "Q01d20c3953b6:R3C5",
+                            "column_index": 4,
+                            "column_label": "unit",
+                            "value": "次"
+                          }
+                        ]
+                      }
+                    ],
+                    "row_count": 3,
+                    "query_result_truncated": false,
+                    "projection_truncated": false,
+                    "omitted_rows": 0,
+                    "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+                  }
+                }
+              ],
+              "calculation_records": []
+            }
+          ],
+          "retrieval_audit": {
+            "a4663705ed494a2aa25324f675a5a8c8": {
+              "index_generation": "7eb1d969ad466e2e0406116909bd9c8d0a55f2799b2e8deb09889f5aca58297f",
+              "cache_hit": true,
+              "mode": "hybrid",
+              "version": {
+                "chunker": "anchored-rows-headings900-overlap120-v3",
+                "embedding": {
+                  "algorithm": "e5-prefix-mean-l2-all-windows512-stride64-v1",
+                  "dimension": 384,
+                  "license": "MIT",
+                  "model": "Xenova/multilingual-e5-small",
+                  "revision": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+                  "tokenizer_sha256": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39",
+                  "weights_sha256": "f80102d3f2a1229f387d3c81909990d8945513e347b0eab049f7de3c6f98c193"
+                },
+                "lexical": "bm25-variants-search-variants-1",
+                "source": {
+                  "id": "a4663705ed494a2aa25324f675a5a8c8",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "revision": "6125b47775877fd99cda17f45b8889366f2873de5b3c9a4533ad713814d96f5b",
+                  "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477"
+                }
+              },
+              "coverage": {
+                "fallback_reason": null,
+                "first_indexed_position": {
+                  "page": 1,
+                  "start": 0
+                },
+                "full_vector_scan": true,
+                "indexed_characters": 487,
+                "indexed_page_count": 5,
+                "last_indexed_position": {
+                  "end": 100,
+                  "page": 5
+                },
+                "parsed_page_count": 5,
+                "parser_processing_truncated": false,
+                "parser_warnings": [],
+                "resumed_chunks": 0,
+                "source_extraction_limits": null
+              },
+              "scan_truncated": false,
+              "searches": [
+                {
+                  "query": "青湾港 东岸 巡检 同名站",
+                  "focus": null,
+                  "mode_requested": "hybrid",
+                  "mode_used": "hybrid",
+                  "fallback_reason": null,
+                  "indexed_chunks": 5,
+                  "vector_rows_scanned": 5,
+                  "lexical_candidate_count": 4,
+                  "vector_candidate_count": 5,
+                  "candidate_limit": 32,
+                  "query_terms_truncated": false,
+                  "lexical_query_variants": [
+                    "青湾港 东岸 巡检 同名站"
+                  ],
+                  "query_normalization_scope": "search_only",
+                  "query_characters_truncated": false,
+                  "selected_chunk_ids": [
+                    "p1:0-40",
+                    "p5:0-100",
+                    "p2:0-108",
+                    "p4:0-116"
+                  ],
+                  "excluded_chunk_ids": [],
+                  "selected_pages_filter": null,
+                  "eligible_chunks": 5,
+                  "scan_truncated": false,
+                  "scope": {
+                    "project_id": "98f48122fa5f42fdb901d851bc8cf6c6",
+                    "source_ids": [
+                      "a4663705ed494a2aa25324f675a5a8c8"
+                    ]
+                  },
+                  "reranker": null,
+                  "elapsed_ms": 17.72
+                }
+              ]
+            }
+          },
+          "context_interpretation": {
+            "status": "unavailable",
+            "reason": "output_truncated",
+            "automatic_retry": false
+          },
+          "trace": [
+            {
+              "stage": "检查来源版本",
+              "elapsed_ms": 0
+            },
+            {
+              "stage": "正在关联资料与查找依据",
+              "elapsed_ms": 8
+            },
+            {
+              "stage": "正在关联资料与查找依据",
+              "elapsed_ms": 5073
+            },
+            {
+              "stage": "正在核对关联、公式与来源",
+              "elapsed_ms": 13811
+            },
+            {
+              "stage": "整理可追溯的本轮口径",
+              "elapsed_ms": 16957
+            },
+            {
+              "stage": "回答完成",
+              "elapsed_ms": 80168
+            }
+          ],
+          "answer_plan": {
+            "version": "answer-plan-1",
+            "kind": "evidence_summary",
+            "mode": "multi_source",
+            "claim_order": [
+              "C1",
+              "C2",
+              "C3"
+            ],
+            "assumptions_added": false
+          },
+          "display_blocks": [
+            {
+              "id": "fact-C1",
+              "kind": "fact",
+              "text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。",
+              "claim_ids": [
+                "C1"
+              ],
+              "evidence_ids": [
+                "E1"
+              ],
+              "citation_placement": "immediately_after_fact",
+              "text_sha256": "b64f5b4c4f372db24df02d27149cccd3bbf2e1208fb7f81a2d06ab30b7eb99fb",
+              "provenance": "published_claim"
+            },
+            {
+              "id": "fact-C2",
+              "kind": "fact",
+              "text": "「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。",
+              "claim_ids": [
+                "C2"
+              ],
+              "evidence_ids": [
+                "E2"
+              ],
+              "citation_placement": "immediately_after_fact",
+              "text_sha256": "869b8fbdeed0f8608349023fb6cd7e55b421056edf76c10d69ac63e6f367c062",
+              "provenance": "published_claim"
+            },
+            {
+              "id": "fact-C3",
+              "kind": "fact",
+              "text": "「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+              "claim_ids": [
+                "C3"
+              ],
+              "evidence_ids": [
+                "E2"
+              ],
+              "citation_placement": "immediately_after_fact",
+              "text_sha256": "25ff1da3fcdcdfabb18112d7b488aa58c6f069750af37f851c0dfc6f4e632365",
+              "provenance": "published_claim"
+            }
+          ],
+          "composition_audit": {
+            "version": "exact-answer-composition-1",
+            "method": "lossless_published_fact_projection",
+            "original_text": "「name」为「青湾港」、「bank」为「南岸」时，「station_id」为「C01」。\n\n「station_id」为「C01」、「period」为「2025-02」时，「checks」为「42」，单位为「次」。\n\n「station_id」为「A01」、「period」为「2025-02」时，「checks」为「30」，单位为「次」。",
+            "original_text_sha256": "9fc84e332404c1fb543d706efd4ad192f69bd57547b31061ee40656ac83f07dd",
+            "new_model_calls": 0,
+            "semantic_rewrite_performed": false,
+            "publication_basis": "terminal_engine_published_claims",
+            "issues": [],
+            "status": "ready",
+            "checks": {
+              "all_published_claims_preserved": true,
+              "claim_texts_exactly_preserved": true,
+              "fact_citations_adjacent": true,
+              "rejected_audit_content_excluded": true,
+              "numeric_entities_years_qualifiers_unchanged": true
+            }
+          },
+          "schema_version": "zhiheng.answer-result.v1",
+          "result_tables": [],
+          "coverage": {
+            "version": "explicit-coverage-v1",
+            "status": "assessed",
+            "complete": true,
+            "items": [
+              {
+                "id": "Q1",
+                "text": "青湾港42次巡检和东岸同名站30次是否属于同一个站？",
+                "status": "answered",
+                "claim_ids": [
+                  "C1",
+                  "C2",
+                  "C3"
+                ],
+                "evidence_ids": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            ],
+            "meaning": "明确分项的模型覆盖判断；缺少逐项结果时未知，不是准确率或人工验收。"
+          },
+          "evidence_graph": {
+            "schema_version": "zhiheng.evidence-graph.v1",
+            "nodes": [
+              {
+                "id": "source:55f03ca549cb43f68855750a3374b73a",
+                "kind": "source",
+                "source_id": "55f03ca549cb43f68855750a3374b73a",
+                "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                "parser_version": "zhiheng-multimodal-3.1"
+              },
+              {
+                "id": "evidence:E1",
+                "kind": "evidence",
+                "evidence_id": "E1",
+                "precision": "query_scope",
+                "page": null,
+                "table_name": "stations"
+              },
+              {
+                "id": "evidence:E2",
+                "kind": "evidence",
+                "evidence_id": "E2",
+                "precision": "query_scope",
+                "page": null,
+                "table_name": "inspections"
+              },
+              {
+                "id": "source:a4663705ed494a2aa25324f675a5a8c8",
+                "kind": "source",
+                "source_id": "a4663705ed494a2aa25324f675a5a8c8",
+                "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+                "parser_version": "zhiheng-multimodal-3.1"
+              },
+              {
+                "id": "evidence:E3",
+                "kind": "evidence",
+                "evidence_id": "E3",
+                "precision": "text_span",
+                "page": 1,
+                "table_name": null
+              },
+              {
+                "id": "evidence:E4",
+                "kind": "evidence",
+                "evidence_id": "E4",
+                "precision": "text_span",
+                "page": 2,
+                "table_name": null
+              },
+              {
+                "id": "evidence:E5",
+                "kind": "evidence",
+                "evidence_id": "E5",
+                "precision": "text_span",
+                "page": 4,
+                "table_name": null
+              },
+              {
+                "id": "evidence:E6",
+                "kind": "evidence",
+                "evidence_id": "E6",
+                "precision": "text_span",
+                "page": 5,
+                "table_name": null
+              },
+              {
+                "id": "claim:C1",
+                "kind": "claim",
+                "claim_id": "C1",
+                "origin": "evidence_backed"
+              },
+              {
+                "id": "answer",
+                "kind": "answer"
+              },
+              {
+                "id": "claim:C2",
+                "kind": "claim",
+                "claim_id": "C2",
+                "origin": "evidence_backed"
+              },
+              {
+                "id": "claim:C3",
+                "kind": "claim",
+                "claim_id": "C3",
+                "origin": "evidence_backed"
+              }
+            ],
+            "edges": [
+              {
+                "source": "source:55f03ca549cb43f68855750a3374b73a",
+                "target": "evidence:E1",
+                "relation": "supports"
+              },
+              {
+                "source": "source:55f03ca549cb43f68855750a3374b73a",
+                "target": "evidence:E2",
+                "relation": "supports"
+              },
+              {
+                "source": "source:a4663705ed494a2aa25324f675a5a8c8",
+                "target": "evidence:E3",
+                "relation": "supports"
+              },
+              {
+                "source": "source:a4663705ed494a2aa25324f675a5a8c8",
+                "target": "evidence:E4",
+                "relation": "supports"
+              },
+              {
+                "source": "source:a4663705ed494a2aa25324f675a5a8c8",
+                "target": "evidence:E5",
+                "relation": "supports"
+              },
+              {
+                "source": "source:a4663705ed494a2aa25324f675a5a8c8",
+                "target": "evidence:E6",
+                "relation": "supports"
+              },
+              {
+                "source": "evidence:E1",
+                "target": "claim:C1",
+                "relation": "supports"
+              },
+              {
+                "source": "claim:C1",
+                "target": "answer",
+                "relation": "included_in"
+              },
+              {
+                "source": "evidence:E2",
+                "target": "claim:C2",
+                "relation": "supports"
+              },
+              {
+                "source": "claim:C2",
+                "target": "answer",
+                "relation": "included_in"
+              },
+              {
+                "source": "evidence:E2",
+                "target": "claim:C3",
+                "relation": "supports"
+              },
+              {
+                "source": "claim:C3",
+                "target": "answer",
+                "relation": "included_in"
+              }
+            ],
+            "unresolved": [],
+            "source_groups": [
+              {
+                "group_id": "G1",
+                "source_ids": [
+                  "a4663705ed494a2aa25324f675a5a8c8"
+                ]
+              },
+              {
+                "group_id": "G2",
+                "source_ids": [
+                  "55f03ca549cb43f68855750a3374b73a"
+                ]
+              }
+            ]
+          }
+        },
+        "parent_answer_id": null,
+        "conversation_id": "cf912b94c57b46d890e12429f7dabffa",
+        "turn_index": 1,
+        "normalized_question": null,
+        "intent": null,
+        "source_ids": [
+          "a4663705ed494a2aa25324f675a5a8c8",
+          "55f03ca549cb43f68855750a3374b73a"
+        ],
+        "sources": [
+          {
+            "id": "a4663705ed494a2aa25324f675a5a8c8",
+            "name": "harbor_operations.docx",
+            "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "6125b47775877fd99cda17f45b8889366f2873de5b3c9a4533ad713814d96f5b",
+            "semantic_revision": "6c8165211bfb2775603757b07230fb42f51e5b2d465ee5fb538ff7aa2e6df098"
+          },
+          {
+            "id": "55f03ca549cb43f68855750a3374b73a",
+            "name": "station_register.sqlite",
+            "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "eebf2860265dd944bd82e8de3ded3076992bda7e108afea1e4957cc8889493fa",
+            "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+          }
+        ],
+        "schema_version": "zhiheng.answer.v6",
+        "context_revision": "3fabaaf723bef719eb3873fbb5bad82eef72993f9fc98bb5a5227308539489b0",
+        "source_revisions": [
+          {
+            "id": "a4663705ed494a2aa25324f675a5a8c8",
+            "name": "harbor_operations.docx",
+            "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "6125b47775877fd99cda17f45b8889366f2873de5b3c9a4533ad713814d96f5b",
+            "semantic_revision": "6c8165211bfb2775603757b07230fb42f51e5b2d465ee5fb538ff7aa2e6df098"
+          },
+          {
+            "id": "55f03ca549cb43f68855750a3374b73a",
+            "name": "station_register.sqlite",
+            "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "eebf2860265dd944bd82e8de3ded3076992bda7e108afea1e4957cc8889493fa",
+            "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+          }
+        ],
+        "suggestions": [],
+        "suggestion_state": "hidden",
+        "context_patch": [],
+        "expected_context_revision": null,
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "branch_parent_id": null,
+          "source_revisions": [
+            {
+              "id": "a4663705ed494a2aa25324f675a5a8c8",
+              "name": "harbor_operations.docx",
+              "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "6125b47775877fd99cda17f45b8889366f2873de5b3c9a4533ad713814d96f5b",
+              "semantic_revision": "6c8165211bfb2775603757b07230fb42f51e5b2d465ee5fb538ff7aa2e6df098"
+            },
+            {
+              "id": "55f03ca549cb43f68855750a3374b73a",
+              "name": "station_register.sqlite",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "eebf2860265dd944bd82e8de3ded3076992bda7e108afea1e4957cc8889493fa",
+              "semantic_revision": "605026fde777a8ff59660325750a8c5b5f16f2669bd9a7fc2d0b27f69710540c"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": {
+            "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+            "claim_ids": [
+              "C1",
+              "C2",
+              "C3"
+            ],
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E3",
+              "E4",
+              "E5",
+              "E6"
+            ]
+          },
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "pending_clarification": null,
+          "revision": "3fabaaf723bef719eb3873fbb5bad82eef72993f9fc98bb5a5227308539489b0"
+        },
+        "usage": [
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 211,
+            "prompt_tokens": 7415,
+            "total_tokens": 7626
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 449,
+            "prompt_tokens": 12295,
+            "total_tokens": 12744
+          },
+          {
+            "purpose": "verify",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "completion_tokens": 115,
+            "prompt_tokens": 10124,
+            "total_tokens": 10239
+          },
+          {
+            "purpose": "document",
+            "requested_model": "kimi-k3",
+            "reported_model": "kimi-k3",
+            "completion_tokens": 6000,
+            "prompt_tokens": 1442,
+            "total_tokens": 7442
+          }
+        ],
+        "model_attempts": [
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 4994,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 4995
+          },
+          {
+            "purpose": "table",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 8712,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 8713
+          },
+          {
+            "purpose": "verify",
+            "requested_model": "qwen3.8-max",
+            "reported_model": "qwen3.8-max",
+            "status": "completed",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 3136,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 0,
+              "max_tokens": 12000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "enable_thinking": false
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 3138
+          },
+          {
+            "purpose": "document",
+            "requested_model": "kimi-k3",
+            "reported_model": "kimi-k3",
+            "status": "output_truncated",
+            "post_started": true,
+            "queue_wait_ms": 0,
+            "cooldown_wait_ms": 0,
+            "request_elapsed_ms": 63202,
+            "circuit_before": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "request_settings": {
+              "temperature": 1,
+              "max_tokens": 6000,
+              "stream": false,
+              "response_format": {
+                "type": "json_object"
+              },
+              "thinking": {
+                "type": "enabled"
+              }
+            },
+            "pacing_scope": "shared_processes",
+            "pacing_max_in_flight": 1,
+            "queue_timeout_seconds": 600.0,
+            "provider_cooldown_remaining_seconds": 0,
+            "effective_timeout_seconds": 90,
+            "timeouts": {
+              "connect": 10,
+              "read": 90,
+              "overall": 90,
+              "kind": null
+            },
+            "http_status": 200,
+            "retry_policy": {
+              "category": "other",
+              "http_status": 200,
+              "retry_after_seconds": null,
+              "post_started": true,
+              "automatic_retry": false,
+              "strategy": "explicit_new_request_only",
+              "reason": "已发出的POST结果可能未知，不自动重放；完整格式响应的协议修复由上层单独记录。"
+            },
+            "circuit_after": {
+              "state": "closed",
+              "consecutive_transport_failures": 0,
+              "retry_after_seconds": 0,
+              "automatic_post_replay": false
+            },
+            "elapsed_ms": 63203
+          }
+        ]
+      },
+      "execution_events": [
+        {
+          "id": "cf912b94c57b46d890e12429f7dabffa:1",
+          "sequence": 1,
+          "kind": "created",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "status": "queued",
+          "stage": "等待处理",
+          "at": "2026-10-18T01:51:02.377+00:00",
+          "elapsed_ms": 0,
+          "since_previous_event_ms": 0
+        },
+        {
+          "id": "cf912b94c57b46d890e12429f7dabffa:2",
+          "sequence": 2,
+          "kind": "transition",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "status": "running",
+          "stage": "检查来源版本",
+          "at": "2026-10-18T01:51:02.379+00:00",
+          "elapsed_ms": 0,
+          "since_previous_event_ms": 2
+        },
+        {
+          "id": "cf912b94c57b46d890e12429f7dabffa:3",
+          "sequence": 3,
+          "kind": "transition",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "status": "running",
+          "stage": "正在关联资料与查找依据",
+          "at": "2026-10-18T01:51:02.387+00:00",
+          "elapsed_ms": 8,
+          "since_previous_event_ms": 8
+        },
+        {
+          "id": "cf912b94c57b46d890e12429f7dabffa:4",
+          "sequence": 4,
+          "kind": "transition",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "status": "running",
+          "stage": "正在核对关联、公式与来源",
+          "at": "2026-10-18T01:51:16.190+00:00",
+          "elapsed_ms": 13811,
+          "since_previous_event_ms": 13803
+        },
+        {
+          "id": "cf912b94c57b46d890e12429f7dabffa:5",
+          "sequence": 5,
+          "kind": "transition",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "status": "running",
+          "stage": "整理可追溯的本轮口径",
+          "at": "2026-10-18T01:51:19.336+00:00",
+          "elapsed_ms": 16957,
+          "since_previous_event_ms": 3146
+        },
+        {
+          "id": "cf912b94c57b46d890e12429f7dabffa:6",
+          "sequence": 6,
+          "kind": "transition",
+          "answer_id": "cf912b94c57b46d890e12429f7dabffa",
+          "status": "completed",
+          "stage": "回答完成",
+          "at": "2026-10-18T01:52:22.550+00:00",
+          "elapsed_ms": 80170,
+          "since_previous_event_ms": 63214,
+          "output_summary": {
+            "claims": 3,
+            "evidence": 6,
+            "calculations": 0,
+            "verification": "passed"
+          }
+        }
+      ],
+      "elapsed_ms": 80273
+    }
+  ],
+  "scope": "Exact saved case records, not reconstructed full model replies; no key loaded."
+}

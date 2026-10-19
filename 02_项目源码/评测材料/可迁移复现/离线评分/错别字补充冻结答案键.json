@@ -1,0 +1,35 @@
+{
+  "schema_version": "acceptance-gold.v1",
+  "plan_sha256": "57454b81fbd263a899bb9dde1c37096e07b2edb06cba2e951c6245a76a7819aa",
+  "visibility": "local_independent_grading_only_never_send_to_model",
+  "cases": {
+    "acceptance-typo-rag008": {
+      "status": "completed",
+      "require_evidence": true,
+      "review_requirements": {
+        "facts": [
+          "成功18次，失败2次",
+          "分母为全部启动次数"
+        ],
+        "source_pages": {
+          "harbor": [
+            4
+          ]
+        },
+        "qualifiers": [
+          "DOCX索引为逻辑节，不冒充物理分页"
+        ],
+        "forbidden": [],
+        "criterion": "Judge all requested facts against these originals; status alone cannot certify correctness. Cite actual source, distinguish measured/derived/unknown, retain period and unit."
+      },
+      "require_text_review": true,
+      "key_provenance": {
+        "path": "评测材料/初赛20题/离线评分/参考答案.json",
+        "sha256": "09abbf0ea546549dea47c3f95ec8c369278357910324aae1a6072c6527f3bf26",
+        "case_id": "rag-008"
+      }
+    }
+  },
+  "comparison": "same semantic requirements as original rag-008; original successful actual attempt remains the control",
+  "portable_copy_note": "仅将源码前缀改为包内相对路径；历史答案键未改，原件SHA-256：8a3cbd4ba42ada33dbfd40a49b2e138c418d62d1cb6665658a5ba676a80b64cc"
+}

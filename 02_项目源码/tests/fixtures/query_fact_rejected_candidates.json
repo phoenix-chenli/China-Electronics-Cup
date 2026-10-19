@@ -1,0 +1,525 @@
+{
+  "scope": "minimal derived fixture; projected actual rejected candidates, not reconstructed raw responses; no answer key",
+  "cases": [
+    {
+      "id": "cross-001",
+      "original_record_sha256": "5121802b50f76333787c17b5a87d206bdb3868eaab30807be77b79aaa2e4676e",
+      "record": {
+        "question": "按照有效更正值和对应电价，计算青湾港2025年7月1日全站不含税电费。",
+        "status": "insufficient_evidence",
+        "result": {
+          "claims": [],
+          "evidence": [
+            {
+              "id": "E4",
+              "kind": "table",
+              "source_id": "41514e6ee12b42b19ec6607acbbe260c",
+              "source_name": "energy_tariff.csv",
+              "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "数据表",
+              "label": "energy_tariff.csv · 数据表",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。",
+              "table_quality": [],
+              "semantic_revision": "0efc8c4424a396ba30d77ecd85d3591c3514418437676b61edf45210463bf631",
+              "query_result": {
+                "columns": [
+                  "时段",
+                  "对象",
+                  "用电量",
+                  "电价",
+                  "计量单位",
+                  "价格单位",
+                  "适用范围"
+                ],
+                "rows": [
+                  [
+                    "2025-07-01",
+                    "全站",
+                    "2610",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ]
+                ],
+                "truncated": false
+              },
+              "query": {
+                "sql": "SELECT \"时段\", \"对象\", \"用电量\", \"电价\", \"计量单位\", \"价格单位\", \"适用范围\" FROM \"数据表\" WHERE \"时段\" = ? AND \"对象\" = ?",
+                "parameters": [
+                  "2025-07-01",
+                  "全站"
+                ]
+              },
+              "column_units": {},
+              "direct_columns": {
+                "时段": "数据表.时段",
+                "对象": "数据表.对象",
+                "用电量": "数据表.用电量",
+                "电价": "数据表.电价",
+                "计量单位": "数据表.计量单位",
+                "价格单位": "数据表.价格单位",
+                "适用范围": "数据表.适用范围"
+              },
+              "supporting_evidence_ids": [],
+              "original_columns": [
+                "价格单位",
+                "对象",
+                "时段",
+                "用电量",
+                "电价",
+                "计量单位",
+                "适用范围"
+              ],
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "c8243e041e879f530c1fb35846c09e0ababe06402ba4381b8d8c50bec8e79eb5",
+                "query_fingerprint": "aae2e4a7d6c46f438ab07a82aa50fe027064e959be08545314c634bd041462b4",
+                "source": {
+                  "source_id": "41514e6ee12b42b19ec6607acbbe260c",
+                  "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "0efc8c4424a396ba30d77ecd85d3591c3514418437676b61edf45210463bf631"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "时段"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "对象"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "用电量"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "电价"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "计量单位"
+                  },
+                  {
+                    "column_index": 5,
+                    "label": "价格单位"
+                  },
+                  {
+                    "column_index": 6,
+                    "label": "适用范围"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Qc8243e041e87:R1C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-01"
+                      },
+                      {
+                        "cell_id": "Qc8243e041e87:R1C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "全站"
+                      },
+                      {
+                        "cell_id": "Qc8243e041e87:R1C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2610"
+                      },
+                      {
+                        "cell_id": "Qc8243e041e87:R1C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.65"
+                      },
+                      {
+                        "cell_id": "Qc8243e041e87:R1C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Qc8243e041e87:R1C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Qc8243e041e87:R1C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 1,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            }
+          ],
+          "diagnostics": {
+            "candidate_attempts": [
+              {
+                "projection_version": 2,
+                "attempt_id": "A6",
+                "round": 6,
+                "stage": "candidate_validation",
+                "scope": "candidate_attempt",
+                "validation_status": "rejected",
+                "publication_status": "not_adopted",
+                "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                "claim_index": 1,
+                "original_claim_count": 1,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "青湾港2025年7月1日全站不含税电费为1696.50元。根据计量更正通知，青湾港7月1日用电日报经电表原始底数复核后由初始值2160kWh更正为2610kWh；对应电价数据表中2025-07-01全站用电量为2610kWh、电价为0.65元/kWh、适用范围为不含税，按用电量乘以电价计算得2610kWh×0.65元/kWh=1696.50元。",
+                    "evidence_ids": [
+                      "E1",
+                      "E4"
+                    ],
+                    "calculation_ids": [
+                      "K1"
+                    ],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "c8243e041e879f530c1fb35846c09e0ababe06402ba4381b8d8c50bec8e79eb5",
+                        "cell_id": "Qc8243e041e87:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2610",
+                        "statement": "对应电价数据表中2025-07-01全站用电量为2610kWh",
+                        "unit": "kWh",
+                        "unit_column": "计量单位",
+                        "entity_cells": [
+                          "Qc8243e041e87:R1C1",
+                          "Qc8243e041e87:R1C2"
+                        ],
+                        "evidence_id": "E4"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "c8243e041e879f530c1fb35846c09e0ababe06402ba4381b8d8c50bec8e79eb5",
+                        "cell_id": "Qc8243e041e87:R1C4",
+                        "row_index": 0,
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.65",
+                        "statement": "电价为0.65元/kWh",
+                        "unit": "元/kWh",
+                        "unit_column": "价格单位",
+                        "entity_cells": [
+                          "Qc8243e041e87:R1C1",
+                          "Qc8243e041e87:R1C2"
+                        ],
+                        "evidence_id": "E4"
+                      },
+                      {
+                        "binding_index": 3,
+                        "context_id": "c8243e041e879f530c1fb35846c09e0ababe06402ba4381b8d8c50bec8e79eb5",
+                        "cell_id": "Qc8243e041e87:R1C7",
+                        "row_index": 0,
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税",
+                        "statement": "适用范围为不含税",
+                        "entity_cells": [
+                          "Qc8243e041e87:R1C1",
+                          "Qc8243e041e87:R1C2"
+                        ],
+                        "evidence_id": "E4"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  }
+                ],
+                "omitted_claims": 0,
+                "truncated": false,
+                "redacted": false,
+                "original_lengths": {},
+                "reason": "第1条候选（C1）查询结果绑定失败：第2项查询绑定：statement缺少完整实体格值：Qc8243e041e87:R1C1，列'时段'，真实值'2025-07-01'；请在正文和本子句同时写全此值，不能用同一时段等代词替代；第3项查询绑定：statement缺少完整实体格值：Qc8243e041e87:R1C1，列'时段'，真实值'2025-07-01'；请在正文和本子句同时写全此值，不能用同一时段等代词替代",
+                "error_kind": "query_binding"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-002",
+      "original_record_sha256": "35276970485db85ced2d466f84ca0dc860b9800d0cb05c0c250f424c30adcf18",
+      "record": {
+        "question": "计算7月2日全站不含税电费，说明用电量与电价来自何处。",
+        "status": "insufficient_evidence",
+        "result": {
+          "claims": [],
+          "evidence": [
+            {
+              "id": "E4",
+              "kind": "table",
+              "source_id": "41514e6ee12b42b19ec6607acbbe260c",
+              "source_name": "energy_tariff.csv",
+              "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "数据表",
+              "label": "energy_tariff.csv · 数据表",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。",
+              "table_quality": [],
+              "semantic_revision": "0efc8c4424a396ba30d77ecd85d3591c3514418437676b61edf45210463bf631",
+              "query_result": {
+                "columns": [
+                  "时段",
+                  "对象",
+                  "用电量",
+                  "电价",
+                  "计量单位",
+                  "价格单位",
+                  "适用范围"
+                ],
+                "rows": [
+                  [
+                    "2025-07-02",
+                    "全站",
+                    "2400",
+                    "0.70",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ]
+                ],
+                "truncated": false
+              },
+              "query": {
+                "sql": "SELECT \"时段\", \"对象\", \"用电量\", \"电价\", \"计量单位\", \"价格单位\", \"适用范围\" FROM \"数据表\" WHERE \"时段\" = ? AND \"对象\" = ? AND \"适用范围\" = ?",
+                "parameters": [
+                  "2025-07-02",
+                  "全站",
+                  "不含税"
+                ]
+              },
+              "column_units": {},
+              "direct_columns": {
+                "时段": "数据表.时段",
+                "对象": "数据表.对象",
+                "用电量": "数据表.用电量",
+                "电价": "数据表.电价",
+                "计量单位": "数据表.计量单位",
+                "价格单位": "数据表.价格单位",
+                "适用范围": "数据表.适用范围"
+              },
+              "supporting_evidence_ids": [],
+              "original_columns": [
+                "价格单位",
+                "对象",
+                "时段",
+                "用电量",
+                "电价",
+                "计量单位",
+                "适用范围"
+              ],
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "a7f3a81be08b4afcfcca514fd173d8b7a2714252da90d76637c460ce8eee247e",
+                "query_fingerprint": "472d54780ede76a6b80938d87557f7cde62e66a1ce731483a3899acf4fec135d",
+                "source": {
+                  "source_id": "41514e6ee12b42b19ec6607acbbe260c",
+                  "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "0efc8c4424a396ba30d77ecd85d3591c3514418437676b61edf45210463bf631"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "时段"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "对象"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "用电量"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "电价"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "计量单位"
+                  },
+                  {
+                    "column_index": 5,
+                    "label": "价格单位"
+                  },
+                  {
+                    "column_index": 6,
+                    "label": "适用范围"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-02"
+                      },
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "全站"
+                      },
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2400"
+                      },
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.70"
+                      },
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Qa7f3a81be08b:R1C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 1,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            }
+          ],
+          "diagnostics": {
+            "candidate_attempts": [
+              {
+                "projection_version": 2,
+                "attempt_id": "A7",
+                "round": 7,
+                "stage": "candidate_validation",
+                "scope": "candidate_attempt",
+                "validation_status": "rejected",
+                "publication_status": "not_adopted",
+                "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+                "claim_index": 1,
+                "original_claim_count": 1,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "7月2日全站不含税电费为1680.00元。用电量2400kWh来自energy_tariff.csv数据表（时段2025-07-02、对象全站、适用范围不含税），并由revision_note.pdf第1页原文确认“7月2日已确认用电量为2400kWh”；电价0.70元/kWh来自同一数据表的电价列，价格单位为元/kWh，适用范围为不含税。计算过程为：2400kWh × 0.70元/kWh = 1680.00元。",
+                    "evidence_ids": [
+                      "E4",
+                      "E2"
+                    ],
+                    "calculation_ids": [
+                      "K1"
+                    ],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "a7f3a81be08b4afcfcca514fd173d8b7a2714252da90d76637c460ce8eee247e",
+                        "cell_id": "Qa7f3a81be08b:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2400",
+                        "statement": "用电量2400kWh来自energy_tariff.csv数据表（时段2025-07-02、对象全站、适用范围不含税）",
+                        "unit": "kWh",
+                        "unit_column": "计量单位",
+                        "entity_cells": [
+                          "Qa7f3a81be08b:R1C1",
+                          "Qa7f3a81be08b:R1C2"
+                        ],
+                        "evidence_id": "E4"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "a7f3a81be08b4afcfcca514fd173d8b7a2714252da90d76637c460ce8eee247e",
+                        "cell_id": "Qa7f3a81be08b:R1C4",
+                        "row_index": 0,
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.70",
+                        "statement": "电价0.70元/kWh来自同一数据表的电价列，价格单位为元/kWh，适用范围为不含税",
+                        "unit": "元/kWh",
+                        "unit_column": "价格单位",
+                        "entity_cells": [
+                          "Qa7f3a81be08b:R1C1",
+                          "Qa7f3a81be08b:R1C2"
+                        ],
+                        "evidence_id": "E4"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  }
+                ],
+                "omitted_claims": 0,
+                "truncated": false,
+                "redacted": false,
+                "original_lengths": {},
+                "reason": "第1条候选（C1）查询结果绑定失败：第2项查询绑定：statement缺少完整实体格值：Qa7f3a81be08b:R1C1，列'时段'，真实值'2025-07-02'；请在正文和本子句同时写全此值，不能用同一时段等代词替代",
+                "error_kind": "query_binding"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

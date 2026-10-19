@@ -1,0 +1,656 @@
+{
+  "用途": "历史证据摘要，非最终版重新实测，非比赛官方评分",
+  "原记录相对路径": "documents/final-assets-ready/values.json",
+  "原记录SHA256": "9b70e6e3d02b8b26ad5edbea9aa7be79de944501aa9b182448d7576f4621c646",
+  "本次整理新增模型调用": 0,
+  "原始统计": {
+    "schema_version": "zhiheng.approved_historical_metric_fill.r11.v1",
+    "status": "completed_evidence_checked_for_manuscript_adoption_not_final_live_score",
+    "new_model_api_calls": 0,
+    "network_calls": 0,
+    "tests_run": 0,
+    "inflight_run_opened": false,
+    "source_files_modified": false,
+    "source_base": "work/竞赛终版验收",
+    "comparability_labels": {
+      "可直接": "仅comparison_scope明确限定的同题/同指标/同版本对照，不默认可与外部论文比较",
+      "有限": "有可核值，但样本、可用性、计时范围或版本限制不支持泛化因果结论",
+      "不可直接": "不同版本/协议/题集或尚无产品结果，不能据此横排性能/准确率"
+    },
+    "input_materials": [
+      {
+        "path": "documents/final-assets-readiness-r11-v1/ready-evidence-values.json",
+        "sha256": "7d4e241b2a33d983566201ecac43d24d62c70d8c288e0c52dd9a3cbae394f6ab"
+      },
+      {
+        "path": "documents/final-assets-readiness-r11-v1/evidence-index.json",
+        "sha256": "ee59f701f70707ca57964147ad04f64a4dde35c59f4074c08368b9d62d346f68"
+      }
+    ],
+    "checked_indexed_evidence_count": 26,
+    "source_index": {
+      "SQL": {
+        "path": "independent-review/sql100-final-r6/summary.json",
+        "sha256": "d479b7b41557a4f6a361863bf1b35e2ddde2f2a3cf93d9e67a3c101f57f3ce0b"
+      },
+      "SQL_EXPORT": {
+        "path": "independent-review/sql100-final-r6/metadata-export-r2/independent-review.json",
+        "sha256": "cf2900c210b50867d843e84bc051536650d42a706614f91a1217aaa0d4404f2d"
+      },
+      "APPLICABILITY": {
+        "path": "final-r11-execution/applicability-r11.json",
+        "sha256": "042a5ff6b23ad1e65c4f0f69f824d67016092dcb7758fc66219f1c427dc7f3dd"
+      },
+      "RETRIEVAL": {
+        "path": "research/ablations/retrieval/score-v1.json",
+        "sha256": "5911d5079f836ab2908809fe74a79cbac303100cfd5dfd1435ea66361a7b0f0d"
+      },
+      "AUX": {
+        "path": "research/ablations/mechanisms-v1/auxiliary-score-r1.json",
+        "sha256": "1a36f05a5012d3913904fad99235ac5c550d7ea0284bfd3c3711e762b9a4ed15"
+      },
+      "CONTEXT": {
+        "path": "research/ablations/mechanisms-v1/context-score-r1.json",
+        "sha256": "cd03ae2da26092c6a27f8a9655a4e692df423109efcd2d57cbff188da44326af"
+      },
+      "RECOVERY": {
+        "path": "independent-review/recovery-r4-independent.json",
+        "sha256": "4408b1c952f3ed5748cc55cedc3743bfb2a5f1377f26300bee66d598b80fbc09"
+      },
+      "GATE": {
+        "path": "research/ablations/mechanisms-v1/gate-counterfactual-r1.json",
+        "sha256": "844db383cdbab3e4d4d0d72142989749ceee657998d19dad98237ff6c0e6622d"
+      },
+      "PAGE": {
+        "path": "adaptive-processing-candidate/page-proxy-r2/run.json",
+        "sha256": "536c6e35895949d0307987dbd72d10bbb3ed6df32fea471ce4b8b0a56eb84af7"
+      },
+      "INDEX": {
+        "path": "reliability/chunk-index-benchmark.json",
+        "sha256": "b160c69a756523149676c42d563fc022f1c1c14b5c9168bf734cd3122635ff11"
+      },
+      "WARM": {
+        "path": "reliability/chunk-index-warm.json",
+        "sha256": "08fc47224cd849c9b216ed2d2adc575fc8464c5999ab0874653943ca17b8907f"
+      },
+      "OLD_SCALE": {
+        "path": "reliability/scale-benchmark.json",
+        "sha256": "15aaaab471637ef1e98317b340d3cba94d4f57be06f4881cfa2a44d6d4c3c6be"
+      },
+      "PROBE100K": {
+        "path": "reliability/100k-probe.json",
+        "sha256": "04e4fe9c6bbc09e8042bc09e076233d0e30d8d0d21858bfb0769b35afce1f593"
+      },
+      "PERF_NOTE": {
+        "path": "reliability/阶段8可靠性与规模验收.md",
+        "sha256": "f083fb7d276dd1f76614598e6be3e940a0c0735d5045dca4983c94281791f10e"
+      },
+      "BIRD": {
+        "path": "public-benchmark/bird-superhero10-v1/freeze.json",
+        "sha256": "6f39456cf63c86ed37b94dba19ad167598a5a3f1736da8eda3d7b2f58576d788"
+      },
+      "OHR_REVIEW": {
+        "path": "public-benchmark/ohr-preparation-v1/scorer-independent-review-v1/independent-review.json",
+        "sha256": "267edc3b5149e0ca81587f11ac24455c3977d557ea118dcf49719a6374a237ce"
+      },
+      "OHR_SELECTION": {
+        "path": "public-benchmark/ohr-preparation-v1/ohr24-selection-v2/freeze.json",
+        "sha256": "717c29c470048c79a0d6c7ed8eaf6b66b7570a7afc8c335a0e66d6116287eb63"
+      },
+      "OHR_INPUTS": {
+        "path": "public-benchmark/ohr-preparation-v1/ohr24-product-suite-v1/freeze.json",
+        "sha256": "888d70cdd32b713197c236640bc3234ec6d5e7c649d4237ca12ff85dade365b2"
+      }
+    },
+    "rows": [
+      {
+        "id": "sql100-r6",
+        "category": "SQL历史",
+        "label": "R6固定SQL100：执行与发布分列",
+        "values": {
+          "saved_sql_result_match": 97,
+          "strict_published_end_to_end": 96,
+          "semantic_usable": 98,
+          "unsafe_published_claim_cases": 0,
+          "correct_sql_unpublished": 1
+        },
+        "denominator": 100,
+        "version": "R6实际运行；R11只承接经依赖审核的适用证据",
+        "direct_comparability": "有限",
+        "comparison_scope": "同一固定SQL100；根database且无父问题的SQL/rows/已发布正文核心仍适用R11，不声称整个API响应相同。",
+        "caveats": [
+          "97/100是实际SQL结果匹配，96/100是严格已发布端到端，不可混写。",
+          "98/100包含sql-092题面允许的另一粒度解释；原严格key未改。",
+          "严格不通过：sql-072、092、093；sql-094正确SQL未发布仍不计业务通过。",
+          "0/100错误发布只描述该次样本，不能声称无幻觉；非官方成绩。"
+        ],
+        "source_ids": [
+          "SQL",
+          "SQL_EXPORT",
+          "APPLICABILITY"
+        ]
+      },
+      {
+        "id": "retrieval-v1",
+        "category": "消融",
+        "label": "检索证据Complete@5",
+        "values": {
+          "arms": {
+            "legacy_lexical": {
+              "complete_at5_count": 12,
+              "mrr_at10": null
+            },
+            "lexical": {
+              "complete_at5_count": 10,
+              "mrr_at10": 0.7361111111111112
+            },
+            "vector": {
+              "complete_at5_count": 12,
+              "mrr_at10": 1.0
+            },
+            "hybrid": {
+              "complete_at5_count": 12,
+              "mrr_at10": 0.9583333333333334
+            },
+            "rerank": {
+              "complete_at5_count": 12,
+              "mrr_at10": 0.9583333333333334
+            }
+          },
+          "chunks": 71,
+          "model_chat_api_calls": 0
+        },
+        "denominator": 12,
+        "version": "retrieval-v1；真实本地E5；run SHA 0f3789e00f43568f14ce7ec6c2947c792da216050947fa207ae2303a35af0298",
+        "direct_comparability": "可直接",
+        "comparison_scope": "仅同一冻结12题、71片段、同一检索指标的五臂横向对照。",
+        "caveats": [
+          "legacy lexical、vector、hybrid、rerank均12/12，BM25 lexical10/12。",
+          "legacy MRR未记录，保持null；不能填0。",
+          "不评价生成答案；该小集不支持混合检索优于旧检索的总体结论。"
+        ],
+        "source_ids": [
+          "RETRIEVAL"
+        ]
+      },
+      {
+        "id": "auxiliary-r1",
+        "category": "消融",
+        "label": "辅助结构上下文开/关",
+        "values": {
+          "on": {
+            "planned": 4,
+            "completed_status": 2,
+            "complete_facts": 3,
+            "end_to_end_complete": 2,
+            "rate_limited": 1
+          },
+          "off": {
+            "planned": 4,
+            "completed_status": 2,
+            "complete_facts": 2,
+            "end_to_end_complete": 2,
+            "rate_limited": 0
+          }
+        },
+        "denominator": {
+          "per_arm": 4,
+          "matched_available_pairs": 3
+        },
+        "version": "mechanisms-v1/auxiliary-r1；run SHA 85744bb8c878dee9d11b8e9c3112bb8759649e9b151589154eae04e2f883303f",
+        "direct_comparability": "有限",
+        "comparison_scope": "四道同源开发题；仅三对两臂都有可用路径。",
+        "caveats": [
+          "两臂端到端均2/4；on有1次429、off无429，不能归因整体增益。",
+          "关闭heading_path后原片段仍有标题文本；两臂均保留引用/绑定门禁，均不启用完整性补救。"
+        ],
+        "source_ids": [
+          "AUX"
+        ]
+      },
+      {
+        "id": "context-r1",
+        "category": "消融",
+        "label": "结构化历史开/关",
+        "values": {
+          "on": {
+            "planned_turns": 8,
+            "correct_completed": 6,
+            "rate_limited_turns": 2,
+            "whole_chain_correct": false
+          },
+          "off": {
+            "planned_turns": 8,
+            "correct_completed": 3,
+            "rate_limited_turns": 5,
+            "whole_chain_correct": false
+          },
+          "matched_correct_on": 3,
+          "matched_correct_off": 3
+        },
+        "denominator": {
+          "per_arm_turns": 8,
+          "matched_available_pairs": 3
+        },
+        "version": "mechanisms-v1/context-r1；run SHA 0417fe2df83409f598f1ffbde6c9637dbf8f147615e08ace7a03008373cf4a84",
+        "direct_comparability": "有限",
+        "comparison_scope": "可对照的共同可用轮仅ctx01-t1至t3，均3/3。",
+        "caveats": [
+          "全轮表面6/8对3/8，分别有2与5轮429；不支持结构化上下文造成提升。",
+          "两臂均无完整正确8轮链，不得用6比3声称完整链因果收益。"
+        ],
+        "source_ids": [
+          "CONTEXT"
+        ]
+      },
+      {
+        "id": "recovery-r4",
+        "category": "消融",
+        "label": "完整性补救开/关",
+        "values": {
+          "off_correct": 4,
+          "on_correct": 4,
+          "actual_remote_attempts": 9,
+          "completed_response_replays": 9,
+          "on_extra_remote_attempts": 0
+        },
+        "denominator": {
+          "questions": 4,
+          "arms": 2
+        },
+        "version": "recovery-rag-r4-v1；freeze SHA a2e2fe0ba43ef3822a849baa6f85bc0291962ca5a4fbbce2b7e65f04a8d7803f",
+        "direct_comparability": "有限",
+        "comparison_scope": "同题共享已完成首轮响应的受控比较，不是两臂各四次独立实测。",
+        "caveats": [
+          "首稿已完整，未触发实际补检，无观察到的补救增益。",
+          "旧r3/503失败保留；4/4不能作为泛化准确率。"
+        ],
+        "source_ids": [
+          "RECOVERY"
+        ]
+      },
+      {
+        "id": "gate-counterfactual-r1",
+        "category": "消融",
+        "label": "独立语义门禁离线反事实",
+        "values": {
+          "total_input_cases": 100,
+          "saved_candidate_cases": 99,
+          "excluded": 1,
+          "semantic_gate_on_accepted": 95,
+          "semantic_gate_off_counterfactual_accepted": 99,
+          "gate_on_strict_result_matches": 89,
+          "gate_on_strict_result_mismatches": 6,
+          "gate_off_strict_result_matches": 91,
+          "gate_off_strict_result_mismatches": 8,
+          "matching_candidates_rejected": [
+            "sql-056",
+            "sql-091"
+          ],
+          "mismatching_candidates_rejected": [
+            "sql-093",
+            "sql-094"
+          ],
+          "strict_mismatches_accepted_despite_gate": [
+            "sql-072",
+            "sql-073",
+            "sql-092",
+            "sql-095",
+            "sql-096",
+            "sql-099"
+          ],
+          "separate_empty_result_terminals": [
+            "sql-043",
+            "sql-084"
+          ]
+        },
+        "denominator": {
+          "original_questions": 100,
+          "saved_candidates": 99,
+          "excluded_no_candidate": 1
+        },
+        "version": "历史SQL100-r1；原code SHA fc62c9d4a370e5589adb06b57081bff17747d8d71cecdd996e97357356ed0ef9",
+        "direct_comparability": "有限",
+        "comparison_scope": "同99份已保存候选，门禁on与假设off的离线接受结果；并非另跑关闭门禁。",
+        "caveats": [
+          "on接受95，其中严格结果匹配89、不匹配6；off假设接受99，其中匹配91、不匹配8。",
+          "sql-080无已执行候选，不能补造；不存在新增API或已实现的成本节省。",
+          "数值行匹配不等于完整正文正确；与R6 SQL100的96/100不是同版本成绩。"
+        ],
+        "source_ids": [
+          "GATE"
+        ]
+      },
+      {
+        "id": "page-routing-r2",
+        "category": "消融",
+        "label": "页面路由真实本地处理",
+        "values": {
+          "native_import_ms": {
+            "adaptive": 459,
+            "uniform_ocr": 2026
+          },
+          "native_ocr_calls": {
+            "adaptive": 0,
+            "uniform_ocr": 1
+          },
+          "low_quality_name_missing_both": true,
+          "model_api_calls": 0
+        },
+        "denominator": {
+          "pages": 4,
+          "source_clusters": 1
+        },
+        "version": "zhiheng-multimodal-3.1；page-proxy-r2，code_sha256见源记录",
+        "direct_comparability": "有限",
+        "comparison_scope": "同源受控退化四页；实际parser/OCR执行，单次冷测。",
+        "caveats": [
+          "同一原件的退化版本不是独立真实原件；低质人名两臂均漏。",
+          "不据459/2026推一般加速率或OCR准确率；旧executed=false实验另存。"
+        ],
+        "source_ids": [
+          "PAGE"
+        ]
+      },
+      {
+        "id": "lexical-index",
+        "category": "性能",
+        "label": "词法索引建库及重复查询",
+        "values": {
+          "build": [
+            {
+              "chunks": 1000,
+              "build_ms": 58.507
+            },
+            {
+              "chunks": 10000,
+              "build_ms": 662.752
+            },
+            {
+              "chunks": 50000,
+              "build_ms": 4378.594
+            }
+          ],
+          "warm": [
+            {
+              "chunks": 1000,
+              "n": 20,
+              "p50_ms": 11.747,
+              "p95_ms": 15.481
+            },
+            {
+              "chunks": 10000,
+              "n": 20,
+              "p50_ms": 125.43,
+              "p95_ms": 161.056
+            },
+            {
+              "chunks": 50000,
+              "n": 20,
+              "p50_ms": 654.671,
+              "p95_ms": 886.094
+            }
+          ]
+        },
+        "denominator": {
+          "build_runs_per_scale": 1,
+          "warm_queries_per_scale": 20
+        },
+        "version": "阶段8后优化快照；document_engine 0c538030a6bd，非R11性能复测",
+        "direct_comparability": "可直接",
+        "comparison_scope": "同阶段后优化快照1k/10k/50k的词法索引局部规模对照。",
+        "caveats": [
+          "数据是合成短片段，一页一块；不代表5万页PDF导入、向量编码或业务准确率。",
+          "仅本机计算，不含模型网络/排队；冷建库与warm查询分列。"
+        ],
+        "source_ids": [
+          "INDEX",
+          "WARM",
+          "PERF_NOTE"
+        ]
+      },
+      {
+        "id": "e5-version-split",
+        "category": "性能",
+        "label": "真实E5的1k与历史10k分版本",
+        "values": {
+          "new_snapshot_1k": {
+            "chunks": 1000,
+            "build_ms": 3094.643,
+            "warm_n": 20,
+            "warm_p50_ms": 20.66,
+            "warm_p95_ms": 34.809
+          },
+          "older_snapshot_10k": {
+            "chunks": 10000,
+            "build_ms": 31852.504,
+            "warm_n": 20,
+            "warm_p50_ms": 195.145,
+            "warm_p95_ms": 227.009
+          },
+          "embedding": {
+            "model": "Xenova/multilingual-e5-small",
+            "revision": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+            "weights_sha256": "f80102d3f2a1229f387d3c81909990d8945513e347b0eab049f7de3c6f98c193",
+            "dimension": 384,
+            "tokenizer_sha256": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39",
+            "algorithm": "e5-prefix-mean-l2-all-windows512-stride64-v1",
+            "license": "MIT"
+          }
+        },
+        "denominator": {
+          "new_snapshot_vectors": 1000,
+          "older_snapshot_vectors": 10000,
+          "warm_queries_each": 20
+        },
+        "version": "1k：chunk-index-benchmark/warm后优化；10k：scale-benchmark较早快照",
+        "direct_comparability": "不可直接",
+        "comparison_scope": "仅证明两个各自快照的真实逐块E5编码规模；不能拼成同版本扩容曲线。",
+        "caveats": [
+          "1k建库3094.643ms；旧10k建库31852.504ms。",
+          "50k只有词法索引证据，无50k真实向量实验；不能外推。"
+        ],
+        "source_ids": [
+          "INDEX",
+          "WARM",
+          "OLD_SCALE",
+          "PERF_NOTE"
+        ]
+      },
+      {
+        "id": "chunk-optimization",
+        "category": "性能",
+        "label": "纯分块及完整索引的前后对照",
+        "values": {
+          "chunk_only": [
+            {
+              "count": 1000,
+              "old_ms": 70.531,
+              "new_ms": 3.569,
+              "byte_coordinate_equivalent": true
+            },
+            {
+              "count": 10000,
+              "old_ms": 6031.56,
+              "new_ms": 31.326,
+              "byte_coordinate_equivalent": true
+            },
+            {
+              "count": 50000,
+              "old_ms": null,
+              "new_ms": 149.254,
+              "byte_coordinate_equivalent": "same algorithm tested at 1k/10k; full 50k legacy build retained separately"
+            }
+          ],
+          "full_lexical_50k_build_ms": {
+            "older": 197888.615,
+            "later": 4378.594
+          }
+        },
+        "denominator": {
+          "timing_repeats": 1,
+          "exact_chunk_field_checks": [
+            1000,
+            10000
+          ],
+          "structured_pages": 30,
+          "structured_chunks": 75
+        },
+        "version": "pre-index-optimization与阶段8后优化两个冻结材料",
+        "direct_comparability": "有限",
+        "comparison_scope": "1k/10k纯分块前后可在已验等价字段范围比较；50k完整建库还包含规范化优化。",
+        "caveats": [
+          "旧50k纯分块没有重跑，old_ms为null。",
+          "197888.615→4378.594ms不可全部归因单一分块函数，也不是网络响应速度。"
+        ],
+        "source_ids": [
+          "INDEX",
+          "OLD_SCALE",
+          "PERF_NOTE"
+        ]
+      },
+      {
+        "id": "sql100k-probe",
+        "category": "性能",
+        "label": "10万行SQL与临时上限实验",
+        "values": {
+          "generic_sql_ms": 146.38,
+          "default_independent_100k": "rejected_at_50000",
+          "experimental_independent_recompute_ms": 694.295,
+          "experimental_csv_import_ms": 133.458,
+          "experimental_csv_import_seconds": 0.133458,
+          "default_limits": {
+            "import_rows": 50000,
+            "independent_scan_rows": 50000,
+            "sql_locator_rows": 50000
+          },
+          "one_million_cells_limit_preserved": true,
+          "1_1_million_cells_rejected": true,
+          "sum": "5000050000"
+        },
+        "denominator": {
+          "rows": 100000,
+          "runs_per_case": 1,
+          "import_formats_tested": [
+            "CSV"
+          ]
+        },
+        "version": "阶段8独立100k-probe；仅实验进程临时常量，不是出厂支持",
+        "direct_comparability": "有限",
+        "comparison_scope": "各局部操作各自读数；导入、SQL和独立复算不是同一计时步骤。",
+        "caveats": [
+          "133.458单位是毫秒，不是秒；仅受控CSV。",
+          "出厂导入、独立扫描、定位仍50000行；通用只读SQL与独立复算容量不同。",
+          "100k独立复算与CSV导入临时扩大行限，仍受100万单元格/时间等约束；不能声称XLSX/DOCX100k支持。",
+          "不含模型/网络；RSS是进程峰值，不能当某步骤增量。"
+        ],
+        "source_ids": [
+          "PROBE100K",
+          "PERF_NOTE"
+        ]
+      },
+      {
+        "id": "bird10-protocol",
+        "category": "公开参考",
+        "label": "BIRD Superhero10协议冻结",
+        "values": {
+          "questions": 10,
+          "databases": 1,
+          "difficulty_counts": {
+            "simple": 4,
+            "moderate": 4,
+            "challenging": 2
+          },
+          "official_id_order": [
+            717,
+            737,
+            738,
+            745,
+            719,
+            723,
+            726,
+            728,
+            724,
+            730
+          ],
+          "product_score": null,
+          "score_status": "待最终真实运行及独立判分；本表仅协议",
+          "oracle_evidence_supplied": true,
+          "gold_sql_supplied_to_model": false
+        },
+        "denominator": {
+          "planned_fixed_cases": 10
+        },
+        "version": "bird-superhero10-v1；HF f65faf4ae3b638c1fa6df1d3370c8d92c8366301",
+        "direct_comparability": "不可直接",
+        "comparison_scope": "公开development单库分层子集；不能同500题全榜或SOTA直接比较。",
+        "caveats": [
+          "原英文题+官方oracle evidence入模型，schema说明CSV只保存、不额外注入；金标准仅离线评分。",
+          "官方式tuple集合EX与重复行、题意排序、200行显示及实际发布分别列。",
+          "738/726/730参考结果371/387/201行，显示截断不等于完整EX；不能因难题超200行删题。",
+          "当前小表不取历史失败/在途run作最终成绩，也不填0分。"
+        ],
+        "source_ids": [
+          "BIRD"
+        ]
+      },
+      {
+        "id": "ohr24-protocol",
+        "category": "公开参考",
+        "label": "OHR24原件输入与官方函数适配",
+        "values": {
+          "questions": 24,
+          "categories": {
+            "text": 4,
+            "table": 4,
+            "formula": 4,
+            "chart": 4,
+            "reading_order": 4,
+            "multi": 4
+          },
+          "complete_pdfs": 12,
+          "physical_pages": 99,
+          "offline_adapter_checks": {
+            "repaired_passed": 20,
+            "denominator": 20,
+            "initial_failed": 2
+          },
+          "product_em": null,
+          "product_f1": null,
+          "score_status": "待最终真实运行及独立判分；适配器已离线核验",
+          "oracle_document_scope": true,
+          "oracle_page_context_gold_sent": false
+        },
+        "denominator": {
+          "planned_fixed_cases": 24,
+          "offline_adapter_checks": 20
+        },
+        "version": "ohr24-selection-v2/product-suite-v1；official GitHub 1f421eb428f9f5b8ac0bc8064d6ad1f13fab7af7",
+        "direct_comparability": "不可直接",
+        "comparison_scope": "6类别各4题、12全文PDF99页的公开development子集；已知资料范围而非全语料检索。",
+        "caveats": [
+          "EM/token F1取冻结官方原函数，完整24分母和非空条件子集分列，数字/事实独审另列。",
+          "20/20是合成离线评分器与输入边界检查，不是OHR回答正确率；初始2失败保留。",
+          "没有注入gold答案、证据正文、页码或类别；原PDF仅本地审计，不随提交ZIP再分发。",
+          "非完整官方evaluator/全榜/比赛成绩。官方归一化可能使-1/1、1.5/15同分，不能省略事实独审。"
+        ],
+        "source_ids": [
+          "OHR_REVIEW",
+          "OHR_SELECTION",
+          "OHR_INPUTS"
+        ]
+      }
+    ],
+    "corrections_to_aggregate_wording": [
+      {
+        "field": "values.context_ablation.conclusion",
+        "action": "本表采用原context-score-r1的明确非因果结论，不沿用“非结构化会话导致6比3提升”的歧义表述；未改原聚合文件。"
+      }
+    ],
+    "pending": [
+      "R11在途nonSQL/context等业务值完全不读取、不预填。",
+      "BIRD10/OHR24最终实测与独立判分后另填，不将协议测试折算产品成绩。",
+      "三臂paired20最终真实结果与成本另待报告；本表消融不代替三臂比较。"
+    ]
+  }
+}

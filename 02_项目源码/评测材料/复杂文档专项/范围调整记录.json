@@ -1,0 +1,58 @@
+{
+  "reason": "用户明确要求12份足够，不再处理未完成资料；并非根据检索好坏筛题",
+  "requested_at": "2026-10-18T09:41:00+00:00",
+  "before": {
+    "documents": 24,
+    "questions": 48,
+    "pages": 6133,
+    "hashes": {
+      "manifest": "438653d5cb7731e32a93a1a25ae1822e02870397aebd3353aa2ccdb282b0ffee",
+      "suite": "6643626eb3ebfb32c1f23e186d620edd57130b04d24fdcca1e0478f7cb069626",
+      "gold": "6835497d1842eab445b4118158f5c9aad2ce25c9f88214ea7c65ebb8e7844aee",
+      "freeze": "49a6b87ea8ae2a2eb4b85b4ded3eb37f95d0b99593db743f55cc0c737cef2dce"
+    }
+  },
+  "after": {
+    "documents": 12,
+    "questions": 24,
+    "pages": 2965,
+    "source_groups": 9,
+    "series": 5,
+    "over_200_pages": 6,
+    "manifest_sha256": "4db282dd7e8356895e58d95b81cbb0386516d84cedf2a6743c438d93b040c49f",
+    "suite_sha256": "d11fec3ca362f00155737ce7759223d65c9870bc4ef77d71c41d1341eb280108",
+    "gold_sha256": "b515a1e3aac4ff836a28b4a4bcedcadf0803c20f6ed178ad0a14304a211c722f"
+  },
+  "retained_source_ids": [
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B08",
+    "B10",
+    "B11",
+    "B12",
+    "工程A01",
+    "工程A02",
+    "工程A03"
+  ],
+  "removed_source_ids": [
+    "工程A04",
+    "工程A05",
+    "工程A06",
+    "工程A07",
+    "工程A08",
+    "工程A09",
+    "工程A10",
+    "工程A11",
+    "工程A12",
+    "B14",
+    "B16",
+    "B17"
+  ],
+  "selected_question_and_answer_contents_changed": false,
+  "retrieval_results_used_for_selection": false,
+  "model_answers_used_for_selection": false,
+  "original20_suite_sha256": "389eb82dd8ae93168d2e153b040455faca5767de23c5306cffc6c75659a58a07"
+}
