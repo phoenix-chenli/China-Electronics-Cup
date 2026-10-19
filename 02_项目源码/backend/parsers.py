@@ -17,7 +17,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from . import table_semantics, document_structure, formula_structure
 
-PARSER_VERSION = "zhiheng-multimodal-3.2"
+PARSER_VERSION = "zhiheng-multimodal-3.3"
 MAX_OCR_PAGES = 40
 MAX_DOCUMENT_SECONDS = 180
 PDF_PAGE_TIMEOUT = 20

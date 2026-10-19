@@ -1,7 +1,7 @@
 {
   "schema_version": "zhiheng-source-handoff.v1",
   "purpose": "知衡完整可迁移源码、构建、模型许可、业务资料及隔离评测输入",
-  "created_at_utc": "2026-10-19T03:56:05.420618+00:00",
+  "created_at_utc": "2026-10-19T06:17:38.484309+00:00",
   "archive_root": "知衡作品",
   "verification_boundary": "文件完整性与可迁移资产校验，不证明Windows实机、模型准确率或本轮端到端成绩。",
   "excluded": [
@@ -275,13 +275,13 @@
     },
     {
       "path": "backend/ocr_adapter.py",
-      "bytes": 6298,
-      "sha256": "50c4b5030d678f695c3a8e44a29c10ecfcc2f5a8b4d76b71a60f44a974fe3307"
+      "bytes": 9075,
+      "sha256": "67214b85ad453af9a43171f94e6d9b8223e4d29aca8f52e270e0dbbf5fcb0240"
     },
     {
       "path": "backend/ocr_native.py",
-      "bytes": 24426,
-      "sha256": "3e7b5dd234c34d0ff38899c32d7ce8c7bc29d92a872d3363ca1d8e8c6f86d178"
+      "bytes": 25569,
+      "sha256": "61e2f850a90783d31984851d929dcc7fe2db47e19c4abb865fbbcf0fb7ae8266"
     },
     {
       "path": "backend/ocr_preprocess.py",
@@ -291,7 +291,7 @@
     {
       "path": "backend/parsers.py",
       "bytes": 69423,
-      "sha256": "f2bc82823b2857f19de575b44d519121332a407007d78df3ddf35ad29e6eb97c"
+      "sha256": "bae9616962a513886a6e1353c72bad7a04e35299ffecdaeab8c02225f4418484"
     },
     {
       "path": "backend/pdf_extract.py",
@@ -4422,6 +4422,21 @@
       "path": "首次准备.cmd",
       "bytes": 223,
       "sha256": "f91452549bd312fb99c01d071e42653f954f6d5e7307c2e3f152866e79bed5fa"
+    },
+    {
+      "path": "backend/ocr_tesseract.py",
+      "bytes": 7424,
+      "sha256": "9c8c66cc02bd6c3fa1436fb549d2bde5a3eccebc28b5e761ab451a8d61686013"
+    },
+    {
+      "path": "tests/test_ocr_tesseract.py",
+      "bytes": 7290,
+      "sha256": "6817822cc2c32feb2a9ceb91d7561fd29c814726914949f14722d82330aefe2b"
+    },
+    {
+      "path": "说明文档/OCR报告针对性修复_20261019.md",
+      "bytes": 4026,
+      "sha256": "e21cf1d1da1a63c6434161f3cd951f57965004314070047b699abc2c3a8845b8"
     }
   ]
 }

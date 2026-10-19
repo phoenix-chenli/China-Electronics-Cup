@@ -65,7 +65,10 @@ def normalized_image(image):
     if "A" in image.getbands() or "transparency" in image.info:
         rgba = image.convert("RGBA")
         background = Image.new("RGBA", rgba.size, "white")
-        return Image.alpha_composite(background, rgba).convert("RGB")
+        result = Image.alpha_composite(background, rgba).convert("RGB")
+        if 'dpi' in image.info:
+            result.info['dpi'] = image.info['dpi']
+        return result
     return image.convert("RGB")
 
 
@@ -366,25 +369,25 @@ def _bands(values, minimum):
     return [round(statistics.mean(b)) for b in bands if len(b) <= 14]
 
 
-def detect_grid(image, blocks, rotation=0):
+def detect_grid(image, blocks, rotation=0, *, allow_open_outer=False):
     """Conservative closed rules, including light rules on colored table backgrounds."""
     gray = image.convert("L")
     gray.thumbnail((1400, 1400))
-    direct = _detect_grid_mask(gray, blocks, rotation)
+    direct = _detect_grid_mask(gray, blocks, rotation, allow_open_outer=allow_open_outer)
     if direct:
         for table in direct:
-            table["grid_detection"] = "dark_rules"
+            table.setdefault("grid_detection", "dark_rules")
         return direct
     # Edges must still form long, closed intersecting rules. Text alignment alone
     # cannot create a grid. This preserves white separators in colored tables.
     edges = gray.filter(ImageFilter.FIND_EDGES).point(lambda p: 0 if p >= 12 else 255)
-    indirect = _detect_grid_mask(edges, blocks, rotation)
+    indirect = _detect_grid_mask(edges, blocks, rotation, allow_open_outer=allow_open_outer)
     for table in indirect:
-        table["grid_detection"] = "intensity_edges"
+        table.setdefault("grid_detection", "intensity_edges")
     return indirect
 
 
-def _detect_grid_mask(gray, blocks, rotation):
+def _detect_grid_mask(gray, blocks, rotation, *, allow_open_outer=False):
     width, height = gray.size
     pixels = gray.load()
     # Long horizontal ink runs identify actual drawn rules, not text alignment.
@@ -432,6 +435,19 @@ def _detect_grid_mask(gray, blocks, rotation):
         right = round(statistics.median(r[2] for r in group))
         coverage = [sum(pixels[x, y] < 160 for y in range(top, bottom + 1)) for x in range(width)]
         xs = [x for x in _bands(coverage, (bottom - top + 1) * .83) if left - 5 <= x <= right + 5]
+        open_outer = False
+        if allow_open_outer and len(xs) >= 2:
+            # Statistical tables often omit the outside vertical border. The
+            # actual common horizontal endpoints provide its extent; internal
+            # separators must still be drawn through every row, not inferred
+            # from aligned numbers or expected column counts.
+            open_outer = abs(xs[0]-left) > 8 or abs(xs[-1]-right) > 8
+            if abs(xs[0]-left) > 8:xs.insert(0,left)
+            if abs(xs[-1]-right) > 8:xs.append(right)
+            if any(max(sum(pixels[xx, y] < 160 for y in range(ys[r], ys[r+1]+1))
+                           for xx in range(max(0,x-2), min(width,x+3))) < .83*(ys[r+1]-ys[r]+1)
+                   for x in xs[1:-1] for r in range(len(ys)-1)):
+                continue
         if not 3 <= len(xs) <= 40 or abs(xs[0] - left) > 8 or abs(xs[-1] - right) > 8:
             continue
         # Every cell must have closed edges; merged/broken scan grids are not fabricated.
@@ -463,4 +479,5 @@ def _detect_grid_mask(gray, blocks, rotation):
                                   confidence=round(min(b["confidence"] for b in content), 4) if content else None))
             rows.append(values)
         output.append(dict(bbox=inverse_box([xs[0] / width, ys[0] / height, xs[-1] / width, ys[-1] / height], rotation), extraction="ocr_grid", rows=rows, row_count=len(rows), column_count=len(xs) - 1, cells=cells, header_names=[], has_merged_cells=False, data_row_offset=0, requires_review=True, _requires_cell_ocr=ambiguous))
+        if open_outer:output[-1]['grid_detection']='horizontal_rules_open_outer'
     return output[:8]

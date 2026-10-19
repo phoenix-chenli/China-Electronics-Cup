@@ -1,15 +1,16 @@
 """Explicit local OCR capability selection. No installation or remote POST here."""
 from __future__ import annotations
 import csv
-import io
 import json
 import platform
 import shutil
 import subprocess
 import tempfile
 import sys
+import math
+import time
 from pathlib import Path
-from .ocr_native import OCRError, quality_metrics, text_blocks, MAX_INPUT_PIXELS
+from .ocr_native import OCRError, quality_metrics, MAX_INPUT_PIXELS
 
 
 def capabilities():
@@ -51,51 +52,92 @@ def recognize(image, timeout=35, cancelled=None):
             except (ValueError,IndexError,UnicodeError) as exc:raise OCRError('本地OCR输出不可读') from exc
             if response.returncode or result.get('error'):raise OCRError(result.get('error','本地OCR失败'))
             return result
+    started = time.monotonic()
+    if not isinstance(timeout, (int,float)) or not math.isfinite(timeout) or timeout <= 0:
+        raise OCRError('Tesseract OCR 时间预算无效')
+    deadline = started + min(35,timeout)
     capability = capabilities()
     if capability['selected'] != 'tesseract':
         raise OCRError('此系统未安装可用本地 OCR；请安装 Tesseract 及中文语言包，或使用明确授权的原页视觉读取。原件仍可保留。')
     if image.width * image.height > MAX_INPUT_PIXELS:
         raise OCRError('图片超过本地 OCR 像素预算')
-    # TSV preserves actual engine boxes. No inferred cells/tables or corrected digits.
+    from .ocr_tesseract import input_dpi, parse_tsv, line_blocks, table_candidates, cell_crops, retain_cell_candidates
+    dpi = input_dpi(image)
+    quality = quality_metrics(image)
+    audit = {'status':'not_applicable','extra_ocr_calls':0,'crop_count':0,
+             'max_crops':80,'max_crop_pixels':12_000_000,'numeric_values_replaced':False}
+    quality.update(ocr_engine='tesseract', rotation_correction=0, preprocessing_applied=False,
+                   input_dpi=list(dpi) if dpi else None, dpi_source='image_metadata' if dpi else 'engine_default',
+                   text_normalization='cjk_interword_spaces', cell_review=audit)
+    def execute(arguments, limit):
+        remaining = min(limit, deadline-time.monotonic())
+        if remaining <= .05:
+            raise subprocess.TimeoutExpired(arguments, max(0,remaining))
+        if cancelled is None:
+            response = subprocess.run(arguments,capture_output=True,timeout=remaining)
+        else:
+            from .reliability import run_cancellable
+            response = run_cancellable(arguments,cancelled=cancelled,timeout=remaining)
+        error = getattr(response,'stderr',b'')
+        if isinstance(error,bytes):error=error.decode('utf-8',errors='replace')
+        if ('read_params_file' in error and ('tsv' in error or "Can't open" in error)):
+            raise OCRError('Tesseract TSV 配置缺失或无效；请检查 tessdata 的 configs/tsv，未当作空白页')
+        if response.returncode or len(response.stdout)>8_000_000:
+            raise OCRError('Tesseract OCR 失败或输出超过预算，未发布部分输出')
+        return response
     with tempfile.TemporaryDirectory(prefix='zhiheng-tesseract-') as folder:
-        path = Path(folder)/'page.png'; image.convert('RGB').save(path)
+        path = Path(folder)/'page.png'
+        image.convert('RGB').save(path, **({'dpi':dpi} if dpi else {}))
+        arguments=[shutil.which('tesseract'),str(path),'stdout','-l',
+            '+'.join(capability['tesseract']['languages'])]
+        if dpi:arguments.extend(['--dpi',str(dpi[0])])
+        arguments.append('tsv')
         try:
-            arguments=[shutil.which('tesseract'),str(path),'stdout','-l',
-                '+'.join(capability['tesseract']['languages']),'tsv']
-            if cancelled is None:
-                response = subprocess.run(arguments,capture_output=True,timeout=max(.1,min(35,timeout)))
-            else:
-                from .reliability import run_cancellable
-                response = run_cancellable(arguments,cancelled=cancelled,timeout=max(.1,min(35,timeout)))
+            response=execute(arguments,35)
+        except InterruptedError:
+            raise
         except subprocess.TimeoutExpired as exc:
             raise OCRError('Tesseract OCR 超时，未发布部分输出') from exc
-        if response.returncode or len(response.stdout) > 8_000_000:
-            raise OCRError('Tesseract OCR 失败或输出超过预算，未发布部分输出')
-        groups = {}
+        except OSError as exc:
+            raise OCRError('Tesseract OCR 无法启动，请检查本机安装与执行权限') from exc
         try:
-            for row in csv.DictReader(io.StringIO(response.stdout.decode('utf-8')),delimiter='\t'):
-                if row.get('level') != '5' or not row.get('text','').strip(): continue
-                key=tuple(row[k] for k in ('page_num','block_num','par_num','line_num'))
-                x,y,w,h=map(int,(row['left'],row['top'],row['width'],row['height']))
-                if w <= 0 or h <= 0 or x < 0 or y < 0 or x+w > image.width or y+h > image.height:
-                    raise ValueError('invalid OCR box')
-                groups.setdefault(key,[]).append((row['text'],x,y,x+w,y+h,float(row['conf'])/100))
-        except (ValueError,KeyError,UnicodeError) as exc:
-            raise OCRError('Tesseract 返回的文字坐标格式无效') from exc
-    blocks=[]
-    for words in groups.values():
-        value=' '.join(w[0] for w in words)
-        blocks.append({'text':value,'bbox':[min(w[1] for w in words)/image.width,min(w[2] for w in words)/image.height,
-            max(w[3] for w in words)/image.width,max(w[4] for w in words)/image.height],
-            'confidence':max(0,min(1,sum(w[5] for w in words)/len(words))),
-            'kind':'formula_candidate' if any(c in value for c in '=∑∫√≤≥') else 'text'})
-    text,blocks=text_blocks(blocks)
-    quality=quality_metrics(image)
-    quality.update(ocr_engine='tesseract',ocr_mean_confidence=sum(b['confidence'] for b in blocks)/len(blocks) if blocks else None,
-                   rotation_correction=0,preprocessing_applied=False)
-    quality['warnings'].append('Tesseract文字与坐标为机器识别候选，未验证业务数值；未推断网格结构。')
+            pages, records=parse_tsv(response.stdout,{1:image.size})
+        except (ValueError,KeyError,TypeError,UnicodeError,csv.Error) as exc:
+            raise OCRError('Tesseract 返回的 TSV 文字坐标格式无效或为空，请检查语言及 TSV 配置') from exc
+        words=pages[1];text,blocks=line_blocks(words)
+        quality.update(tsv_records=records,word_observations=len(words))
+        tables=table_candidates(image,words) if deadline-time.monotonic()>.1 else []
+        if tables:
+            quality['visual_review_required']=True
+            jobs,truncated=cell_crops(image,tables)
+            audit.update(status='skipped_budget',crop_count=len(jobs),truncated=truncated)
+            if jobs and deadline-time.monotonic()>=1:
+                paths=[]
+                for i,(_,_,crop) in enumerate(jobs):
+                    dest=Path(folder)/f'cell-{i}.png';crop.save(dest,dpi=(300,300));paths.append(str(dest))
+                listing=Path(folder)/'cells.txt';listing.write_text('\n'.join(paths)+'\n',encoding='utf-8')
+                batch=[arguments[0],str(listing),'stdout','-l',arguments[4],'--psm','6','--dpi','300','tsv']
+                try:
+                    audit['extra_ocr_calls']=1
+                    result=execute(batch,15)
+                    candidates,_=parse_tsv(result.stdout,{i:crop.size for i,(_,_,crop) in enumerate(jobs,1)})
+                    differences=retain_cell_candidates(jobs,candidates)
+                    audit.update(status='compared',disagreement_cells=differences)
+                    if differences:quality['warnings'].append(f'{differences} 个单元格复读存在差异；原值保留，候选须对照原图复核，小数点和负号未自动补写')
+                except InterruptedError:
+                    raise
+                except (OCRError,OSError,subprocess.TimeoutExpired,ValueError,TypeError,KeyError,UnicodeError,csv.Error):
+                    audit['status']='candidate_failed'
+                    quality['warnings'].append('表格局部复读未完整完成；保留整页候选，不以失败推断空单元格')
+            if truncated:quality['warnings'].append('逐格复读达到数量或像素预算，未复读单元格仍须核验')
+            quality['warnings'].append('表格仅依据实际格线及文字框生成待复核候选；未确认表头、行名、数值和单位')
+        else:
+            quality['warnings'].append('未取得可靠表格网格；仅保留文字，不表示原件没有表格')
+    quality.update(ocr_mean_confidence=sum(b['confidence'] for b in blocks)/len(blocks) if blocks else None,
+                   elapsed_ms=round((time.monotonic()-started)*1000))
+    quality['warnings'].append('Tesseract文字与坐标为机器识别候选，未验证业务数值。')
     if not capability['chinese_available']:quality['warnings'].append('缺少中文OCR语言包；中文识别可能不完整。')
-    return {'text':text,'blocks':blocks,'quality':quality,'extraction':'ocr' if text else 'unreadable','tables':[]}
+    return {'text':text,'blocks':blocks,'quality':quality,'extraction':'ocr' if text else 'unreadable','tables':tables}
 
 
 if __name__=='__main__':
