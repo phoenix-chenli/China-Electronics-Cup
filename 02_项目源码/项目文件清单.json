@@ -279,6 +279,11 @@
       "sha256": "e330d6b676841257ef58e7b28fde20070124909093b99ddd7a36e53708eb9c2f"
     },
     {
+      "path": "backend/ocr_layout.py",
+      "bytes": 8626,
+      "sha256": "4d22d58f31a4dcffac48798052fba642d8172610f26e0d118d1c09c808ed19d7"
+    },
+    {
       "path": "backend/ocr_native.py",
       "bytes": 25569,
       "sha256": "61e2f850a90783d31984851d929dcc7fe2db47e19c4abb865fbbcf0fb7ae8266"
@@ -292,6 +297,11 @@
       "path": "backend/ocr_preprocess.py",
       "bytes": 4567,
       "sha256": "857103cfe796ada339484628db02f5bd3d12f7222deeb229554508570d1aa296"
+    },
+    {
+      "path": "backend/ocr_ruled.py",
+      "bytes": 11574,
+      "sha256": "41c9fa0c54b07ff55489171b6d4e3664602bf8729cac6a10a1c17996ce7a8ac8"
     },
     {
       "path": "backend/ocr_tesseract.py",
@@ -2539,6 +2549,16 @@
       "sha256": "f35db47d8deecfc3be4e9d8c94cbac2769cda7d78a1f0550f05fd890b7667f98"
     },
     {
+      "path": "tests/test_ocr_layout.py",
+      "bytes": 11795,
+      "sha256": "2c6b5226537737c5fc42c27bf5ede22c97616f02bf80d608155314fa17dc6585"
+    },
+    {
+      "path": "tests/test_ocr_layout_context.py",
+      "bytes": 11667,
+      "sha256": "ca2d85bf4e3e2b92dbb296b94ac4f7eb0b475985f1e5fc3bf9436b441da758f2"
+    },
+    {
       "path": "tests/test_ocr_orientation.py",
       "bytes": 14414,
       "sha256": "8fe50d6937d0fb5bef5d987920917221b38d8b20af4271f8cf5e7870e90297f4"
@@ -2547,6 +2567,16 @@
       "path": "tests/test_ocr_preprocess.py",
       "bytes": 10975,
       "sha256": "ea742a5a3d6138094a86f28f2235f3ec655d2f94ab94c6e7bae80980f8764f2c"
+    },
+    {
+      "path": "tests/test_ocr_ruled.py",
+      "bytes": 3654,
+      "sha256": "610122a76a19c012227ae2119687cb1dc836e5ea7c085630907431e14ce24ae6"
+    },
+    {
+      "path": "tests/test_ocr_table_pipeline.py",
+      "bytes": 3061,
+      "sha256": "6e2a1e8607ace8df1df313992bb5a64c347e212cd35eb34bb6b81b6e63307aba"
     },
     {
       "path": "tests/test_ocr_tesseract.py",
@@ -4405,8 +4435,8 @@
     },
     {
       "path": "说明文档/OCR报告针对性修复_20261019.md",
-      "bytes": 2845,
-      "sha256": "0a6cbe15fe8b75c6dbf85d3d4429249e5fecf6ab397317dcaf9c882c75ff6b2a"
+      "bytes": 2851,
+      "sha256": "b14d4bf7114330a9529c4a0604dde3dcf68e71135c81298ff014220dcf528943"
     },
     {
       "path": "说明文档/OCR方向纠正实测_20261019.json",
@@ -4415,13 +4445,23 @@
     },
     {
       "path": "说明文档/OCR方向纠正验收_20261019.md",
-      "bytes": 2570,
-      "sha256": "7d0fa8757a0cfd5f7591523ef1ea734c7469979f7643027269c000fc9b3fecd1"
+      "bytes": 2576,
+      "sha256": "02975fb4cfc638508a4ba331d0b246e38547a05d6091ae2e675109873e373940"
     },
     {
       "path": "说明文档/变更与回退说明.md",
       "bytes": 2306,
       "sha256": "87acfccb4bf722ffaca9e3b40bc07fd9127b1b921c2a952bc87c3501ba8b60b0"
+    },
+    {
+      "path": "说明文档/复杂表格关系修复验收_20261019.md",
+      "bytes": 4984,
+      "sha256": "6648a1ec9d77f20d62259ea00b2da1bb0bf77e5047b67f2ca9b842669ac874a5"
+    },
+    {
+      "path": "说明文档/复杂表格结构实测_20261019.json",
+      "bytes": 24510,
+      "sha256": "c1eb25e4c05b454df672d7d0901f51383d21c8095f5ee51397ef080671b5789e"
     },
     {
       "path": "说明文档/复杂资料库使用与复现.md",
@@ -4457,46 +4497,6 @@
       "path": "首次准备.cmd",
       "bytes": 223,
       "sha256": "f91452549bd312fb99c01d071e42653f954f6d5e7307c2e3f152866e79bed5fa"
-    },
-    {
-      "path": "backend/ocr_layout.py",
-      "bytes": 8626,
-      "sha256": "4d22d58f31a4dcffac48798052fba642d8172610f26e0d118d1c09c808ed19d7"
-    },
-    {
-      "path": "backend/ocr_ruled.py",
-      "bytes": 11574,
-      "sha256": "41c9fa0c54b07ff55489171b6d4e3664602bf8729cac6a10a1c17996ce7a8ac8"
-    },
-    {
-      "path": "tests/test_ocr_layout.py",
-      "bytes": 11795,
-      "sha256": "2c6b5226537737c5fc42c27bf5ede22c97616f02bf80d608155314fa17dc6585"
-    },
-    {
-      "path": "tests/test_ocr_layout_context.py",
-      "bytes": 11667,
-      "sha256": "ca2d85bf4e3e2b92dbb296b94ac4f7eb0b475985f1e5fc3bf9436b441da758f2"
-    },
-    {
-      "path": "tests/test_ocr_ruled.py",
-      "bytes": 3654,
-      "sha256": "610122a76a19c012227ae2119687cb1dc836e5ea7c085630907431e14ce24ae6"
-    },
-    {
-      "path": "tests/test_ocr_table_pipeline.py",
-      "bytes": 3061,
-      "sha256": "6e2a1e8607ace8df1df313992bb5a64c347e212cd35eb34bb6b81b6e63307aba"
-    },
-    {
-      "path": "说明文档/复杂表格关系修复验收_20261019.md",
-      "bytes": 5063,
-      "sha256": "e979c48b5fbbca8851258ec9292706b78c94268b96c90ca9b2cd665bd60491a0"
-    },
-    {
-      "path": "说明文档/复杂表格结构实测_20261019.json",
-      "bytes": 24510,
-      "sha256": "c1eb25e4c05b454df672d7d0901f51383d21c8095f5ee51397ef080671b5789e"
     }
   ]
 }
