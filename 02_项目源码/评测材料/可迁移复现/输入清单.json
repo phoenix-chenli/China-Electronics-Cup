@@ -1,0 +1,1026 @@
+{
+  "schema_version": "zhiheng-portable-inputs.v1",
+  "name": "45场景可迁移输入（独立导出，未改冻结原件）",
+  "path_base": "project_root",
+  "historical_plan_lineage": [
+    {
+      "historical_file": "冻结计划.json",
+      "file_sha256": "788721746a2fcd61716c02296a9bea1e2dc3f200b1183b84b959a04b91b7c700",
+      "plan_sha256": "7d4d1b0c7a749affe83acc3e2219c455c49ef73815ed3cd1a4524a9b38b677b1"
+    },
+    {
+      "historical_file": "补充冻结计划.json",
+      "file_sha256": "4d4ce73ec3ade68464421841bda131f73ad2e108f36b489c17ddceb2c6d51471",
+      "plan_sha256": "fa3a92b41661f08a34e1c082d65dbbb6481b3e631477540697323f5c6a96874f"
+    },
+    {
+      "historical_file": "多轮补充冻结计划.json",
+      "file_sha256": "d5a4072f5fefa47df449b2caae52497d9be8ae60674b946dc3c9e9c264da55c6",
+      "plan_sha256": "020db33f68d470ed6c41bf3da8131c27edfc9999f8e141759f017776d63f344e"
+    },
+    {
+      "historical_file": "错别字补充冻结计划.json",
+      "file_sha256": "97a0586af237eb0029f68d7172ccac37d6518a2f38b84bf48ea59c9ea270ef84",
+      "plan_sha256": "57454b81fbd263a899bb9dde1c37096e07b2edb06cba2e951c6245a76a7819aa"
+    }
+  ],
+  "sources": [
+    {
+      "id": "chinook",
+      "path": "知识库样本/结构化数据库/Chinook.sqlite",
+      "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "origin": "https://raw.githubusercontent.com/lerocha/chinook-database/7f67772503d71ba90f19283c38e93923addb43fa/ChinookDatabase/DataSources/Chinook_Sqlite.sqlite",
+      "kind": "public_teaching",
+      "cluster": "chinook"
+    },
+    {
+      "id": "harbor",
+      "path": "评测材料/初赛20题/输入/harbor.docx",
+      "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "kind": "controlled_synthetic",
+      "cluster": "harbor-v1"
+    },
+    {
+      "id": "river",
+      "path": "评测材料/初赛20题/输入/river.pdf",
+      "sha256": "bd190bfe54d0b0b9bca488545a1355171aadf7f2e08fe72d4556ad3cfc46d55e",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "kind": "controlled_synthetic",
+      "cluster": "river-v1"
+    },
+    {
+      "id": "equipment",
+      "path": "评测材料/初赛20题/输入/equipment.txt",
+      "sha256": "1b017e32153f1a71dbae9a1645de9a7a883e4e85d887fbbfc427c700ba78a280",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "kind": "controlled_synthetic",
+      "cluster": "equipment-v1"
+    },
+    {
+      "id": "sample",
+      "path": "评测材料/初赛20题/输入/sample.md",
+      "sha256": "6a73a71c369c1601ebcf6cf5b5a394e866971c9a8085434375ca20c0a93404b7",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "kind": "controlled_synthetic",
+      "cluster": "sampling-v1"
+    },
+    {
+      "id": "draft",
+      "path": "评测材料/初赛20题/输入/draft.docx",
+      "sha256": "09f913425009033b9bd9ca41b2d15d8ec63c314c03a2beccf0b50b8ce1643c63",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "kind": "controlled_synthetic",
+      "cluster": "harbor-policy-v1"
+    },
+    {
+      "id": "revision",
+      "path": "评测材料/初赛20题/输入/revision.pdf",
+      "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "kind": "controlled_synthetic",
+      "cluster": "harbor-energy-v1"
+    },
+    {
+      "id": "B08",
+      "path": "知识库样本/真实业务文档/B08_EPA_市政营养盐去除技术参考_2008.pdf",
+      "sha256": "e82259182509bbf730830d7d706352cc12535a72e7625804450200e8f9dd2e50",
+      "origin": "https://www.epa.gov/sites/default/files/2019-02/documents/municipal-nutrient-removal-reference-document.pdf",
+      "kind": "real_complete_original",
+      "cluster": "B08-e82259182509"
+    },
+    {
+      "id": "B04",
+      "path": "知识库样本/真实业务文档/B04_DOE_仪表与控制_卷1_1992.pdf",
+      "sha256": "da491ea2d042a857b146e5ae0531b81a7833d9cae1080ca24630a50d5f6fcd32",
+      "origin": "https://www.energy.gov/sites/default/files/2026-04/DOE-HDBK-1013-92-VOL1.pdf",
+      "kind": "real_complete_original",
+      "cluster": "DOE-HDBK-1013-92"
+    },
+    {
+      "id": "工程A01",
+      "path": "知识库样本/真实业务文档/工程A01_土与基础手册_卷一_FHWA_NHI06088_2006.pdf",
+      "sha256": "f970902490ea97b07225f0eea51402dfe4c4988229aab8a0f0336429357340b4",
+      "origin": "https://www.fhwa.dot.gov/engineering/geotech/pubs/nhi06088.pdf",
+      "kind": "real_complete_original",
+      "cluster": "Soils and Foundations"
+    },
+    {
+      "id": "boundary",
+      "path": "知识库样本/结构化数据库/边界测试数据库.sqlite",
+      "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+      "origin": "evaluation/synthetic_sources.py; existing deterministic controlled fixture",
+      "kind": "synthetic_controlled",
+      "cluster": "controlled-boundary-v1"
+    },
+    {
+      "id": "definitions",
+      "path": "评测材料/可迁移复现/受控输入/口径说明V1_合成.txt",
+      "sha256": "e959b0125b961e1371a1076fbb965e61ff77845d668103161ac4bc438ffffa18",
+      "origin": "evaluation/build_context_suite.py; existing deterministic controlled fixture",
+      "kind": "synthetic_controlled",
+      "cluster": "controlled-boundary-v1"
+    },
+    {
+      "id": "工程A02",
+      "path": "知识库样本/真实业务文档/工程A02_地锚与锚固系统_GEC04_1999.pdf",
+      "sha256": "2501e171a90a1d169d1f3eba581551ebbe5279775a915bb9fd05fa3b95a1a5f2",
+      "origin": "https://www.fhwa.dot.gov/engineering/geotech/pubs/if99015.pdf",
+      "kind": "real_complete_original",
+      "cluster": "GEC 4"
+    },
+    {
+      "id": "工程A03",
+      "path": "知识库样本/真实业务文档/工程A03_浅基础_GEC06_2002.pdf",
+      "sha256": "9a46ef8b0c67875685f101a0f5d45ccb45f4e824985f1bd312455833fa474af1",
+      "origin": "https://www.fhwa.dot.gov/engineering/geotech/pubs/010943.pdf",
+      "kind": "real_complete_original",
+      "cluster": "GEC 6"
+    },
+    {
+      "id": "B01",
+      "path": "知识库样本/真实业务文档/B01_DOE_热力学_1992.pdf",
+      "sha256": "3c4ef4ad700cfd64444677404956ec2237bb5e24e31f7e591b1767526ec0b2c9",
+      "origin": "https://www.energy.gov/sites/default/files/2026-04/DOE-HDBK-1012-92_VOL1.pdf",
+      "kind": "real_complete_original",
+      "cluster": "DOE-HDBK-1012-92"
+    },
+    {
+      "id": "B02",
+      "path": "知识库样本/真实业务文档/B02_DOE_传热学_1992.pdf",
+      "sha256": "1261936f3985477e85c694f27dd8ffd56ca95130e44f3f1bbc64d30de540e2b2",
+      "origin": "https://www.energy.gov/sites/default/files/2026-04/DOE-HDBK-1012-92_VOL2.pdf",
+      "kind": "real_complete_original",
+      "cluster": "DOE-HDBK-1012-92"
+    },
+    {
+      "id": "B03",
+      "path": "知识库样本/真实业务文档/B03_DOE_流体流动_1992.pdf",
+      "sha256": "0135196976fc613fa7e0129776e9fd74ead03e6cc3a37bab65803d5484140974",
+      "origin": "https://www.energy.gov/sites/default/files/2026-04/DOE-HDBK-1012-92_VOL3.pdf",
+      "kind": "real_complete_original",
+      "cluster": "DOE-HDBK-1012-92"
+    },
+    {
+      "id": "B05",
+      "path": "知识库样本/真实业务文档/B05_DOE_仪表与控制_卷2_1992.pdf",
+      "sha256": "def9cbd98d40f56dd78c508ae4564ce2afabfe6c1ab8d74c458353009f3083a6",
+      "origin": "https://www.energy.gov/sites/default/files/2026-04/DOE-HDBK-1013-92-VOL2.pdf",
+      "kind": "real_complete_original",
+      "cluster": "DOE-HDBK-1013-92"
+    },
+    {
+      "id": "B10",
+      "path": "知识库样本/真实业务文档/B10_EPA_紫外消毒指南_2006.pdf",
+      "sha256": "7289711f09f47b7d80f159d7b7ab839d9a692fa373e15dbd0543616871377da9",
+      "origin": "https://nepis.epa.gov/Exe/ZyPDF.cgi/600006T3.PDF?Dockey=600006T3.PDF",
+      "kind": "real_complete_original",
+      "cluster": "B10-7289711f09f4"
+    },
+    {
+      "id": "B11",
+      "path": "知识库样本/真实业务文档/B11_EPA_膜过滤指南_2005.pdf",
+      "sha256": "45872c75488960e62f1ff4367353f547bb1228d5644e1825aacf2faa1841ec75",
+      "origin": "https://nepis.epa.gov/Exe/ZyPDF.cgi/901V0500.PDF?Dockey=901V0500.PDF",
+      "kind": "real_complete_original",
+      "cluster": "B11-45872c754889"
+    },
+    {
+      "id": "B12",
+      "path": "知识库样本/真实业务文档/B12_EPA_紫外处理技术审查工具包_2022.pdf",
+      "sha256": "817207c4a175025dd6d347f4ecb8a976992a32e7c59dd99bf66cbbb4c518a4d7",
+      "origin": "https://www.epa.gov/system/files/documents/2022-05/uv-toolkit-815-B-21-007_0.pdf",
+      "kind": "real_complete_original",
+      "cluster": "B12-817207c4a175"
+    }
+  ],
+  "cases": [
+    {
+      "id": "sql-001",
+      "question": "曲目表一共有多少条记录？只返回数量。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "count",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-003",
+      "question": "紧急撤离和普通到岗提示的鸣笛信号分别是什么？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-004",
+      "question": "所有账单Total合计是多少？保留两位小数，只返回金额。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "sum",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-008",
+      "question": "手册中的成功启动与失败启动次数各是多少，成功率分母怎样定义？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-006",
+      "question": "按客户国家统计客户数量，输出国家和数量，按国家名升序。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "group_count",
+        "ordering",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-012",
+      "question": "每个断面有几个独立水样？实验室复测会增加这个数量吗？",
+      "source_ids": [
+        "river"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-009",
+      "question": "有多少首曲目的Composer为NULL？只返回数量，不把空字符串当NULL。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "null",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-020",
+      "question": "复查必须保留哪三项标识？",
+      "source_ids": [
+        "river"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-014",
+      "question": "时长严格超过10分钟的曲目有多少首？请用Milliseconds正确换算。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "unit_conversion",
+        "strict_range",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-023",
+      "question": "M-028的温升与室温分别是多少？",
+      "source_ids": [
+        "equipment"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-017",
+      "question": "客户表Company已填写、即不是NULL的客户有多少人？",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "not_null",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-028",
+      "question": "在日志尾部找到M-080备用继电器型号、保管柜和附件复核暗号。",
+      "source_ids": [
+        "equipment"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-020",
+      "question": "BillingState为NULL和非NULL的发票各多少张？按NULL数量、非NULL数量输出。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "conditional_count",
+        "null",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-032",
+      "question": "通勤时长是否包含接送子女绕行时间？",
+      "source_ids": [
+        "sample"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-041",
+      "question": "按账单国家统计总销售额，金额保留两位小数，取最高的5个国家，输出国家和销售额。金额相同按国家名升序。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_complex",
+        "aggregate",
+        "ranking",
+        "legacy_development_reference",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-038",
+      "question": "拟议补助对象是否包括尚未开工项目？",
+      "source_ids": [
+        "draft"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-051",
+      "question": "只看至少卖出过一首曲目的艺术家，他们名下总曲目数超过50的有哪些？输出艺术家编号、名字、总曲目数。总曲目数包括未售出的曲目。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_complex",
+        "nested",
+        "correlated",
+        "having",
+        "grain",
+        "legacy_development_reference",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-044",
+      "question": "用电更正通知哪天签发，涉及哪天日报？",
+      "source_ids": [
+        "revision"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-074",
+      "question": "各播放列表有多少不同专辑？包括没有曲目的列表，输出列表编号、名称、专辑数，按编号升序。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_complex",
+        "left_join",
+        "many_to_many",
+        "distinct",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "rag-049",
+      "question": "审核人和复核人分别是谁，能据此判断设备操作员吗？",
+      "source_ids": [
+        "revision"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "sql-002",
+      "question": "客户来自多少个不同国家？只返回国家数，不把客户数当国家数。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "distinct",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "sql-003",
+      "question": "发票最早和最晚的开票日期是什么？按最早、最晚两列输出。",
+      "source_ids": [
+        "chinook"
+      ],
+      "mode": "database",
+      "split": "development",
+      "tags": [
+        "sql_basic",
+        "date",
+        "min_max",
+        "public_teaching"
+      ]
+    },
+    {
+      "id": "RD-B08-01",
+      "question": "在2008年《Municipal Nutrient Removal Technologies Reference Document》的Central Johnston County案例中，请区分设计处理能力与研究期平均实际流量，并列出研究期的进、出水TN和TP平均浓度。要注明研究时间，不能把许可限值当作实测浓度。",
+      "source_ids": [
+        "B08"
+      ],
+      "mode": "document",
+      "tags": [
+        "real_document",
+        "complex_table",
+        "complex_table",
+        "cross_page",
+        "long_document",
+        "condition"
+      ],
+      "split": "development",
+      "cluster": "B08-e82259182509"
+    },
+    {
+      "id": "RD-B04-01",
+      "question": "阅读 DOE《仪表与控制》卷1的RTD电阻—温度曲线和热电偶原理图：在图1约400°C处，Nickel、Copper、Platinum的电阻高低顺序怎样？RTD与Thermocouple分别利用什么物理量形成测温信号？",
+      "source_ids": [
+        "B04"
+      ],
+      "mode": "document",
+      "tags": [
+        "real_document",
+        "chart",
+        "chart",
+        "cross_page",
+        "same_family_distinction"
+      ],
+      "split": "development",
+      "cluster": "DOE-HDBK-1013-92"
+    },
+    {
+      "id": "工程A01-Q1",
+      "question": "依据 FHWA NHI-06-088《Soils and Foundations》卷一的 point load test 说明，若岩石的尺寸修正点荷载强度指数 Is(50)=2 MPa，按手册常用换算式估计的单轴抗压强度是多少？为什么不能把该换算系数视为所有岩石都适用的常数？",
+      "source_ids": [
+        "工程A01"
+      ],
+      "mode": "document",
+      "tags": [
+        "real_document",
+        "公式与适用边界",
+        "formula",
+        "conditional",
+        "cross_language",
+        "long_document"
+      ],
+      "split": "development",
+      "cluster": "Soils and Foundations"
+    },
+    {
+      "id": "acceptance-cross-t1",
+      "question": "按口径说明V1统计2025年登记金额，先给出原始单位下的合计，再依照文档换算为元；说明来源字段、订单状态、日期范围和NULL处理边界。",
+      "source_ids": [
+        "boundary",
+        "definitions"
+      ],
+      "mode": "multi_source",
+      "split": "development",
+      "tags": [
+        "context",
+        "six_turn_chain",
+        "cross_source",
+        "synthetic_controlled"
+      ],
+      "chain_id": "acceptance-cross",
+      "turn_index": 1
+    },
+    {
+      "id": "ctx03-t1",
+      "chain_id": "ctx03",
+      "turn_index": 1,
+      "question": "张伟一共登记了多少工时？",
+      "source_ids": [
+        "boundary"
+      ],
+      "mode": "database",
+      "tags": [
+        "context",
+        "clarification",
+        "synthetic_controlled",
+        "two_turn_clarification"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "ctx03-t2",
+      "chain_id": "ctx03",
+      "turn_index": 2,
+      "question": "选择西店、员工编号2；按worklogs.hours求和，NULL未知不补零。",
+      "source_ids": [
+        "boundary"
+      ],
+      "mode": "database",
+      "tags": [
+        "context",
+        "clarification",
+        "synthetic_controlled",
+        "two_turn_clarification"
+      ],
+      "split": "development",
+      "parent_case_id": "ctx03-t1"
+    },
+    {
+      "id": "acceptance-cross-t2",
+      "question": "把年份改成2024年，其余口径不变，仍分别给出原始金额和换算为元的金额。",
+      "source_ids": [
+        "boundary",
+        "definitions"
+      ],
+      "mode": "multi_source",
+      "split": "development",
+      "tags": [
+        "context",
+        "six_turn_chain",
+        "cross_source",
+        "synthetic_controlled"
+      ],
+      "chain_id": "acceptance-cross",
+      "turn_index": 2,
+      "parent_case_id": "acceptance-cross-t1"
+    },
+    {
+      "id": "acceptance-cross-t3",
+      "question": "仍针对2024年，仅假设刚才的登记金额减少10%，按原金额乘以(1-10%)计算假设金额，分别用分和元表示。明确这不是实际登记结果，不修改原始数据。",
+      "source_ids": [
+        "boundary",
+        "definitions"
+      ],
+      "mode": "multi_source",
+      "split": "development",
+      "tags": [
+        "context",
+        "six_turn_chain",
+        "cross_source",
+        "synthetic_controlled"
+      ],
+      "chain_id": "acceptance-cross",
+      "turn_index": 3,
+      "parent_case_id": "acceptance-cross-t2"
+    },
+    {
+      "id": "acceptance-cross-t4",
+      "question": "将当前假设金额与第1轮2025年的实际登记金额比较，给出两者金额及相差多少元，明确各自年份、实际或假设性质；不要把它说成实际同比变化。",
+      "source_ids": [
+        "boundary",
+        "definitions"
+      ],
+      "mode": "multi_source",
+      "split": "development",
+      "tags": [
+        "context",
+        "six_turn_chain",
+        "cross_source",
+        "synthetic_controlled"
+      ],
+      "chain_id": "acceptance-cross",
+      "turn_index": 4,
+      "parent_case_id": "acceptance-cross-t3"
+    },
+    {
+      "id": "acceptance-cross-t5",
+      "question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+      "source_ids": [
+        "boundary",
+        "definitions"
+      ],
+      "mode": "multi_source",
+      "split": "development",
+      "tags": [
+        "context",
+        "six_turn_chain",
+        "cross_source",
+        "synthetic_controlled"
+      ],
+      "chain_id": "acceptance-cross",
+      "turn_index": 5,
+      "parent_case_id": "acceptance-cross-t4"
+    },
+    {
+      "id": "acceptance-cross-t6",
+      "question": "【动态建议占位，禁止直接发给模型】从上一轮系统真实产生的合格下一问中，按冻结选择规则选取一条继续分析。",
+      "source_ids": [
+        "boundary",
+        "definitions"
+      ],
+      "mode": "multi_source",
+      "split": "development",
+      "tags": [
+        "context",
+        "six_turn_chain",
+        "cross_source",
+        "synthetic_controlled"
+      ],
+      "chain_id": "acceptance-cross",
+      "turn_index": 6,
+      "parent_case_id": "acceptance-cross-t5",
+      "dynamic_suggestion_from": "acceptance-cross-t5",
+      "historical_actual_question": "说明这次已核对计算的参数来源与计算步骤？",
+      "reproduction_note": "冻结动态建议规则保留；历史实际问句仅供回放比较，不伪装成新实例生成的建议。"
+    },
+    {
+      "id": "acceptance-12-source-scope",
+      "question": "在2008年《Municipal Nutrient Removal Technologies Reference Document》的Central Johnston County案例中，请区分设计处理能力与研究期平均实际流量，并列出研究期的进、出水TN和TP平均浓度。要注明研究时间，不能把许可限值当作实测浓度。",
+      "source_ids": [
+        "工程A01",
+        "工程A02",
+        "工程A03",
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B08",
+        "B10",
+        "B11",
+        "B12"
+      ],
+      "mode": "multi_source",
+      "tags": [
+        "12-source-scope",
+        "development",
+        "long-document",
+        "complex-table"
+      ],
+      "split": "development",
+      "cluster": "B08-e82259182509"
+    },
+    {
+      "id": "ctx03-t3",
+      "chain_id": "ctx03",
+      "turn_index": 3,
+      "question": "改查东店、员工编号1的张伟，其余统计口径不变。",
+      "source_ids": [
+        "boundary"
+      ],
+      "mode": "database",
+      "tags": [
+        "context",
+        "clarification_chain",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "ctx03-t2"
+    },
+    {
+      "id": "ctx03-t4",
+      "chain_id": "ctx03",
+      "turn_index": 4,
+      "question": "仍查刚才这位，只统计关联订单日期在2024年的登记工时。",
+      "source_ids": [
+        "boundary"
+      ],
+      "mode": "database",
+      "tags": [
+        "context",
+        "clarification_chain",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "ctx03-t3"
+    },
+    {
+      "id": "ctx03-t5",
+      "chain_id": "ctx03",
+      "turn_index": 5,
+      "question": "撤销上一轮新增的年份限制，恢复这位员工的全部已登记工时。",
+      "source_ids": [
+        "boundary"
+      ],
+      "mode": "database",
+      "tags": [
+        "context",
+        "clarification_chain",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "ctx03-t4"
+    },
+    {
+      "id": "ctx03-t6",
+      "chain_id": "ctx03",
+      "turn_index": 6,
+      "question": "把当前结果与第2轮选定的西店张伟比较，分别给出已知工时合计和缺失工时记录数，再说明已知合计相差多少；不要把缺失值当成0。",
+      "source_ids": [
+        "boundary"
+      ],
+      "mode": "database",
+      "tags": [
+        "context",
+        "clarification_chain",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "ctx03-t5"
+    },
+    {
+      "id": "acceptance-rag-chain-t1",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 1,
+      "question": "根据这份运行手册，密封圈在什么库存条件下需要提出采购申请？库存恰好等于最低值时是否需要？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "context",
+        "rag",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development"
+    },
+    {
+      "id": "acceptance-rag-chain-t2",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 2,
+      "question": "那月末的实际盘点和电子台账分别是多少？按刚才的规则是否需要申请采购，二者差额应当怎样表述？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "context",
+        "rag",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "acceptance-rag-chain-t1"
+    },
+    {
+      "id": "acceptance-rag-chain-t3",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 3,
+      "question": "先作一个假设：月末实盘改为7件，采购规则保持不变。此时是否应提出申请？请明确这只是情景假设。",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "context",
+        "rag",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "acceptance-rag-chain-t2"
+    },
+    {
+      "id": "acceptance-rag-chain-t4",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 4,
+      "question": "撤销刚才的7件假设，回到手册原始月末记录。现在是否触发采购，库存差额能否直接认定为遗失？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "context",
+        "rag",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "acceptance-rag-chain-t3"
+    },
+    {
+      "id": "acceptance-rag-chain-t5",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 5,
+      "question": "以上结论依据手册哪个版本、何时签发、适用于哪里？仅凭这份资料，能否声称其他试验站或V2.2版本也采用同一规则？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "context",
+        "rag",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "acceptance-rag-chain-t4"
+    },
+    {
+      "id": "acceptance-rag-chain-t6",
+      "chain_id": "acceptance-rag-chain",
+      "turn_index": 6,
+      "question": "请把我们最终确认的内容整理为一段给值班人员看的说明：当前库存、申请采购的边界、差额处理、版本及适用范围都要保留，并说明刚才的假设是否仍生效。",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "context",
+        "rag",
+        "synthetic_controlled",
+        "six_turn_chain"
+      ],
+      "split": "development",
+      "parent_case_id": "acceptance-rag-chain-t5"
+    },
+    {
+      "id": "acceptance-typo-rag008",
+      "question": "手册中的成功启冻与失败启动次数各是多少，成功率分母怎样定义？",
+      "source_ids": [
+        "harbor"
+      ],
+      "mode": "document",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units",
+        "controlled_user_typo",
+        "supplemental_not_scoring_set"
+      ],
+      "split": "development"
+    }
+  ],
+  "scoring_sets": {
+    "original20": [
+      "sql-001",
+      "rag-003",
+      "sql-004",
+      "rag-008",
+      "sql-006",
+      "rag-012",
+      "sql-009",
+      "rag-020",
+      "sql-014",
+      "rag-023",
+      "sql-017",
+      "rag-028",
+      "sql-020",
+      "rag-032",
+      "sql-041",
+      "rag-038",
+      "sql-051",
+      "rag-044",
+      "sql-074",
+      "rag-049"
+    ],
+    "single_table_sql": [
+      "sql-001",
+      "sql-004",
+      "sql-006",
+      "sql-009",
+      "sql-014",
+      "sql-017",
+      "sql-020",
+      "sql-041",
+      "sql-002",
+      "sql-003"
+    ],
+    "single_document_rag": [
+      "rag-003",
+      "rag-008",
+      "rag-012",
+      "rag-020",
+      "rag-023",
+      "rag-028",
+      "rag-032",
+      "rag-038",
+      "rag-044",
+      "rag-049"
+    ],
+    "multi_table_sql": [
+      "sql-051",
+      "sql-074"
+    ],
+    "complex_specialty": [
+      "RD-B08-01",
+      "RD-B04-01",
+      "工程A01-Q1"
+    ],
+    "clarification": [
+      "ctx03-t1",
+      "ctx03-t2"
+    ],
+    "six_turn_context": [
+      "acceptance-cross-t1",
+      "acceptance-cross-t2",
+      "acceptance-cross-t3",
+      "acceptance-cross-t4",
+      "acceptance-cross-t5",
+      "acceptance-cross-t6"
+    ]
+  },
+  "execution": "验证与资料准备不调用模型；本文件不是运行结果或稳定性证明。"
+}

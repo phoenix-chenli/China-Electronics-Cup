@@ -1,0 +1,2286 @@
+{
+  "case_id": "ctx04-t2",
+  "record_sha256": "73fc4f94cc233891394f32e6c94d3a3897d0d739f999234a00b8735a8739a2ca",
+  "original_question": "改看第三产业，保留上述年份和两项指标。",
+  "normalized_question_after_answer": "根据公报，2024年石景山区第三产业地区生产总值及按不变价格计算的同比增速是多少？",
+  "status": "completed",
+  "published_claims": [
+    {
+      "id": "C1",
+      "text": "根据石景山区2024年统计公报表1，2024年第三产业地区生产总值为1222.1亿元。",
+      "evidence_ids": [
+        "E4"
+      ],
+      "table_bindings": [
+        {
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "cell_id": "R5C2",
+          "value": "1222.1",
+          "statement": "根据石景山区2024年统计公报表1，2024年第三产业地区生产总值为1222.1亿元。",
+          "column_label": "2024 年",
+          "row_label": "第三产业",
+          "unit": "亿元",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+          "parser_version": "zhiheng-multimodal-3.1",
+          "row": 5,
+          "col": 2,
+          "cell": {
+            "row": 5,
+            "col": 2,
+            "text": "1222.1",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.495212,
+              0.290937,
+              0.634554,
+              0.318494
+            ],
+            "cell_id": "R5C2"
+          },
+          "header_path": [
+            {
+              "text": "2024 年",
+              "row": 1,
+              "col": 2,
+              "evidence": {
+                "page": 2,
+                "page_unit": "physical_page",
+                "row": 1,
+                "col": 2,
+                "bbox": [
+                  0.495212,
+                  0.17938,
+                  0.634554,
+                  0.208267
+                ]
+              }
+            }
+          ],
+          "row_headers": [
+            {
+              "row": 5,
+              "column": 1,
+              "text": "第三产业",
+              "cell_id": "R5C1",
+              "rowspan": 1,
+              "colspan": 1,
+              "role_basis": "inferred",
+              "role": "row_label_candidate",
+              "evidence": {
+                "page": 2,
+                "page_unit": "physical_page",
+                "row": 5,
+                "col": 1,
+                "bbox": [
+                  0.132034,
+                  0.290937,
+                  0.495212,
+                  0.318494
+                ]
+              }
+            }
+          ],
+          "unit_evidence": [
+            {
+              "text": "单位：亿元、%",
+              "value": "亿元、%",
+              "scope": "table_candidate",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.738586,
+                  0.15947,
+                  0.876325,
+                  0.178171
+                ],
+                "start": 16,
+                "end": 23
+              }
+            }
+          ],
+          "footnotes": [],
+          "relation_basis": "inferred",
+          "context_annotations": [
+            {
+              "kind": "table_caption",
+              "text": "表1",
+              "start": 15,
+              "end": 17,
+              "evidence_id": "E4",
+              "table_name": "第2页_表1",
+              "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+              "source_anchor": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              }
+            },
+            {
+              "kind": "table_period",
+              "text": "2024年",
+              "start": 6,
+              "end": 11,
+              "evidence_id": "E4",
+              "table_name": "第2页_表1",
+              "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+              "source_anchor": {
+                "page": 2,
+                "bbox": [
+                  0.410617,
+                  0.129654,
+                  0.628941,
+                  0.151549
+                ],
+                "start": 3,
+                "end": 15
+              }
+            },
+            {
+              "kind": "table_period",
+              "text": "2024年",
+              "start": 18,
+              "end": 23,
+              "evidence_id": "E4",
+              "table_name": "第2页_表1",
+              "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+              "source_anchor": {
+                "page": 2,
+                "bbox": [
+                  0.410617,
+                  0.129654,
+                  0.628941,
+                  0.151549
+                ],
+                "start": 3,
+                "end": 15
+              }
+            }
+          ]
+        }
+      ],
+      "context_annotations": [
+        {
+          "kind": "table_caption",
+          "text": "表1",
+          "start": 15,
+          "end": 17,
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "source_anchor": {
+            "page": 2,
+            "bbox": [
+              0.133244,
+              0.129654,
+              0.174475,
+              0.151549
+            ],
+            "start": 0,
+            "end": 2
+          }
+        },
+        {
+          "kind": "table_period",
+          "text": "2024年",
+          "start": 6,
+          "end": 11,
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "source_anchor": {
+            "page": 2,
+            "bbox": [
+              0.410617,
+              0.129654,
+              0.628941,
+              0.151549
+            ],
+            "start": 3,
+            "end": 15
+          }
+        },
+        {
+          "kind": "table_period",
+          "text": "2024年",
+          "start": 18,
+          "end": 23,
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "source_anchor": {
+            "page": 2,
+            "bbox": [
+              0.410617,
+              0.129654,
+              0.628941,
+              0.151549
+            ],
+            "start": 3,
+            "end": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "text": "根据石景山区2024年统计公报表1，2024年第三产业地区生产总值比上年增长7.3%。",
+      "evidence_ids": [
+        "E4"
+      ],
+      "table_bindings": [
+        {
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "cell_id": "R5C3",
+          "value": "7.3",
+          "statement": "根据石景山区2024年统计公报表1，2024年第三产业地区生产总值比上年增长7.3%。",
+          "column_label": "比上年增长",
+          "row_label": "第三产业",
+          "unit": "%",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+          "parser_version": "zhiheng-multimodal-3.1",
+          "row": 5,
+          "col": 3,
+          "cell": {
+            "row": 5,
+            "col": 3,
+            "text": "7.3",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.634554,
+              0.290937,
+              0.746514,
+              0.318494
+            ],
+            "cell_id": "R5C3"
+          },
+          "header_path": [
+            {
+              "text": "比上年增长",
+              "row": 1,
+              "col": 3,
+              "evidence": {
+                "page": 2,
+                "page_unit": "physical_page",
+                "row": 1,
+                "col": 3,
+                "bbox": [
+                  0.634554,
+                  0.17938,
+                  0.746514,
+                  0.208267
+                ]
+              }
+            }
+          ],
+          "row_headers": [
+            {
+              "row": 5,
+              "column": 1,
+              "text": "第三产业",
+              "cell_id": "R5C1",
+              "rowspan": 1,
+              "colspan": 1,
+              "role_basis": "inferred",
+              "role": "row_label_candidate",
+              "evidence": {
+                "page": 2,
+                "page_unit": "physical_page",
+                "row": 5,
+                "col": 1,
+                "bbox": [
+                  0.132034,
+                  0.290937,
+                  0.495212,
+                  0.318494
+                ]
+              }
+            }
+          ],
+          "unit_evidence": [
+            {
+              "text": "单位：亿元、%",
+              "value": "亿元、%",
+              "scope": "table_candidate",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.738586,
+                  0.15947,
+                  0.876325,
+                  0.178171
+                ],
+                "start": 16,
+                "end": 23
+              }
+            }
+          ],
+          "footnotes": [],
+          "relation_basis": "inferred",
+          "context_annotations": [
+            {
+              "kind": "table_caption",
+              "text": "表1",
+              "start": 15,
+              "end": 17,
+              "evidence_id": "E4",
+              "table_name": "第2页_表1",
+              "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+              "source_anchor": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              }
+            },
+            {
+              "kind": "table_period",
+              "text": "2024年",
+              "start": 6,
+              "end": 11,
+              "evidence_id": "E4",
+              "table_name": "第2页_表1",
+              "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+              "source_anchor": {
+                "page": 2,
+                "bbox": [
+                  0.410617,
+                  0.129654,
+                  0.628941,
+                  0.151549
+                ],
+                "start": 3,
+                "end": 15
+              }
+            },
+            {
+              "kind": "table_period",
+              "text": "2024年",
+              "start": 18,
+              "end": 23,
+              "evidence_id": "E4",
+              "table_name": "第2页_表1",
+              "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+              "source_anchor": {
+                "page": 2,
+                "bbox": [
+                  0.410617,
+                  0.129654,
+                  0.628941,
+                  0.151549
+                ],
+                "start": 3,
+                "end": 15
+              }
+            }
+          ]
+        }
+      ],
+      "context_annotations": [
+        {
+          "kind": "table_caption",
+          "text": "表1",
+          "start": 15,
+          "end": 17,
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "source_anchor": {
+            "page": 2,
+            "bbox": [
+              0.133244,
+              0.129654,
+              0.174475,
+              0.151549
+            ],
+            "start": 0,
+            "end": 2
+          }
+        },
+        {
+          "kind": "table_period",
+          "text": "2024年",
+          "start": 6,
+          "end": 11,
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "source_anchor": {
+            "page": 2,
+            "bbox": [
+              0.410617,
+              0.129654,
+              0.628941,
+              0.151549
+            ],
+            "start": 3,
+            "end": 15
+          }
+        },
+        {
+          "kind": "table_period",
+          "text": "2024年",
+          "start": 18,
+          "end": 23,
+          "evidence_id": "E4",
+          "table_name": "第2页_表1",
+          "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+          "source_anchor": {
+            "page": 2,
+            "bbox": [
+              0.410617,
+              0.129654,
+              0.628941,
+              0.151549
+            ],
+            "start": 3,
+            "end": 15
+          }
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "label": "第 2 页",
+      "kind": "text",
+      "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+      "source_name": "石景山区2024年统计公报.pdf",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 2,
+      "page_label": "第 2 页",
+      "quote": "1312.9\n6.5\n100.0\n地区生产总值",
+      "start": 44,
+      "end": 67,
+      "table_context": {
+        "tables": [
+          {
+            "schema_version": "table-semantics-v1",
+            "table_name": "第2页_表1",
+            "format": "pdf",
+            "page": 2,
+            "sheet": null,
+            "source_position": {
+              "page": 2,
+              "page_unit": "physical_page",
+              "bbox": [
+                0.132034,
+                0.17938,
+                0.874265,
+                0.787552
+              ]
+            },
+            "row_count": 22,
+            "column_count": 4,
+            "header_rows": [
+              1
+            ],
+            "header_basis": "inferred",
+            "columns": [
+              {
+                "column": 1,
+                "header_path": [
+                  {
+                    "text": "指 标",
+                    "row": 1,
+                    "col": 1,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 1,
+                      "bbox": [
+                        0.132034,
+                        0.17938,
+                        0.495212,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "指 标",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 2,
+                "header_path": [
+                  {
+                    "text": "2024 年",
+                    "row": 1,
+                    "col": 2,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 2,
+                      "bbox": [
+                        0.495212,
+                        0.17938,
+                        0.634554,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "2024 年",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 3,
+                "header_path": [
+                  {
+                    "text": "比上年增长",
+                    "row": 1,
+                    "col": 3,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 3,
+                      "bbox": [
+                        0.634554,
+                        0.17938,
+                        0.746514,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比上年增长",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 4,
+                "header_path": [
+                  {
+                    "text": "比重",
+                    "row": 1,
+                    "col": 4,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 4,
+                      "bbox": [
+                        0.746514,
+                        0.17938,
+                        0.874265,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比重",
+                "role_basis": "inferred"
+              }
+            ],
+            "units": [
+              {
+                "text": "单位：亿元、%",
+                "value": "亿元、%",
+                "scope": "table_candidate",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.738586,
+                    0.15947,
+                    0.876325,
+                    0.178171
+                  ],
+                  "start": 16,
+                  "end": 23
+                }
+              }
+            ],
+            "caption": {
+              "text": "表1",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              },
+              "side": "before"
+            },
+            "footnotes": [],
+            "context": [
+              {
+                "text": "2024 年地区生产总值",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.410617,
+                    0.129654,
+                    0.628941,
+                    0.151549
+                  ],
+                  "start": 3,
+                  "end": 15
+                },
+                "side": "before"
+              }
+            ],
+            "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。",
+            "cells": [
+              {
+                "row": 1,
+                "col": 1,
+                "text": "指 标",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.17938,
+                  0.495212,
+                  0.208267
+                ],
+                "cell_id": "R1C1"
+              },
+              {
+                "row": 1,
+                "col": 2,
+                "text": "2024 年",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.17938,
+                  0.634554,
+                  0.208267
+                ],
+                "cell_id": "R1C2"
+              },
+              {
+                "row": 1,
+                "col": 3,
+                "text": "比上年增长",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.17938,
+                  0.746514,
+                  0.208267
+                ],
+                "cell_id": "R1C3"
+              },
+              {
+                "row": 1,
+                "col": 4,
+                "text": "比重",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.17938,
+                  0.874265,
+                  0.208267
+                ],
+                "cell_id": "R1C4"
+              },
+              {
+                "row": 2,
+                "col": 1,
+                "text": "地区生产总值",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.208267,
+                  0.495212,
+                  0.235824
+                ],
+                "cell_id": "R2C1"
+              },
+              {
+                "row": 2,
+                "col": 2,
+                "text": "1312.9",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.208267,
+                  0.634554,
+                  0.235824
+                ],
+                "cell_id": "R2C2"
+              },
+              {
+                "row": 2,
+                "col": 3,
+                "text": "6.5",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.208267,
+                  0.746514,
+                  0.235824
+                ],
+                "cell_id": "R2C3"
+              },
+              {
+                "row": 2,
+                "col": 4,
+                "text": "100.0",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.208267,
+                  0.874265,
+                  0.235824
+                ],
+                "cell_id": "R2C4"
+              }
+            ],
+            "row_headers": [
+              {
+                "row": 2,
+                "column": 1,
+                "text": "地区生产总值",
+                "cell_id": "R2C1",
+                "rowspan": 1,
+                "colspan": 1,
+                "role_basis": "inferred",
+                "role": "row_label_candidate",
+                "evidence": {
+                  "page": 2,
+                  "page_unit": "physical_page",
+                  "row": 2,
+                  "col": 1,
+                  "bbox": [
+                    0.132034,
+                    0.208267,
+                    0.495212,
+                    0.235824
+                  ]
+                }
+              }
+            ],
+            "selected_cell_ids": [
+              "R2C1",
+              "R2C2",
+              "R2C3",
+              "R2C4"
+            ],
+            "selection_state": "source_span",
+            "requires_review": true,
+            "review_reasons": [
+              "表头角色为结构候选，需对照原表确认"
+            ],
+            "truncated": false
+          }
+        ],
+        "has_table": true,
+        "truncated": false,
+        "requires_review": true
+      },
+      "preprocessing": {
+        "triggers": [],
+        "operations": [],
+        "status": "not_triggered",
+        "selected": "original",
+        "extra_ocr_calls": 0,
+        "elapsed_ms": 0,
+        "visual_review_required": false,
+        "text_disagreement": false,
+        "numeric_symbol_disagreement": false,
+        "truncated": false
+      },
+      "visual_checked": true
+    },
+    {
+      "id": "E2",
+      "label": "第 2 页",
+      "kind": "text",
+      "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+      "source_name": "石景山区2024年统计公报.pdf",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 2,
+      "page_label": "第 2 页",
+      "quote": "按产业分",
+      "start": 68,
+      "end": 72,
+      "table_context": {
+        "tables": [
+          {
+            "schema_version": "table-semantics-v1",
+            "table_name": "第2页_表1",
+            "format": "pdf",
+            "page": 2,
+            "sheet": null,
+            "source_position": {
+              "page": 2,
+              "page_unit": "physical_page",
+              "bbox": [
+                0.132034,
+                0.17938,
+                0.874265,
+                0.787552
+              ]
+            },
+            "row_count": 22,
+            "column_count": 4,
+            "header_rows": [
+              1
+            ],
+            "header_basis": "inferred",
+            "columns": [
+              {
+                "column": 1,
+                "header_path": [
+                  {
+                    "text": "指 标",
+                    "row": 1,
+                    "col": 1,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 1,
+                      "bbox": [
+                        0.132034,
+                        0.17938,
+                        0.495212,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "指 标",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 2,
+                "header_path": [
+                  {
+                    "text": "2024 年",
+                    "row": 1,
+                    "col": 2,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 2,
+                      "bbox": [
+                        0.495212,
+                        0.17938,
+                        0.634554,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "2024 年",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 3,
+                "header_path": [
+                  {
+                    "text": "比上年增长",
+                    "row": 1,
+                    "col": 3,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 3,
+                      "bbox": [
+                        0.634554,
+                        0.17938,
+                        0.746514,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比上年增长",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 4,
+                "header_path": [
+                  {
+                    "text": "比重",
+                    "row": 1,
+                    "col": 4,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 4,
+                      "bbox": [
+                        0.746514,
+                        0.17938,
+                        0.874265,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比重",
+                "role_basis": "inferred"
+              }
+            ],
+            "units": [
+              {
+                "text": "单位：亿元、%",
+                "value": "亿元、%",
+                "scope": "table_candidate",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.738586,
+                    0.15947,
+                    0.876325,
+                    0.178171
+                  ],
+                  "start": 16,
+                  "end": 23
+                }
+              }
+            ],
+            "caption": {
+              "text": "表1",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              },
+              "side": "before"
+            },
+            "footnotes": [],
+            "context": [
+              {
+                "text": "2024 年地区生产总值",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.410617,
+                    0.129654,
+                    0.628941,
+                    0.151549
+                  ],
+                  "start": 3,
+                  "end": 15
+                },
+                "side": "before"
+              }
+            ],
+            "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。",
+            "cells": [
+              {
+                "row": 1,
+                "col": 1,
+                "text": "指 标",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.17938,
+                  0.495212,
+                  0.208267
+                ],
+                "cell_id": "R1C1"
+              },
+              {
+                "row": 1,
+                "col": 2,
+                "text": "2024 年",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.17938,
+                  0.634554,
+                  0.208267
+                ],
+                "cell_id": "R1C2"
+              },
+              {
+                "row": 1,
+                "col": 3,
+                "text": "比上年增长",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.17938,
+                  0.746514,
+                  0.208267
+                ],
+                "cell_id": "R1C3"
+              },
+              {
+                "row": 1,
+                "col": 4,
+                "text": "比重",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.17938,
+                  0.874265,
+                  0.208267
+                ],
+                "cell_id": "R1C4"
+              },
+              {
+                "row": 3,
+                "col": 1,
+                "text": "按产业分",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.235824,
+                  0.495212,
+                  0.26338
+                ],
+                "cell_id": "R3C1"
+              },
+              {
+                "row": 3,
+                "col": 2,
+                "text": "",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.235824,
+                  0.634554,
+                  0.26338
+                ],
+                "cell_id": "R3C2"
+              },
+              {
+                "row": 3,
+                "col": 3,
+                "text": "",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.235824,
+                  0.746514,
+                  0.26338
+                ],
+                "cell_id": "R3C3"
+              },
+              {
+                "row": 3,
+                "col": 4,
+                "text": "",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.235824,
+                  0.874265,
+                  0.26338
+                ],
+                "cell_id": "R3C4"
+              }
+            ],
+            "row_headers": [
+              {
+                "row": 3,
+                "column": 1,
+                "text": "按产业分",
+                "cell_id": "R3C1",
+                "rowspan": 1,
+                "colspan": 1,
+                "role_basis": "inferred",
+                "role": "row_label_candidate",
+                "evidence": {
+                  "page": 2,
+                  "page_unit": "physical_page",
+                  "row": 3,
+                  "col": 1,
+                  "bbox": [
+                    0.132034,
+                    0.235824,
+                    0.495212,
+                    0.26338
+                  ]
+                }
+              }
+            ],
+            "selected_cell_ids": [
+              "R3C1"
+            ],
+            "selection_state": "source_span",
+            "requires_review": true,
+            "review_reasons": [
+              "表头角色为结构候选，需对照原表确认"
+            ],
+            "truncated": false
+          }
+        ],
+        "has_table": true,
+        "truncated": false,
+        "requires_review": true
+      },
+      "preprocessing": {
+        "triggers": [],
+        "operations": [],
+        "status": "not_triggered",
+        "selected": "original",
+        "extra_ocr_calls": 0,
+        "elapsed_ms": 0,
+        "visual_review_required": false,
+        "text_disagreement": false,
+        "numeric_symbol_disagreement": false,
+        "truncated": false
+      },
+      "visual_checked": true
+    },
+    {
+      "id": "E3",
+      "label": "第 2 页",
+      "kind": "text",
+      "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+      "source_name": "石景山区2024年统计公报.pdf",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 2,
+      "page_label": "第 2 页",
+      "quote": "90.8\n-3.1\n6.9\n第二产业",
+      "start": 73,
+      "end": 91,
+      "table_context": {
+        "tables": [
+          {
+            "schema_version": "table-semantics-v1",
+            "table_name": "第2页_表1",
+            "format": "pdf",
+            "page": 2,
+            "sheet": null,
+            "source_position": {
+              "page": 2,
+              "page_unit": "physical_page",
+              "bbox": [
+                0.132034,
+                0.17938,
+                0.874265,
+                0.787552
+              ]
+            },
+            "row_count": 22,
+            "column_count": 4,
+            "header_rows": [
+              1
+            ],
+            "header_basis": "inferred",
+            "columns": [
+              {
+                "column": 1,
+                "header_path": [
+                  {
+                    "text": "指 标",
+                    "row": 1,
+                    "col": 1,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 1,
+                      "bbox": [
+                        0.132034,
+                        0.17938,
+                        0.495212,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "指 标",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 2,
+                "header_path": [
+                  {
+                    "text": "2024 年",
+                    "row": 1,
+                    "col": 2,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 2,
+                      "bbox": [
+                        0.495212,
+                        0.17938,
+                        0.634554,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "2024 年",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 3,
+                "header_path": [
+                  {
+                    "text": "比上年增长",
+                    "row": 1,
+                    "col": 3,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 3,
+                      "bbox": [
+                        0.634554,
+                        0.17938,
+                        0.746514,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比上年增长",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 4,
+                "header_path": [
+                  {
+                    "text": "比重",
+                    "row": 1,
+                    "col": 4,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 4,
+                      "bbox": [
+                        0.746514,
+                        0.17938,
+                        0.874265,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比重",
+                "role_basis": "inferred"
+              }
+            ],
+            "units": [
+              {
+                "text": "单位：亿元、%",
+                "value": "亿元、%",
+                "scope": "table_candidate",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.738586,
+                    0.15947,
+                    0.876325,
+                    0.178171
+                  ],
+                  "start": 16,
+                  "end": 23
+                }
+              }
+            ],
+            "caption": {
+              "text": "表1",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              },
+              "side": "before"
+            },
+            "footnotes": [],
+            "context": [
+              {
+                "text": "2024 年地区生产总值",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.410617,
+                    0.129654,
+                    0.628941,
+                    0.151549
+                  ],
+                  "start": 3,
+                  "end": 15
+                },
+                "side": "before"
+              }
+            ],
+            "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。",
+            "cells": [
+              {
+                "row": 1,
+                "col": 1,
+                "text": "指 标",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.17938,
+                  0.495212,
+                  0.208267
+                ],
+                "cell_id": "R1C1"
+              },
+              {
+                "row": 1,
+                "col": 2,
+                "text": "2024 年",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.17938,
+                  0.634554,
+                  0.208267
+                ],
+                "cell_id": "R1C2"
+              },
+              {
+                "row": 1,
+                "col": 3,
+                "text": "比上年增长",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.17938,
+                  0.746514,
+                  0.208267
+                ],
+                "cell_id": "R1C3"
+              },
+              {
+                "row": 1,
+                "col": 4,
+                "text": "比重",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.17938,
+                  0.874265,
+                  0.208267
+                ],
+                "cell_id": "R1C4"
+              },
+              {
+                "row": 4,
+                "col": 1,
+                "text": "第二产业",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.26338,
+                  0.495212,
+                  0.290937
+                ],
+                "cell_id": "R4C1"
+              },
+              {
+                "row": 4,
+                "col": 2,
+                "text": "90.8",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.26338,
+                  0.634554,
+                  0.290937
+                ],
+                "cell_id": "R4C2"
+              },
+              {
+                "row": 4,
+                "col": 3,
+                "text": "-3.1",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.26338,
+                  0.746514,
+                  0.290937
+                ],
+                "cell_id": "R4C3"
+              },
+              {
+                "row": 4,
+                "col": 4,
+                "text": "6.9",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.26338,
+                  0.874265,
+                  0.290937
+                ],
+                "cell_id": "R4C4"
+              }
+            ],
+            "row_headers": [
+              {
+                "row": 4,
+                "column": 1,
+                "text": "第二产业",
+                "cell_id": "R4C1",
+                "rowspan": 1,
+                "colspan": 1,
+                "role_basis": "inferred",
+                "role": "row_label_candidate",
+                "evidence": {
+                  "page": 2,
+                  "page_unit": "physical_page",
+                  "row": 4,
+                  "col": 1,
+                  "bbox": [
+                    0.132034,
+                    0.26338,
+                    0.495212,
+                    0.290937
+                  ]
+                }
+              }
+            ],
+            "selected_cell_ids": [
+              "R4C1",
+              "R4C2",
+              "R4C3",
+              "R4C4"
+            ],
+            "selection_state": "source_span",
+            "requires_review": true,
+            "review_reasons": [
+              "表头角色为结构候选，需对照原表确认"
+            ],
+            "truncated": false
+          }
+        ],
+        "has_table": true,
+        "truncated": false,
+        "requires_review": true
+      },
+      "preprocessing": {
+        "triggers": [],
+        "operations": [],
+        "status": "not_triggered",
+        "selected": "original",
+        "extra_ocr_calls": 0,
+        "elapsed_ms": 0,
+        "visual_review_required": false,
+        "text_disagreement": false,
+        "numeric_symbol_disagreement": false,
+        "truncated": false
+      },
+      "visual_checked": true
+    },
+    {
+      "id": "E4",
+      "label": "第 2 页",
+      "kind": "text",
+      "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+      "source_name": "石景山区2024年统计公报.pdf",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 2,
+      "page_label": "第 2 页",
+      "quote": "1222.1\n7.3\n93.1\n第三产业",
+      "start": 92,
+      "end": 112,
+      "table_context": {
+        "tables": [
+          {
+            "schema_version": "table-semantics-v1",
+            "table_name": "第2页_表1",
+            "format": "pdf",
+            "page": 2,
+            "sheet": null,
+            "source_position": {
+              "page": 2,
+              "page_unit": "physical_page",
+              "bbox": [
+                0.132034,
+                0.17938,
+                0.874265,
+                0.787552
+              ]
+            },
+            "row_count": 22,
+            "column_count": 4,
+            "header_rows": [
+              1
+            ],
+            "header_basis": "inferred",
+            "columns": [
+              {
+                "column": 1,
+                "header_path": [
+                  {
+                    "text": "指 标",
+                    "row": 1,
+                    "col": 1,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 1,
+                      "bbox": [
+                        0.132034,
+                        0.17938,
+                        0.495212,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "指 标",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 2,
+                "header_path": [
+                  {
+                    "text": "2024 年",
+                    "row": 1,
+                    "col": 2,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 2,
+                      "bbox": [
+                        0.495212,
+                        0.17938,
+                        0.634554,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "2024 年",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 3,
+                "header_path": [
+                  {
+                    "text": "比上年增长",
+                    "row": 1,
+                    "col": 3,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 3,
+                      "bbox": [
+                        0.634554,
+                        0.17938,
+                        0.746514,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比上年增长",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 4,
+                "header_path": [
+                  {
+                    "text": "比重",
+                    "row": 1,
+                    "col": 4,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 4,
+                      "bbox": [
+                        0.746514,
+                        0.17938,
+                        0.874265,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比重",
+                "role_basis": "inferred"
+              }
+            ],
+            "units": [
+              {
+                "text": "单位：亿元、%",
+                "value": "亿元、%",
+                "scope": "table_candidate",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.738586,
+                    0.15947,
+                    0.876325,
+                    0.178171
+                  ],
+                  "start": 16,
+                  "end": 23
+                }
+              }
+            ],
+            "caption": {
+              "text": "表1",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              },
+              "side": "before"
+            },
+            "footnotes": [],
+            "context": [
+              {
+                "text": "2024 年地区生产总值",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.410617,
+                    0.129654,
+                    0.628941,
+                    0.151549
+                  ],
+                  "start": 3,
+                  "end": 15
+                },
+                "side": "before"
+              }
+            ],
+            "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。",
+            "cells": [
+              {
+                "row": 1,
+                "col": 1,
+                "text": "指 标",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.17938,
+                  0.495212,
+                  0.208267
+                ],
+                "cell_id": "R1C1"
+              },
+              {
+                "row": 1,
+                "col": 2,
+                "text": "2024 年",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.17938,
+                  0.634554,
+                  0.208267
+                ],
+                "cell_id": "R1C2"
+              },
+              {
+                "row": 1,
+                "col": 3,
+                "text": "比上年增长",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.17938,
+                  0.746514,
+                  0.208267
+                ],
+                "cell_id": "R1C3"
+              },
+              {
+                "row": 1,
+                "col": 4,
+                "text": "比重",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.17938,
+                  0.874265,
+                  0.208267
+                ],
+                "cell_id": "R1C4"
+              },
+              {
+                "row": 5,
+                "col": 1,
+                "text": "第三产业",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.290937,
+                  0.495212,
+                  0.318494
+                ],
+                "cell_id": "R5C1"
+              },
+              {
+                "row": 5,
+                "col": 2,
+                "text": "1222.1",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.290937,
+                  0.634554,
+                  0.318494
+                ],
+                "cell_id": "R5C2"
+              },
+              {
+                "row": 5,
+                "col": 3,
+                "text": "7.3",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.290937,
+                  0.746514,
+                  0.318494
+                ],
+                "cell_id": "R5C3"
+              },
+              {
+                "row": 5,
+                "col": 4,
+                "text": "93.1",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.290937,
+                  0.874265,
+                  0.318494
+                ],
+                "cell_id": "R5C4"
+              }
+            ],
+            "row_headers": [
+              {
+                "row": 5,
+                "column": 1,
+                "text": "第三产业",
+                "cell_id": "R5C1",
+                "rowspan": 1,
+                "colspan": 1,
+                "role_basis": "inferred",
+                "role": "row_label_candidate",
+                "evidence": {
+                  "page": 2,
+                  "page_unit": "physical_page",
+                  "row": 5,
+                  "col": 1,
+                  "bbox": [
+                    0.132034,
+                    0.290937,
+                    0.495212,
+                    0.318494
+                  ]
+                }
+              }
+            ],
+            "selected_cell_ids": [
+              "R5C1",
+              "R5C2",
+              "R5C3",
+              "R5C4"
+            ],
+            "selection_state": "source_span",
+            "requires_review": true,
+            "review_reasons": [
+              "表头角色为结构候选，需对照原表确认"
+            ],
+            "truncated": false
+          }
+        ],
+        "has_table": true,
+        "truncated": false,
+        "requires_review": true
+      },
+      "preprocessing": {
+        "triggers": [],
+        "operations": [],
+        "status": "not_triggered",
+        "selected": "original",
+        "extra_ocr_calls": 0,
+        "elapsed_ms": 0,
+        "visual_review_required": false,
+        "text_disagreement": false,
+        "numeric_symbol_disagreement": false,
+        "truncated": false
+      },
+      "visual_checked": true
+    },
+    {
+      "id": "E5",
+      "label": "第 2 页",
+      "kind": "text",
+      "source_id": "a0497fa430c440cc97ee7c8cf4f45740",
+      "source_name": "石景山区2024年统计公报.pdf",
+      "sha256": "1bdc0e594d0b89a0a617ea4d5df4e6b6d8633946bdbde9c31718ebca7cccc86f",
+      "parser_version": "zhiheng-multimodal-3.1",
+      "page": 2,
+      "page_label": "第 2 页",
+      "quote": "114.4\n4.1\n8.7\n房地产业",
+      "start": 270,
+      "end": 288,
+      "table_context": {
+        "tables": [
+          {
+            "schema_version": "table-semantics-v1",
+            "table_name": "第2页_表1",
+            "format": "pdf",
+            "page": 2,
+            "sheet": null,
+            "source_position": {
+              "page": 2,
+              "page_unit": "physical_page",
+              "bbox": [
+                0.132034,
+                0.17938,
+                0.874265,
+                0.787552
+              ]
+            },
+            "row_count": 22,
+            "column_count": 4,
+            "header_rows": [
+              1
+            ],
+            "header_basis": "inferred",
+            "columns": [
+              {
+                "column": 1,
+                "header_path": [
+                  {
+                    "text": "指 标",
+                    "row": 1,
+                    "col": 1,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 1,
+                      "bbox": [
+                        0.132034,
+                        0.17938,
+                        0.495212,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "指 标",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 2,
+                "header_path": [
+                  {
+                    "text": "2024 年",
+                    "row": 1,
+                    "col": 2,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 2,
+                      "bbox": [
+                        0.495212,
+                        0.17938,
+                        0.634554,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "2024 年",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 3,
+                "header_path": [
+                  {
+                    "text": "比上年增长",
+                    "row": 1,
+                    "col": 3,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 3,
+                      "bbox": [
+                        0.634554,
+                        0.17938,
+                        0.746514,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比上年增长",
+                "role_basis": "inferred"
+              },
+              {
+                "column": 4,
+                "header_path": [
+                  {
+                    "text": "比重",
+                    "row": 1,
+                    "col": 4,
+                    "evidence": {
+                      "page": 2,
+                      "page_unit": "physical_page",
+                      "row": 1,
+                      "col": 4,
+                      "bbox": [
+                        0.746514,
+                        0.17938,
+                        0.874265,
+                        0.208267
+                      ]
+                    }
+                  }
+                ],
+                "label": "比重",
+                "role_basis": "inferred"
+              }
+            ],
+            "units": [
+              {
+                "text": "单位：亿元、%",
+                "value": "亿元、%",
+                "scope": "table_candidate",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.738586,
+                    0.15947,
+                    0.876325,
+                    0.178171
+                  ],
+                  "start": 16,
+                  "end": 23
+                }
+              }
+            ],
+            "caption": {
+              "text": "表1",
+              "evidence": {
+                "page": 2,
+                "bbox": [
+                  0.133244,
+                  0.129654,
+                  0.174475,
+                  0.151549
+                ],
+                "start": 0,
+                "end": 2
+              },
+              "side": "before"
+            },
+            "footnotes": [],
+            "context": [
+              {
+                "text": "2024 年地区生产总值",
+                "evidence": {
+                  "page": 2,
+                  "bbox": [
+                    0.410617,
+                    0.129654,
+                    0.628941,
+                    0.151549
+                  ],
+                  "start": 3,
+                  "end": 15
+                },
+                "side": "before"
+              }
+            ],
+            "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。",
+            "cells": [
+              {
+                "row": 1,
+                "col": 1,
+                "text": "指 标",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.17938,
+                  0.495212,
+                  0.208267
+                ],
+                "cell_id": "R1C1"
+              },
+              {
+                "row": 1,
+                "col": 2,
+                "text": "2024 年",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.17938,
+                  0.634554,
+                  0.208267
+                ],
+                "cell_id": "R1C2"
+              },
+              {
+                "row": 1,
+                "col": 3,
+                "text": "比上年增长",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.17938,
+                  0.746514,
+                  0.208267
+                ],
+                "cell_id": "R1C3"
+              },
+              {
+                "row": 1,
+                "col": 4,
+                "text": "比重",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.17938,
+                  0.874265,
+                  0.208267
+                ],
+                "cell_id": "R1C4"
+              },
+              {
+                "row": 14,
+                "col": 1,
+                "text": "房地产业",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.132034,
+                  0.538948,
+                  0.495212,
+                  0.566504
+                ],
+                "cell_id": "R14C1"
+              },
+              {
+                "row": 14,
+                "col": 2,
+                "text": "114.4",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.495212,
+                  0.538948,
+                  0.634554,
+                  0.566504
+                ],
+                "cell_id": "R14C2"
+              },
+              {
+                "row": 14,
+                "col": 3,
+                "text": "4.1",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.634554,
+                  0.538948,
+                  0.746514,
+                  0.566504
+                ],
+                "cell_id": "R14C3"
+              },
+              {
+                "row": 14,
+                "col": 4,
+                "text": "8.7",
+                "rowspan": 1,
+                "colspan": 1,
+                "covered_by": null,
+                "bbox": [
+                  0.746514,
+                  0.538948,
+                  0.874265,
+                  0.566504
+                ],
+                "cell_id": "R14C4"
+              }
+            ],
+            "row_headers": [
+              {
+                "row": 14,
+                "column": 1,
+                "text": "房地产业",
+                "cell_id": "R14C1",
+                "rowspan": 1,
+                "colspan": 1,
+                "role_basis": "inferred",
+                "role": "row_label_candidate",
+                "evidence": {
+                  "page": 2,
+                  "page_unit": "physical_page",
+                  "row": 14,
+                  "col": 1,
+                  "bbox": [
+                    0.132034,
+                    0.538948,
+                    0.495212,
+                    0.566504
+                  ]
+                }
+              }
+            ],
+            "selected_cell_ids": [
+              "R14C1",
+              "R14C2",
+              "R14C3",
+              "R14C4"
+            ],
+            "selection_state": "source_span",
+            "requires_review": true,
+            "review_reasons": [
+              "表头角色为结构候选，需对照原表确认"
+            ],
+            "truncated": false
+          }
+        ],
+        "has_table": true,
+        "truncated": false,
+        "requires_review": true
+      },
+      "preprocessing": {
+        "triggers": [],
+        "operations": [],
+        "status": "not_triggered",
+        "selected": "original",
+        "extra_ocr_calls": 0,
+        "elapsed_ms": 0,
+        "visual_review_required": false,
+        "text_disagreement": false,
+        "numeric_symbol_disagreement": false,
+        "truncated": false
+      },
+      "visual_checked": true
+    }
+  ],
+  "boundary": "Actual R9 publication. Normalized question was recorded after answer; it is an explicit offline repair input here, not an original pre-answer message."
+}

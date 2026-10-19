@@ -1,0 +1,74 @@
+{
+  "用途": "历史证据摘要，非最终版重新实测，非比赛官方评分",
+  "原记录相对路径": "independent-review/nonsql134-r11-prepared/summary.json",
+  "原记录SHA256": "2962fcb980e47aeca2362a6642b318e8df50589135faee50e71c2abf3f54247a",
+  "本次整理新增模型调用": 0,
+  "原始统计": {
+    "status": "offline_scored_and_independently_reviewed",
+    "human_review_performed": false,
+    "official_competition_score": false,
+    "run_sha256": "6c6a50af53e4008758517ae121903e2431b654dd207309532e15d5a1de8c3474",
+    "review_sha256": "930c6c7fb562e78bdce5682e57d04957162def952aaecba076106c6c4d702608",
+    "automatic_score_sha256": "d57669850b903460df7a461a7f2fbc91b69977c65c4691ac6609aa7b7471cd70",
+    "fixed_denominator": 134,
+    "strict": 50,
+    "semantic_usable": 51,
+    "unsafe_published_claim": 0,
+    "completed_status": 51,
+    "failed_status": 83,
+    "http402_cases": 81,
+    "http503_cases": 1,
+    "http504_cases": 1,
+    "model_calls_for_scoring": 0,
+    "groups": {
+      "rag": {
+        "denominator": 50,
+        "strict": 48,
+        "semantic_usable": 49,
+        "unsafe_published_claim": 0,
+        "statuses": {
+          "completed": 49,
+          "failed": 1
+        }
+      },
+      "chart": {
+        "denominator": 20,
+        "strict": 2,
+        "semantic_usable": 2,
+        "unsafe_published_claim": 0,
+        "statuses": {
+          "failed": 18,
+          "completed": 2
+        }
+      },
+      "formula": {
+        "denominator": 20,
+        "strict": 0,
+        "semantic_usable": 0,
+        "unsafe_published_claim": 0,
+        "statuses": {
+          "failed": 20
+        }
+      },
+      "cross": {
+        "denominator": 24,
+        "strict": 0,
+        "semantic_usable": 0,
+        "unsafe_published_claim": 0,
+        "statuses": {
+          "failed": 24
+        }
+      },
+      "clarify": {
+        "denominator": 20,
+        "strict": 0,
+        "semantic_usable": 0,
+        "unsafe_published_claim": 0,
+        "statuses": {
+          "failed": 20
+        }
+      }
+    },
+    "boundary": "First full R11 run retained including all failures. Service failures are not model semantic errors or evidence of successful clarification. No final overall score inferred."
+  }
+}

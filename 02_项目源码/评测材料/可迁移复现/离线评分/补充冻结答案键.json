@@ -1,0 +1,92 @@
+{
+  "plan_sha256": "fa3a92b41661f08a34e1c082d65dbbb6481b3e631477540697323f5c6a96874f",
+  "cases": {
+    "acceptance-12-source-scope": {
+      "id": "RD-B08-01",
+      "source_ids": [
+        "B08"
+      ],
+      "physical_pages": [
+        273,
+        274,
+        277
+      ],
+      "evidence": [
+        {
+          "source_id": "B08",
+          "physical_page": 273,
+          "exact_quote": "October 2005 to September",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        },
+        {
+          "source_id": "B08",
+          "physical_page": 277,
+          "exact_quote": "Influent and effluent averages",
+          "quote_matching": "原文短摘录；只归一化空白进行逐字比对"
+        }
+      ],
+      "expected_points": [
+        "设计能力7 MGD，2005年10月至2006年9月研究期平均实际流量4.12 MGD。",
+        "TN进水31.2 mg/L、出水2.14 mg/L；TP进水5.8 mg/L、出水0.26 mg/L。",
+        "这些是案例研究期平均值；许可表中的年度负荷或月均限值、最大月/最大周值不能替代它们。"
+      ],
+      "numeric_constraints": [
+        {
+          "label": "设计流量",
+          "expected": 7,
+          "unit": "MGD",
+          "absolute_tolerance": 0
+        },
+        {
+          "label": "平均流量",
+          "expected": 4.12,
+          "unit": "MGD",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "进水TN",
+          "expected": 31.2,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "出水TN",
+          "expected": 2.14,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "进水TP",
+          "expected": 5.8,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "label": "出水TP",
+          "expected": 0.26,
+          "unit": "mg/L",
+          "absolute_tolerance": 0.01
+        }
+      ],
+      "conditions": [
+        "研究期2005-10至2006-09；物理页273–277，位于单份完整原件第200页以后。"
+      ],
+      "grading_requirements": [
+        "必须回答全部预期要点；数值及单位按numeric_constraints判定，遗漏关键条件或同类资料混淆不算完全正确。",
+        "来源必须落到本题指定原件和相应物理页，印刷页码应明确区分；只给文件名不算页级证据通过。",
+        "允许等价中文表述与正确的等值单位换算；不得把本测试中的假设计算当成原文实测数据。"
+      ],
+      "real_model_result": null,
+      "status": "completed",
+      "require_evidence": true,
+      "require_text_review": true,
+      "review": null,
+      "key_provenance": {
+        "path": "评测材料/复杂文档专项/离线评分/参考答案.json",
+        "sha256": "b515a1e3aac4ff836a28b4a4bcedcadf0803c20f6ed178ad0a14304a211c722f",
+        "case_id": "RD-B08-01"
+      }
+    }
+  },
+  "portable_copy_note": "仅将源码前缀改为包内相对路径；历史答案键未改，原件SHA-256：5ce25497eb69dc980e4325348def5faf574b7e633a06f9cae97f1c11afb147dd"
+}

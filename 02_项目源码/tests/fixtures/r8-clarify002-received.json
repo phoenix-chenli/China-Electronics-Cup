@@ -1,0 +1,92 @@
+{
+  "case_id": "clarify-002",
+  "run_sha256": "f8a166e011f98e28f26013cd361d83d4f7ac9de83b0e2c504f7da0ac66632452",
+  "record_sha256": "eba73920c6d9d5ecfda2c6066a5e76aacda76454ed5f30aa5a2f1d5ed8ef172a",
+  "backend_sha256": "d9618979800f6ee235c9352c9bc5953feda5e83258d4c1df6c47ec3e50e45008",
+  "provenance": "Exact whitelisted fields from the saved, untruncated received-candidate/review audit; gateway raw text was not retained. No claim of transport/parser truncation.",
+  "candidate": {
+    "question": "数据库中有两个station_id不同但名称均为"
+  },
+  "candidate_identity": {
+    "sha256": "b519f137ba1174d5b4fb613cf2087fce400a38e46413d81913394f2e316d39ef",
+    "characters": 40,
+    "type": "dict"
+  },
+  "review": {
+    "clarification_supported": true,
+    "reason": "stations表中有两个station_id不同（A01、B01）但name均为'同名站'的记录，用户未指定是求合计还是按station_id分别统计，且未授权全部合计，属于同名对象对应不同主键需要澄清的情形。"
+  },
+  "review_identity": {
+    "sha256": "d581c47b67e52df42933aa07877467048e0af270ae4bce8dac2bd2767f4e4017",
+    "characters": 153,
+    "type": "dict"
+  },
+  "query_results": [
+    {
+      "id": "E1",
+      "query": {
+        "sql": "SELECT \"name\", COUNT(*) AS cnt FROM \"stations\" GROUP BY \"name\" HAVING COUNT(*) > 1",
+        "parameters": []
+      },
+      "query_result": {
+        "columns": [
+          "name",
+          "cnt"
+        ],
+        "rows": [
+          [
+            "同名站",
+            2
+          ]
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "id": "E2",
+      "query": {
+        "sql": "SELECT s.\"name\", s.\"station_id\", i.\"checks\", i.\"rechecks\", i.\"unit\" FROM \"stations\" s JOIN \"inspections\" i ON s.\"station_id\" = i.\"station_id\"",
+        "parameters": []
+      },
+      "query_result": {
+        "columns": [
+          "name",
+          "station_id",
+          "checks",
+          "rechecks",
+          "unit"
+        ],
+        "rows": [
+          [
+            "同名站",
+            "A01",
+            30,
+            2,
+            "次"
+          ],
+          [
+            "同名站",
+            "B01",
+            45,
+            4,
+            "次"
+          ],
+          [
+            "青湾港",
+            "C01",
+            42,
+            3,
+            "次"
+          ]
+        ],
+        "truncated": false,
+        "selection_required_for_scalar": true
+      }
+    }
+  ],
+  "published_clarification": {
+    "question": "数据库中有两个station_id不同但名称均为",
+    "field": "",
+    "options": []
+  }
+}

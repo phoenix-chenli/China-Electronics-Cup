@@ -1,0 +1,70 @@
+/** Executes actual source callbacks in a controlled local environment, with no browser or model calls. */
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+import ts from 'typescript';
+const require=createRequire(import.meta.url),file=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../src/ResearchApp.tsx');
+const source=ts.createSourceFile(file,fs.readFileSync(file,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+const types={exports:{}};new Function('module','exports',ts.transpileModule(fs.readFileSync(path.join(path.dirname(file),'researchTypes.ts'),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(types,types.exports);const {canContinueAnswer}=types.exports;
+function load(name,environment){let expression;const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(source)===name)expression=ts.isCallExpression(node.initializer)?node.initializer.arguments[0]:node.initializer;if(ts.isFunctionDeclaration(node)&&node.name?.text===name)expression=node;ts.forEachChild(node,visit);};visit(source);assert.ok(expression,`source callback ${name} exists`);const raw=ts.isFunctionDeclaration(expression)?`${expression.getText(source)};module.exports=${name};`:`module.exports=(${expression.getText(source)});`;const code=ts.transpileModule(raw,{fileName:'callback.tsx',compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText;const mod={exports:{}};new Function('require','module','exports',...Object.keys(environment),code)(require,mod,mod.exports,...Object.values(environment));return mod.exports;}
+const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};const tick=()=>new Promise(resolve=>setImmediate(resolve));
+function chainHarness(){const calls=[],pending=[],changes={},errors=[],announcements=[],requestGeneration={current:0},draftRevision={current:0},projectRef={current:'p'},activeRef={current:{id:'current',project_id:'p'}};const set=key=>value=>{changes[key]=value;};const environment={canContinueAnswer,requestAnimationFrame:fn=>fn(),document:{getElementById:id=>({scrollIntoView:()=>{changes.scrollTarget=id;}})},pid:'p',requestGeneration,draftRevision,projectRef,activeRef,setBusy:set('busy'),api:async(url)=>{calls.push(url);const next=deferred();pending.push(next);return next.promise;},setChain:set('chain'),setDraftUndo:set('undo'),setScope:set('scope'),setPatch:set('patch'),pendingPatch:()=>[],setView:set('view'),setReader:set('reader'),setDraft:set('draft'),tabStorage:{getItem:()=> '目标轮次保存的草稿'},showError:error=>errors.push(error),messageOf:error=>error.message,setScenarioOpen:set('scenario'),announce:text=>announcements.push(text)};const loadChain=load('loadChain',environment);const activate=load('activateAnswerTool',{...environment,loadChain});return {loadChain,activate,calls,pending,changes,errors,announcements,requestGeneration,draftRevision,projectRef};}
+const answer=id=>({id,project_id:'p',source_ids:['s'],status:'completed'});
+test('a successful history load returns true only for the requested project and target turn',async()=>{const h=chainHarness(),promise=h.loadChain('a');h.pending[0].resolve([answer('a')]);assert.equal(await promise,true);assert.equal(h.changes.chain.at(-1).id,'a');assert.equal(h.changes.scrollTarget,'turn-a');assert.equal(h.changes.draft,'目标轮次保存的草稿');assert.equal(h.changes.busy,false);});
+test('failed or mismatched history loads return false and never replace current content',async()=>{for(const result of ['error','wrong-answer','wrong-project']){const h=chainHarness(),promise=h.loadChain('a');if(result==='error')h.pending[0].reject(Error('读取失败'));else h.pending[0].resolve(result==='wrong-answer'?[answer('b')]:[{...answer('a'),project_id:'other'}]);assert.equal(await promise,false);assert.equal(h.changes.chain,undefined);assert.equal(h.changes.draft,undefined);assert.equal(h.errors.length,1);}});
+test('project change or superseding navigation prevents late history replacement',async()=>{for(const change of ['project','generation']){const h=chainHarness(),promise=h.loadChain('a');if(change==='project')h.projectRef.current='other';else h.requestGeneration.current++;h.pending[0].resolve([answer('a')]);assert.equal(await promise,false);assert.equal(h.changes.chain,undefined);assert.equal(h.changes.draft,undefined);}});
+test('typing while history loads preserves the newer draft',async()=>{const h=chainHarness(),promise=h.loadChain('a');h.draftRevision.current++;h.pending[0].resolve([answer('a')]);assert.equal(await promise,true);assert.equal(h.changes.draft,undefined);});
+test('failed historical scenario selection never opens a calculation for another active turn',async()=>{const h=chainHarness();h.activate(answer('a'),'scenario');h.pending[0].reject(Error('读取失败'));await tick();assert.equal(h.changes.scenario,undefined);assert.equal(h.announcements.length,0);});
+test('scenario and branch follow-ups run only after successful target navigation',async()=>{for(const tool of ['scenario','branch']){const h=chainHarness();h.activate(answer('a'),tool);assert.equal(h.changes.scenario,undefined);assert.equal(h.announcements.length,0);h.pending[0].resolve([answer('a')]);await tick();if(tool==='scenario')assert.equal(h.changes.scenario,true);else assert.equal(h.announcements.length,1);}});
+test('a superseding request blocks an otherwise successful follow-up before its microtask',async()=>{const h=chainHarness();h.activate(answer('a'),'scenario');h.pending[0].resolve([answer('a')]);h.requestGeneration.current++;await tick();assert.equal(h.changes.scenario,undefined);});
+test('scenario for current answer needs no navigation and cross-project stale handlers do nothing',()=>{const h=chainHarness();h.activate(answer('current'),'scenario');assert.equal(h.calls.length,0);assert.equal(h.changes.scenario,true);delete h.changes.scenario;h.activate({...answer('a'),project_id:'other'},'scenario');assert.equal(h.calls.length,0);assert.equal(h.changes.scenario,undefined);});
+const nodes=tree=>tree==null||typeof tree!=='object'?[]:Array.isArray(tree)?tree.flatMap(nodes):[tree,...nodes(tree.props?.children)];
+function projectHarness(){const state=[],refs=[],cleanups=[],calls=[],created=[];let s=0,r=0,first=true,tree;const pending=deferred();const component=load('CreateProject',{useState:initial=>{const i=s++;if(!(i in state))state[i]=initial;return [state[i],value=>state[i]=value];},useRef:initial=>{const i=r++;return refs[i]??(refs[i]={current:initial});},useEffect:effect=>{if(first)cleanups.push(effect());},ResearchDialog:()=>null,api:async(...args)=>{calls.push(args);return pending.promise;},messageOf:error=>error.message});const render=()=>{s=r=0;tree=component({onClose:()=>{},onCreated:project=>created.push(project)});first=false;return tree;};render();return {render,calls,created,pending,get tree(){return tree;},input:()=>nodes(tree).find(n=>n.type==='input'),form:()=>nodes(tree).find(n=>n.type==='form'),unmount:()=>cleanups.forEach(fn=>fn?.())};}
+test('project form locks repeated Enter synchronously and freezes inputs during creation',async()=>{const h=projectHarness();h.input().props.onChange({target:{value:' 新项目 '}});h.render();const submit=h.form().props.onSubmit;submit({preventDefault(){}});submit({preventDefault(){}});h.render();assert.equal(h.calls.length,1);assert.equal(JSON.parse(h.calls[0][1].body).name,'新项目');assert.equal(h.input().props.disabled,true);h.pending.resolve({id:'created'});await tick();assert.equal(h.created.length,1);});
+test('closing project form prevents a late success from switching the current project',async()=>{const h=projectHarness();h.input().props.onChange({target:{value:'新项目'}});h.render();h.form().props.onSubmit({preventDefault(){}});h.unmount();h.pending.resolve({id:'created'});await tick();assert.equal(h.created.length,0);});
+test('failed project creation retains input and releases its submission lock',async()=>{const h=projectHarness();h.input().props.onChange({target:{value:'保留名称'}});h.render();h.form().props.onSubmit({preventDefault(){}});h.pending.reject(Error('创建失败'));await tick();h.render();assert.equal(h.input().props.value,'保留名称');assert.equal(h.input().props.disabled,false);assert.equal(h.created.length,0);assert.ok(nodes(h.tree).some(n=>n.props?.role==='alert'&&n.props.children==='创建失败'));});
+
+
+test('context edits apply to the clicked historical answer only after successful branch loading',async()=>{
+ const changes={},calls=[],target={...answer('historic'),turn_index:2};let release;const pending=new Promise(resolve=>{release=resolve;});const p=[{op:'replace',field:'unit',value:'元'}];
+ const apply=load('applyContextPatch',{contextAnswer:target,projectRef:{current:'p'},activeRef:{current:answer('latest')},loadChain:async(id,pid)=>{calls.push([id,pid]);return pending;},announce:()=>{},setPatch:value=>changes.patch=value,setContextAnswer:value=>changes.target=value,requestAnimationFrame:fn=>fn(),document:{getElementById:()=>null}});
+ const result=apply(p);assert.deepEqual(calls,[['historic','p']]);assert.equal(changes.patch,undefined);release(true);assert.equal(await result,true);assert.deepEqual(changes.patch,p);assert.equal(changes.target,null);
+});
+test('failed or cross-project historical context edits leave current conditions untouched',async()=>{
+ for(const project of ['p','other']){const changes={};const apply=load('applyContextPatch',{contextAnswer:answer('historic'),projectRef:{current:project},activeRef:{current:answer('latest')},loadChain:async()=>false,announce:()=>{},setPatch:value=>changes.patch=value,setContextAnswer:value=>changes.target=value,requestAnimationFrame:fn=>fn(),document:{getElementById:()=>null}});assert.equal(await apply([{op:'remove',field:'time_range'}]),false);assert.deepEqual(changes,{});}
+});
+
+function submissionHarness(status){
+ const active=status?{...answer('previous'),status,mode:'database',context_revision:'r6',turn_index:6}:null,changes={},calls=[],removed=[];
+ const patch=[{op:'replace',field:'time_range',value:'2024'}],set=key=>value=>{changes[key]=value;};
+ const submit=load('submit',{canContinueAnswer,draft:' 完整问题：统计2024年员工工时 ',busy:false,processing:['queued','running'].includes(status),submittingGeneration:{current:null},requestGeneration:{current:0},scope:['s'],model:{configured:true},pid:'p',draftRevision:{current:0},active,chain:active?[active]:[],patch,projectRef:{current:'p'},crypto:{randomUUID:()=> 'local-test-request'},setBusy:set('busy'),setError:set('error'),setScopeOpen:set('scopeOpen'),setSettings:set('settings'),showError:set('error'),messageOf:error=>error.message,setChain:set('chain'),setDraft:set('draft'),setDraftUndo:set('undo'),setPatch:set('patch'),setView:set('view'),setChartId:set('chart'),tabStorage:{removeItem:key=>removed.push(key)},requestAnimationFrame:fn=>fn(),document:{getElementById:()=>null},api:async(url,options)=>{calls.push({url,body:JSON.parse(options.body)});return {id:'created',project_id:'p'};}});
+ return {submit,calls,changes,removed,patch};
+}
+for(const status of ['failed','cancelled',null])test(`${status??'new'} submits an independent question without an inherited patch`,async()=>{
+ const h=submissionHarness(status);await h.submit();assert.equal(h.calls.length,1);const payload=h.calls[0].body;
+ assert.equal(payload.parent_answer_id,null);assert.deepEqual(payload.context_patch,[]);assert.equal(payload.mode,'auto');assert.equal('expected_context_revision' in payload,false);assert.equal(payload.question,'完整问题：统计2024年员工工时');assert.equal(h.changes.chain.length,1);
+ assert.ok(h.removed.includes(`zhiheng-draft:p:${status?'previous':'new'}`));if(status)assert.ok(!h.removed.includes('zhiheng-draft:p:new'));
+});
+for(const status of ['completed','needs_clarification','insufficient_evidence'])test(`${status} sends the same parent and revision it promises in the UI`,async()=>{
+ const h=submissionHarness(status);await h.submit();const payload=h.calls[0].body;
+ assert.equal(payload.parent_answer_id,'previous');assert.equal(payload.expected_context_revision,'r6');assert.equal(payload.mode,'database');assert.deepEqual(payload.context_patch,h.patch);assert.equal(h.changes.chain.length,2);
+});
+for(const status of ['running','queued'])test(`${status} cannot submit or consume the pending draft`,async()=>{
+ const h=submissionHarness(status);await h.submit();assert.equal(h.calls.length,0);assert.deepEqual(h.removed,[]);assert.equal(h.changes.draft,undefined);
+});
+test('restoring a failed or cancelled answer never reactivates its pending context patch',()=>{
+ const pending=load('pendingPatch',{canContinueAnswer,tabStorage:{getItem:()=>JSON.stringify({revision:'r6',patch:[{op:'replace',field:'time_range',value:'2024'}]})}});
+ for(const status of ['failed','cancelled','running','queued'])assert.deepEqual(pending('p',{id:'a',status,context_revision:'r6'}),[]);
+ for(const status of ['completed','needs_clarification','insufficient_evidence'])assert.equal(pending('p',{id:'a',status,context_revision:'r6'}).length,1);
+});
+test('opening failed history announces an independent new question only after the target loads',async()=>{
+ const h=chainHarness();h.activate({...answer('failed'),status:'failed'},'branch');h.pending[0].resolve([{...answer('failed'),status:'failed'}]);await tick();
+ assert.equal(h.announcements.length,1);assert.match(h.announcements[0],/独立新问/);assert.doesNotMatch(h.announcements[0],/从这里继续/);
+});
+test('retry fill preserves the entire original question and makes an existing draft undoable',()=>{
+ const values={},fill=load('fillDraft',{draftRef:{current:'只改年份，其余不变'},setDraftUndo:value=>values.undo=value,setDraft:value=>values.draft=value,requestAnimationFrame:fn=>fn(),document:{getElementById:()=>null}}),question='完整原问题：按2025年合同条款查询金额、折扣率与优惠后金额。';
+ fill(question);assert.equal(values.draft,question);assert.deepEqual(values.undo,{before:'只改年份，其余不变',after:question});
+});

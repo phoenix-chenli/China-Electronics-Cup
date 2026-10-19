@@ -1,0 +1,28 @@
+[
+  {
+    "name": "石景山区2024年产业指标_同源转换.xlsx",
+    "file": "石景山区2024年产业指标_同源转换.xlsx",
+    "origin": "https://www.bjsjs.gov.cn/gongkai/zwgkpd/zdly_1960/ndxx/202510/P020250616521785817353.pdf",
+    "license": "公开发布，未声明开放许可证；保留官方机构及出处",
+    "note": "同源CSV转换件，19行10列，非官方Excel；95个数值类型单元格。不是新增独立来源。",
+    "source_group": "shijingshan_stats_2024",
+    "derived_from": "../石景山区2024年产业指标_原表转录.csv",
+    "source_type": "csv_to_xlsx",
+    "quality_notes": [
+      "已逐值转录/原表口径待核实：工业30.7与建筑业61.1合计91.8亿元，与同页第二产业90.8亿元相差1.0亿元。未核实原因，保留官方数值；禁止混合合计、产业和行业层级求和。"
+    ],
+    "sha256": "bc051dedfaab3ba0d0815e619ab17908427a7c862e0303acbd1d9947ec4a8b82"
+  },
+  {
+    "name": "Chinook_公开测试数据库.sqlite",
+    "file": "Chinook_公开测试数据库.sqlite",
+    "origin": "https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_Sqlite.sqlite",
+    "license": "MIT，见Chinook_LICENSE.txt",
+    "note": "仅作SQLite导入测试；曲目元数据来自真实iTunes库，客户与员工为虚构，销售记录为随机生成，不是真实企业业务数据。",
+    "source_group": "chinook_public_sample",
+    "derived_from": null,
+    "source_type": "public_test_database",
+    "quality_notes": [],
+    "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15"
+  }
+]

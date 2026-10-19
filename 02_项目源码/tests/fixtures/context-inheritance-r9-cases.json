@@ -1,0 +1,4963 @@
+{
+  "schema_version": "context-inheritance-replay-1",
+  "origin_run": "final-r9-execution/runs-r9/context64/run.json",
+  "origin_run_snapshot_sha256": "d96fd1f7781e2a5dbcb8255674e845d86fe0d7e402df6438312dc94e4489d91c",
+  "origin_run_status_at_capture": "finished",
+  "origin_backend_sha256": "0278d7632fe4adee578e2be133fc238e973483dbc8c4e130d7e0b81fa96f4f63",
+  "boundary": "Only completed ctx01/ctx02 records; selected original fields unchanged; no new model calls or final suite score.",
+  "cases": [
+    {
+      "id": "ctx01-t1",
+      "original_record_sha256": "31401bbbd94a1c9c4ad294d23f20e27737390b4b185654ed3d7ee53546317144",
+      "record": {
+        "id": "fc23f4b9b95a4c16bad644442905c840",
+        "question": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2024年",
+          "filters": [
+            {
+              "field": "BillingCountry",
+              "op": "=",
+              "value": "USA"
+            }
+          ]
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "fc23f4b9b95a4c16bad644442905c840",
+          "branch_parent_id": null,
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "8d7cc241c1e34c0d2ba26024eaa86ffbefdf3065c41e9e8e63e44b42aab4a6cc"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "Total合计：127.98。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "127.98"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 3,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2024年",
+              "filters": [
+                {
+                  "field": "BillingCountry",
+                  "op": "=",
+                  "value": "USA"
+                }
+              ]
+            },
+            "normalized_question": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "entities",
+                "filters",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "topic",
+                  "source": "current_question",
+                  "quote": "Invoice.Total合计",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "current_question",
+                  "quote": "Invoice",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "Invoice.Total合计",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "time_range",
+                  "source": "current_question",
+                  "quote": "2024年",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "filters",
+                  "source": "current_question",
+                  "quote": "BillingCountry为USA",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "04ab5edeb74b7460580d9622ed1c514a6a04ee17d6c66e798f3878c298a14619",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "filters"
+                ],
+                "status": "grounding_rejected",
+                "errors": [
+                  {
+                    "field": null,
+                    "reason": "grounding含未声明或无效字段"
+                  },
+                  {
+                    "field": null,
+                    "reason": "grounding含未声明或无效字段"
+                  },
+                  {
+                    "field": "entities",
+                    "reason": "每个意图槽位必须有实际出处"
+                  },
+                  {
+                    "field": "filters",
+                    "reason": "每个意图槽位必须有实际出处"
+                  }
+                ]
+              },
+              {
+                "step": 2,
+                "candidate_sha256": "2b938fec9541965b87fede4a27f56010509362607069818b3a7ccdd6dd62f076",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "filters"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT PRINTF('%.2f', COALESCE(DECIMAL_SUM(\"Total\"), 0)) AS \"Total合计\" FROM \"Invoice\" WHERE \"BillingCountry\" = 'USA' AND strftime('%Y', \"InvoiceDate\") = '2024'",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": false,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": false,
+                "output_contract": true
+              },
+              "reason": "SQL在WHERE子句中正确筛选了BillingCountry='USA'和2024年，使用DECIMAL_SUM求和并用PRINTF保留两位小数，列别名正确。但用户未要求将NULL或无匹配记录补零，COALESCE(..., 0)在无满足条件的发票时会将结果从NULL变为'0.00'，属于未经授权的非空/默认值替换，改变了缺失值语义。",
+              "failure_kind": "invalid_plan",
+              "corrected_interpretation": {
+                "normalized_question": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                "intent": {
+                  "metric": "Total合计",
+                  "dimensions": [],
+                  "filters": [
+                    "BillingCountry = 'USA'",
+                    "InvoiceDate在2024年"
+                  ],
+                  "time_range": "2024年",
+                  "grain": null,
+                  "denominator": null,
+                  "entities": [],
+                  "sort": null,
+                  "top_k": null,
+                  "comparison_base": null,
+                  "unit": null,
+                  "topic": "发票金额汇总",
+                  "timezone": null,
+                  "tie_policy": null,
+                  "percentage_kind": null
+                }
+              },
+              "issues": [
+                {
+                  "id": "I1",
+                  "dimension": "missing_values",
+                  "kind": "user_requirement",
+                  "reason": "SQL使用COALESCE(DECIMAL_SUM(\"Total\"), 0)将无匹配时的NULL替换为0，但用户原始问题仅要求合计与保留两位小数，未授权对缺失值补零。当2024年无USA发票时应返回NULL而非'0.00'。",
+                  "requirement": "null_propagation",
+                  "user_quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。"
+                }
+              ]
+            },
+            "effective_review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly queries the Invoice table, filters by BillingCountry='USA' and year 2024 using strftime, aggregates Total with DECIMAL_SUM, formats to two decimal places with PRINTF, and uses COALESCE to handle the empty-set case gracefully which is acceptable for a sum aggregation request. No unauthorized joins or missing conditions.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "effective_review_source": "independent_adjudication",
+            "review_adjudication": {
+              "status": "received",
+              "challenges": [
+                {
+                  "issue_id": "I1",
+                  "dimension": "missing_values",
+                  "kind": "propagation_not_literal_in_cited_quote",
+                  "requirement": "null_propagation",
+                  "user_quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。"
+                }
+              ],
+              "same_sql_fingerprint": "5a1f541e8dcde56f74987a570a5046f731f7bed26e8fde462a133c3d2b8ef788",
+              "initial_mechanical_contract": {
+                "version": "sql-mechanical-contract-1",
+                "issues": [],
+                "output_contract": null,
+                "null_filters": [],
+                "quantifier_checks": [],
+                "counterexamples": [],
+                "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+                "accepted_nonnull_basis": [],
+                "unresolved_issues": []
+              },
+              "response": {
+                "decision": "retract",
+                "resolved_issue_ids": [
+                  "I1"
+                ],
+                "reason": "Challenge correctly points out that the user's request for '合计' (sum) with '保留两位小数' (two decimal places) does not explicitly mandate NULL propagation when no rows match. COALESCE(..., 0) is a standard and reasonable implementation choice to ensure PRINTF('%.2f', ...) always produces a formatted numeric string rather than an empty/NULL result for a scalar aggregation. The original issue I1 incorrectly treated null_propagation as a strict user requirement without explicit textual basis. All other aspects of the SQL (source table, filters, date extraction, DECIMAL_SUM, PRINTF formatting, alias) are correct.",
+                "review": {
+                  "supported": true,
+                  "interpretation_supported": true,
+                  "scope_review": {
+                    "source_basis": true,
+                    "population_grain": true,
+                    "quantifier_scope": true,
+                    "missing_values": true,
+                    "output_contract": true
+                  },
+                  "reason": "SQL correctly queries the Invoice table, filters by BillingCountry='USA' and year 2024 using strftime, aggregates Total with DECIMAL_SUM, formats to two decimal places with PRINTF, and uses COALESCE to handle the empty-set case gracefully which is acceptable for a sum aggregation request. No unauthorized joins or missing conditions.",
+                  "failure_kind": null,
+                  "table_relations": []
+                }
+              },
+              "selected_as_effective_review": true,
+              "initial_review_preserved": true,
+              "passed_remaining_gates": true
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t2",
+      "original_record_sha256": "dca740c209a53093d4c93f5b9f70bcd14bd045e57aaba2eadef0af964ec5a403",
+      "record": {
+        "id": "df1fc9fba1df4ccb898edd737accbaad",
+        "question": "把年份改成2025年，其他口径不变。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2025年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2025年",
+          "filters": [
+            {
+              "field": "BillingCountry",
+              "op": "=",
+              "value": "USA"
+            }
+          ]
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "df1fc9fba1df4ccb898edd737accbaad",
+          "branch_parent_id": "fc23f4b9b95a4c16bad644442905c840",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "14484549fb9c8776f840346b42954baf2916b3ef0cb211a1ff52af502e77b803"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "Total合计：85.14。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "85.14"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2025年",
+              "filters": [
+                {
+                  "field": "BillingCountry",
+                  "op": "=",
+                  "value": "USA"
+                }
+              ]
+            },
+            "normalized_question": "只统计2025年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "entities",
+                "filters",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "time_range",
+                  "source": "current_question",
+                  "quote": "把年份改成2025年，其他口径不变。",
+                  "source_answer_id": "df1fc9fba1df4ccb898edd737accbaad"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "bd5b58caaa7d074643724025b374682f9fce5c42dae3a732bd1dddf868587787",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "filters"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT PRINTF('%.2f', DECIMAL_SUM(\"Total\")) AS \"Total合计\" FROM \"Invoice\" WHERE \"BillingCountry\" = 'USA' AND strftime('%Y', \"InvoiceDate\") = '2025'",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly updates the year filter to 2025 while preserving all other conditions from the previous round (BillingCountry = 'USA', DECIMAL_SUM on Total, PRINTF two-decimal formatting). No unauthorized NULL filters or COALESCE added. Probe P2 sample showing only 2021 dates does not prove absence of 2025 data in the full table; the returned result confirms matching rows exist.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t3",
+      "original_record_sha256": "0b42e97644161f8906188f229bb60fa2c1c95682a62c9e85bb54f24c381a68c8",
+      "record": {
+        "id": "7e9db1afc52b47bebfb9d2a3fd7d81ca",
+        "question": "加入Canada，与USA分别列出国家和金额，按国家名升序。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2025年BillingCountry为USA和Canada的Invoice.Total合计，分别列出国家和金额，按国家名升序，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2025年",
+          "dimensions": [
+            "BillingCountry"
+          ],
+          "filters": [
+            {
+              "field": "BillingCountry",
+              "op": "in",
+              "value": [
+                "USA",
+                "Canada"
+              ]
+            }
+          ]
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "7e9db1afc52b47bebfb9d2a3fd7d81ca",
+          "branch_parent_id": "df1fc9fba1df4ccb898edd737accbaad",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "f976c1a7a3112c6b9fe85f358609b4024dd1cf63f4ba12721a323c058c70617f"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "国家：Canada；Total合计：72.27。\n国家：USA；Total合计：85.14。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "国家",
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "Canada",
+              "72.27"
+            ],
+            [
+              "USA",
+              "85.14"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2025年",
+              "dimensions": [
+                "BillingCountry"
+              ],
+              "filters": [
+                {
+                  "field": "BillingCountry",
+                  "op": "in",
+                  "value": [
+                    "USA",
+                    "Canada"
+                  ]
+                }
+              ]
+            },
+            "normalized_question": "只统计2025年BillingCountry为USA和Canada的Invoice.Total合计，分别列出国家和金额，按国家名升序，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "dimensions",
+                "entities",
+                "filters",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "把年份改成2025年，其他口径不变。",
+                  "source_answer_id": "df1fc9fba1df4ccb898edd737accbaad"
+                },
+                {
+                  "field": "filters",
+                  "source": "current_question",
+                  "quote": "加入Canada，与USA分别列出国家和金额，按国家名升序。",
+                  "source_answer_id": "7e9db1afc52b47bebfb9d2a3fd7d81ca"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "current_question",
+                  "quote": "与USA分别列出国家和金额",
+                  "source_answer_id": "7e9db1afc52b47bebfb9d2a3fd7d81ca"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "1a49b6ba17b97f6e9066cbed1d5faeb4fabb9d7ee21783d225892cacbdbbebf1",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "filters"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT \"BillingCountry\" AS \"国家\", PRINTF('%.2f', DECIMAL_SUM(\"Total\")) AS \"Total合计\" FROM \"Invoice\" WHERE \"BillingCountry\" IN ('USA', 'Canada') AND strftime('%Y', \"InvoiceDate\") = '2025' GROUP BY \"BillingCountry\" ORDER BY \"BillingCountry\" ASC",
+            "parameters": [],
+            "returned_rows": 2,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly filters Invoice by BillingCountry IN ('USA','Canada') and year 2025, groups by country, sums Total with DECIMAL_SUM formatted to two decimals via PRINTF, and orders by country name ascending. No unauthorized NULL filters or COALESCE added. Output columns and aliases match the user request.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t4",
+      "original_record_sha256": "4c18c26b28d99d0ae4679eef5eba365ebd9eceda6daf7356824c07c9999bbafe",
+      "record": {
+        "id": "15b41bb4ffd245c6a1b93e160d5d5843",
+        "question": "只看Canada，只给合计金额。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2025年BillingCountry为Canada的Invoice.Total合计，只给合计金额，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2025年",
+          "filters": [
+            {
+              "field": "BillingCountry",
+              "op": "=",
+              "value": "Canada"
+            }
+          ]
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "15b41bb4ffd245c6a1b93e160d5d5843",
+          "branch_parent_id": "7e9db1afc52b47bebfb9d2a3fd7d81ca",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "3257c4d6d8fa17874366734f6c38e6ddf8b818dbed0a5bdf0f87430e851610a3"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "Total合计：72.27。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "72.27"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 3,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2025年",
+              "filters": [
+                {
+                  "field": "BillingCountry",
+                  "op": "=",
+                  "value": "Canada"
+                }
+              ]
+            },
+            "normalized_question": "只统计2025年BillingCountry为Canada的Invoice.Total合计，只给合计金额，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "entities",
+                "filters",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "filters",
+                  "source": "current_question",
+                  "quote": "只看Canada",
+                  "source_answer_id": "15b41bb4ffd245c6a1b93e160d5d5843"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "Invoice.Total合计",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "Invoice",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "Invoice.Total合计",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "把年份改成2025年",
+                  "source_answer_id": "df1fc9fba1df4ccb898edd737accbaad"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "ecbc964d8f69ee6721286ed3a6c7294e683511d5876f4d1d999e61d421363282",
+                "candidate_fields": [
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "filters"
+                ],
+                "status": "grounding_rejected",
+                "errors": [
+                  {
+                    "field": null,
+                    "reason": "grounding含未声明或无效字段"
+                  },
+                  {
+                    "field": null,
+                    "reason": "grounding含未声明或无效字段"
+                  }
+                ]
+              },
+              {
+                "step": 2,
+                "candidate_sha256": "656dbc88733690c765eb6705528723c9bd0bf5cbd5c4d585237569706fc8508b",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "filters"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT PRINTF('%.2f', DECIMAL_SUM(\"Total\")) AS \"Total合计\" FROM \"Invoice\" WHERE \"BillingCountry\" = 'Canada' AND strftime('%Y', \"InvoiceDate\") = '2025'",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly filters Invoice by BillingCountry='Canada' and year 2025, aggregates Total with DECIMAL_SUM, and formats to two decimal places via PRINTF. Multi-turn context (year changed to 2025 in round 2, country changed to Canada-only in current round) is faithfully preserved. No unauthorized NULL filters or COALESCE. Output matches user requirement '保留两位小数'.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t5",
+      "original_record_sha256": "2d3b24b49bdf6c80d271a6c898212813ce30ca3434992b2e289a2184ac601773",
+      "record": {
+        "id": "be240722930c48998db10e3e2c5e4089",
+        "question": "去掉国家限制，其他条件保持，只给金额合计。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2025年的Invoice.Total合计，只给金额合计，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2025年"
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "be240722930c48998db10e3e2c5e4089",
+          "branch_parent_id": "15b41bb4ffd245c6a1b93e160d5d5843",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "75d9f766eef12d54ccdb4f43dc6ec25c786899a52e88a9f802d6cc7ca9db6f83"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "Total合计：450.58。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "450.58"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 3,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2025年"
+            },
+            "normalized_question": "只统计2025年的Invoice.Total合计，只给金额合计，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "entities",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "去掉国家限制，其他条件保持，只给金额合计。",
+                  "source_answer_id": "be240722930c48998db10e3e2c5e4089"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "把年份改成2025年，其他口径不变。",
+                  "source_answer_id": "df1fc9fba1df4ccb898edd737accbaad"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "d997c08f53a3bbb9ffbfccedd130fadf19fd06b628bd41f390eb0e50f28dfa80",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range"
+                ],
+                "status": "grounding_rejected",
+                "errors": [
+                  {
+                    "field": null,
+                    "reason": "grounding含未声明或无效字段"
+                  }
+                ]
+              },
+              {
+                "step": 2,
+                "candidate_sha256": "f7c65a7bb86f67d5f94d78d14fe7676790b1e6bb789755ce4834791cbcc03d65",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT PRINTF('%.2f', DECIMAL_SUM(\"Total\")) AS \"Total合计\" FROM \"Invoice\" WHERE strftime('%Y', \"InvoiceDate\") = '2025'",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly removes the country filter per user request, retains the 2025 year condition and two-decimal formatting from prior context, sums Invoice.Total using DECIMAL_SUM with PRINTF('%.2f'), and returns a single scalar row. No unauthorized NULL filters or COALESCE added.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t6",
+      "original_record_sha256": "224b34162c3c2b3f5f98b821d09748696c84240ceef0d5e1c1f59229dc3c44a0",
+      "record": {
+        "id": "dd9f4c4a4f5843a4890f9bbaaba783c9",
+        "question": "改为按月列出年月和金额，年月升序；没有记录的月份不补造零。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2025年的Invoice.Total合计，按月列出年月和金额，年月升序，没有记录的月份不补造零，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2025年",
+          "dimensions": [
+            "年月"
+          ],
+          "grain": "月"
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "dd9f4c4a4f5843a4890f9bbaaba783c9",
+          "branch_parent_id": "be240722930c48998db10e3e2c5e4089",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "a10647a47e53cddb81ea62c397e63cd90960eadd3fa3406a09a4d196f971c84d"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "年月：2025-01；Total合计：37.62。\n年月：2025-02；Total合计：27.72。\n年月：2025-03；Total合计：37.62。\n年月：2025-04；Total合计：33.66。\n年月：2025-05；Total合计：37.62。\n年月：2025-06；Total合计：37.62。\n当前显示 12 行，见结果表。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "年月",
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "2025-01",
+              "37.62"
+            ],
+            [
+              "2025-02",
+              "27.72"
+            ],
+            [
+              "2025-03",
+              "37.62"
+            ],
+            [
+              "2025-04",
+              "33.66"
+            ],
+            [
+              "2025-05",
+              "37.62"
+            ],
+            [
+              "2025-06",
+              "37.62"
+            ],
+            [
+              "2025-07",
+              "37.62"
+            ],
+            [
+              "2025-08",
+              "37.62"
+            ],
+            [
+              "2025-09",
+              "37.62"
+            ],
+            [
+              "2025-10",
+              "37.62"
+            ],
+            [
+              "2025-11",
+              "49.62"
+            ],
+            [
+              "2025-12",
+              "38.62"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2025年",
+              "dimensions": [
+                "年月"
+              ],
+              "grain": "月"
+            },
+            "normalized_question": "只统计2025年的Invoice.Total合计，按月列出年月和金额，年月升序，没有记录的月份不补造零，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "dimensions",
+                "entities",
+                "grain",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "dimensions",
+                  "source": "current_question",
+                  "quote": "改为按月列出年月和金额",
+                  "source_answer_id": "dd9f4c4a4f5843a4890f9bbaaba783c9"
+                },
+                {
+                  "field": "grain",
+                  "source": "current_question",
+                  "quote": "按月",
+                  "source_answer_id": "dd9f4c4a4f5843a4890f9bbaaba783c9"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "把年份改成2025年，其他口径不变。",
+                  "source_answer_id": "df1fc9fba1df4ccb898edd737accbaad"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "去掉国家限制，其他条件保持，只给金额合计。",
+                  "source_answer_id": "be240722930c48998db10e3e2c5e4089"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "Invoice.Total合计",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "Invoice.Total合计",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "af9bb2e690793c654c07266cc133fc4b2baf148e88af28759e7c5086cf4e9131",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "grain"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT strftime('%Y-%m', \"InvoiceDate\") AS \"年月\", PRINTF('%.2f', DECIMAL_SUM(\"Total\")) AS \"Total合计\" FROM \"Invoice\" WHERE strftime('%Y', \"InvoiceDate\") = '2025' GROUP BY strftime('%Y-%m', \"InvoiceDate\") ORDER BY \"年月\" ASC",
+            "parameters": [],
+            "returned_rows": 12,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly filters Invoice to 2025, groups by year-month via strftime('%Y-%m', InvoiceDate), sums Total with DECIMAL_SUM, formats to two decimal places with PRINTF, orders by the alias ascending, and naturally omits months without records. No unauthorized NULL filters or COALESCE added. All five scope dimensions verified.",
+              "failure_kind": null,
+              "nonnull_filter_basis": [],
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t7",
+      "original_record_sha256": "9673349dac7cd78bcb2c370e3936e437756e9c6fbfe86644eeee272dc700e2f6",
+      "record": {
+        "id": "169f43d0767a44419a2e480b086a1a29",
+        "question": "把指标改为发票张数，其他不变。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+        "intent": {
+          "metric": "发票张数",
+          "dimensions": [
+            "年月"
+          ],
+          "filters": [],
+          "time_range": "2025年",
+          "grain": "month",
+          "entities": [
+            "Invoice"
+          ],
+          "unit": "张",
+          "topic": "发票张数"
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "169f43d0767a44419a2e480b086a1a29",
+          "branch_parent_id": "dd9f4c4a4f5843a4890f9bbaaba783c9",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {
+            "metric": {
+              "value": "发票张数",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "dimensions": {
+              "value": [
+                "年月"
+              ],
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "time_range": {
+              "value": "2025年",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "grain": {
+              "value": "month",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "entities": {
+              "value": [
+                "Invoice"
+              ],
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "unit": {
+              "value": "张",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "topic": {
+              "value": "发票张数",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            }
+          },
+          "changes": [
+            {
+              "field": "metric",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": "发票张数",
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "dimensions",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": [
+                  "年月"
+                ],
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "filters",
+              "operation": "remove",
+              "before": null,
+              "after": null,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "time_range",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": "2025年",
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "grain",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": "month",
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "entities",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": [
+                  "Invoice"
+                ],
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "unit",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": "张",
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            },
+            {
+              "field": "topic",
+              "operation": "add",
+              "before": null,
+              "after": {
+                "value": "发票张数",
+                "origin": "model_interpretation",
+                "confirmed_by_user": false,
+                "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+                "user_question": "把指标改为发票张数，其他不变。",
+                "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+                "verification": "answer_semantic_review"
+              },
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29"
+            }
+          ],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": {
+            "answer_id": "169f43d0767a44419a2e480b086a1a29",
+            "claim_ids": [
+              "C1"
+            ],
+            "evidence_ids": [
+              "E1"
+            ]
+          },
+          "interpretation_available": true,
+          "legacy_parent": false,
+          "pending_clarification": null,
+          "revision": "c0a6ae80273e962e2b54bda543942115680bd1fe583571deb57d7d702eb710df"
+        },
+        "result": {
+          "verification": {
+            "status": "passed",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "年月：2025-01；发票张数：7。\n年月：2025-02；发票张数：5。\n年月：2025-03；发票张数：7。\n年月：2025-04；发票张数：5。\n年月：2025-05；发票张数：7。\n年月：2025-06；发票张数：7。\n当前显示 12 行，见结果表。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "年月",
+            "发票张数"
+          ],
+          "rows": [
+            [
+              "2025-01",
+              7
+            ],
+            [
+              "2025-02",
+              5
+            ],
+            [
+              "2025-03",
+              7
+            ],
+            [
+              "2025-04",
+              5
+            ],
+            [
+              "2025-05",
+              7
+            ],
+            [
+              "2025-06",
+              7
+            ],
+            [
+              "2025-07",
+              7
+            ],
+            [
+              "2025-08",
+              7
+            ],
+            [
+              "2025-09",
+              7
+            ],
+            [
+              "2025-10",
+              7
+            ],
+            [
+              "2025-11",
+              7
+            ],
+            [
+              "2025-12",
+              7
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 0,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "metric": "发票张数",
+              "dimensions": [
+                "年月"
+              ],
+              "filters": [],
+              "time_range": "2025年",
+              "grain": "month",
+              "entities": [
+                "Invoice"
+              ],
+              "unit": "张",
+              "topic": "发票张数"
+            },
+            "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "existing_engine_reviewed_interpretation",
+              "new_review": false,
+              "omitted_ungrounded_fields": [],
+              "slot_type_notes": []
+            },
+            "protocol_attempts": [],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT strftime('%Y-%m', \"InvoiceDate\") AS \"年月\", COUNT(\"InvoiceId\") AS \"发票张数\" FROM \"Invoice\" WHERE strftime('%Y', \"InvoiceDate\") = '2025' GROUP BY strftime('%Y-%m', \"InvoiceDate\") ORDER BY \"年月\" ASC",
+            "parameters": [],
+            "returned_rows": 12,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly changes the metric from DECIMAL_SUM(Total) to COUNT(InvoiceId) while preserving all other conditions from the previous turn: 2025 year filter, monthly grouping by strftime('%Y-%m', InvoiceDate), ascending order by month, and no zero-filling for missing months. InvoiceId is a non-nullable primary key so COUNT(InvoiceId) accurately counts invoice rows. The user's '保留两位小数' requirement from round 1 applied to monetary amounts; integer counts do not require decimal formatting, so omitting PRINTF here is correct. Probe P1V1-P1V12 show sample dates are 2021, but the executed SQL returned 12 rows for 2025 confirming data exists; probes are bounded samples and do not disprove full-table coverage.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx01-t8",
+      "original_record_sha256": "3331f34fb95d81e97e9c79dd2826cf640a7ca070edb7509ece820d468bffc267",
+      "record": {
+        "id": "fc80f95415f142d7bbf7c058800a7d25",
+        "question": "撤销上一轮指标修改，回到按月金额。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+        "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "只统计2025年的Invoice.Total合计，按月列出年月和金额，按年月升序排列，没有记录的月份不补造零，保留两位小数。",
+        "intent": {
+          "topic": "Invoice.Total合计",
+          "entities": [
+            "Invoice"
+          ],
+          "metric": "Invoice.Total合计",
+          "time_range": "2025年",
+          "dimensions": [
+            "年月"
+          ],
+          "grain": "月",
+          "assumptions": [
+            "没有记录的月份不补造零"
+          ]
+        },
+        "sources": [
+          {
+            "id": "ccfe1f63f278481c8767a20e919f23ee",
+            "name": "chinook.sqlite",
+            "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+            "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "fc80f95415f142d7bbf7c058800a7d25",
+          "branch_parent_id": "169f43d0767a44419a2e480b086a1a29",
+          "source_revisions": [
+            {
+              "id": "ccfe1f63f278481c8767a20e919f23ee",
+              "name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "114cfdb3b805d9147d5bd46a5821221b9373420d02522daf31b9c82b04c62848",
+              "semantic_revision": "63e1f7e00a17fc2ff85d4542cf1dd9bbdd7cf937a430f2e7a55dea1c56ae9f7f"
+            }
+          ],
+          "slots": {
+            "metric": {
+              "value": "发票张数",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "dimensions": {
+              "value": [
+                "年月"
+              ],
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "time_range": {
+              "value": "2025年",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "grain": {
+              "value": "month",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "entities": {
+              "value": [
+                "Invoice"
+              ],
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "unit": {
+              "value": "张",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            },
+            "topic": {
+              "value": "发票张数",
+              "origin": "model_interpretation",
+              "confirmed_by_user": false,
+              "source_answer_id": "169f43d0767a44419a2e480b086a1a29",
+              "user_question": "把指标改为发票张数，其他不变。",
+              "normalized_question": "统计2025年的发票张数，按月列出年月和发票张数，按年月升序排列；没有记录的月份不补造零。",
+              "verification": "answer_semantic_review"
+            }
+          },
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": {
+            "answer_id": "169f43d0767a44419a2e480b086a1a29",
+            "claim_ids": [
+              "C1"
+            ],
+            "evidence_ids": [
+              "E1"
+            ]
+          },
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "d51d643965bf29918552effa2f533c80ab062920ed7156f49638b4b862105775"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "DECIMAL聚合按原值字符串执行；记录了各分组的非空数量和结果，未将NULL补为0",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "年月：2025-01；Total合计：37.62。\n年月：2025-02；Total合计：27.72。\n年月：2025-03；Total合计：37.62。\n年月：2025-04；Total合计：33.66。\n年月：2025-05；Total合计：37.62。\n年月：2025-06；Total合计：37.62。\n当前显示 12 行，见结果表。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "ccfe1f63f278481c8767a20e919f23ee",
+              "source_name": "chinook.sqlite",
+              "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "Invoice",
+              "label": "chinook.sqlite · Invoice",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "年月",
+            "Total合计"
+          ],
+          "rows": [
+            [
+              "2025-01",
+              "37.62"
+            ],
+            [
+              "2025-02",
+              "27.72"
+            ],
+            [
+              "2025-03",
+              "37.62"
+            ],
+            [
+              "2025-04",
+              "33.66"
+            ],
+            [
+              "2025-05",
+              "37.62"
+            ],
+            [
+              "2025-06",
+              "37.62"
+            ],
+            [
+              "2025-07",
+              "37.62"
+            ],
+            [
+              "2025-08",
+              "37.62"
+            ],
+            [
+              "2025-09",
+              "37.62"
+            ],
+            [
+              "2025-10",
+              "37.62"
+            ],
+            [
+              "2025-11",
+              "49.62"
+            ],
+            [
+              "2025-12",
+              "38.62"
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "Invoice.Total合计",
+              "entities": [
+                "Invoice"
+              ],
+              "metric": "Invoice.Total合计",
+              "time_range": "2025年",
+              "dimensions": [
+                "年月"
+              ],
+              "grain": "月",
+              "assumptions": [
+                "没有记录的月份不补造零"
+              ]
+            },
+            "normalized_question": "只统计2025年的Invoice.Total合计，按月列出年月和金额，按年月升序排列，没有记录的月份不补造零，保留两位小数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                },
+                {
+                  "field": "assumptions",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "assumptions",
+                "dimensions",
+                "entities",
+                "grain",
+                "metric",
+                "time_range",
+                "topic"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "撤销上一轮指标修改，回到按月金额。",
+                  "source_answer_id": "fc80f95415f142d7bbf7c058800a7d25"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "只统计2024年BillingCountry为USA的Invoice.Total合计，保留两位小数。",
+                  "source_answer_id": "fc23f4b9b95a4c16bad644442905c840"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "把年份改成2025年，其他口径不变。",
+                  "source_answer_id": "df1fc9fba1df4ccb898edd737accbaad"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "ancestor_question",
+                  "quote": "改为按月列出年月和金额，年月升序；没有记录的月份不补造零。",
+                  "source_answer_id": "dd9f4c4a4f5843a4890f9bbaaba783c9"
+                },
+                {
+                  "field": "grain",
+                  "source": "ancestor_question",
+                  "quote": "改为按月列出年月和金额，年月升序；没有记录的月份不补造零。",
+                  "source_answer_id": "dd9f4c4a4f5843a4890f9bbaaba783c9"
+                },
+                {
+                  "field": "assumptions",
+                  "source": "ancestor_question",
+                  "quote": "改为按月列出年月和金额，年月升序；没有记录的月份不补造零。",
+                  "source_answer_id": "dd9f4c4a4f5843a4890f9bbaaba783c9"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "e65c6c29e868995b9af4d266d1ca8e0a8ba3539ebf1572fa8cf0d647dd8bd571",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "grain",
+                  "assumptions"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT strftime('%Y-%m', \"InvoiceDate\") AS \"年月\", PRINTF('%.2f', DECIMAL_SUM(\"Total\")) AS \"Total合计\" FROM \"Invoice\" WHERE strftime('%Y', \"InvoiceDate\") = '2025' GROUP BY strftime('%Y-%m', \"InvoiceDate\") ORDER BY \"年月\" ASC",
+            "parameters": [],
+            "returned_rows": 12,
+            "used_tables": [
+              "Invoice"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly restores the monthly Invoice.Total aggregation for 2025 as requested, reverting the previous invoice-count metric. It groups by strftime('%Y-%m', InvoiceDate), filters year 2025, uses DECIMAL_SUM with PRINTF('%.2f') for two-decimal display, orders ascending, and naturally omits months without records. No unauthorized NULL filters or COALESCE are introduced.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t1",
+      "original_record_sha256": "6c631b0ef6de1d5d45ff9723d882be2506bc70d1a3735f746e7d816187cc9384",
+      "record": {
+        "id": "1f15c9e29ecc4837bc81fc0705570ec5",
+        "question": "统计2025年已完成订单：每个客户的订单头total_cents合计，单位分；NULL未知不补零。输出客户编号、金额，编号升序。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2025年已完成订单：按客户统计每个客户的订单头total_cents合计金额，单位分；NULL视为未知不补零。输出客户编号、金额，按客户编号升序。",
+        "intent": {
+          "topic": "2025年已完成订单的客户订单金额统计",
+          "entities": [
+            "客户",
+            "订单头"
+          ],
+          "metric": "订单头total_cents合计",
+          "time_range": "2025年",
+          "dimensions": [
+            "客户编号"
+          ],
+          "filters": [
+            "已完成订单",
+            "NULL未知不补零"
+          ],
+          "unit": "分",
+          "grain": "每个客户"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "1f15c9e29ecc4837bc81fc0705570ec5",
+          "branch_parent_id": null,
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "de0586235d98981d832820f1291ebdf6d64f7573a09f956d12a3b794c92167e0"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；金额(分)：20000。\n客户编号：2；金额(分)：0。\n客户编号：3；金额(分)：24000。\n客户编号：4；金额(分)：12000。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "金额(分)"
+          ],
+          "rows": [
+            [
+              1,
+              20000
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              24000
+            ],
+            [
+              4,
+              12000
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "2025年已完成订单的客户订单金额统计",
+              "entities": [
+                "客户",
+                "订单头"
+              ],
+              "metric": "订单头total_cents合计",
+              "time_range": "2025年",
+              "dimensions": [
+                "客户编号"
+              ],
+              "filters": [
+                "已完成订单",
+                "NULL未知不补零"
+              ],
+              "unit": "分",
+              "grain": "每个客户"
+            },
+            "normalized_question": "统计2025年已完成订单：按客户统计每个客户的订单头total_cents合计金额，单位分；NULL视为未知不补零。输出客户编号、金额，按客户编号升序。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                },
+                {
+                  "field": "unit",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "dimensions",
+                "entities",
+                "filters",
+                "grain",
+                "metric",
+                "time_range",
+                "topic",
+                "unit"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "topic",
+                  "source": "current_question",
+                  "quote": "统计2025年已完成订单",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "entities",
+                  "source": "current_question",
+                  "quote": "每个客户的订单头total_cents合计",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "订单头total_cents合计",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "time_range",
+                  "source": "current_question",
+                  "quote": "2025年",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "current_question",
+                  "quote": "输出客户编号、金额",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "current_question",
+                  "quote": "已完成订单",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "current_question",
+                  "quote": "NULL未知不补零",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "unit",
+                  "source": "current_question",
+                  "quote": "单位分",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "grain",
+                  "source": "current_question",
+                  "quote": "每个客户",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "f520858e87abf36748b50edb9061582d77b8f66dad364bcd7e2111107cda2ce0",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "filters",
+                  "unit",
+                  "grain"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT o.customer_id AS \"客户编号\", SUM(o.total_cents) AS \"金额(分)\" FROM orders o WHERE o.status = '已完成' AND strftime('%Y', o.day) = '2025' GROUP BY o.customer_id ORDER BY o.customer_id ASC",
+            "parameters": [],
+            "returned_rows": 4,
+            "used_tables": [
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly filters orders by status='已完成' and year 2025, groups by customer_id, sums total_cents without COALESCE (respecting 'NULL未知不补零'), outputs the two requested columns with correct aliases including unit, and sorts by customer_id ASC. Probe P1 confirms status values; P2 confirms STRFTIME('%Y', day) = '2025' correctly matches 2025 dates and excludes 2024-12-31. SUM behavior on NULLs is standard SQLite (ignores NULLs, returns NULL if all NULL), which aligns with user requirement.",
+              "failure_kind": null,
+              "nonnull_filter_basis": [],
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": {
+                "basis": "literal_user_enumeration",
+                "span": [
+                  49,
+                  58
+                ],
+                "quote": "输出客户编号、金额",
+                "columns": [
+                  "客户编号",
+                  "金额"
+                ],
+                "expected_count": 2
+              },
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t2",
+      "original_record_sha256": "66c47275ebc268f37340d7fcd793f04da4d07f8d617325ce3c0c9c62cdabf7a4",
+      "record": {
+        "id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd",
+        "question": "只保留在该期间已完成订单里买过P-A的客户；仍合计这些客户全部已完成订单头金额。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2025年已完成订单中买过SKU为'P-A'的客户，合计这些客户在2025年全部已完成订单的订单头total_cents金额，单位分；NULL视为未知不补零。输出客户编号、金额，按客户编号升序。",
+        "intent": {
+          "metric": "sum_total_cents",
+          "dimensions": [
+            "customer_id"
+          ],
+          "filters": [
+            "status='已完成'",
+            "day in 2025",
+            "客户在2025年已完成订单中存在sku='P-A'的行"
+          ],
+          "time_range": "2025",
+          "grain": "customer",
+          "denominator": null,
+          "entities": [],
+          "sort": [
+            {
+              "field": "customer_id",
+              "direction": "asc"
+            }
+          ],
+          "top_k": null,
+          "comparison_base": null,
+          "unit": "分",
+          "topic": "2025年买过P-A客户的已完成订单金额合计",
+          "timezone": null,
+          "tie_policy": null,
+          "percentage_kind": null
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd",
+          "branch_parent_id": "1f15c9e29ecc4837bc81fc0705570ec5",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "4fa13d3985e09479d8ea54f34055859434d7f64664ee806b3d25f6eeddde785b"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；金额(分)：20000。",
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "lines",
+              "label": "boundary.sqlite · lines",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "金额(分)"
+          ],
+          "rows": [
+            [
+              1,
+              20000
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "unavailable",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {},
+            "normalized_question": null,
+            "intent_review": {
+              "status": "rejected",
+              "candidate_fields": [
+                "topic",
+                "entities",
+                "metric",
+                "time_range",
+                "dimensions",
+                "filters",
+                "unit",
+                "grain"
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "c62d733042a18021ce77fe6e609b3ced2adc7a8cb30e9d370620ce268300ae46",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "filters",
+                  "unit",
+                  "grain"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "reason": "independent_intent_review_rejected"
+          },
+          "query": {
+            "sql": "WITH target_customers AS (\n  SELECT DISTINCT o.customer_id\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2025'\n    AND l.sku = 'P-A'\n)\nSELECT o.customer_id AS \"客户编号\",\n       SUM(o.total_cents) AS \"金额(分)\"\nFROM orders o\nWHERE o.status = '已完成'\n  AND strftime('%Y', o.day) = '2025'\n  AND o.customer_id IN (SELECT customer_id FROM target_customers)\nGROUP BY o.customer_id\nORDER BY o.customer_id ASC",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "lines",
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly implements the two-step logic: CTE identifies customers who bought P-A in 2025 completed orders, outer query sums total_cents of all 2025 completed orders for those customers. No unauthorized NULL filters or COALESCE. Output columns, aliases, unit and sort match requirements.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t3",
+      "original_record_sha256": "837124331216020be37b2c98e963800cd175748b792283171d15601a233dbf1c",
+      "record": {
+        "id": "d4ef6c90aaa34a0e8a90b61ac335ce6f",
+        "question": "金额改成P-A明细折后金额，qty乘price_cents再乘(1-discount_bp/10000)，单位分、两位小数；按客户编号列出。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2025年已完成订单中买过P-A的客户：按客户统计每个客户的P-A明细折后金额合计，计算方式为qty×price_cents×(1-discount_bp/10000)，单位分，保留两位小数；NULL视为未知不补零。输出客户编号、金额，按客户编号升序列出。",
+        "intent": {
+          "topic": "2025年已完成订单中买过P-A客户的P-A明细折后金额统计",
+          "entities": [
+            "客户",
+            "P-A明细"
+          ],
+          "metric": "P-A明细折后金额合计（qty×price_cents×(1-discount_bp/10000)）",
+          "time_range": "2025年",
+          "dimensions": [
+            "客户编号"
+          ],
+          "filters": [
+            "已完成订单",
+            "NULL未知不补零",
+            "客户在该期间已完成订单里买过P-A"
+          ],
+          "unit": "分",
+          "grain": "每个客户"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f",
+          "branch_parent_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "801ab0fdd7dd2f78515b8e84f175b4e915bb6fd428c037c87b4ccff3f61168ae"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；P-A明细折后金额(分)：15000.00。",
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "lines",
+              "label": "boundary.sqlite · lines",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "P-A明细折后金额(分)"
+          ],
+          "rows": [
+            [
+              1,
+              15000.0
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "2025年已完成订单中买过P-A客户的P-A明细折后金额统计",
+              "entities": [
+                "客户",
+                "P-A明细"
+              ],
+              "metric": "P-A明细折后金额合计（qty×price_cents×(1-discount_bp/10000)）",
+              "time_range": "2025年",
+              "dimensions": [
+                "客户编号"
+              ],
+              "filters": [
+                "已完成订单",
+                "NULL未知不补零",
+                "客户在该期间已完成订单里买过P-A"
+              ],
+              "unit": "分",
+              "grain": "每个客户"
+            },
+            "normalized_question": "统计2025年已完成订单中买过P-A的客户：按客户统计每个客户的P-A明细折后金额合计，计算方式为qty×price_cents×(1-discount_bp/10000)，单位分，保留两位小数；NULL视为未知不补零。输出客户编号、金额，按客户编号升序列出。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                },
+                {
+                  "field": "unit",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "dimensions",
+                "entities",
+                "filters",
+                "grain",
+                "metric",
+                "time_range",
+                "topic",
+                "unit"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "金额改成P-A明细折后金额，qty乘price_cents再乘(1-discount_bp/10000)",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "unit",
+                  "source": "current_question",
+                  "quote": "单位分",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "current_question",
+                  "quote": "按客户编号列出",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "ancestor_question",
+                  "quote": "输出客户编号、金额，编号升序",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "grain",
+                  "source": "ancestor_question",
+                  "quote": "每个客户",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "统计2025年已完成订单",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "统计2025年已完成订单",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "NULL未知不补零",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "只保留在该期间已完成订单里买过P-A的客户",
+                  "source_answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd"
+                },
+                {
+                  "field": "entities",
+                  "source": "current_question",
+                  "quote": "P-A明细折后金额",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "entities",
+                  "source": "current_question",
+                  "quote": "按客户编号列出",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "topic",
+                  "source": "current_question",
+                  "quote": "金额改成P-A明细折后金额",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "只保留在该期间已完成订单里买过P-A的客户",
+                  "source_answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "a666542d2439538debd09a563d9488bbbe4c527a6db2f2d3bdd05fb92d2baeea",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "filters",
+                  "unit",
+                  "grain"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "WITH target_customers AS (\n  SELECT DISTINCT o.customer_id\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2025'\n    AND l.sku = 'P-A'\n)\nSELECT o.customer_id AS \"客户编号\",\n       ROUND(SUM(CAST(l.qty AS REAL) * l.price_cents * (1.0 - CAST(l.discount_bp AS REAL) / 10000.0)), 2) AS \"P-A明细折后金额(分)\"\nFROM orders o\nJOIN lines l ON l.order_id = o.id\nWHERE o.status = '已完成'\n  AND strftime('%Y', o.day) = '2025'\n  AND l.sku = 'P-A'\n  AND o.customer_id IN (SELECT customer_id FROM target_customers)\nGROUP BY o.customer_id\nORDER BY o.customer_id ASC",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "lines",
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly identifies customers who bought P-A in 2025 completed orders via CTE, then sums the line-level discounted amount (qty*price_cents*(1-discount_bp/10000)) for P-A lines of those customers' 2025 completed orders. The IN clause is logically redundant but harmless since the main query already filters sku='P-A'. ROUND(...,2) with REAL cast satisfies the two-decimal requirement; SUM ignores NULLs without COALESCE, matching 'NULL视为未知不补零'. Output columns and sort match the request.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t4",
+      "original_record_sha256": "252a7d97456fa4888b30dcf307706e60acd31efb9ed6c00802e21c2afb986f5a",
+      "record": {
+        "id": "8d6daa4d9de14f0e8415fd87638e9736",
+        "question": "改为列每个客户占上述P-A金额总额的比例百分数，两位小数；分母只用当前范围。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2025年已完成订单：只保留在该期间已完成订单里买过P-A的客户，改为列出每个客户的P-A明细折后金额（qty乘price_cents再乘(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数；分母只用当前范围。NULL未知不补零。输出客户编号、占比百分数，按客户编号升序。",
+        "intent": {
+          "topic": "2025年已完成订单中买过P-A客户的P-A明细折后金额占比统计",
+          "entities": [
+            "客户",
+            "P-A明细"
+          ],
+          "metric": "每个客户P-A明细折后金额（qty×price_cents×(1-discount_bp/10000)）占上述P-A金额总额的比例百分数",
+          "time_range": "2025年",
+          "dimensions": [
+            "客户编号"
+          ],
+          "filters": [
+            "已完成订单",
+            "客户在该期间已完成订单里买过P-A",
+            "NULL未知不补零"
+          ],
+          "unit": "百分比",
+          "grain": "每个客户",
+          "denominator": "上述P-A金额总额，只用当前范围"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "8d6daa4d9de14f0e8415fd87638e9736",
+          "branch_parent_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "bc01d30a2bc8aa9b8466ccd584795a56a3228be534c4c2aac51e256412f7f427"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；P-A明细折后金额(分)：15000.0；占比(%)：100.0。",
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "lines",
+              "label": "boundary.sqlite · lines",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "P-A明细折后金额(分)",
+            "占比(%)"
+          ],
+          "rows": [
+            [
+              1,
+              15000.0,
+              100.0
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "2025年已完成订单中买过P-A客户的P-A明细折后金额占比统计",
+              "entities": [
+                "客户",
+                "P-A明细"
+              ],
+              "metric": "每个客户P-A明细折后金额（qty×price_cents×(1-discount_bp/10000)）占上述P-A金额总额的比例百分数",
+              "time_range": "2025年",
+              "dimensions": [
+                "客户编号"
+              ],
+              "filters": [
+                "已完成订单",
+                "客户在该期间已完成订单里买过P-A",
+                "NULL未知不补零"
+              ],
+              "unit": "百分比",
+              "grain": "每个客户",
+              "denominator": "上述P-A金额总额，只用当前范围"
+            },
+            "normalized_question": "统计2025年已完成订单：只保留在该期间已完成订单里买过P-A的客户，改为列出每个客户的P-A明细折后金额（qty乘price_cents再乘(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数；分母只用当前范围。NULL未知不补零。输出客户编号、占比百分数，按客户编号升序。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                },
+                {
+                  "field": "unit",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                },
+                {
+                  "field": "denominator",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "denominator",
+                "dimensions",
+                "entities",
+                "filters",
+                "grain",
+                "metric",
+                "time_range",
+                "topic",
+                "unit"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "占上述P-A金额总额的比例百分数",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "金额改成P-A明细折后金额，qty乘price_cents再乘(1-discount_bp/10000)",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "denominator",
+                  "source": "current_question",
+                  "quote": "上述P-A金额总额",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "denominator",
+                  "source": "current_question",
+                  "quote": "分母只用当前范围",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "unit",
+                  "source": "current_question",
+                  "quote": "比例百分数",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "grain",
+                  "source": "current_question",
+                  "quote": "每个客户",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "time_range",
+                  "source": "ancestor_question",
+                  "quote": "统计2025年已完成订单",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "已完成订单",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "只保留在该期间已完成订单里买过P-A的客户",
+                  "source_answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "NULL未知不补零",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "ancestor_question",
+                  "quote": "输出客户编号、金额，编号升序",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "每个客户",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "P-A明细折后金额",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "topic",
+                  "source": "ancestor_question",
+                  "quote": "只保留在该期间已完成订单里买过P-A的客户",
+                  "source_answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "f12f94ec51580feacf6c37caa1eccdb157328310c595ff44597ef7d605ce3b5f",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "filters",
+                  "unit",
+                  "grain",
+                  "denominator"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "WITH target_customers AS (\n  SELECT DISTINCT o.customer_id\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2025'\n    AND l.sku = 'P-A'\n),\ncustomer_amounts AS (\n  SELECT o.customer_id AS \"客户编号\",\n         ROUND(SUM(CAST(l.qty AS REAL) * l.price_cents * (1.0 - CAST(l.discount_bp AS REAL) / 10000.0)), 2) AS \"P-A明细折后金额(分)\"\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2025'\n    AND l.sku = 'P-A'\n    AND o.customer_id IN (SELECT customer_id FROM target_customers)\n  GROUP BY o.customer_id\n)\nSELECT \"客户编号\",\n       \"P-A明细折后金额(分)\",\n       CASE WHEN SUM(\"P-A明细折后金额(分)\") OVER () = 0 THEN NULL\n            ELSE ROUND(\"P-A明细折后金额(分)\" * 100.0 / SUM(\"P-A明细折后金额(分)\") OVER (), 2)\n       END AS \"占比(%)\"\nFROM customer_amounts\nORDER BY \"客户编号\" ASC",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "lines",
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly identifies target customers who bought P-A in 2025 completed orders, computes per-customer P-A discounted line amounts using the specified formula, and calculates each customer's percentage of the total within the current scope. The denominator uses SUM() OVER () restricted to the filtered CTE, with a zero-division guard returning NULL. Output columns, aliases, units, two-decimal precision, and ascending sort by customer_id all match the user's request. No unauthorized non-null filters or COALESCE were added.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t5",
+      "original_record_sha256": "cffb1ab9dbb292741ba5dfd663930556a4e57ef557c888d8cbb4d0971bc26500",
+      "record": {
+        "id": "2af24394101d4c0387c422af8803782b",
+        "question": "将时期改为2024年，比例定义和P-A限制保留。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2024年已完成订单：只保留在该期间已完成订单里买过P-A的客户，列出每个客户的P-A明细折后金额（qty乘price_cents再乘(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数；分母只用当前范围。NULL未知不补零。输出客户编号、P-A明细折后金额(分)、占比(%)，按客户编号升序。",
+        "intent": {
+          "metric": "每个客户P-A明细折后金额（qty×price_cents×(1-discount_bp/10000)）占上述P-A金额总额的比例百分数",
+          "dimensions": [
+            "customer_id"
+          ],
+          "filters": [
+            "status='已完成'",
+            "day in 2024",
+            "sku='P-A'",
+            "客户在2024年已完成订单中存在sku='P-A'的行",
+            "NULL未知不补零"
+          ],
+          "time_range": "2024年",
+          "grain": "customer",
+          "denominator": "当前范围内所有符合条件客户的P-A明细折后金额总和",
+          "entities": [],
+          "sort": [
+            {
+              "field": "customer_id",
+              "direction": "asc"
+            }
+          ],
+          "top_k": null,
+          "comparison_base": null,
+          "unit": "分,百分比",
+          "topic": "2024年买过P-A客户的P-A明细折后金额占比",
+          "timezone": null,
+          "tie_policy": null,
+          "percentage_kind": "row_over_scope_sum"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "2af24394101d4c0387c422af8803782b",
+          "branch_parent_id": "8d6daa4d9de14f0e8415fd87638e9736",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "da866dd5c156be6d35db76931b88c714dd19a2b77574048cfa53cbfb4b582d38"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；P-A明细折后金额(分)：8000.0；占比(%)：100.0。",
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "lines",
+              "label": "boundary.sqlite · lines",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "P-A明细折后金额(分)",
+            "占比(%)"
+          ],
+          "rows": [
+            [
+              1,
+              8000.0,
+              100.0
+            ]
+          ],
+          "context_interpretation": {
+            "status": "unavailable",
+            "reason": "output_truncated",
+            "automatic_retry": false
+          },
+          "query": {
+            "sql": "WITH target_customers AS (\n  SELECT DISTINCT o.customer_id\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2024'\n    AND l.sku = 'P-A'\n),\ncustomer_amounts AS (\n  SELECT o.customer_id AS \"客户编号\",\n         ROUND(SUM(CAST(l.qty AS REAL) * l.price_cents * (1.0 - CAST(l.discount_bp AS REAL) / 10000.0)), 2) AS \"P-A明细折后金额(分)\"\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2024'\n    AND l.sku = 'P-A'\n    AND o.customer_id IN (SELECT customer_id FROM target_customers)\n  GROUP BY o.customer_id\n)\nSELECT \"客户编号\",\n       \"P-A明细折后金额(分)\",\n       CASE WHEN SUM(\"P-A明细折后金额(分)\") OVER () = 0 THEN NULL\n            ELSE ROUND(\"P-A明细折后金额(分)\" * 100.0 / SUM(\"P-A明细折后金额(分)\") OVER (), 2)\n       END AS \"占比(%)\"\nFROM customer_amounts\nORDER BY \"客户编号\" ASC",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "lines",
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly changes the time filter to 2024 while preserving all other conditions from the previous round: status='已完成', sku='P-A', target customer identification via CTE, per-customer P-A discounted amount (qty*price_cents*(1-discount_bp/10000)), percentage over current scope with zero-division guard, two-decimal rounding, unit '分' for amount and '%' for ratio, ordered by customer_id ASC. No unauthorized IS NOT NULL or COALESCE added. Output columns match user requirement exactly.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t6",
+      "original_record_sha256": "5ed5f4a3db8d08851be97c82198a66ff389e47fb9fcc6c50e00b2b7567ce3c0a",
+      "record": {
+        "id": "76b90220e64340568a9025750a9bea18",
+        "question": "去掉P-A限制，仍按该年全部明细折后金额计算各客户占比。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "统计2024年已完成订单：去掉P-A限制，按每个客户的全部明细折后金额（qty×price_cents×(1-discount_bp/10000)）合计，计算各客户占该年全部明细折后金额总额的比例百分数，保留两位小数；分母为2024年所有已完成订单的全部明细折后金额总和。NULL未知不补零。输出客户编号、明细折后金额(分)、占比(%)，按客户编号升序。",
+        "intent": {
+          "metric": "每个客户全部明细折后金额（qty×price_cents×(1-discount_bp/10000)）占该年全部明细折后金额总额的比例百分数",
+          "dimensions": [
+            "customer_id"
+          ],
+          "filters": [
+            "status='已完成'",
+            "day in 2024",
+            "NULL未知不补零"
+          ],
+          "time_range": "2024年",
+          "grain": "customer",
+          "denominator": "2024年所有已完成订单的全部明细折后金额总和",
+          "entities": [],
+          "sort": [
+            {
+              "field": "customer_id",
+              "direction": "asc"
+            }
+          ],
+          "top_k": null,
+          "comparison_base": null,
+          "unit": "分,百分比",
+          "topic": "2024年各客户全部明细折后金额占比",
+          "timezone": null,
+          "tie_policy": null,
+          "percentage_kind": "row_over_scope_sum"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "76b90220e64340568a9025750a9bea18",
+          "branch_parent_id": "2af24394101d4c0387c422af8803782b",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "6e3f1e071097401969cba12c8dfefdc8a8c4fffcc35030ac2e85627811308efb"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；明细折后金额(分)：10000.0；占比(%)：100.0。",
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "lines",
+              "label": "boundary.sqlite · lines",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "明细折后金额(分)",
+            "占比(%)"
+          ],
+          "rows": [
+            [
+              1,
+              10000.0,
+              100.0
+            ]
+          ],
+          "context_interpretation": {
+            "status": "unavailable",
+            "reason": "output_truncated",
+            "automatic_retry": false
+          },
+          "query": {
+            "sql": "WITH customer_amounts AS (\n  SELECT o.customer_id AS \"客户编号\",\n         ROUND(SUM(CAST(l.qty AS REAL) * l.price_cents * (1.0 - CAST(l.discount_bp AS REAL) / 10000.0)), 2) AS \"明细折后金额(分)\"\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2024'\n  GROUP BY o.customer_id\n)\nSELECT \"客户编号\",\n       \"明细折后金额(分)\",\n       CASE WHEN SUM(\"明细折后金额(分)\") OVER () = 0 THEN NULL\n            ELSE ROUND(\"明细折后金额(分)\" * 100.0 / SUM(\"明细折后金额(分)\") OVER (), 2)\n       END AS \"占比(%)\"\nFROM customer_amounts\nORDER BY \"客户编号\" ASC",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "lines",
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly removes the P-A restriction, aggregates all line-level discounted amounts per customer for 2024 completed orders using qty*price_cents*(1-discount_bp/10000), computes each customer's percentage of the total with a zero-denominator guard, preserves NULL semantics without unauthorized COALESCE, and outputs the required columns sorted by customer_id. Probe P2V1 confirms STRFTIME('%Y','2024-12-31')='2024' evaluates true. Join lines.order_id->orders.id is many-to-one per DDL FK, so no row duplication. ROUND(...,2) satisfies the two-decimal requirement.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t7",
+      "original_record_sha256": "0589bc2ed93f903509e4b6a5a3257f089f5bfef6667a7ea329aec9827794d384",
+      "record": {
+        "id": "68d3c424dddd46b5aa5ce8fb6118973b",
+        "question": "暂不计算占比：单看2025年已完成订单头，total_cents为NULL和等于0分别多少张？依次输出两项。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "暂不计算占比：单看2025年已完成订单的订单头，分别统计total_cents为NULL的订单有多少张、total_cents等于0的订单有多少张，依次输出这两项。",
+        "intent": {
+          "topic": "2025年已完成订单头total_cents为NULL与等于0的订单张数统计",
+          "entities": [
+            "订单头"
+          ],
+          "metric": "订单头total_cents为NULL的订单张数、订单头total_cents等于0的订单张数",
+          "time_range": "2025年",
+          "filters": [
+            "已完成订单"
+          ],
+          "unit": "张",
+          "grain": "订单头"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "68d3c424dddd46b5aa5ce8fb6118973b",
+          "branch_parent_id": "76b90220e64340568a9025750a9bea18",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "8b8853c03e4cd3ceaa9e6ca471553fcb1f17f4399340b4752f86c414e257a82f"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "total_cents为NULL的订单张数：1；total_cents等于0的订单张数：1。",
+              "evidence_ids": [
+                "E1"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "total_cents为NULL的订单张数",
+            "total_cents等于0的订单张数"
+          ],
+          "rows": [
+            [
+              1,
+              1
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "2025年已完成订单头total_cents为NULL与等于0的订单张数统计",
+              "entities": [
+                "订单头"
+              ],
+              "metric": "订单头total_cents为NULL的订单张数、订单头total_cents等于0的订单张数",
+              "time_range": "2025年",
+              "filters": [
+                "已完成订单"
+              ],
+              "unit": "张",
+              "grain": "订单头"
+            },
+            "normalized_question": "暂不计算占比：单看2025年已完成订单的订单头，分别统计total_cents为NULL的订单有多少张、total_cents等于0的订单有多少张，依次输出这两项。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                },
+                {
+                  "field": "unit",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "entities",
+                "filters",
+                "grain",
+                "metric",
+                "time_range",
+                "topic",
+                "unit"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "time_range",
+                  "source": "current_question",
+                  "quote": "2025年",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                },
+                {
+                  "field": "filters",
+                  "source": "current_question",
+                  "quote": "已完成订单",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                },
+                {
+                  "field": "entities",
+                  "source": "current_question",
+                  "quote": "订单头",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                },
+                {
+                  "field": "metric",
+                  "source": "current_question",
+                  "quote": "total_cents为NULL和等于0分别多少张",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                },
+                {
+                  "field": "unit",
+                  "source": "current_question",
+                  "quote": "多少张",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                },
+                {
+                  "field": "grain",
+                  "source": "current_question",
+                  "quote": "订单头",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                },
+                {
+                  "field": "topic",
+                  "source": "current_question",
+                  "quote": "暂不计算占比：单看2025年已完成订单头，total_cents为NULL和等于0分别多少张",
+                  "source_answer_id": "68d3c424dddd46b5aa5ce8fb6118973b"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "0e378056a6f342aac1fd004fb29f832735a9c83d71782fd624700bffd3a70a36",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "filters",
+                  "unit",
+                  "grain"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "SELECT SUM(CASE WHEN o.total_cents IS NULL THEN 1 ELSE 0 END) AS \"total_cents为NULL的订单张数\", SUM(CASE WHEN o.total_cents = 0 THEN 1 ELSE 0 END) AS \"total_cents等于0的订单张数\" FROM orders o WHERE o.status = '已完成' AND strftime('%Y', o.day) = '2025'",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly filters orders by status='已完成' and year 2025, then counts total_cents IS NULL and total_cents = 0 separately using SUM(CASE...). No unauthorized non-null filters or COALESCE. Output columns match the user's request to output two counts in order.",
+              "failure_kind": null,
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ctx02-t8",
+      "original_record_sha256": "8cfae372a7b78ff0572361cb57291dda6cd40ff6750da8d11ae900c86d75641a",
+      "record": {
+        "id": "6b2d23529b7d4bd39a319bfb5dae189f",
+        "question": "恢复第4轮的2025年P-A比例口径，取比例最高的前三位客户；同值按编号升序。",
+        "status": "completed",
+        "mode": "database",
+        "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+        "source_sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.1",
+        "normalized_question": "恢复第4轮口径：统计2025年已完成订单，只保留在该期间已完成订单里买过P-A的客户，计算每个客户的P-A明细折后金额（qty乘price_cents再乘(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数；分母只用当前范围；NULL未知不补零。按比例从高到低取比例最高的前三位客户；同值按客户编号升序。输出客户编号、占比百分数。",
+        "intent": {
+          "topic": "恢复第4轮2025年P-A比例口径，取比例最高的前三位客户",
+          "entities": [
+            "客户",
+            "P-A明细"
+          ],
+          "metric": "每个客户P-A明细折后金额（qty×price_cents×(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数",
+          "time_range": "2025年",
+          "dimensions": [
+            "客户编号"
+          ],
+          "filters": [
+            "已完成订单",
+            "只保留在该期间已完成订单里买过P-A的客户",
+            "NULL未知不补零"
+          ],
+          "unit": "百分比",
+          "grain": "每个客户",
+          "denominator": "上述P-A金额总额，只用当前范围"
+        },
+        "sources": [
+          {
+            "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+            "name": "boundary.sqlite",
+            "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+            "parser_version": "zhiheng-multimodal-3.1",
+            "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+            "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+          }
+        ],
+        "context_patch": [],
+        "context_state": {
+          "schema_version": "zhiheng.conversation-state.v1",
+          "answer_id": "6b2d23529b7d4bd39a319bfb5dae189f",
+          "branch_parent_id": "68d3c424dddd46b5aa5ce8fb6118973b",
+          "source_revisions": [
+            {
+              "id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "revision": "4bfbe08a7838809d389961db382bb3fbacf7390679279219bb6c12238def44ee",
+              "semantic_revision": "daaf203f2e7f77903095dee60f604180dafe4b475692271d523f0eed8d68ddee"
+            }
+          ],
+          "slots": {},
+          "changes": [],
+          "unresolved": [],
+          "unknown_fields": {},
+          "result_reference": null,
+          "interpretation_available": false,
+          "legacy_parent": false,
+          "revision": "fd6fe6d74e0695b94814069334fb816589b0d6a220c7e7d1cca674b866f37962"
+        },
+        "result": {
+          "verification": {
+            "status": "limited",
+            "checks": [
+              "单条只读查询通过语法检查和SQLite权限检查",
+              "仅访问当前资料已导入的普通数据表",
+              "字段由SQLite严格解析，未知双引号字段不会退化为文本",
+              "执行设置了步数、时间、单元格大小和结果行数上限",
+              "关联与口径经单独模型调用复核；不等同于人工业务核验"
+            ]
+          },
+          "claims": [
+            {
+              "id": "C1",
+              "text": "客户编号：1；P-A明细折后金额(分)：15000.0；占比(%)：100.0。",
+              "evidence_ids": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "lines",
+              "label": "boundary.sqlite · lines",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "4e2627a2c77e4d7e94226c6f2a6e282f",
+              "source_name": "boundary.sqlite",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "table_name": "orders",
+              "label": "boundary.sqlite · orders",
+              "lineage": "table",
+              "row_numbers": [],
+              "columns": [],
+              "rows": [],
+              "total_rows": null,
+              "stale": false,
+              "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。"
+            }
+          ],
+          "columns": [
+            "客户编号",
+            "P-A明细折后金额(分)",
+            "占比(%)"
+          ],
+          "rows": [
+            [
+              1,
+              15000.0,
+              100.0
+            ]
+          ],
+          "context_interpretation": {
+            "version": "context-intent-adapter-3",
+            "status": "passed",
+            "model_calls": 2,
+            "confirmed_by_user": false,
+            "origin": "model_interpretation",
+            "intent": {
+              "topic": "恢复第4轮2025年P-A比例口径，取比例最高的前三位客户",
+              "entities": [
+                "客户",
+                "P-A明细"
+              ],
+              "metric": "每个客户P-A明细折后金额（qty×price_cents×(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数",
+              "time_range": "2025年",
+              "dimensions": [
+                "客户编号"
+              ],
+              "filters": [
+                "已完成订单",
+                "只保留在该期间已完成订单里买过P-A的客户",
+                "NULL未知不补零"
+              ],
+              "unit": "百分比",
+              "grain": "每个客户",
+              "denominator": "上述P-A金额总额，只用当前范围"
+            },
+            "normalized_question": "恢复第4轮口径：统计2025年已完成订单，只保留在该期间已完成订单里买过P-A的客户，计算每个客户的P-A明细折后金额（qty乘price_cents再乘(1-discount_bp/10000)）占上述P-A金额总额的比例百分数，保留两位小数；分母只用当前范围；NULL未知不补零。按比例从高到低取比例最高的前三位客户；同值按客户编号升序。输出客户编号、占比百分数。",
+            "intent_review": {
+              "status": "passed",
+              "basis": "separate_question_interpretation_review",
+              "new_review": true,
+              "normalized_question_supported": true,
+              "overall_supported": true,
+              "fields": [
+                {
+                  "field": "topic",
+                  "supported": true
+                },
+                {
+                  "field": "entities",
+                  "supported": true
+                },
+                {
+                  "field": "metric",
+                  "supported": true
+                },
+                {
+                  "field": "time_range",
+                  "supported": true
+                },
+                {
+                  "field": "dimensions",
+                  "supported": true
+                },
+                {
+                  "field": "filters",
+                  "supported": true
+                },
+                {
+                  "field": "unit",
+                  "supported": true
+                },
+                {
+                  "field": "grain",
+                  "supported": true
+                },
+                {
+                  "field": "denominator",
+                  "supported": true
+                }
+              ],
+              "accepted_fields": [
+                "denominator",
+                "dimensions",
+                "entities",
+                "filters",
+                "grain",
+                "metric",
+                "time_range",
+                "topic",
+                "unit"
+              ],
+              "rejected_fields": [],
+              "omitted_ungrounded_fields": [],
+              "grounding": [
+                {
+                  "field": "topic",
+                  "source": "current_question",
+                  "quote": "恢复第4轮的2025年P-A比例口径，取比例最高的前三位客户；同值按编号升序。",
+                  "source_answer_id": "6b2d23529b7d4bd39a319bfb5dae189f"
+                },
+                {
+                  "field": "time_range",
+                  "source": "current_question",
+                  "quote": "恢复第4轮的2025年P-A比例口径，取比例最高的前三位客户；同值按编号升序。",
+                  "source_answer_id": "6b2d23529b7d4bd39a319bfb5dae189f"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "金额改成P-A明细折后金额，qty乘price_cents再乘(1-discount_bp/10000)，单位分、两位小数；按客户编号列出。",
+                  "source_answer_id": "d4ef6c90aaa34a0e8a90b61ac335ce6f"
+                },
+                {
+                  "field": "metric",
+                  "source": "ancestor_question",
+                  "quote": "改为列每个客户占上述P-A金额总额的比例百分数，两位小数；分母只用当前范围。",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "只保留在该期间已完成订单里买过P-A的客户；仍合计这些客户全部已完成订单头金额。",
+                  "source_answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd"
+                },
+                {
+                  "field": "filters",
+                  "source": "ancestor_question",
+                  "quote": "统计2025年已完成订单：每个客户的订单头total_cents合计，单位分；NULL未知不补零。输出客户编号、金额，编号升序。",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "ancestor_question",
+                  "quote": "统计2025年已完成订单：每个客户的订单头total_cents合计，单位分；NULL未知不补零。输出客户编号、金额，编号升序。",
+                  "source_answer_id": "1f15c9e29ecc4837bc81fc0705570ec5"
+                },
+                {
+                  "field": "dimensions",
+                  "source": "current_question",
+                  "quote": "恢复第4轮的2025年P-A比例口径，取比例最高的前三位客户；同值按编号升序。",
+                  "source_answer_id": "6b2d23529b7d4bd39a319bfb5dae189f"
+                },
+                {
+                  "field": "unit",
+                  "source": "ancestor_question",
+                  "quote": "改为列每个客户占上述P-A金额总额的比例百分数，两位小数；分母只用当前范围。",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "grain",
+                  "source": "ancestor_question",
+                  "quote": "改为列每个客户占上述P-A金额总额的比例百分数，两位小数；分母只用当前范围。",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "denominator",
+                  "source": "ancestor_question",
+                  "quote": "改为列每个客户占上述P-A金额总额的比例百分数，两位小数；分母只用当前范围。",
+                  "source_answer_id": "8d6daa4d9de14f0e8415fd87638e9736"
+                },
+                {
+                  "field": "entities",
+                  "source": "ancestor_question",
+                  "quote": "只保留在该期间已完成订单里买过P-A的客户；仍合计这些客户全部已完成订单头金额。",
+                  "source_answer_id": "2b6e2fb57d1f4f1ebd9cb3f25a0faddd"
+                }
+              ]
+            },
+            "protocol_attempts": [
+              {
+                "step": 1,
+                "candidate_sha256": "7db4e563f0296bd23957b34f9076f80c77d3ebd7bc15c85373e27761e482cae1",
+                "candidate_fields": [
+                  "topic",
+                  "entities",
+                  "metric",
+                  "time_range",
+                  "dimensions",
+                  "filters",
+                  "unit",
+                  "grain",
+                  "denominator"
+                ],
+                "status": "grounding_valid",
+                "errors": []
+              }
+            ],
+            "unknown_fields": []
+          },
+          "query": {
+            "sql": "WITH target_customers AS (\n  SELECT DISTINCT o.customer_id\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2025'\n    AND l.sku = 'P-A'\n),\ncustomer_amounts AS (\n  SELECT o.customer_id AS \"客户编号\",\n         ROUND(SUM(CAST(l.qty AS REAL) * l.price_cents * (1.0 - CAST(l.discount_bp AS REAL) / 10000.0)), 2) AS \"P-A明细折后金额(分)\"\n  FROM orders o\n  JOIN lines l ON l.order_id = o.id\n  WHERE o.status = '已完成'\n    AND strftime('%Y', o.day) = '2025'\n    AND l.sku = 'P-A'\n    AND o.customer_id IN (SELECT customer_id FROM target_customers)\n  GROUP BY o.customer_id\n),\nwith_ratio AS (\n  SELECT \"客户编号\",\n         \"P-A明细折后金额(分)\",\n         CASE WHEN SUM(\"P-A明细折后金额(分)\") OVER () = 0 THEN NULL\n              ELSE ROUND(\"P-A明细折后金额(分)\" * 100.0 / SUM(\"P-A明细折后金额(分)\") OVER (), 2)\n         END AS \"占比(%)\"\n  FROM customer_amounts\n)\nSELECT \"客户编号\", \"P-A明细折后金额(分)\", \"占比(%)\"\nFROM with_ratio\nORDER BY \"占比(%)\" DESC, \"客户编号\" ASC\nLIMIT 3",
+            "parameters": [],
+            "returned_rows": 1,
+            "used_tables": [
+              "lines",
+              "orders"
+            ],
+            "scope_review": {
+              "source_basis": true,
+              "population_grain": true,
+              "quantifier_scope": true,
+              "missing_values": true,
+              "output_contract": true
+            },
+            "review_response": {
+              "supported": true,
+              "interpretation_supported": true,
+              "scope_review": {
+                "source_basis": true,
+                "population_grain": true,
+                "quantifier_scope": true,
+                "missing_values": true,
+                "output_contract": true
+              },
+              "reason": "SQL correctly restores the Round 4 2025 P-A ratio definition (target customers, discounted line amount, scope-limited denominator with zero-division guard), adds ORDER BY ratio DESC then customer_id ASC, and applies LIMIT 3. Output columns and aliases match the user requirement. No unauthorized NULL filters or COALESCE introduced.",
+              "failure_kind": null,
+              "nonnull_filter_basis": [],
+              "table_relations": []
+            },
+            "mechanical_contract": {
+              "version": "sql-mechanical-contract-1",
+              "issues": [],
+              "output_contract": null,
+              "null_filters": [],
+              "quantifier_checks": [],
+              "counterexamples": [],
+              "boundary": "Narrow literal request and AST/DDL checks. Unknown meanings still require independent review.",
+              "accepted_nonnull_basis": [],
+              "unresolved_issues": []
+            }
+          }
+        }
+      }
+    }
+  ]
+}

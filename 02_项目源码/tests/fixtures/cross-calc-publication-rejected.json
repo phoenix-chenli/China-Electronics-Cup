@@ -1,0 +1,275 @@
+{
+  "schema": "calculation-repair-received-fixture.v1",
+  "origin_attempt_id": "2b422ade210e461b8815dcc41b299a36",
+  "wrapper_sha256": "492b39ae032ee733664d07ff9db3d58eae8b2c309e52d4373509f12430616e75",
+  "status": "failed",
+  "is_actual_success": false,
+  "boundary": "真实未采纳候选与真实计算执行投影；未保存完整SQL，测试仅核对实际K反馈投影，不声称完整原候选/SQL重放或模型回答通过。",
+  "candidate": {
+    "projection_version": 2,
+    "attempt_id": "A6",
+    "round": 6,
+    "stage": "candidate_validation",
+    "scope": "candidate_attempt",
+    "validation_status": "rejected",
+    "publication_status": "not_adopted",
+    "notice": "未采纳的完成态候选，仅供诊断；不是原文、支持依据或已发布结论。",
+    "claim_index": 3,
+    "original_claim_count": 5,
+    "claims": [
+      {
+        "candidate_index": 3,
+        "text": "按口径说明V1，2024年已完成订单（orders.status为“已完成”，日期范围按orders.day为2024年1月1日至2025年1月1日之前，来源字段orders.total_cents，原始单位分，NULL按未记录处理、不替换为零）的登记金额，经用户明确假设减少10%后，按原金额乘以(1-10%)计算的假设金额为90.00元；该2024年金额为假设性质，不是实际登记结果，不修改原始数据。",
+        "evidence_ids": [
+          "E1",
+          "E2"
+        ],
+        "calculation_ids": [
+          "K1"
+        ]
+      },
+      {
+        "candidate_index": 1,
+        "text": "口径说明V1规定：登记金额的来源字段为orders.total_cents；登记金额只计算orders.status为“已完成”的订单；日期范围按orders.day，ISO日期文本，年份包含1月1日至下一年1月1日之前；金额原始单位为分，100分=1元；NULL代表未记录或未知，不能替换成零；显式零保留，负值表示该原始记录的负金额、不无据改符号；求和按已记录数值统计，并报告缺失边界；本文未定义利润、成本或收益，不得将登记金额、到账金额、员工工时互相替代。",
+        "evidence_ids": [
+          "E1"
+        ],
+        "calculation_ids": []
+      },
+      {
+        "candidate_index": 2,
+        "text": "口径说明V1说明：该口径说明文件与boundary.sqlite为项目作者编写的受控评测资料，不是真实企业记录。",
+        "evidence_ids": [
+          "E1"
+        ],
+        "calculation_ids": []
+      }
+    ],
+    "omitted_claims": 2,
+    "truncated": true,
+    "redacted": false,
+    "original_lengths": {},
+    "reason": "第3、4、5条结论含未由所引证据或已执行计算支持的数值/日期；请逐条修正引用或先计算。候选证据仅供核对，空列表表示没有已读取依据，不得心算补值"
+  },
+  "calculations": {
+    "K1": {
+      "id": "K1",
+      "expression": "a*(1-r)",
+      "value": "90.0000",
+      "display_value": "90.00",
+      "unit": "元",
+      "parameters": [
+        {
+          "name": "a",
+          "value": "10000",
+          "unit": "分",
+          "evidence_ids": [
+            "E2",
+            "E1"
+          ],
+          "binding": {
+            "evidence_id": "E2",
+            "row": 0,
+            "column": "sum_2024",
+            "unit": "分",
+            "unit_evidence_id": "E1"
+          }
+        },
+        {
+          "name": "r",
+          "value": "10",
+          "unit": "%",
+          "evidence_ids": [],
+          "binding": {
+            "user_input_id": "U7b6b1fd7ed41",
+            "quote": "10%",
+            "start": 21,
+            "end": 24,
+            "unit": "%"
+          },
+          "user_input": {
+            "id": "U7b6b1fd7ed41",
+            "origin": "user_question",
+            "source_answer_id": "53d0331e3fb84eb79d011f8f9c3b7ded",
+            "source_text": "仍针对2024年，仅假设刚才的登记金额减少10%，按原金额乘以(1-10%)计算假设金额，分别用分和元表示。明确这不是实际登记结果，不修改原始数据。",
+            "source_sha256": "c93f13aac0193a4fbde6b76ccda4afad66efe1ecce5f7fee98b7f7302a553661",
+            "quote": "10%",
+            "start": 21,
+            "end": 24,
+            "unit": "%",
+            "direction": "decrease",
+            "parameter_kind": "percentage",
+            "is_hypothetical": true,
+            "is_document_evidence": false
+          },
+          "provenance": "user_question",
+          "is_hypothetical": true,
+          "is_document_evidence": false
+        }
+      ],
+      "evidence_ids": [
+        "E2",
+        "E1"
+      ],
+      "rule_evidence_ids": [],
+      "rule_origin": "user_scenario",
+      "is_hypothetical": true,
+      "unit_handling": {
+        "evaluation_basis": "parameters_normalized_before_expression_then_converted_to_output",
+        "parameter_base_values": [
+          {
+            "parameter": "a",
+            "original_value": "10000",
+            "original_unit": "分",
+            "base_value": "100.00",
+            "unit_factor": "0.01",
+            "dimensions": [
+              "[非JSON诊断值已省略]"
+            ]
+          },
+          {
+            "parameter": "r",
+            "original_value": "10",
+            "original_unit": "%",
+            "base_value": "0.10",
+            "unit_factor": "0.01",
+            "dimensions": []
+          }
+        ],
+        "output_unit": "元",
+        "output_unit_factor": "1",
+        "pure_unit_conversion": false,
+        "semantic_status": "not_established_by_arithmetic",
+        "notice": "参数先按单位归一化，表达式在基准单位上运算，再换算到output_unit；纯换算只写单个变量，不重复乘除换算系数。"
+      }
+    },
+    "K2": {
+      "id": "K2",
+      "expression": "a",
+      "value": "560.00",
+      "display_value": "560.00",
+      "unit": "元",
+      "parameters": [
+        {
+          "name": "a",
+          "value": "56000",
+          "unit": "分",
+          "evidence_ids": [
+            "E2",
+            "E1"
+          ],
+          "binding": {
+            "evidence_id": "E2",
+            "row": 0,
+            "column": "sum_2025",
+            "unit": "分",
+            "unit_evidence_id": "E1"
+          }
+        }
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "rule_evidence_ids": [
+        "E1"
+      ],
+      "rule_origin": "source",
+      "is_hypothetical": false,
+      "unit_handling": {
+        "evaluation_basis": "parameters_normalized_before_expression_then_converted_to_output",
+        "parameter_base_values": [
+          {
+            "parameter": "a",
+            "original_value": "56000",
+            "original_unit": "分",
+            "base_value": "560.00",
+            "unit_factor": "0.01",
+            "dimensions": [
+              "[非JSON诊断值已省略]"
+            ]
+          }
+        ],
+        "output_unit": "元",
+        "output_unit_factor": "1",
+        "pure_unit_conversion": true,
+        "semantic_status": "not_established_by_arithmetic",
+        "notice": "参数先按单位归一化，表达式在基准单位上运算，再换算到output_unit；纯换算只写单个变量，不重复乘除换算系数。"
+      }
+    },
+    "K3": {
+      "id": "K3",
+      "expression": "a-b",
+      "value": "470.0000",
+      "display_value": "470.00",
+      "unit": "元",
+      "parameters": [
+        {
+          "name": "a",
+          "value": "560.00",
+          "unit": "元",
+          "evidence_ids": [
+            "E1",
+            "E2"
+          ],
+          "binding": {
+            "calculation_id": "K2",
+            "unit": "元"
+          },
+          "is_hypothetical": false
+        },
+        {
+          "name": "b",
+          "value": "90.0000",
+          "unit": "元",
+          "evidence_ids": [
+            "E2",
+            "E1"
+          ],
+          "binding": {
+            "calculation_id": "K1",
+            "unit": "元"
+          },
+          "is_hypothetical": true
+        }
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "rule_evidence_ids": [],
+      "rule_origin": "user_scenario",
+      "is_hypothetical": true,
+      "unit_handling": {
+        "evaluation_basis": "parameters_normalized_before_expression_then_converted_to_output",
+        "parameter_base_values": [
+          {
+            "parameter": "a",
+            "original_value": "560.00",
+            "original_unit": "元",
+            "base_value": "560.00",
+            "unit_factor": "1",
+            "dimensions": [
+              "[非JSON诊断值已省略]"
+            ]
+          },
+          {
+            "parameter": "b",
+            "original_value": "90.0000",
+            "original_unit": "元",
+            "base_value": "90.0000",
+            "unit_factor": "1",
+            "dimensions": [
+              "[非JSON诊断值已省略]"
+            ]
+          }
+        ],
+        "output_unit": "元",
+        "output_unit_factor": "1",
+        "pure_unit_conversion": false,
+        "semantic_status": "not_established_by_arithmetic",
+        "notice": "参数先按单位归一化，表达式在基准单位上运算，再换算到output_unit；纯换算只写单个变量，不重复乘除换算系数。"
+      }
+    }
+  }
+}

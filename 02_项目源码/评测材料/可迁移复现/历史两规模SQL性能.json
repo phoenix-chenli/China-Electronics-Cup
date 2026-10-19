@@ -1,0 +1,545 @@
+{
+  "schema_version": "acceptance-sql-scale.v1",
+  "created_at": "2026-10-18T11:10:14.388231+00:00",
+  "environment": {
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.13.6",
+    "sqlite": "3.50.4",
+    "logical_cpu_count": 10,
+    "machdep.cpu.brand_string": "Apple M4",
+    "hw.memsize": "17179869184",
+    "hw.physicalcpu": "10"
+  },
+  "model_api_calls": 0,
+  "endpoint_calls": 0,
+  "measurement_kind": "measured_local_sql_executor",
+  "executor": "backend.sql_engine.execute_sql",
+  "executor_sha256": "28fefac65b71f99193583c719db753bfba2fdc1e1ac6828cb86e92e79a24d151",
+  "script_sha256": "3c6a8342e2a72773eaa96c1ceacc501d39f29e3e858c517b2496f2988a2cd417",
+  "timing_boundary": "execute_sql调用前至结果返回，包括AST校验、只读连接、SQLite权限校验、查询、来源记录及序列化准备；不含数据构造、Schema导入、模型规划/复核和UI。",
+  "cache_boundary": "没有活动TaskScope，机械结果缓存绕过。每次新SQLite连接；不清空操作系统页缓存，不能称冷盘基准。首次调用另列，后5次报告中位数。",
+  "concurrency_boundary": "本地开发机器的单进程顺序测量；未隔离其他系统工作负载，不是生产并发压测。",
+  "scales": [
+    {
+      "rows": 1000,
+      "path": "评测材料/可迁移复现/受控输入/性能尺度/性能受控记录_1000.sqlite",
+      "sha256": "777680994717a331d16ae844dac912f4b6fe89eb07d1142cd7fc6cf955dfe35a",
+      "bytes": 69632,
+      "origin": "Deterministic synthetic performance input; no real business claim",
+      "queries": [
+        {
+          "name": "full_aggregate",
+          "sql": "SELECT COUNT(*),SUM(amount_cents) FROM events",
+          "parameters": [],
+          "independent_python_rows": [
+            [
+              1000,
+              13518500
+            ]
+          ],
+          "samples": [
+            {
+              "repeat": 0,
+              "elapsed_ns": 12922916,
+              "elapsed_ms": 12.922916,
+              "executor_reported_ms": 4,
+              "rows": [
+                [
+                  1000,
+                  13518500
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 1,
+              "elapsed_ns": 1338791,
+              "elapsed_ms": 1.338791,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  1000,
+                  13518500
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 2,
+              "elapsed_ns": 613208,
+              "elapsed_ms": 0.613208,
+              "executor_reported_ms": 0,
+              "rows": [
+                [
+                  1000,
+                  13518500
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 3,
+              "elapsed_ns": 666292,
+              "elapsed_ms": 0.666292,
+              "executor_reported_ms": 0,
+              "rows": [
+                [
+                  1000,
+                  13518500
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 4,
+              "elapsed_ns": 1223791,
+              "elapsed_ms": 1.223791,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  1000,
+                  13518500
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 5,
+              "elapsed_ns": 1007833,
+              "elapsed_ms": 1.007833,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  1000,
+                  13518500
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            }
+          ],
+          "first_invocation_ms": 12.922916,
+          "warm_median_ms": 1.007833,
+          "warm_min_ms": 0.613208,
+          "warm_max_ms": 1.338791,
+          "checks": [
+            "all_six_results_match_independent_python",
+            "read_only_product_executor",
+            "no_truncation",
+            "no_model_call"
+          ]
+        },
+        {
+          "name": "indexed_filter",
+          "sql": "SELECT COUNT(*),SUM(amount_cents) FROM events WHERE region=? AND status=?",
+          "parameters": [
+            "区域01",
+            "已完成"
+          ],
+          "independent_python_rows": [
+            [
+              50,
+              658350
+            ]
+          ],
+          "samples": [
+            {
+              "repeat": 0,
+              "elapsed_ns": 1204125,
+              "elapsed_ms": 1.204125,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  50,
+                  658350
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 1,
+              "elapsed_ns": 964708,
+              "elapsed_ms": 0.964708,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  50,
+                  658350
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 2,
+              "elapsed_ns": 915666,
+              "elapsed_ms": 0.915666,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  50,
+                  658350
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 3,
+              "elapsed_ns": 675583,
+              "elapsed_ms": 0.675583,
+              "executor_reported_ms": 0,
+              "rows": [
+                [
+                  50,
+                  658350
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 4,
+              "elapsed_ns": 539167,
+              "elapsed_ms": 0.539167,
+              "executor_reported_ms": 0,
+              "rows": [
+                [
+                  50,
+                  658350
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 5,
+              "elapsed_ns": 477125,
+              "elapsed_ms": 0.477125,
+              "executor_reported_ms": 0,
+              "rows": [
+                [
+                  50,
+                  658350
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            }
+          ],
+          "first_invocation_ms": 1.204125,
+          "warm_median_ms": 0.675583,
+          "warm_min_ms": 0.477125,
+          "warm_max_ms": 0.964708,
+          "checks": [
+            "all_six_results_match_independent_python",
+            "read_only_product_executor",
+            "no_truncation",
+            "no_model_call"
+          ]
+        }
+      ],
+      "input_unchanged": true
+    },
+    {
+      "rows": 10000,
+      "path": "评测材料/可迁移复现/受控输入/性能尺度/性能受控记录_10000.sqlite",
+      "sha256": "db1980ca8a258f638d953bd59392483151e2eff1d13131b3ce1e9b1e4ab52675",
+      "bytes": 557056,
+      "origin": "Deterministic synthetic performance input; no real business claim",
+      "queries": [
+        {
+          "name": "full_aggregate",
+          "sql": "SELECT COUNT(*),SUM(amount_cents) FROM events",
+          "parameters": [],
+          "independent_python_rows": [
+            [
+              10000,
+              421685000
+            ]
+          ],
+          "samples": [
+            {
+              "repeat": 0,
+              "elapsed_ns": 3261459,
+              "elapsed_ms": 3.261459,
+              "executor_reported_ms": 2,
+              "rows": [
+                [
+                  10000,
+                  421685000
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 1,
+              "elapsed_ns": 2215291,
+              "elapsed_ms": 2.215291,
+              "executor_reported_ms": 2,
+              "rows": [
+                [
+                  10000,
+                  421685000
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 2,
+              "elapsed_ns": 4683000,
+              "elapsed_ms": 4.683,
+              "executor_reported_ms": 4,
+              "rows": [
+                [
+                  10000,
+                  421685000
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 3,
+              "elapsed_ns": 2186125,
+              "elapsed_ms": 2.186125,
+              "executor_reported_ms": 2,
+              "rows": [
+                [
+                  10000,
+                  421685000
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 4,
+              "elapsed_ns": 2418541,
+              "elapsed_ms": 2.418541,
+              "executor_reported_ms": 2,
+              "rows": [
+                [
+                  10000,
+                  421685000
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 5,
+              "elapsed_ns": 3292041,
+              "elapsed_ms": 3.292041,
+              "executor_reported_ms": 3,
+              "rows": [
+                [
+                  10000,
+                  421685000
+                ]
+              ],
+              "query_plan": [
+                "SCAN events"
+              ],
+              "result_truncated": false
+            }
+          ],
+          "first_invocation_ms": 3.261459,
+          "warm_median_ms": 2.418541,
+          "warm_min_ms": 2.186125,
+          "warm_max_ms": 4.683,
+          "checks": [
+            "all_six_results_match_independent_python",
+            "read_only_product_executor",
+            "no_truncation",
+            "no_model_call"
+          ]
+        },
+        {
+          "name": "indexed_filter",
+          "sql": "SELECT COUNT(*),SUM(amount_cents) FROM events WHERE region=? AND status=?",
+          "parameters": [
+            "区域01",
+            "已完成"
+          ],
+          "independent_python_rows": [
+            [
+              500,
+              21133500
+            ]
+          ],
+          "samples": [
+            {
+              "repeat": 0,
+              "elapsed_ns": 1953167,
+              "elapsed_ms": 1.953167,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  500,
+                  21133500
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 1,
+              "elapsed_ns": 2055791,
+              "elapsed_ms": 2.055791,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  500,
+                  21133500
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 2,
+              "elapsed_ns": 1800875,
+              "elapsed_ms": 1.800875,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  500,
+                  21133500
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 3,
+              "elapsed_ns": 1579833,
+              "elapsed_ms": 1.579833,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  500,
+                  21133500
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 4,
+              "elapsed_ns": 1598750,
+              "elapsed_ms": 1.59875,
+              "executor_reported_ms": 1,
+              "rows": [
+                [
+                  500,
+                  21133500
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            },
+            {
+              "repeat": 5,
+              "elapsed_ns": 2310291,
+              "elapsed_ms": 2.310291,
+              "executor_reported_ms": 2,
+              "rows": [
+                [
+                  500,
+                  21133500
+                ]
+              ],
+              "query_plan": [
+                "SEARCH events USING INDEX idx_events_region_status (region=? AND status=?)"
+              ],
+              "result_truncated": false
+            }
+          ],
+          "first_invocation_ms": 1.953167,
+          "warm_median_ms": 1.800875,
+          "warm_min_ms": 1.579833,
+          "warm_max_ms": 2.310291,
+          "checks": [
+            "all_six_results_match_independent_python",
+            "read_only_product_executor",
+            "no_truncation",
+            "no_model_call"
+          ]
+        }
+      ],
+      "input_unchanged": true
+    }
+  ],
+  "status": "complete",
+  "theory": {
+    "classification": "理论分析，不是测得复杂度或延迟保证",
+    "full_aggregate": "COUNT+SUM无条件聚合需要读取全部金额，SQLite执行部分随n近似O(n)，结果仅1行。",
+    "indexed_filter": "复合B-tree索引匹配region,status，定位约O(log n)，累加匹配m行约O(m)；需以实际EXPLAIN QUERY PLAN确认索引采用。",
+    "pipeline": "总耗时还包含AST解析、连接、安全校验和来源构造等固定成本；不能由10倍行数推断整体必为10倍。",
+    "rag": "当前精确向量扫描需读取选中n个d维向量，计算量约O(n*d)，分批扫描控制峰值内存，不等于ANN。切片邻页规则与候选重排还带来额外成本。",
+    "end_to_end": "问答端到端=规划+查询/检索+必要视觉+生成/复核+发布；本文件未测模型阶段，不报端到端毫秒级结论。"
+  },
+  "bottlenecks_and_strategy": [
+    "本次小规模查询固定开销可能主导。大表筛选使用真实有用索引，禁止为测试硬编码答案。",
+    "复杂JOIN先校验粒度与连接关系，必要时先聚合再连接，不能为加速静默LIMIT或删条件。",
+    "复用已解析页面与索引；仅受影响部分重建，不反复OCR全库。",
+    "生产机械缓存仅复用来源版本一致的实际结果，模型语义复核仍需执行。",
+    "真实模型阶段耗时由本轮付费问答账本补充；目前不使用历史API失败耗时估计正常回答速度。"
+  ],
+  "completed_at": "2026-10-18T11:10:14.547951+00:00",
+  "portable_copy_note": "仅将历史输入路径映射到包内；数据、时延与原始环境未改，非本轮新测。"
+}

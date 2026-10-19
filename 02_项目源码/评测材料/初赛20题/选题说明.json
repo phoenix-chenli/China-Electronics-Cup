@@ -1,0 +1,33 @@
+{
+  "suite_sha256": "389eb82dd8ae93168d2e153b040455faca5767de23c5306cffc6c75659a58a07",
+  "case_ids": [
+    "sql-001",
+    "rag-003",
+    "sql-004",
+    "rag-008",
+    "sql-006",
+    "rag-012",
+    "sql-009",
+    "rag-020",
+    "sql-014",
+    "rag-023",
+    "sql-017",
+    "rag-028",
+    "sql-020",
+    "rag-032",
+    "sql-041",
+    "rag-038",
+    "sql-051",
+    "rag-044",
+    "sql-074",
+    "rag-049"
+  ],
+  "model_calls": 0,
+  "source_suites": {
+    "sql": "c9ff0c10d9cfc6a956204adce299cea56e3bbd4743471949685e13b76414d737",
+    "rag": "2cb18f19a6b2abd4e6c51762db48868a8cd235463c5e65dd1b07bef3af0ec029"
+  },
+  "selection_basis": "固定覆盖：计数/聚合/NULL/单位/粒度/连接；精确原文/尾部/限定/版本/身份不可推断。未读取模型结果。",
+  "denominator": 20,
+  "split": "development"
+}

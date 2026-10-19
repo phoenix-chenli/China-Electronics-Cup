@@ -1,0 +1,2337 @@
+{
+  "pages": [
+    {
+      "number": 1,
+      "title": "原始图片",
+      "text": "Chapter 8- Initial Start-Up\nTable 8.1 Schedule of Training Events\nDuration'\nTime Period\nTopic\n（hours）\nSystem Overview / Review of Unit Operations\n1-4\nFacility Walk Through\n1-2\nPrinciples of Membrane Operation\n1-4\nControlSystem\n4-24\nPretreatment Unit Operations\n1-4\nOperation / Pumps / Instrumentation\n4-16\nDuring Construction\nand Commissioning\n1-2\nPost-Treatment\nChemical Cleaning （Including Demonstration）\n4-16\nIntegrity Testing/ Module Isolation and Repair\n4-8\nMonitoring / Troubleshooting/ Data Normalization\n2-4\nDetails of Control System / Remote Monitoring\n1-2\nTotal\n24-86\nAfter Commissioning\nOpen Discussion with Membrane Manufacturer\n1-3 days\nAfter Three Months\nOpen Discussion with Membrane Manufacturer\n1-3 days\n1 Higher ends of the ranges cited are associated with more complex systems and less operator familiarity\nMembrane Filtration Guidance Manual\n8-7\nNovember 2005",
+      "char_count": 879,
+      "has_image": true,
+      "blocks": [
+        {
+          "text": "Chapter 8- Initial Start-Up",
+          "bbox": [
+            0.407895,
+            0.047965,
+            0.590226,
+            0.0625
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 0,
+          "end": 27
+        },
+        {
+          "text": "Table 8.1 Schedule of Training Events",
+          "bbox": [
+            0.319549,
+            0.110465,
+            0.678571,
+            0.128
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 28,
+          "end": 65
+        },
+        {
+          "text": "Duration'",
+          "bbox": [
+            0.74242,
+            0.142292,
+            0.81961,
+            0.161487
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "text": "Time Period",
+          "bbox": [
+            0.167095,
+            0.151913,
+            0.267116,
+            0.170761
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 76,
+          "end": 87
+        },
+        {
+          "text": "Topic",
+          "bbox": [
+            0.336363,
+            0.152436,
+            0.387321,
+            0.170238
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "text": "（hours）",
+          "bbox": [
+            0.751826,
+            0.164104,
+            0.808324,
+            0.177465
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "text": "System Overview / Review of Unit Operations",
+          "bbox": [
+            0.338346,
+            0.1815,
+            0.671053,
+            0.199128
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 102,
+          "end": 145
+        },
+        {
+          "text": "1-4",
+          "bbox": [
+            0.763158,
+            0.183,
+            0.798872,
+            0.196221
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 146,
+          "end": 149
+        },
+        {
+          "text": "Facility Walk Through",
+          "bbox": [
+            0.338346,
+            0.199,
+            0.5,
+            0.218023
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 150,
+          "end": 171
+        },
+        {
+          "text": "1-2",
+          "bbox": [
+            0.763158,
+            0.2005,
+            0.802632,
+            0.21657
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 172,
+          "end": 175
+        },
+        {
+          "text": "Principles of Membrane Operation",
+          "bbox": [
+            0.338346,
+            0.2165,
+            0.590226,
+            0.2355
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 176,
+          "end": 208
+        },
+        {
+          "text": "1-4",
+          "bbox": [
+            0.763158,
+            0.218,
+            0.800752,
+            0.234012
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 209,
+          "end": 212
+        },
+        {
+          "text": "ControlSystem",
+          "bbox": [
+            0.338346,
+            0.234,
+            0.454887,
+            0.256
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 213,
+          "end": 226
+        },
+        {
+          "text": "4-24",
+          "bbox": [
+            0.757519,
+            0.238372,
+            0.804511,
+            0.2545
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 227,
+          "end": 231
+        },
+        {
+          "text": "Pretreatment Unit Operations",
+          "bbox": [
+            0.338346,
+            0.25436,
+            0.552632,
+            0.2735
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 232,
+          "end": 260
+        },
+        {
+          "text": "1-4",
+          "bbox": [
+            0.763158,
+            0.257267,
+            0.800752,
+            0.2735
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 261,
+          "end": 264
+        },
+        {
+          "text": "Operation / Pumps / Instrumentation",
+          "bbox": [
+            0.338346,
+            0.2745,
+            0.603383,
+            0.292151
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 265,
+          "end": 300
+        },
+        {
+          "text": "4-16",
+          "bbox": [
+            0.757519,
+            0.2745,
+            0.806391,
+            0.290698
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 301,
+          "end": 305
+        },
+        {
+          "text": "During Construction",
+          "bbox": [
+            0.169173,
+            0.279,
+            0.315789,
+            0.295058
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 306,
+          "end": 325
+        },
+        {
+          "text": "and Commissioning",
+          "bbox": [
+            0.169173,
+            0.292,
+            0.31391,
+            0.309593
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 326,
+          "end": 343
+        },
+        {
+          "text": "1-2",
+          "bbox": [
+            0.763158,
+            0.2905,
+            0.802632,
+            0.311047
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 344,
+          "end": 347
+        },
+        {
+          "text": "Post-Treatment",
+          "bbox": [
+            0.336466,
+            0.292,
+            0.456767,
+            0.311047
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 348,
+          "end": 362
+        },
+        {
+          "text": "Chemical Cleaning （Including Demonstration）",
+          "bbox": [
+            0.338346,
+            0.311,
+            0.671053,
+            0.3315
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 363,
+          "end": 406
+        },
+        {
+          "text": "4-16",
+          "bbox": [
+            0.757519,
+            0.3125,
+            0.806391,
+            0.33
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 407,
+          "end": 411
+        },
+        {
+          "text": "Integrity Testing/ Module Isolation and Repair",
+          "bbox": [
+            0.334402,
+            0.328016,
+            0.676916,
+            0.351848
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 412,
+          "end": 458
+        },
+        {
+          "text": "4-8",
+          "bbox": [
+            0.761278,
+            0.328488,
+            0.802632,
+            0.349
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 459,
+          "end": 462
+        },
+        {
+          "text": "Monitoring / Troubleshooting/ Data Normalization",
+          "bbox": [
+            0.336466,
+            0.3515,
+            0.699248,
+            0.367733
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 463,
+          "end": 511
+        },
+        {
+          "text": "2-4",
+          "bbox": [
+            0.763158,
+            0.3515,
+            0.800752,
+            0.3665
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 512,
+          "end": 515
+        },
+        {
+          "text": "Details of Control System / Remote Monitoring",
+          "bbox": [
+            0.338346,
+            0.3675,
+            0.676692,
+            0.386628
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 516,
+          "end": 561
+        },
+        {
+          "text": "1-2",
+          "bbox": [
+            0.761278,
+            0.369,
+            0.800752,
+            0.386628
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 562,
+          "end": 565
+        },
+        {
+          "text": "Total",
+          "bbox": [
+            0.338346,
+            0.392442,
+            0.383459,
+            0.405523
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 566,
+          "end": 571
+        },
+        {
+          "text": "24-86",
+          "bbox": [
+            0.753687,
+            0.389394,
+            0.810223,
+            0.407118
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 572,
+          "end": 577
+        },
+        {
+          "text": "After Commissioning",
+          "bbox": [
+            0.169173,
+            0.414,
+            0.321429,
+            0.430233
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 578,
+          "end": 597
+        },
+        {
+          "text": "Open Discussion with Membrane Manufacturer",
+          "bbox": [
+            0.338346,
+            0.414,
+            0.682331,
+            0.429
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 598,
+          "end": 640
+        },
+        {
+          "text": "1-3 days",
+          "bbox": [
+            0.742481,
+            0.414,
+            0.817669,
+            0.430233
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 641,
+          "end": 649
+        },
+        {
+          "text": "After Three Months",
+          "bbox": [
+            0.169173,
+            0.44186,
+            0.31203,
+            0.4565
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 650,
+          "end": 668
+        },
+        {
+          "text": "Open Discussion with Membrane Manufacturer",
+          "bbox": [
+            0.338346,
+            0.44186,
+            0.682331,
+            0.458
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 669,
+          "end": 711
+        },
+        {
+          "text": "1-3 days",
+          "bbox": [
+            0.742389,
+            0.443025,
+            0.817761,
+            0.458138
+          ],
+          "confidence": 0.3,
+          "kind": "text",
+          "start": 712,
+          "end": 720
+        },
+        {
+          "text": "1 Higher ends of the ranges cited are associated with more complex systems and less operator familiarity",
+          "bbox": [
+            0.172932,
+            0.47093,
+            0.789474,
+            0.4855
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 721,
+          "end": 825
+        },
+        {
+          "text": "Membrane Filtration Guidance Manual",
+          "bbox": [
+            0.116541,
+            0.94186,
+            0.37594,
+            0.9535
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 826,
+          "end": 861
+        },
+        {
+          "text": "8-7",
+          "bbox": [
+            0.486842,
+            0.943314,
+            0.511278,
+            0.9535
+          ],
+          "confidence": 1.0,
+          "kind": "text",
+          "start": 862,
+          "end": 865
+        },
+        {
+          "text": "November 2005",
+          "bbox": [
+            0.774436,
+            0.94186,
+            0.881579,
+            0.952035
+          ],
+          "confidence": 0.5,
+          "kind": "text",
+          "start": 866,
+          "end": 879
+        }
+      ],
+      "quality": {
+        "contrast": 39.94,
+        "grayscale_range": 255,
+        "sharpness": 3653.75,
+        "dark_pixel_ratio": 0.04,
+        "blank": false,
+        "warnings": [
+          "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.5905,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 32,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 5006
+      },
+      "extraction": "ocr"
+    }
+  ],
+  "tables": [
+    {
+      "name": "图片表1",
+      "columns": [
+        {
+          "name": "列1",
+          "type": "文本"
+        },
+        {
+          "name": "列2",
+          "type": "文本"
+        },
+        {
+          "name": "列3",
+          "type": "文本"
+        }
+      ],
+      "row_count": 4,
+      "preview": [
+        [
+          "Time Period",
+          "Topic",
+          "Duration'\n（hours）"
+        ],
+        [
+          "During Construction\nand Commissioning",
+          "System Overview / Review of Unit Operations\nFacility Walk Through\nPrinciples of Membrane Operation\nControl System\nPretreatment Unit Operations\nOperation / Pumps / Instrumentation\nPost-Treatment\nChemical Cleaning （Including Demonstration）\nIntegrity Testing / Module Isolation and Repair\nMonitoring / Troubleshooting / Data Normalization\nDetails of Control System / Remote Monitoring\nTotal",
+          "1-4\n1-2\n1-4\n4- 24\n1-4\n4- 16\n1-2\n4- 16\n4-8\n2-4\n1-2\n24- 86"
+        ],
+        [
+          "After Commissioning",
+          "Open Discussion with Membrane Manufacturer",
+          "1-3 days"
+        ],
+        [
+          "After Three Months",
+          "Open Discussion with Membrane Manufacturer",
+          "1-3 days"
+        ]
+      ]
+    },
+    {
+      "name": "图片表2",
+      "columns": [
+        {
+          "name": "列1",
+          "type": "文本"
+        },
+        {
+          "name": "列2",
+          "type": "文本"
+        }
+      ],
+      "row_count": 10,
+      "preview": [
+        [
+          "Facility Walk Through",
+          "1-2"
+        ],
+        [
+          "Principles of Membrane Operation",
+          "1-4"
+        ],
+        [
+          "Control System",
+          "4- 24"
+        ],
+        [
+          "Pretreatment Unit Operations",
+          "1-4"
+        ],
+        [
+          "Operation / Pumps / Instrumentation",
+          "4-16"
+        ]
+      ]
+    }
+  ],
+  "warnings": [
+    "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称",
+    "PDF / 图片表格保留全部原始行，列名为列1、列2等；表头与合并覆盖空值未转成业务数据，计算前需确认表头、单位和合计行。",
+    "扫描表格根据真实格线定位；单元格文字来自 OCR，数字及空格须对照原件复核"
+  ],
+  "metadata": {
+    "width": 1546,
+    "height": 2000,
+    "exif_orientation": 1,
+    "ocr_performed": true,
+    "page_unit": "physical_page",
+    "outline": [],
+    "quality_summary": {
+      "native_pages": 0,
+      "ocr_pages": 1,
+      "ocr_comparison_pages": 0,
+      "unreadable_pages": 0,
+      "warning_pages": [
+        1
+      ],
+      "ocr_confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+      "processing_truncated": false,
+      "missing_page_note": "仅检查文件实际包含的页面；无法据此判断纸质原稿是否缺页。"
+    },
+    "complexity": {
+      "multi_column_pages": [],
+      "merged_table_count": 0,
+      "formula_candidates": 0,
+      "notes": [
+        "OCR 仅保留公式候选文字，未验证公式。",
+        "无可靠闭合格线时不生成数据表。"
+      ]
+    },
+    "table_regions": [
+      {
+        "bbox": [
+          0.160813,
+          0.142857,
+          0.843808,
+          0.462143
+        ],
+        "extraction": "ocr_grid",
+        "row_count": 4,
+        "column_count": 3,
+        "cells": [
+          {
+            "row": 1,
+            "col": 1,
+            "text": "Time Period",
+            "bbox": [
+              0.160813,
+              0.142857,
+              0.330869,
+              0.179286
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 1,
+            "col": 2,
+            "text": "Topic",
+            "bbox": [
+              0.330869,
+              0.142857,
+              0.719039,
+              0.179286
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 1,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 1,
+            "col": 3,
+            "text": "Duration'\n（hours）",
+            "bbox": [
+              0.719039,
+              0.142857,
+              0.843808,
+              0.179286
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 2,
+            "col": 1,
+            "text": "During Construction\nand Commissioning",
+            "bbox": [
+              0.160813,
+              0.179286,
+              0.330869,
+              0.406429
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 2,
+            "col": 2,
+            "text": "System Overview / Review of Unit Operations\nFacility Walk Through\nPrinciples of Membrane Operation\nControl System\nPretreatment Unit Operations\nOperation / Pumps / Instrumentation\nPost-Treatment\nChemical Cleaning （Including Demonstration）\nIntegrity Testing / Module Isolation and Repair\nMonitoring / Troubleshooting / Data Normalization\nDetails of Control System / Remote Monitoring\nTotal",
+            "bbox": [
+              0.330869,
+              0.179286,
+              0.719039,
+              0.406429
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 2,
+            "col": 3,
+            "text": "1-4\n1-2\n1-4\n4- 24\n1-4\n4- 16\n1-2\n4- 16\n4-8\n2-4\n1-2\n24- 86",
+            "bbox": [
+              0.719039,
+              0.179286,
+              0.843808,
+              0.406429
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 3,
+            "col": 1,
+            "text": "After Commissioning",
+            "bbox": [
+              0.160813,
+              0.406429,
+              0.330869,
+              0.434286
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 3,
+            "col": 2,
+            "text": "Open Discussion with Membrane Manufacturer",
+            "bbox": [
+              0.330869,
+              0.406429,
+              0.719039,
+              0.434286
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 3,
+            "col": 3,
+            "text": "1-3 days",
+            "bbox": [
+              0.719039,
+              0.406429,
+              0.843808,
+              0.434286
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 4,
+            "col": 1,
+            "text": "After Three Months",
+            "bbox": [
+              0.160813,
+              0.434286,
+              0.330869,
+              0.462143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 1,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 4,
+            "col": 2,
+            "text": "Open Discussion with Membrane Manufacturer",
+            "bbox": [
+              0.330869,
+              0.434286,
+              0.719039,
+              0.462143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 4,
+            "col": 3,
+            "text": "1-3 days",
+            "bbox": [
+              0.719039,
+              0.434286,
+              0.843808,
+              0.462143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          }
+        ],
+        "header_names": [],
+        "has_merged_cells": false,
+        "data_row_offset": 0,
+        "requires_review": true,
+        "grid_detection": "dark_rules",
+        "verification": "cell_ocr",
+        "table_name": "图片表1",
+        "page": 1
+      },
+      {
+        "bbox": [
+          0.330869,
+          0.198571,
+          0.843808,
+          0.387143
+        ],
+        "extraction": "ocr_grid",
+        "row_count": 10,
+        "column_count": 2,
+        "cells": [
+          {
+            "row": 1,
+            "col": 1,
+            "text": "Facility Walk Through",
+            "bbox": [
+              0.330869,
+              0.198571,
+              0.719039,
+              0.217143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 1,
+            "col": 2,
+            "text": "1-2",
+            "bbox": [
+              0.719039,
+              0.198571,
+              0.843808,
+              0.217143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 2,
+            "col": 1,
+            "text": "Principles of Membrane Operation",
+            "bbox": [
+              0.330869,
+              0.217143,
+              0.719039,
+              0.235714
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 2,
+            "col": 2,
+            "text": "1-4",
+            "bbox": [
+              0.719039,
+              0.217143,
+              0.843808,
+              0.235714
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 3,
+            "col": 1,
+            "text": "Control System",
+            "bbox": [
+              0.330869,
+              0.235714,
+              0.719039,
+              0.255
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 1,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 3,
+            "col": 2,
+            "text": "4- 24",
+            "bbox": [
+              0.719039,
+              0.235714,
+              0.843808,
+              0.255
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 4,
+            "col": 1,
+            "text": "Pretreatment Unit Operations",
+            "bbox": [
+              0.330869,
+              0.255,
+              0.719039,
+              0.273571
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 4,
+            "col": 2,
+            "text": "1-4",
+            "bbox": [
+              0.719039,
+              0.255,
+              0.843808,
+              0.273571
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 5,
+            "col": 1,
+            "text": "Operation / Pumps / Instrumentation",
+            "bbox": [
+              0.330869,
+              0.273571,
+              0.719039,
+              0.292143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 5,
+            "col": 2,
+            "text": "4-16",
+            "bbox": [
+              0.719039,
+              0.273571,
+              0.843808,
+              0.292143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 6,
+            "col": 1,
+            "text": "Post-Treatment",
+            "bbox": [
+              0.330869,
+              0.292143,
+              0.719039,
+              0.311429
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 1,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 6,
+            "col": 2,
+            "text": "1-2",
+            "bbox": [
+              0.719039,
+              0.292143,
+              0.843808,
+              0.311429
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 7,
+            "col": 1,
+            "text": "Chemical Cleaning （Including Demonstration）",
+            "bbox": [
+              0.330869,
+              0.311429,
+              0.719039,
+              0.33
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 1,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 7,
+            "col": 2,
+            "text": "4-16",
+            "bbox": [
+              0.719039,
+              0.311429,
+              0.843808,
+              0.33
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 8,
+            "col": 1,
+            "text": "Integrity Testing / Module Isolation and Repair",
+            "bbox": [
+              0.330869,
+              0.33,
+              0.719039,
+              0.348571
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 8,
+            "col": 2,
+            "text": "4-8",
+            "bbox": [
+              0.719039,
+              0.33,
+              0.843808,
+              0.348571
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 9,
+            "col": 1,
+            "text": "Monitoring / Troubleshooting / Data Normalization",
+            "bbox": [
+              0.330869,
+              0.348571,
+              0.719039,
+              0.367857
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 9,
+            "col": 2,
+            "text": "2-4",
+            "bbox": [
+              0.719039,
+              0.348571,
+              0.843808,
+              0.367857
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 10,
+            "col": 1,
+            "text": "Details of Control System / Remote Monitoring",
+            "bbox": [
+              0.330869,
+              0.367857,
+              0.719039,
+              0.387143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.5,
+            "verification": "cell_ocr"
+          },
+          {
+            "row": 10,
+            "col": 2,
+            "text": "1-2",
+            "bbox": [
+              0.719039,
+              0.367857,
+              0.843808,
+              0.387143
+            ],
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "confidence": 0.3,
+            "verification": "cell_ocr"
+          }
+        ],
+        "header_names": [],
+        "has_merged_cells": false,
+        "data_row_offset": 0,
+        "requires_review": true,
+        "grid_detection": "dark_rules",
+        "verification": "cell_ocr",
+        "table_name": "图片表2",
+        "page": 1
+      }
+    ],
+    "table_semantics": [
+      {
+        "schema_version": "table-semantics-v1",
+        "table_name": "图片表1",
+        "format": "image",
+        "page": 1,
+        "sheet": null,
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "bbox": [
+            0.160813,
+            0.142857,
+            0.843808,
+            0.462143
+          ]
+        },
+        "row_count": 4,
+        "column_count": 3,
+        "header_rows": [],
+        "header_basis": "unknown",
+        "columns": [
+          {
+            "column": 1,
+            "header_path": [],
+            "label": "",
+            "role_basis": "unknown"
+          },
+          {
+            "column": 2,
+            "header_path": [],
+            "label": "",
+            "role_basis": "unknown"
+          },
+          {
+            "column": 3,
+            "header_path": [],
+            "label": "",
+            "role_basis": "unknown"
+          }
+        ],
+        "cells": [
+          {
+            "row": 1,
+            "col": 1,
+            "text": "Time Period",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.160813,
+              0.142857,
+              0.330869,
+              0.179286
+            ],
+            "cell_id": "R1C1"
+          },
+          {
+            "row": 1,
+            "col": 2,
+            "text": "Topic",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.142857,
+              0.719039,
+              0.179286
+            ],
+            "cell_id": "R1C2"
+          },
+          {
+            "row": 1,
+            "col": 3,
+            "text": "Duration'\n（hours）",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.142857,
+              0.843808,
+              0.179286
+            ],
+            "cell_id": "R1C3"
+          },
+          {
+            "row": 2,
+            "col": 1,
+            "text": "During Construction\nand Commissioning",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.160813,
+              0.179286,
+              0.330869,
+              0.406429
+            ],
+            "cell_id": "R2C1"
+          },
+          {
+            "row": 2,
+            "col": 2,
+            "text": "System Overview / Review of Unit Operations\nFacility Walk Through\nPrinciples of Membrane Operation\nControl System\nPretreatment Unit Operations\nOperation / Pumps / Instrumentation\nPost-Treatment\nChemical Cleaning （Including Demonstration）\nIntegrity Testing / Module Isolation and Repair\nMonitoring / Troubleshooting / Data Normalization\nDetails of Control System / Remote Monitoring\nTotal",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.179286,
+              0.719039,
+              0.406429
+            ],
+            "cell_id": "R2C2"
+          },
+          {
+            "row": 2,
+            "col": 3,
+            "text": "1-4\n1-2\n1-4\n4- 24\n1-4\n4- 16\n1-2\n4- 16\n4-8\n2-4\n1-2\n24- 86",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.179286,
+              0.843808,
+              0.406429
+            ],
+            "cell_id": "R2C3"
+          },
+          {
+            "row": 3,
+            "col": 1,
+            "text": "After Commissioning",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.160813,
+              0.406429,
+              0.330869,
+              0.434286
+            ],
+            "cell_id": "R3C1"
+          },
+          {
+            "row": 3,
+            "col": 2,
+            "text": "Open Discussion with Membrane Manufacturer",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.406429,
+              0.719039,
+              0.434286
+            ],
+            "cell_id": "R3C2"
+          },
+          {
+            "row": 3,
+            "col": 3,
+            "text": "1-3 days",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.406429,
+              0.843808,
+              0.434286
+            ],
+            "cell_id": "R3C3"
+          },
+          {
+            "row": 4,
+            "col": 1,
+            "text": "After Three Months",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.160813,
+              0.434286,
+              0.330869,
+              0.462143
+            ],
+            "cell_id": "R4C1"
+          },
+          {
+            "row": 4,
+            "col": 2,
+            "text": "Open Discussion with Membrane Manufacturer",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.434286,
+              0.719039,
+              0.462143
+            ],
+            "cell_id": "R4C2"
+          },
+          {
+            "row": 4,
+            "col": 3,
+            "text": "1-3 days",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.434286,
+              0.843808,
+              0.462143
+            ],
+            "cell_id": "R4C3"
+          }
+        ],
+        "row_headers": [
+          {
+            "row": 1,
+            "column": 1,
+            "text": "Time Period",
+            "cell_id": "R1C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 1,
+              "col": 1,
+              "bbox": [
+                0.160813,
+                0.142857,
+                0.330869,
+                0.179286
+              ]
+            }
+          },
+          {
+            "row": 2,
+            "column": 1,
+            "text": "During Construction\nand Commissioning",
+            "cell_id": "R2C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 2,
+              "col": 1,
+              "bbox": [
+                0.160813,
+                0.179286,
+                0.330869,
+                0.406429
+              ]
+            }
+          },
+          {
+            "row": 3,
+            "column": 1,
+            "text": "After Commissioning",
+            "cell_id": "R3C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 3,
+              "col": 1,
+              "bbox": [
+                0.160813,
+                0.406429,
+                0.330869,
+                0.434286
+              ]
+            }
+          },
+          {
+            "row": 4,
+            "column": 1,
+            "text": "After Three Months",
+            "cell_id": "R4C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 4,
+              "col": 1,
+              "bbox": [
+                0.160813,
+                0.434286,
+                0.330869,
+                0.462143
+              ]
+            }
+          }
+        ],
+        "caption": {
+          "text": "Table 8.1 Schedule of Training Events",
+          "evidence": {
+            "page": 1,
+            "bbox": [
+              0.319549,
+              0.110465,
+              0.678571,
+              0.128
+            ],
+            "start": 28,
+            "end": 65
+          },
+          "side": "before"
+        },
+        "footnotes": [],
+        "units": [],
+        "context": [
+          {
+            "text": "Chapter 8- Initial Start-Up",
+            "evidence": {
+              "page": 1,
+              "bbox": [
+                0.407895,
+                0.047965,
+                0.590226,
+                0.0625
+              ],
+              "start": 0,
+              "end": 27
+            },
+            "side": "before"
+          },
+          {
+            "text": "Table 8.1 Schedule of Training Events",
+            "evidence": {
+              "page": 1,
+              "bbox": [
+                0.319549,
+                0.110465,
+                0.678571,
+                0.128
+              ],
+              "start": 28,
+              "end": 65
+            },
+            "side": "before"
+          },
+          {
+            "text": "1 Higher ends of the ranges cited are associated with more complex systems and less operator familiarity",
+            "evidence": {
+              "page": 1,
+              "bbox": [
+                0.172932,
+                0.47093,
+                0.789474,
+                0.4855
+              ],
+              "start": 721,
+              "end": 825
+            },
+            "side": "after"
+          }
+        ],
+        "requires_review": true,
+        "review_reasons": [
+          "未能可靠区分表头和业务数据行"
+        ],
+        "truncated": false,
+        "limits": {
+          "max_cells": 2048,
+          "max_cell_text_characters": 24000,
+          "max_context_characters": 4000,
+          "max_header_rows": 8
+        },
+        "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。"
+      },
+      {
+        "schema_version": "table-semantics-v1",
+        "table_name": "图片表2",
+        "format": "image",
+        "page": 1,
+        "sheet": null,
+        "source_position": {
+          "page": 1,
+          "page_unit": "physical_page",
+          "bbox": [
+            0.330869,
+            0.198571,
+            0.843808,
+            0.387143
+          ]
+        },
+        "row_count": 10,
+        "column_count": 2,
+        "header_rows": [],
+        "header_basis": "unknown",
+        "columns": [
+          {
+            "column": 1,
+            "header_path": [],
+            "label": "",
+            "role_basis": "unknown"
+          },
+          {
+            "column": 2,
+            "header_path": [],
+            "label": "",
+            "role_basis": "unknown"
+          }
+        ],
+        "cells": [
+          {
+            "row": 1,
+            "col": 1,
+            "text": "Facility Walk Through",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.198571,
+              0.719039,
+              0.217143
+            ],
+            "cell_id": "R1C1"
+          },
+          {
+            "row": 1,
+            "col": 2,
+            "text": "1-2",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.198571,
+              0.843808,
+              0.217143
+            ],
+            "cell_id": "R1C2"
+          },
+          {
+            "row": 2,
+            "col": 1,
+            "text": "Principles of Membrane Operation",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.217143,
+              0.719039,
+              0.235714
+            ],
+            "cell_id": "R2C1"
+          },
+          {
+            "row": 2,
+            "col": 2,
+            "text": "1-4",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.217143,
+              0.843808,
+              0.235714
+            ],
+            "cell_id": "R2C2"
+          },
+          {
+            "row": 3,
+            "col": 1,
+            "text": "Control System",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.235714,
+              0.719039,
+              0.255
+            ],
+            "cell_id": "R3C1"
+          },
+          {
+            "row": 3,
+            "col": 2,
+            "text": "4- 24",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.235714,
+              0.843808,
+              0.255
+            ],
+            "cell_id": "R3C2"
+          },
+          {
+            "row": 4,
+            "col": 1,
+            "text": "Pretreatment Unit Operations",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.255,
+              0.719039,
+              0.273571
+            ],
+            "cell_id": "R4C1"
+          },
+          {
+            "row": 4,
+            "col": 2,
+            "text": "1-4",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.255,
+              0.843808,
+              0.273571
+            ],
+            "cell_id": "R4C2"
+          },
+          {
+            "row": 5,
+            "col": 1,
+            "text": "Operation / Pumps / Instrumentation",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.273571,
+              0.719039,
+              0.292143
+            ],
+            "cell_id": "R5C1"
+          },
+          {
+            "row": 5,
+            "col": 2,
+            "text": "4-16",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.273571,
+              0.843808,
+              0.292143
+            ],
+            "cell_id": "R5C2"
+          },
+          {
+            "row": 6,
+            "col": 1,
+            "text": "Post-Treatment",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.292143,
+              0.719039,
+              0.311429
+            ],
+            "cell_id": "R6C1"
+          },
+          {
+            "row": 6,
+            "col": 2,
+            "text": "1-2",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.292143,
+              0.843808,
+              0.311429
+            ],
+            "cell_id": "R6C2"
+          },
+          {
+            "row": 7,
+            "col": 1,
+            "text": "Chemical Cleaning （Including Demonstration）",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.311429,
+              0.719039,
+              0.33
+            ],
+            "cell_id": "R7C1"
+          },
+          {
+            "row": 7,
+            "col": 2,
+            "text": "4-16",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.311429,
+              0.843808,
+              0.33
+            ],
+            "cell_id": "R7C2"
+          },
+          {
+            "row": 8,
+            "col": 1,
+            "text": "Integrity Testing / Module Isolation and Repair",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.33,
+              0.719039,
+              0.348571
+            ],
+            "cell_id": "R8C1"
+          },
+          {
+            "row": 8,
+            "col": 2,
+            "text": "4-8",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.33,
+              0.843808,
+              0.348571
+            ],
+            "cell_id": "R8C2"
+          },
+          {
+            "row": 9,
+            "col": 1,
+            "text": "Monitoring / Troubleshooting / Data Normalization",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.348571,
+              0.719039,
+              0.367857
+            ],
+            "cell_id": "R9C1"
+          },
+          {
+            "row": 9,
+            "col": 2,
+            "text": "2-4",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.348571,
+              0.843808,
+              0.367857
+            ],
+            "cell_id": "R9C2"
+          },
+          {
+            "row": 10,
+            "col": 1,
+            "text": "Details of Control System / Remote Monitoring",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.330869,
+              0.367857,
+              0.719039,
+              0.387143
+            ],
+            "cell_id": "R10C1"
+          },
+          {
+            "row": 10,
+            "col": 2,
+            "text": "1-2",
+            "rowspan": 1,
+            "colspan": 1,
+            "covered_by": null,
+            "bbox": [
+              0.719039,
+              0.367857,
+              0.843808,
+              0.387143
+            ],
+            "cell_id": "R10C2"
+          }
+        ],
+        "row_headers": [
+          {
+            "row": 1,
+            "column": 1,
+            "text": "Facility Walk Through",
+            "cell_id": "R1C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 1,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.198571,
+                0.719039,
+                0.217143
+              ]
+            }
+          },
+          {
+            "row": 2,
+            "column": 1,
+            "text": "Principles of Membrane Operation",
+            "cell_id": "R2C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 2,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.217143,
+                0.719039,
+                0.235714
+              ]
+            }
+          },
+          {
+            "row": 3,
+            "column": 1,
+            "text": "Control System",
+            "cell_id": "R3C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 3,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.235714,
+                0.719039,
+                0.255
+              ]
+            }
+          },
+          {
+            "row": 4,
+            "column": 1,
+            "text": "Pretreatment Unit Operations",
+            "cell_id": "R4C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 4,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.255,
+                0.719039,
+                0.273571
+              ]
+            }
+          },
+          {
+            "row": 5,
+            "column": 1,
+            "text": "Operation / Pumps / Instrumentation",
+            "cell_id": "R5C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 5,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.273571,
+                0.719039,
+                0.292143
+              ]
+            }
+          },
+          {
+            "row": 6,
+            "column": 1,
+            "text": "Post-Treatment",
+            "cell_id": "R6C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 6,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.292143,
+                0.719039,
+                0.311429
+              ]
+            }
+          },
+          {
+            "row": 7,
+            "column": 1,
+            "text": "Chemical Cleaning （Including Demonstration）",
+            "cell_id": "R7C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 7,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.311429,
+                0.719039,
+                0.33
+              ]
+            }
+          },
+          {
+            "row": 8,
+            "column": 1,
+            "text": "Integrity Testing / Module Isolation and Repair",
+            "cell_id": "R8C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 8,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.33,
+                0.719039,
+                0.348571
+              ]
+            }
+          },
+          {
+            "row": 9,
+            "column": 1,
+            "text": "Monitoring / Troubleshooting / Data Normalization",
+            "cell_id": "R9C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 9,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.348571,
+                0.719039,
+                0.367857
+              ]
+            }
+          },
+          {
+            "row": 10,
+            "column": 1,
+            "text": "Details of Control System / Remote Monitoring",
+            "cell_id": "R10C1",
+            "rowspan": 1,
+            "colspan": 1,
+            "role_basis": "inferred",
+            "role": "row_label_candidate",
+            "evidence": {
+              "page": 1,
+              "page_unit": "physical_page",
+              "row": 10,
+              "col": 1,
+              "bbox": [
+                0.330869,
+                0.367857,
+                0.719039,
+                0.387143
+              ]
+            }
+          }
+        ],
+        "caption": null,
+        "footnotes": [],
+        "units": [],
+        "context": [],
+        "requires_review": true,
+        "review_reasons": [
+          "未能可靠区分表头和业务数据行"
+        ],
+        "truncated": false,
+        "limits": {
+          "max_cells": 2048,
+          "max_cell_text_characters": 24000,
+          "max_context_characters": 4000,
+          "max_header_rows": 8
+        },
+        "interpretation_note": "表头、行头和单位作用域仅是注明依据的结构解释；合并覆盖空值不是独立数值。"
+      }
+    ],
+    "table_semantics_truncated": false,
+    "table_row_note": "PDF / 图片表格保留全部原始行，列名为列1、列2等；表头与合并覆盖空值未转成业务数据，计算前需确认表头、单位和合计行。",
+    "formula_structures": [],
+    "formula_structures_truncated": false,
+    "document_structure": {
+      "schema_version": "zhiheng-document-2",
+      "page_unit": "physical_page",
+      "headings": [],
+      "toc_entries": [],
+      "excluded_spans": [],
+      "page_labels": [
+        {
+          "physical_page": 1,
+          "printed_page_label": null,
+          "basis": "unknown"
+        }
+      ],
+      "issues": [],
+      "truncated": false,
+      "structure_status": "unknown",
+      "note": "目录与页眉页脚仅旁挂标注；原文字未删除。候选标题不是已核验的完整目录。"
+    },
+    "document_profiles": {
+      "schema_version": "zhiheng-document-2",
+      "complexity": {
+        "kind": "rule_estimate",
+        "score": 6,
+        "scale": [
+          0,
+          100
+        ],
+        "features": {
+          "pages": 1,
+          "formula_count": 0,
+          "table_count": 2,
+          "merged_table_count": 0,
+          "multi_column_pages": [],
+          "heading_count": 0
+        },
+        "note": "结构处理负担估计，不是文档质量、答案正确率或OCR准确率。"
+      },
+      "quality": {
+        "kind": "observed_diagnostics",
+        "pages": [
+          {
+            "page": 1,
+            "status": "observed",
+            "observations": {
+              "contrast": 39.94,
+              "sharpness": 3653.75,
+              "grayscale_range": 255,
+              "blank": false,
+              "rotation_correction": 0,
+              "skew_degrees": 0.0,
+              "ocr_mean_confidence": 0.5905,
+              "low_confidence_blocks": 32
+            },
+            "flags": [
+              "ocr_uncertain"
+            ],
+            "warnings": [
+              "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+            ],
+            "not_assessed": []
+          }
+        ],
+        "accuracy_estimate": null,
+        "note": "仅报告实际测量与识别不确定性；无图像测量的DOCX不推断清晰度。"
+      },
+      "processing_plan": [
+        {
+          "page": 1,
+          "suggested_action": "targeted_high_resolution_review",
+          "basis": [
+            "ocr_uncertain"
+          ],
+          "executed": false
+        }
+      ]
+    },
+    "table_continuations": {
+      "links": [],
+      "pending": [],
+      "truncated": false,
+      "note": "每页原表、原行和单位独立保留；关联不授权跨表求和或自动继承表头。"
+    },
+    "normalization_candidates": {
+      "schema_version": "search-variants-1",
+      "items": [],
+      "truncated": false,
+      "source_modified": false,
+      "conversion_scope": "finite_orthographic_map_not_full_dictionary"
+    },
+    "processing_history": [
+      {
+        "method": "png_import",
+        "parser_version": "zhiheng-multimodal-3.2",
+        "elapsed_ms": 5139,
+        "status": "parsed",
+        "processing_truncated": false
+      }
+    ]
+  },
+  "page_count": 1,
+  "summary": "1546 × 2000 像素 · 879 字符",
+  "data_path": "结果/B11_p268_original.sqlite"
+}

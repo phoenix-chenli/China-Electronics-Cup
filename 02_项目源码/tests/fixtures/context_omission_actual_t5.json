@@ -1,0 +1,1094 @@
+{
+  "notice": "Immutable real t5 excerpt for OFFLINE replay only. Scripted review responses in tests are not real API evidence.",
+  "item": {
+    "id": "c81cb43c1a3747958e9106624a127330",
+    "project_id": "4e6a1f6feae243cbafd3a3de59b8cf4c",
+    "question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+    "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+    "status": "completed",
+    "intent": {
+      "metric": "登记金额合计",
+      "dimensions": [],
+      "filters": [
+        "orders.status为“已完成”",
+        "日期范围按orders.day、ISO日期文本，年份包含1月1日至下一年1月1日之前"
+      ],
+      "time_range": "2024年",
+      "entities": [
+        "口径说明V1",
+        "orders"
+      ],
+      "unit": "分和元",
+      "topic": "按口径说明V1统计2024年实际登记金额并撤销减少10%的假设"
+    },
+    "mode": "multi_source",
+    "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+    "source_ids": [
+      "693ef9bc604d4f36a10c507cc6c922a1",
+      "376aaa9fa44c4a5fb82a327869783d59"
+    ],
+    "source_revisions": [
+      {
+        "id": "693ef9bc604d4f36a10c507cc6c922a1",
+        "name": "boundary.sqlite",
+        "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.2",
+        "revision": "c58331174f44b47f3d357bbebf541229aa07350de0ba07968ca1596d3667caf1",
+        "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+      },
+      {
+        "id": "376aaa9fa44c4a5fb82a327869783d59",
+        "name": "口径说明V1_合成.txt",
+        "sha256": "e959b0125b961e1371a1076fbb965e61ff77845d668103161ac4bc438ffffa18",
+        "parser_version": "zhiheng-multimodal-3.2",
+        "revision": "24323e7c4e5422c65f92e771986d8a57f7b2cdf1f177732d7665eea6f952773f",
+        "semantic_revision": "96ab89afe345bec1e4eece5889a9e98a7dc9bfdf247d94458d8f19cfc57acc6f"
+      }
+    ],
+    "sources": [
+      {
+        "id": "693ef9bc604d4f36a10c507cc6c922a1",
+        "name": "boundary.sqlite",
+        "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+        "parser_version": "zhiheng-multimodal-3.2",
+        "revision": "c58331174f44b47f3d357bbebf541229aa07350de0ba07968ca1596d3667caf1",
+        "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+      },
+      {
+        "id": "376aaa9fa44c4a5fb82a327869783d59",
+        "name": "口径说明V1_合成.txt",
+        "sha256": "e959b0125b961e1371a1076fbb965e61ff77845d668103161ac4bc438ffffa18",
+        "parser_version": "zhiheng-multimodal-3.2",
+        "revision": "24323e7c4e5422c65f92e771986d8a57f7b2cdf1f177732d7665eea6f952773f",
+        "semantic_revision": "96ab89afe345bec1e4eece5889a9e98a7dc9bfdf247d94458d8f19cfc57acc6f"
+      }
+    ],
+    "context_state": {
+      "schema_version": "zhiheng.conversation-state.v1",
+      "answer_id": "c81cb43c1a3747958e9106624a127330",
+      "branch_parent_id": "86af850cb3584ec393339c4cee086171",
+      "source_revisions": [
+        {
+          "id": "693ef9bc604d4f36a10c507cc6c922a1",
+          "name": "boundary.sqlite",
+          "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+          "parser_version": "zhiheng-multimodal-3.2",
+          "revision": "c58331174f44b47f3d357bbebf541229aa07350de0ba07968ca1596d3667caf1",
+          "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+        },
+        {
+          "id": "376aaa9fa44c4a5fb82a327869783d59",
+          "name": "口径说明V1_合成.txt",
+          "sha256": "e959b0125b961e1371a1076fbb965e61ff77845d668103161ac4bc438ffffa18",
+          "parser_version": "zhiheng-multimodal-3.2",
+          "revision": "24323e7c4e5422c65f92e771986d8a57f7b2cdf1f177732d7665eea6f952773f",
+          "semantic_revision": "96ab89afe345bec1e4eece5889a9e98a7dc9bfdf247d94458d8f19cfc57acc6f"
+        }
+      ],
+      "slots": {
+        "topic": {
+          "value": "按口径说明V1统计2024年实际登记金额并撤销减少10%的假设",
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330",
+          "user_question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+          "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+          "verification": "answer_semantic_review"
+        },
+        "entities": {
+          "value": [
+            "口径说明V1",
+            "orders"
+          ],
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "e930f80a584947b98a080c6b1f4e9adf",
+          "user_question": "按口径说明V1统计2025年登记金额，先给出原始单位下的合计，再依照文档换算为元；说明来源字段、订单状态、日期范围和NULL处理边界。",
+          "normalized_question": "按口径说明V1统计2025年登记金额，先给出原始单位下的合计，再依照文档换算为元；说明来源字段、订单状态、日期范围和NULL处理边界。",
+          "verification": "answer_semantic_review"
+        },
+        "metric": {
+          "value": "登记金额合计",
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330",
+          "user_question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+          "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+          "verification": "answer_semantic_review"
+        },
+        "time_range": {
+          "value": "2024年",
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330",
+          "user_question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+          "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+          "verification": "answer_semantic_review"
+        },
+        "filters": {
+          "value": [
+            "orders.status为“已完成”",
+            "日期范围按orders.day、ISO日期文本，年份包含1月1日至下一年1月1日之前"
+          ],
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "e930f80a584947b98a080c6b1f4e9adf",
+          "user_question": "按口径说明V1统计2025年登记金额，先给出原始单位下的合计，再依照文档换算为元；说明来源字段、订单状态、日期范围和NULL处理边界。",
+          "normalized_question": "按口径说明V1统计2025年登记金额，先给出原始单位下的合计，再依照文档换算为元；说明来源字段、订单状态、日期范围和NULL处理边界。",
+          "verification": "answer_semantic_review"
+        },
+        "unit": {
+          "value": "分和元",
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "53d0331e3fb84eb79d011f8f9c3b7ded",
+          "user_question": "仍针对2024年，仅假设刚才的登记金额减少10%，按原金额乘以(1-10%)计算假设金额，分别用分和元表示。明确这不是实际登记结果，不修改原始数据。",
+          "normalized_question": "按口径说明V1统计2024年已完成订单的登记金额，先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；并额外给出假设登记金额减少10%后的假设金额，按原金额乘以(1-10%)计算，分别用分和元表示。明确该假设金额不是实际登记结果，不修改原始数据。说明来源字段、订单状态、日期范围和NULL处理边界。",
+          "verification": "answer_semantic_review"
+        },
+        "comparison_base": {
+          "value": "2024年登记金额减少10%后的假设金额",
+          "origin": "model_interpretation",
+          "confirmed_by_user": false,
+          "source_answer_id": "86af850cb3584ec393339c4cee086171",
+          "user_question": "将当前假设金额与第1轮2025年的实际登记金额比较，给出两者金额及相差多少元，明确各自年份、实际或假设性质；不要把它说成实际同比变化。",
+          "normalized_question": "按口径说明V1统计2025年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位下的合计，再依照文档“100分=1元”换算为元；同时给出2024年已完成订单登记金额减少10%后的假设金额（按2024年原登记金额乘以(1-10%)计算，分别用分和元表示），明确该假设金额不是实际登记结果、不修改原始数据；将2025年实际登记金额与该假设金额比较，给出两者金额及相差多少元，明确各自年份和实际或假设性质，不要把它说成实际同比变化。说明来源字段、订单状态、日期范围和NULL处理边界。",
+          "verification": "answer_semantic_review"
+        }
+      },
+      "changes": [
+        {
+          "field": "metric",
+          "operation": "replace",
+          "before": {
+            "value": "2025年实际登记金额合计与2024年登记金额减少10%后的假设金额之比较",
+            "origin": "model_interpretation",
+            "confirmed_by_user": false,
+            "source_answer_id": "86af850cb3584ec393339c4cee086171",
+            "user_question": "将当前假设金额与第1轮2025年的实际登记金额比较，给出两者金额及相差多少元，明确各自年份、实际或假设性质；不要把它说成实际同比变化。",
+            "normalized_question": "按口径说明V1统计2025年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位下的合计，再依照文档“100分=1元”换算为元；同时给出2024年已完成订单登记金额减少10%后的假设金额（按2024年原登记金额乘以(1-10%)计算，分别用分和元表示），明确该假设金额不是实际登记结果、不修改原始数据；将2025年实际登记金额与该假设金额比较，给出两者金额及相差多少元，明确各自年份和实际或假设性质，不要把它说成实际同比变化。说明来源字段、订单状态、日期范围和NULL处理边界。",
+            "verification": "answer_semantic_review"
+          },
+          "after": {
+            "value": "登记金额合计",
+            "origin": "model_interpretation",
+            "confirmed_by_user": false,
+            "source_answer_id": "c81cb43c1a3747958e9106624a127330",
+            "user_question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+            "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+            "verification": "answer_semantic_review"
+          },
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330"
+        },
+        {
+          "field": "dimensions",
+          "operation": "remove",
+          "before": null,
+          "after": null,
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330"
+        },
+        {
+          "field": "time_range",
+          "operation": "replace",
+          "before": {
+            "value": "2025年（实际）与2024年（假设基准）",
+            "origin": "model_interpretation",
+            "confirmed_by_user": false,
+            "source_answer_id": "86af850cb3584ec393339c4cee086171",
+            "user_question": "将当前假设金额与第1轮2025年的实际登记金额比较，给出两者金额及相差多少元，明确各自年份、实际或假设性质；不要把它说成实际同比变化。",
+            "normalized_question": "按口径说明V1统计2025年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位下的合计，再依照文档“100分=1元”换算为元；同时给出2024年已完成订单登记金额减少10%后的假设金额（按2024年原登记金额乘以(1-10%)计算，分别用分和元表示），明确该假设金额不是实际登记结果、不修改原始数据；将2025年实际登记金额与该假设金额比较，给出两者金额及相差多少元，明确各自年份和实际或假设性质，不要把它说成实际同比变化。说明来源字段、订单状态、日期范围和NULL处理边界。",
+            "verification": "answer_semantic_review"
+          },
+          "after": {
+            "value": "2024年",
+            "origin": "model_interpretation",
+            "confirmed_by_user": false,
+            "source_answer_id": "c81cb43c1a3747958e9106624a127330",
+            "user_question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+            "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+            "verification": "answer_semantic_review"
+          },
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330"
+        },
+        {
+          "field": "topic",
+          "operation": "replace",
+          "before": {
+            "value": "2025年实际登记金额与2024年假设减少10%金额的比较",
+            "origin": "model_interpretation",
+            "confirmed_by_user": false,
+            "source_answer_id": "86af850cb3584ec393339c4cee086171",
+            "user_question": "将当前假设金额与第1轮2025年的实际登记金额比较，给出两者金额及相差多少元，明确各自年份、实际或假设性质；不要把它说成实际同比变化。",
+            "normalized_question": "按口径说明V1统计2025年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位下的合计，再依照文档“100分=1元”换算为元；同时给出2024年已完成订单登记金额减少10%后的假设金额（按2024年原登记金额乘以(1-10%)计算，分别用分和元表示），明确该假设金额不是实际登记结果、不修改原始数据；将2025年实际登记金额与该假设金额比较，给出两者金额及相差多少元，明确各自年份和实际或假设性质，不要把它说成实际同比变化。说明来源字段、订单状态、日期范围和NULL处理边界。",
+            "verification": "answer_semantic_review"
+          },
+          "after": {
+            "value": "按口径说明V1统计2024年实际登记金额并撤销减少10%的假设",
+            "origin": "model_interpretation",
+            "confirmed_by_user": false,
+            "source_answer_id": "c81cb43c1a3747958e9106624a127330",
+            "user_question": "撤销刚才减少10%的假设，恢复2024年的实际登记金额，分别用分和元表示，说明已经撤销什么、其他哪些口径仍然保留。",
+            "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+            "verification": "answer_semantic_review"
+          },
+          "source_answer_id": "c81cb43c1a3747958e9106624a127330"
+        }
+      ],
+      "unresolved": [],
+      "unknown_fields": {},
+      "result_reference": {
+        "answer_id": "c81cb43c1a3747958e9106624a127330",
+        "claim_ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7",
+          "C8"
+        ],
+        "evidence_ids": [
+          "E1",
+          "E2",
+          "E3"
+        ]
+      },
+      "interpretation_available": true,
+      "legacy_parent": false,
+      "pending_clarification": null,
+      "revision": "a13e0c79229ab4e274aa5da21b7e702b09cd618a507a1425b1f026e3dab4b46c"
+    },
+    "context_revision": "a13e0c79229ab4e274aa5da21b7e702b09cd618a507a1425b1f026e3dab4b46c",
+    "parent_answer_id": "86af850cb3584ec393339c4cee086171",
+    "conversation_id": "e930f80a584947b98a080c6b1f4e9adf",
+    "turn_index": 5,
+    "result": {
+      "claims": [
+        {
+          "id": "C1",
+          "text": "按口径说明V1统计，2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分）合计查询输出为10000分。",
+          "evidence_ids": [
+            "E3",
+            "E1"
+          ],
+          "query_bindings": [
+            {
+              "evidence_id": "E3",
+              "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+              "cell_id": "Qa0f9048d292d:R1C2",
+              "row_index": 0,
+              "column_index": 1,
+              "column_label": "sum_cents",
+              "value": 10000,
+              "entity_cells": [
+                "Qa0f9048d292d:R1C1"
+              ],
+              "statement": "按口径说明V1统计，2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分）合计查询输出为10000分。",
+              "entity_values": [
+                {
+                  "cell_id": "Qa0f9048d292d:R1C1",
+                  "column_index": 0,
+                  "column_label": "order_year",
+                  "value": "2024"
+                }
+              ],
+              "source": {
+                "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+                "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+                "parser_version": "zhiheng-multimodal-3.2",
+                "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+              },
+              "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af",
+              "localization_scope": "query_output_not_original_cell",
+              "query_result_truncated": false,
+              "semantic_review_required": true,
+              "context_annotations": [
+                {
+                  "kind": "executed_query_time_filter",
+                  "origin": "executed_sql_where",
+                  "evidence_id": "E3",
+                  "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+                  "column": "day",
+                  "year": 2024,
+                  "start_inclusive": "2024-01-01",
+                  "end_exclusive": "2025-01-01",
+                  "statement_start": 10,
+                  "statement_end": 15,
+                  "display_text": "2024年",
+                  "display_kind": "full_calendar_year",
+                  "scope": "query_filter_label_only_not_business_fact",
+                  "semantic_review_required": true,
+                  "claim_start": 10,
+                  "claim_end": 15,
+                  "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af"
+                }
+              ]
+            }
+          ],
+          "context_annotations": [
+            {
+              "kind": "executed_query_time_filter",
+              "origin": "executed_sql_where",
+              "evidence_id": "E3",
+              "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+              "column": "day",
+              "year": 2024,
+              "start_inclusive": "2024-01-01",
+              "end_exclusive": "2025-01-01",
+              "statement_start": 10,
+              "statement_end": 15,
+              "display_text": "2024年",
+              "display_kind": "full_calendar_year",
+              "scope": "query_filter_label_only_not_business_fact",
+              "semantic_review_required": true,
+              "claim_start": 10,
+              "claim_end": 15,
+              "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af"
+            },
+            {
+              "type": "query_output_binding",
+              "evidence_id": "E3",
+              "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+              "cell_id": "Qa0f9048d292d:R1C2",
+              "statement_start": 0,
+              "statement_end": 90,
+              "localization_scope": "query_output_not_original_cell"
+            }
+          ]
+        },
+        {
+          "id": "C2",
+          "text": "按口径说明V1，将2024年已完成订单登记金额（来源字段orders.total_cents）的原始单位（分）合计依文档“100分=1元”换算为元，换算结果为100.00元。",
+          "evidence_ids": [
+            "E1",
+            "E3",
+            "E2"
+          ],
+          "calculation_ids": [
+            "K1"
+          ]
+        },
+        {
+          "id": "C3",
+          "text": "同一查询中纳入统计的2024年已完成订单行数为1。",
+          "evidence_ids": [
+            "E3"
+          ],
+          "query_bindings": [
+            {
+              "evidence_id": "E3",
+              "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+              "cell_id": "Qa0f9048d292d:R1C3",
+              "row_index": 0,
+              "column_index": 2,
+              "column_label": "n_rows",
+              "value": 1,
+              "entity_cells": [
+                "Qa0f9048d292d:R1C1"
+              ],
+              "statement": "同一查询中纳入统计的2024年已完成订单行数为1。",
+              "entity_values": [
+                {
+                  "cell_id": "Qa0f9048d292d:R1C1",
+                  "column_index": 0,
+                  "column_label": "order_year",
+                  "value": "2024"
+                }
+              ],
+              "source": {
+                "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+                "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+                "parser_version": "zhiheng-multimodal-3.2",
+                "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+              },
+              "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af",
+              "localization_scope": "query_output_not_original_cell",
+              "query_result_truncated": false,
+              "semantic_review_required": true,
+              "context_annotations": [
+                {
+                  "kind": "executed_query_time_filter",
+                  "origin": "executed_sql_where",
+                  "evidence_id": "E3",
+                  "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+                  "column": "day",
+                  "year": 2024,
+                  "start_inclusive": "2024-01-01",
+                  "end_exclusive": "2025-01-01",
+                  "statement_start": 10,
+                  "statement_end": 15,
+                  "display_text": "2024年",
+                  "display_kind": "full_calendar_year",
+                  "scope": "query_filter_label_only_not_business_fact",
+                  "semantic_review_required": true,
+                  "claim_start": 10,
+                  "claim_end": 15,
+                  "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af"
+                }
+              ]
+            }
+          ],
+          "context_annotations": [
+            {
+              "kind": "executed_query_time_filter",
+              "origin": "executed_sql_where",
+              "evidence_id": "E3",
+              "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+              "column": "day",
+              "year": 2024,
+              "start_inclusive": "2024-01-01",
+              "end_exclusive": "2025-01-01",
+              "statement_start": 10,
+              "statement_end": 15,
+              "display_text": "2024年",
+              "display_kind": "full_calendar_year",
+              "scope": "query_filter_label_only_not_business_fact",
+              "semantic_review_required": true,
+              "claim_start": 10,
+              "claim_end": 15,
+              "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af"
+            },
+            {
+              "type": "query_output_binding",
+              "evidence_id": "E3",
+              "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+              "cell_id": "Qa0f9048d292d:R1C3",
+              "statement_start": 0,
+              "statement_end": 25,
+              "localization_scope": "query_output_not_original_cell"
+            }
+          ]
+        },
+        {
+          "id": "C4",
+          "text": "同一查询中2024年已完成订单里total_cents为NULL的行数为0。",
+          "evidence_ids": [
+            "E3"
+          ],
+          "query_bindings": [
+            {
+              "evidence_id": "E3",
+              "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+              "cell_id": "Qa0f9048d292d:R1C4",
+              "row_index": 0,
+              "column_index": 3,
+              "column_label": "n_null",
+              "value": 0,
+              "entity_cells": [
+                "Qa0f9048d292d:R1C1"
+              ],
+              "statement": "同一查询中2024年已完成订单里total_cents为NULL的行数为0。",
+              "entity_values": [
+                {
+                  "cell_id": "Qa0f9048d292d:R1C1",
+                  "column_index": 0,
+                  "column_label": "order_year",
+                  "value": "2024"
+                }
+              ],
+              "source": {
+                "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+                "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+                "parser_version": "zhiheng-multimodal-3.2",
+                "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+              },
+              "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af",
+              "localization_scope": "query_output_not_original_cell",
+              "query_result_truncated": false,
+              "semantic_review_required": true,
+              "context_annotations": [
+                {
+                  "kind": "executed_query_time_filter",
+                  "origin": "executed_sql_where",
+                  "evidence_id": "E3",
+                  "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+                  "column": "day",
+                  "year": 2024,
+                  "start_inclusive": "2024-01-01",
+                  "end_exclusive": "2025-01-01",
+                  "statement_start": 5,
+                  "statement_end": 10,
+                  "display_text": "2024年",
+                  "display_kind": "full_calendar_year",
+                  "scope": "query_filter_label_only_not_business_fact",
+                  "semantic_review_required": true,
+                  "claim_start": 5,
+                  "claim_end": 10,
+                  "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af"
+                }
+              ]
+            }
+          ],
+          "context_annotations": [
+            {
+              "kind": "executed_query_time_filter",
+              "origin": "executed_sql_where",
+              "evidence_id": "E3",
+              "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+              "column": "day",
+              "year": 2024,
+              "start_inclusive": "2024-01-01",
+              "end_exclusive": "2025-01-01",
+              "statement_start": 5,
+              "statement_end": 10,
+              "display_text": "2024年",
+              "display_kind": "full_calendar_year",
+              "scope": "query_filter_label_only_not_business_fact",
+              "semantic_review_required": true,
+              "claim_start": 5,
+              "claim_end": 10,
+              "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af"
+            },
+            {
+              "type": "query_output_binding",
+              "evidence_id": "E3",
+              "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+              "cell_id": "Qa0f9048d292d:R1C4",
+              "statement_start": 0,
+              "statement_end": 38,
+              "localization_scope": "query_output_not_original_cell"
+            }
+          ]
+        },
+        {
+          "id": "C5",
+          "text": "本轮已撤销此前对2024年已完成订单登记金额减少百分之十的假设；本轮不再计算该假设金额，也不修改原始数据。",
+          "evidence_ids": [
+            "E1",
+            "E3"
+          ]
+        },
+        {
+          "id": "C6",
+          "text": "已撤销的假设内容为：此前曾假设2024年已完成订单的登记金额减少百分之十，并按原金额乘以（一减百分之十）计算假设金额的情景；该假设不是实际登记结果，现已撤销，本轮不再采用。",
+          "evidence_ids": [
+            "E1",
+            "E3"
+          ]
+        },
+        {
+          "id": "C7",
+          "text": "本轮统计仍保留的口径：登记金额的来源字段为orders.total_cents；登记金额只计算orders.status为“已完成”的订单；日期范围按orders.day（ISO日期文本），年份包含1月1日至下一年1月1日之前；NULL代表未记录或未知，不能替换成零，显式零保留，负值表示该原始记录的负金额、不无据改符号；求和按已记录数值统计并报告缺失边界。",
+          "evidence_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "C8",
+          "text": "口径说明V1说明：该口径说明文件与boundary.sqlite为项目作者编写的受控评测资料，不是真实企业记录。",
+          "evidence_ids": [
+            "E1"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "id": "E1",
+          "label": "第 1 逻辑节",
+          "kind": "text",
+          "source_id": "376aaa9fa44c4a5fb82a327869783d59",
+          "source_name": "口径说明V1_合成.txt",
+          "sha256": "e959b0125b961e1371a1076fbb965e61ff77845d668103161ac4bc438ffffa18",
+          "parser_version": "zhiheng-multimodal-3.2",
+          "page": 1,
+          "page_label": "第 1 逻辑节",
+          "quote": "合成业务口径说明 V1\n本文件与boundary.sqlite是项目作者编写的受控评测资料，不是真实企业记录。本文规则是资料中的规则，不代表使用者在系统内确认过私人语义定义，也不是数据库DDL自动表达的含义。\n登记金额：orders.total_cents。到账金额：payments.paid_cents，通过payments.order_id关联orders.id；每笔支付只计一次，不与lines直接联表放大支付或订单头金额。\n上述两种指标均只计算orders.status为“已完成”的订单；日期范围按orders.day，ISO日期文本，年份包含1月1日至下一年1月1日之前。\n金额原始单位为分。100分=1元。NULL代表未记录或未知，不能替换成零；显式零保留，负值表示该原始记录的负金额，不无据改符号。求和按已记录数值统计，报告缺失边界。\n本文未定义利润、成本或收益，不得将登记金额、到账金额、员工工时互相替代。",
+          "start": 0,
+          "end": 413
+        },
+        {
+          "id": "E2",
+          "kind": "table",
+          "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+          "source_name": "boundary.sqlite",
+          "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+          "parser_version": "zhiheng-multimodal-3.2",
+          "table_name": "orders",
+          "label": "boundary.sqlite · orders",
+          "lineage": "table",
+          "row_numbers": [],
+          "columns": [],
+          "rows": [],
+          "total_rows": null,
+          "stale": false,
+          "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。",
+          "table_quality": [],
+          "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44",
+          "query_result": {
+            "columns": [
+              "sum_cents",
+              "n_rows",
+              "n_null"
+            ],
+            "rows": [
+              [
+                10000,
+                1,
+                0
+              ]
+            ],
+            "truncated": false
+          },
+          "query": {
+            "sql": "SELECT SUM(total_cents) AS sum_cents, COUNT(*) AS n_rows, SUM(CASE WHEN total_cents IS NULL THEN 1 ELSE 0 END) AS n_null FROM orders WHERE status = '已完成' AND day >= '2024-01-01' AND day < '2025-01-01'",
+            "parameters": []
+          },
+          "column_units": {},
+          "direct_columns": {},
+          "supporting_evidence_ids": [],
+          "original_columns": [
+            "day",
+            "status",
+            "total_cents"
+          ],
+          "query_result_context": {
+            "schema_version": "query-result-context-v1",
+            "kind": "query_result",
+            "usable": true,
+            "context_id": "92f87d28da620ba272346efbe8a39cc600850146018b59b13d1848e560880b3b",
+            "context_alias": "QC92f87d28da62",
+            "query_fingerprint": "19dd45636b8b40c30d5e8634040a39ab55d3175ae83e46b26a8ca47308f8a7c4",
+            "source": {
+              "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.2",
+              "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+            },
+            "localization_scope": "query_output_not_original_cell",
+            "columns": [
+              {
+                "column_index": 0,
+                "label": "sum_cents"
+              },
+              {
+                "column_index": 1,
+                "label": "n_rows"
+              },
+              {
+                "column_index": 2,
+                "label": "n_null"
+              }
+            ],
+            "rows": [
+              {
+                "row_index": 0,
+                "cells": [
+                  {
+                    "cell_id": "Q92f87d28da62:R1C1",
+                    "column_index": 0,
+                    "column_label": "sum_cents",
+                    "value": 10000
+                  },
+                  {
+                    "cell_id": "Q92f87d28da62:R1C2",
+                    "column_index": 1,
+                    "column_label": "n_rows",
+                    "value": 1
+                  },
+                  {
+                    "cell_id": "Q92f87d28da62:R1C3",
+                    "column_index": 2,
+                    "column_label": "n_null",
+                    "value": 0
+                  }
+                ]
+              }
+            ],
+            "row_count": 1,
+            "query_result_truncated": false,
+            "projection_truncated": false,
+            "omitted_rows": 0,
+            "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+          }
+        },
+        {
+          "id": "E3",
+          "kind": "table",
+          "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+          "source_name": "boundary.sqlite",
+          "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+          "parser_version": "zhiheng-multimodal-3.2",
+          "table_name": "orders",
+          "label": "boundary.sqlite · orders",
+          "lineage": "table",
+          "row_numbers": [],
+          "columns": [],
+          "rows": [],
+          "total_rows": null,
+          "stale": false,
+          "note": "此查询提供表级来源范围；聚合、连接、窗口或子查询的逐行贡献未展开，不将表中抽样行当作完整计算依据。",
+          "table_quality": [],
+          "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44",
+          "query_result": {
+            "columns": [
+              "order_year",
+              "sum_cents",
+              "n_rows",
+              "n_null"
+            ],
+            "rows": [
+              [
+                "2024",
+                10000,
+                1,
+                0
+              ]
+            ],
+            "truncated": false
+          },
+          "query": {
+            "sql": "SELECT strftime('%Y', day) AS order_year, SUM(total_cents) AS sum_cents, COUNT(*) AS n_rows, SUM(CASE WHEN total_cents IS NULL THEN 1 ELSE 0 END) AS n_null FROM orders WHERE status = '已完成' AND day >= '2024-01-01' AND day < '2025-01-01' GROUP BY order_year",
+            "parameters": []
+          },
+          "column_units": {},
+          "direct_columns": {},
+          "supporting_evidence_ids": [],
+          "original_columns": [
+            "day",
+            "status",
+            "total_cents"
+          ],
+          "query_result_context": {
+            "schema_version": "query-result-context-v1",
+            "kind": "query_result",
+            "usable": true,
+            "context_id": "a0f9048d292d1ec442dec44c79b2b2e503c2982914261e2a6aaec1f09fc7b1cf",
+            "context_alias": "QCa0f9048d292d",
+            "query_fingerprint": "03294ca2c369d9bc8006e95958f4839051702db70c0c6a89bdb104b307ab05af",
+            "source": {
+              "source_id": "693ef9bc604d4f36a10c507cc6c922a1",
+              "sha256": "48a23dfbf70131e0a0d2e1e39ee3da370a30cfe176640cc0b9e58c8b9e4d01ff",
+              "parser_version": "zhiheng-multimodal-3.2",
+              "semantic_revision": "dee4941a9094c0cdbe3c08d167daf49f39bab8962fd7a9c217dabb9e54735e44"
+            },
+            "localization_scope": "query_output_not_original_cell",
+            "columns": [
+              {
+                "column_index": 0,
+                "label": "order_year"
+              },
+              {
+                "column_index": 1,
+                "label": "sum_cents"
+              },
+              {
+                "column_index": 2,
+                "label": "n_rows"
+              },
+              {
+                "column_index": 3,
+                "label": "n_null"
+              }
+            ],
+            "rows": [
+              {
+                "row_index": 0,
+                "cells": [
+                  {
+                    "cell_id": "Qa0f9048d292d:R1C1",
+                    "column_index": 0,
+                    "column_label": "order_year",
+                    "value": "2024"
+                  },
+                  {
+                    "cell_id": "Qa0f9048d292d:R1C2",
+                    "column_index": 1,
+                    "column_label": "sum_cents",
+                    "value": 10000
+                  },
+                  {
+                    "cell_id": "Qa0f9048d292d:R1C3",
+                    "column_index": 2,
+                    "column_label": "n_rows",
+                    "value": 1
+                  },
+                  {
+                    "cell_id": "Qa0f9048d292d:R1C4",
+                    "column_index": 3,
+                    "column_label": "n_null",
+                    "value": 0
+                  }
+                ]
+              }
+            ],
+            "row_count": 1,
+            "query_result_truncated": false,
+            "projection_truncated": false,
+            "omitted_rows": 0,
+            "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+          }
+        }
+      ],
+      "verification": {
+        "status": "passed",
+        "checks": [
+          "引用来自所选资料的精确原文或实际只读查询",
+          "跨步骤依赖使用已执行结果",
+          "公式参数、量纲与Decimal计算通过检查",
+          "关联、口径与答案完整性经单独模型调用复核；不等同于人工业务核验"
+        ],
+        "semantic_review": true,
+        "visual_review": false,
+        "tool_actions": 5,
+        "chart_relations": [],
+        "operation_relations": [],
+        "scenario_relations": [],
+        "query_relations": [
+          {
+            "id": "C1",
+            "supported": true
+          },
+          {
+            "id": "C3",
+            "supported": true
+          },
+          {
+            "id": "C4",
+            "supported": true
+          }
+        ],
+        "planner_rounds": 8,
+        "planning_progress": {
+          "productive_rounds": 4,
+          "recovery_rounds": 4,
+          "consecutive_no_progress": 1,
+          "max_consecutive_no_progress": 3,
+          "requested_planner_reasoning_effort": "high",
+          "default_mechanical_repair_used": true,
+          "mechanical_repair_advances": 1,
+          "mechanical_repair_audit": [
+            {
+              "advance": false,
+              "ranks": [
+                0,
+                100,
+                100,
+                100,
+                0,
+                100,
+                100,
+                100,
+                100,
+                100
+              ],
+              "gains": [
+                {
+                  "claim_index": 2,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 3,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 4,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 6,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 7,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 8,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 9,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 10,
+                  "before": 0,
+                  "after": 100
+                }
+              ]
+            },
+            {
+              "advance": false,
+              "ranks": [
+                0,
+                100,
+                100,
+                100,
+                0,
+                100,
+                100,
+                100,
+                100,
+                100
+              ],
+              "gains": []
+            },
+            {
+              "advance": false,
+              "ranks": [
+                0,
+                100,
+                100,
+                100,
+                0,
+                100,
+                100,
+                100,
+                100,
+                100
+              ],
+              "gains": []
+            },
+            {
+              "advance": true,
+              "ranks": [
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100
+              ],
+              "gains": [
+                {
+                  "claim_index": 1,
+                  "before": 0,
+                  "after": 100
+                },
+                {
+                  "claim_index": 5,
+                  "before": 0,
+                  "after": 100
+                }
+              ]
+            }
+          ],
+          "mechanical_repair_audit_truncated": false,
+          "mechanical_rank_meaning": "有限协议检查高水位，不是事实正确率或置信度；不跳过独立核验"
+        },
+        "same_origin_is_independent": false
+      },
+      "context_interpretation": {
+        "version": "context-intent-adapter-5-schema-bound-slots",
+        "status": "passed",
+        "model_calls": 0,
+        "confirmed_by_user": false,
+        "origin": "model_interpretation",
+        "intent": {
+          "metric": "登记金额合计",
+          "dimensions": [],
+          "filters": [
+            "orders.status为“已完成”",
+            "日期范围按orders.day、ISO日期文本，年份包含1月1日至下一年1月1日之前"
+          ],
+          "time_range": "2024年",
+          "entities": [
+            "口径说明V1",
+            "orders"
+          ],
+          "unit": "分和元",
+          "topic": "按口径说明V1统计2024年实际登记金额并撤销减少10%的假设"
+        },
+        "normalized_question": "按口径说明V1统计2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分），先给出原始单位（分）下的合计，再依照文档“100分=1元”换算为元；撤销此前对2024年登记金额减少10%的假设，恢复2024年实际登记金额，不计算假设金额、不修改原始数据；说明已撤销的假设内容，并说明来源字段、订单状态、日期范围和NULL处理边界等其他口径仍然保留。",
+        "intent_review": {
+          "status": "passed",
+          "basis": "existing_engine_reviewed_interpretation",
+          "new_review": false,
+          "omitted_ungrounded_fields": [],
+          "slot_type_notes": []
+        },
+        "protocol_attempts": [],
+        "unknown_fields": []
+      },
+      "calculations": [
+        {
+          "expression": "a",
+          "parameters": [
+            {
+              "name": "a",
+              "value": "10000",
+              "unit": "分",
+              "evidence_ids": [
+                "E2",
+                "E1"
+              ],
+              "binding": {
+                "evidence_id": "E2",
+                "row": 0,
+                "column": "sum_cents",
+                "unit": "分",
+                "unit_evidence_id": "E1"
+              }
+            }
+          ],
+          "value": "100.00",
+          "unit": "元",
+          "cache": {
+            "status": "miss_stored",
+            "kind": "formula_arithmetic",
+            "policy": "mechanical-v1-original-and-database-byte-digest",
+            "source_checks": "current_scope_and_actual_bytes_before_and_after",
+            "elapsed_ms": 20.884,
+            "fact_verification_cached": false,
+            "scope": "pure_arithmetic_only; bindings_and_units_rechecked"
+          },
+          "visual_rule_structure_checked": false,
+          "visual_rule_constants": [],
+          "display_value": "100.00",
+          "precision": 2,
+          "evidence_ids": [
+            "E1",
+            "E2"
+          ],
+          "unit_handling": {
+            "evaluation_basis": "parameters_normalized_before_expression_then_converted_to_output",
+            "parameter_base_values": [
+              {
+                "parameter": "a",
+                "original_value": "10000",
+                "original_unit": "分",
+                "base_value": "100.00",
+                "unit_factor": "0.01",
+                "dimensions": [
+                  [
+                    "CNY",
+                    1
+                  ]
+                ]
+              }
+            ],
+            "output_unit": "元",
+            "output_unit_factor": "1",
+            "pure_unit_conversion": true,
+            "semantic_status": "not_established_by_arithmetic",
+            "notice": "参数先按单位归一化，表达式在基准单位上运算，再换算到output_unit；纯换算只写单个变量，不重复乘除换算系数。"
+          },
+          "rule_evidence_ids": [
+            "E1"
+          ],
+          "rule_origin": "source",
+          "is_hypothetical": false,
+          "checks": [
+            "参数从精确原文或真实查询结果读取",
+            "单位按有限白名单校验并换算",
+            "使用40位Decimal上下文计算，展示采用ROUND_HALF_UP",
+            "算术语法与资源上限检查通过"
+          ],
+          "numeric_policy": "40位有效数字；平方根和除法为有限精度计算；展示位数不代表来源精度。",
+          "id": "K1"
+        }
+      ],
+      "text": "按口径说明V1统计，2024年已完成订单（orders.status为“已完成”）的登记金额（来源字段orders.total_cents，原始单位分）合计查询输出为10000分。\n\n按口径说明V1，将2024年已完成订单登记金额（来源字段orders.total_cents）的原始单位（分）合计依文档“100分=1元”换算为元，换算结果为100.00元。\n\n同一查询中纳入统计的2024年已完成订单行数为1。\n\n同一查询中2024年已完成订单里total_cents为NULL的行数为0。\n\n本轮已撤销此前对2024年已完成订单登记金额减少百分之十的假设；本轮不再计算该假设金额，也不修改原始数据。\n\n已撤销的假设内容为：此前曾假设2024年已完成订单的登记金额减少百分之十，并按原金额乘以（一减百分之十）计算假设金额的情景；该假设不是实际登记结果，现已撤销，本轮不再采用。\n\n本轮统计仍保留的口径：登记金额的来源字段为orders.total_cents；登记金额只计算orders.status为“已完成”的订单；日期范围按orders.day（ISO日期文本），年份包含1月1日至下一年1月1日之前；NULL代表未记录或未知，不能替换成零，显式零保留，负值表示该原始记录的负金额、不无据改符号；求和按已记录数值统计并报告缺失边界。\n\n口径说明V1说明：该口径说明文件与boundary.sqlite为项目作者编写的受控评测资料，不是真实企业记录。"
+    }
+  }
+}

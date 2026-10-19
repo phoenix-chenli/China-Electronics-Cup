@@ -1,0 +1,2 @@
+# Windows-only transitive requirement for pytest/tqdm. Loaded only on Windows.
+colorama==0.4.6

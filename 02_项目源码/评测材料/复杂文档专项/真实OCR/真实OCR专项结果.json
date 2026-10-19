@@ -1,0 +1,744 @@
+{
+  "status": "completed",
+  "parser_version": "zhiheng-multimodal-3.2",
+  "frozen_protocol_sha256": "721cabff12b654fa6bf9ab150d7db5bd85d9c503b2b2c2adc00b659f3efcfbd7",
+  "independent_originals": 2,
+  "original_pages": 3,
+  "derived_images_counted_as_documents": false,
+  "workers": 1,
+  "results": [
+    {
+      "source_id": "B10",
+      "physical_page": 43,
+      "condition": "original",
+      "image_sha256": "3b099c4bd5c118223f8ec605cc842e17c3a5488a6491e9d62ddcdfe4a1ca7443",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "Equation 2.1",
+          "found": true
+        },
+        {
+          "anchor": "Equation 2.2",
+          "found": true
+        },
+        {
+          "anchor": "0.45",
+          "found": true
+        },
+        {
+          "anchor": "254 nm",
+          "found": true
+        },
+        {
+          "anchor": "UV Transmittance",
+          "found": true
+        }
+      ],
+      "text_characters": 1664,
+      "table_count": 0,
+      "rotation_correction": 0,
+      "quality": {
+        "contrast": 48.36,
+        "grayscale_range": 255,
+        "sharpness": 4537.17,
+        "dark_pixel_ratio": 0.0562,
+        "blank": false,
+        "warnings": [
+          "35 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.5848,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 35,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 3739
+      },
+      "result_file": "结果/B10_p043_original.json",
+      "elapsed_seconds": 3.904,
+      "width": 1546,
+      "height": 2000
+    },
+    {
+      "source_id": "B10",
+      "physical_page": 43,
+      "condition": "rotate90",
+      "image_sha256": "2c8dfa40042dc8c34593b738890a270cbaceb30277c4bbde58fe8cefac6c44d4",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "Equation 2.1",
+          "found": true
+        },
+        {
+          "anchor": "Equation 2.2",
+          "found": true
+        },
+        {
+          "anchor": "0.45",
+          "found": true
+        },
+        {
+          "anchor": "254 nm",
+          "found": true
+        },
+        {
+          "anchor": "UV Transmittance",
+          "found": true
+        }
+      ],
+      "text_characters": 1664,
+      "table_count": 0,
+      "rotation_correction": 270,
+      "quality": {
+        "contrast": 48.35,
+        "grayscale_range": 255,
+        "sharpness": 4540.26,
+        "dark_pixel_ratio": 0.0562,
+        "blank": false,
+        "warnings": [
+          "识别时旋转 270°；原件和定位坐标保持原有方向",
+          "35 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 270,
+        "ocr_mean_confidence": 0.5848,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 35,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 3417
+      },
+      "result_file": "结果/B10_p043_rotate90.json",
+      "elapsed_seconds": 3.573,
+      "width": 2000,
+      "height": 1546
+    },
+    {
+      "source_id": "B10",
+      "physical_page": 43,
+      "condition": "downsample50",
+      "image_sha256": "2f2bc1627a3bc1c6659826f868d6b772760e37b579b87ae0dd3051396c7bfed8",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 4,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "Equation 2.1",
+          "found": true
+        },
+        {
+          "anchor": "Equation 2.2",
+          "found": true
+        },
+        {
+          "anchor": "0.45",
+          "found": false
+        },
+        {
+          "anchor": "254 nm",
+          "found": true
+        },
+        {
+          "anchor": "UV Transmittance",
+          "found": true
+        }
+      ],
+      "text_characters": 1339,
+      "table_count": 0,
+      "rotation_correction": 0,
+      "quality": {
+        "contrast": 47.31,
+        "grayscale_range": 255,
+        "sharpness": 5481.77,
+        "dark_pixel_ratio": 0.0627,
+        "blank": false,
+        "warnings": [
+          "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.5436,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 32,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 3111
+      },
+      "result_file": "结果/B10_p043_downsample50.json",
+      "elapsed_seconds": 3.207,
+      "width": 773,
+      "height": 1000
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 84,
+      "condition": "original",
+      "image_sha256": "80d0b7578aa8426d5faa4f39ee39e0b1b009e4fdabaae4f080392f63266a965c",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "1.73",
+          "found": true
+        },
+        {
+          "anchor": "2.56",
+          "found": true
+        },
+        {
+          "anchor": "4.68",
+          "found": true
+        },
+        {
+          "anchor": "Recovery",
+          "found": true
+        },
+        {
+          "anchor": "Crossflow Model",
+          "found": true
+        }
+      ],
+      "text_characters": 2248,
+      "table_count": 0,
+      "rotation_correction": 0,
+      "quality": {
+        "contrast": 56.16,
+        "grayscale_range": 255,
+        "sharpness": 6598.73,
+        "dark_pixel_ratio": 0.0817,
+        "blank": false,
+        "warnings": [
+          "41 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.8331,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 41,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 5249
+      },
+      "result_file": "结果/B11_p084_original.json",
+      "elapsed_seconds": 5.399,
+      "width": 1546,
+      "height": 2000
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 84,
+      "condition": "rotate90",
+      "image_sha256": "45c4440ca2878847777cd4eaf0a97b4d2d1ad714d138132c2676dbb05eae74d3",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "1.73",
+          "found": true
+        },
+        {
+          "anchor": "2.56",
+          "found": true
+        },
+        {
+          "anchor": "4.68",
+          "found": true
+        },
+        {
+          "anchor": "Recovery",
+          "found": true
+        },
+        {
+          "anchor": "Crossflow Model",
+          "found": true
+        }
+      ],
+      "text_characters": 2248,
+      "table_count": 0,
+      "rotation_correction": 270,
+      "quality": {
+        "contrast": 56.14,
+        "grayscale_range": 255,
+        "sharpness": 6599.19,
+        "dark_pixel_ratio": 0.0817,
+        "blank": false,
+        "warnings": [
+          "识别时旋转 270°；原件和定位坐标保持原有方向",
+          "41 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 270,
+        "ocr_mean_confidence": 0.8331,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 41,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 5261
+      },
+      "result_file": "结果/B11_p084_rotate90.json",
+      "elapsed_seconds": 5.503,
+      "width": 2000,
+      "height": 1546
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 84,
+      "condition": "downsample50",
+      "image_sha256": "0dbbd8d6f239e27160dae81213da5c13f32fd6d4563212b4c1a00e7b233e2b3e",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "1.73",
+          "found": true
+        },
+        {
+          "anchor": "2.56",
+          "found": true
+        },
+        {
+          "anchor": "4.68",
+          "found": true
+        },
+        {
+          "anchor": "Recovery",
+          "found": true
+        },
+        {
+          "anchor": "Crossflow Model",
+          "found": true
+        }
+      ],
+      "text_characters": 2060,
+      "table_count": 0,
+      "rotation_correction": 0,
+      "quality": {
+        "contrast": 54.4,
+        "grayscale_range": 255,
+        "sharpness": 7899.64,
+        "dark_pixel_ratio": 0.0927,
+        "blank": false,
+        "warnings": [
+          "59 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.7461,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 59,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 4165
+      },
+      "result_file": "结果/B11_p084_downsample50.json",
+      "elapsed_seconds": 4.277,
+      "width": 773,
+      "height": 1000
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 268,
+      "condition": "original",
+      "image_sha256": "ef744b4e9a7509b85a8842d91cf0e61d570b9537cfd3fbf6280feb66a69ff542",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "Control System",
+          "found": true
+        },
+        {
+          "anchor": "24 - 86",
+          "found": true
+        },
+        {
+          "anchor": "1 - 3 days",
+          "found": true
+        },
+        {
+          "anchor": "Chemical Cleaning",
+          "found": true
+        },
+        {
+          "anchor": "After Three Months",
+          "found": true
+        }
+      ],
+      "text_characters": 879,
+      "table_count": 2,
+      "rotation_correction": 0,
+      "quality": {
+        "contrast": 39.94,
+        "grayscale_range": 255,
+        "sharpness": 3653.75,
+        "dark_pixel_ratio": 0.04,
+        "blank": false,
+        "warnings": [
+          "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.5905,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 32,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 5006
+      },
+      "result_file": "结果/B11_p268_original.json",
+      "elapsed_seconds": 5.14,
+      "width": 1546,
+      "height": 2000
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 268,
+      "condition": "rotate90",
+      "image_sha256": "ddc998bc54447400274e7256abf165f7717c7b47ed8545e203227aceaa2328e9",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "Control System",
+          "found": true
+        },
+        {
+          "anchor": "24 - 86",
+          "found": true
+        },
+        {
+          "anchor": "1 - 3 days",
+          "found": true
+        },
+        {
+          "anchor": "Chemical Cleaning",
+          "found": true
+        },
+        {
+          "anchor": "After Three Months",
+          "found": true
+        }
+      ],
+      "text_characters": 879,
+      "table_count": 2,
+      "rotation_correction": 270,
+      "quality": {
+        "contrast": 39.93,
+        "grayscale_range": 255,
+        "sharpness": 3653.08,
+        "dark_pixel_ratio": 0.04,
+        "blank": false,
+        "warnings": [
+          "识别时旋转 270°；原件和定位坐标保持原有方向",
+          "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 270,
+        "ocr_mean_confidence": 0.5905,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 32,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 4662
+      },
+      "result_file": "结果/B11_p268_rotate90.json",
+      "elapsed_seconds": 4.812,
+      "width": 2000,
+      "height": 1546
+    },
+    {
+      "source_id": "B11",
+      "physical_page": 268,
+      "condition": "downsample50",
+      "image_sha256": "e4b8056f762647dcdfa7a8a8975ee4b42191e3e89de4148f850dc83f0088b1c5",
+      "status": "parsed",
+      "denominator": 5,
+      "hits": 5,
+      "model_chat_api_calls": 0,
+      "anchors": [
+        {
+          "anchor": "Control System",
+          "found": true
+        },
+        {
+          "anchor": "24 - 86",
+          "found": true
+        },
+        {
+          "anchor": "1 - 3 days",
+          "found": true
+        },
+        {
+          "anchor": "Chemical Cleaning",
+          "found": true
+        },
+        {
+          "anchor": "After Three Months",
+          "found": true
+        }
+      ],
+      "text_characters": 842,
+      "table_count": 1,
+      "rotation_correction": 0,
+      "quality": {
+        "contrast": 38.45,
+        "grayscale_range": 255,
+        "sharpness": 4346.24,
+        "dark_pixel_ratio": 0.0462,
+        "blank": false,
+        "warnings": [
+          "32 处文字的 OCR 置信度偏低，请对照原件核对数字、符号和名称",
+          "1 个单元格的全页与逐格 OCR 结果不一致，已保留两种识别值；计算前需对照原件确认"
+        ],
+        "diagnostic_note": "对比度、边缘清晰度和空白检测为图像诊断，不代表文字正确率。",
+        "rotation_correction": 0,
+        "ocr_mean_confidence": 0.5684,
+        "confidence_note": "OCR 置信度为识别引擎的内部评分，不是识别准确率；数字、符号和低质区域需对照原件。",
+        "preprocessing": {
+          "triggers": [],
+          "operations": [],
+          "candidate_count": 0,
+          "extra_ocr_calls": 0,
+          "selected": "original",
+          "status": "not_triggered",
+          "elapsed_ms": 0,
+          "text_disagreement": false,
+          "numeric_symbol_disagreement": false,
+          "visual_review_required": false,
+          "truncated": false,
+          "trigger_thresholds": {
+            "contrast_below": 15,
+            "grayscale_range_below": 80,
+            "short_side_below": 350
+          },
+          "geometry": "same_size_no_crop_or_warp",
+          "note": "候选只用于有界对照；图像诊断和引擎评分均不代表文字正确率。"
+        },
+        "visual_review_required": false,
+        "low_confidence_blocks": 32,
+        "skew_degrees": 0.0,
+        "elapsed_ms": 3021
+      },
+      "result_file": "结果/B11_p268_downsample50.json",
+      "elapsed_seconds": 3.101,
+      "width": 773,
+      "height": 1000
+    }
+  ],
+  "conditions": {
+    "original": {
+      "pages": 3,
+      "hits": 15,
+      "denominator": 15,
+      "failed_pages": 0,
+      "elapsed_seconds": 14.443
+    },
+    "rotate90": {
+      "pages": 3,
+      "hits": 15,
+      "denominator": 15,
+      "failed_pages": 0,
+      "elapsed_seconds": 13.888
+    },
+    "downsample50": {
+      "pages": 3,
+      "hits": 14,
+      "denominator": 15,
+      "failed_pages": 0,
+      "elapsed_seconds": 10.585
+    }
+  },
+  "model_chat_api_calls": 0,
+  "elapsed_seconds": 38.916,
+  "boundary": "当前保留3页15个预选锚点；取自原4页实验的已运行记录，因用户收缩资料范围移除B17，不是重新运行或按得分选题。不是全文OCR准确率，不评价公式结构、表关系或阅读顺序；图片不计新增文档。",
+  "normalization": "纯数字锚点必须是完整数值token；短语采用NFKC+casefold+去空白+横线字符归一；不修复数字或词汇。",
+  "portable_protocol_sha256": "4dea09e946736f0e1e352317e80cfdaf255de1d295b7138ef9e3b2972e77cfb9",
+  "portability_note": "frozen_protocol_sha256保留初始4页原冻结SHA；portable_protocol_sha256为当前3页协议SHA。初始完整记录暂存在制作工作区；本目录仅保留最终资料范围内9次既有结果，不重跑、不改识别值。",
+  "subset_reason": "user_requested_completed_sources_only",
+  "initial_result_sha256": "ee30412fe18b4e46fa1dec3290f6998658592a1478e25512413bb8327facf991",
+  "initial_page_count": 4,
+  "initial_trial_count": 12,
+  "initial_run_elapsed_seconds": 48.31,
+  "subset_selected_after_ocr": true,
+  "elapsed_scope": "仅把保留9次原运行记录耗时相加，不是3页独立重跑的墙钟耗时"
+}

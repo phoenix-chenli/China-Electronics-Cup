@@ -1,0 +1,134 @@
+{
+  "subset_reason": "user_requested_completed_sources_only",
+  "subset_selected_after_ocr": true,
+  "initial_original_protocol_sha256": "721cabff12b654fa6bf9ab150d7db5bd85d9c503b2b2c2adc00b659f3efcfbd7",
+  "initial_portable_protocol_sha256": "9d2477e657b7cb408f09a43b7ff4f23b2a0e2ee47e60384f2219521accf82fe8",
+  "initial_portable_result_sha256": "ee30412fe18b4e46fa1dec3290f6998658592a1478e25512413bb8327facf991",
+  "initial_path_mapping_sha256": "7dfc21dbf1d539b4147ee83bc5b127c22e614cc6162b34ff6b54699b3f81d79c",
+  "current_protocol_sha256": "4dea09e946736f0e1e352317e80cfdaf255de1d295b7138ef9e3b2972e77cfb9",
+  "current_result_sha256": "0f95def999c7d267f76d9cda31280615cc2554c54fb254c06bff2b2ef6c0c57b",
+  "retained_page_keys": [
+    [
+      "B10",
+      43
+    ],
+    [
+      "B11",
+      84
+    ],
+    [
+      "B11",
+      268
+    ]
+  ],
+  "removed_outputs": [
+    {
+      "file": "结果/B17_p107_downsample50.json",
+      "sha256": "2aaaf85651ee04f6215c35cff1f55ebb8676b91120d33cd29103d7d812faa2a3"
+    },
+    {
+      "file": "结果/B17_p107_rotate90.json",
+      "sha256": "04d3a575790686c76ac86457b0343041f1fdacd3d47317acbfc44b1e0d88934b"
+    },
+    {
+      "file": "结果/B17_p107_original.json",
+      "sha256": "5211fdbdb45b427b9096dfa0e30cf586eeb5ceb256418abae5734dafd6ab80ae"
+    }
+  ],
+  "full_original_audit_retention": "制作工作区/work/复杂文档完善/真实OCR专项/范围变更前_4页20锚点，完整原文件暂存；最终清理由主任务执行。",
+  "note": "未改变保留的原识别输出、锚点、逐次判定及耗时。原实验包含4页20锚点；范围缩减不是重新实验。仅适配路径的历史原始SHA和便携SHA在files中分列。",
+  "files": [
+    {
+      "file": "结果/B10_p043_rotate90.json",
+      "original_sha256": "6a92048162e933b884f4ceb3103fb9d9e5ea0ac6b8c57e88e44d20e7b6dc66f4",
+      "portable_sha256": "6a92048162e933b884f4ceb3103fb9d9e5ea0ac6b8c57e88e44d20e7b6dc66f4",
+      "changes": []
+    },
+    {
+      "file": "结果/B10_p043_downsample50.json",
+      "original_sha256": "d3db418af7a7914040a9b5e15d928329f9d6aca379508d19e3c5fbd0fa5d59df",
+      "portable_sha256": "d3db418af7a7914040a9b5e15d928329f9d6aca379508d19e3c5fbd0fa5d59df",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p268_downsample50.json",
+      "original_sha256": "8240749f57b7a8f2307c3551c549b03782a1792701f4d47be1f12b2cf3593f66",
+      "portable_sha256": "acaef5e5b319fa171657e29f0587df5bcad940363577b550aec30f22d9301e5e",
+      "changes": [
+        {
+          "json_pointer": "/data_path",
+          "original_value_sha256": "e7e331879641582d9f0db0d5dccabf7716663275b0e0629492c4478fb5f43f5d",
+          "portable_value": "结果/B11_p268_downsample50.sqlite"
+        }
+      ]
+    },
+    {
+      "file": "结果/B10_p043_original.json",
+      "original_sha256": "21fe78b18f1e90c04a24f2f412061a15a6fc0c97acc3dd206876eeed608cdc25",
+      "portable_sha256": "21fe78b18f1e90c04a24f2f412061a15a6fc0c97acc3dd206876eeed608cdc25",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p268_original.json",
+      "original_sha256": "37d00c2800f3a807955c6b35867cb0697fa5f00fcffba4fa32da54b912273568",
+      "portable_sha256": "12d30edd9f003439d829a8e53760bb2cecb69d0898caca1be1fa73518e86ab36",
+      "changes": [
+        {
+          "json_pointer": "/data_path",
+          "original_value_sha256": "05eb5ab0c3ffa520102d2f57229aedc78fbd73e3b60404afdb7a5b9836812210",
+          "portable_value": "结果/B11_p268_original.sqlite"
+        }
+      ]
+    },
+    {
+      "file": "结果/B11_p084_rotate90.json",
+      "original_sha256": "7980ba881c16da9768bb3bbb2ce5e68b71ff8ed731c81eaa777b73e6ed8cf32d",
+      "portable_sha256": "7980ba881c16da9768bb3bbb2ce5e68b71ff8ed731c81eaa777b73e6ed8cf32d",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p084_original.json",
+      "original_sha256": "6214fc1dfa0eb99a1ca33cf61e15c59bd46eaaa3727d3596eb0d866c1f7c1b54",
+      "portable_sha256": "6214fc1dfa0eb99a1ca33cf61e15c59bd46eaaa3727d3596eb0d866c1f7c1b54",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p268_rotate90.json",
+      "original_sha256": "d4ad33a30caa505c969c152639fd9be774b16632e000b5ab64cc167edac7f9a9",
+      "portable_sha256": "d0128199bf04eaa65ebf161975aae7f620afc7b045a171576c3105232b53201a",
+      "changes": [
+        {
+          "json_pointer": "/data_path",
+          "original_value_sha256": "a0b2f643575bb97958121de173b8a2e111ccfb2cdcf5f138fe0229ee73e9ccd1",
+          "portable_value": "结果/B11_p268_rotate90.sqlite"
+        }
+      ]
+    },
+    {
+      "file": "结果/B11_p084_downsample50.json",
+      "original_sha256": "ef8939c896fa3de96711e241f3bca5cc5b95f0858701d98c8d9ec29b682390c7",
+      "portable_sha256": "ef8939c896fa3de96711e241f3bca5cc5b95f0858701d98c8d9ec29b682390c7",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p268_downsample50.sqlite",
+      "original_sha256": "c34cf3f57317b3b9747028e7b1575c0c30d55b247bdb713643acbb555fd8450e",
+      "portable_sha256": "c34cf3f57317b3b9747028e7b1575c0c30d55b247bdb713643acbb555fd8450e",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p268_original.sqlite",
+      "original_sha256": "ea8a9ca90d3eaf3eef2287c8c5d2148afc3eb03d5fa2234e028cdd0eb38a8341",
+      "portable_sha256": "ea8a9ca90d3eaf3eef2287c8c5d2148afc3eb03d5fa2234e028cdd0eb38a8341",
+      "changes": []
+    },
+    {
+      "file": "结果/B11_p268_rotate90.sqlite",
+      "original_sha256": "ea8a9ca90d3eaf3eef2287c8c5d2148afc3eb03d5fa2234e028cdd0eb38a8341",
+      "portable_sha256": "ea8a9ca90d3eaf3eef2287c8c5d2148afc3eb03d5fa2234e028cdd0eb38a8341",
+      "changes": []
+    }
+  ],
+  "previous_subset_protocol_sha256": "105c405c35c028a8e846820943eca11b9664abd19d6e21f2aec7e80528066737",
+  "final_manifest_sha256": "4db282dd7e8356895e58d95b81cbb0386516d84cedf2a6743c438d93b040c49f"
+}

@@ -1,0 +1,90 @@
+{
+  "用途": "历史证据摘要，非最终版重新实测，非比赛官方评分",
+  "原记录相对路径": "independent-review/context64-final-r9/independent-summary.json",
+  "原记录SHA256": "aea3322195d4d2a764726c8f12d96261d265341c154b09aa99f61857ce7fb49f",
+  "本次整理新增模型调用": 0,
+  "原始统计": {
+    "run_sha256": "d96fd1f7781e2a5dbcb8255674e845d86fe0d7e402df6438312dc94e4489d91c",
+    "status": "finished_independent_review",
+    "code_sha256": "0278d7632fe4adee578e2be133fc238e973483dbc8c4e130d7e0b81fa96f4f63",
+    "final_code_sha256": "0278d7632fe4adee578e2be133fc238e973483dbc8c4e130d7e0b81fa96f4f63",
+    "code_changed_during_run": false,
+    "fixed_denominator": 64,
+    "strict_passed": 39,
+    "strict_failed": 25,
+    "semantic_value_content_correct": 47,
+    "semantic_business_usable": 40,
+    "counts_by_status": {
+      "completed": 44,
+      "needs_clarification": 1,
+      "insufficient_evidence": 5,
+      "failed": 3,
+      "not_run": 11
+    },
+    "whole_chains_passed": 3,
+    "chains": {
+      "ctx01": {
+        "turns": 8,
+        "strict_passed": 8,
+        "all_passed": true
+      },
+      "ctx02": {
+        "turns": 8,
+        "strict_passed": 4,
+        "all_passed": false
+      },
+      "ctx03": {
+        "turns": 8,
+        "strict_passed": 8,
+        "all_passed": true
+      },
+      "ctx04": {
+        "turns": 8,
+        "strict_passed": 3,
+        "all_passed": false
+      },
+      "ctx05": {
+        "turns": 8,
+        "strict_passed": 2,
+        "all_passed": false
+      },
+      "ctx06": {
+        "turns": 8,
+        "strict_passed": 6,
+        "all_passed": false
+      },
+      "ctx07": {
+        "turns": 8,
+        "strict_passed": 0,
+        "all_passed": false
+      },
+      "ctx08": {
+        "turns": 8,
+        "strict_passed": 8,
+        "all_passed": true
+      }
+    },
+    "attempts": {
+      "total": 297,
+      "statuses": {
+        "completed": 292,
+        "output_truncated": 5
+      },
+      "http_statuses": {
+        "200": 297
+      },
+      "unknown_transport": 0
+    },
+    "source_and_key_unchanged": true,
+    "new_model_calls": 0,
+    "limitations": [
+      "内部固定development题集独立代码代理审阅，不是比赛官方评分/真人试用。",
+      "strict为原key+实际发布完整性；ctx06-t3多总计行是原题及合计的合理理解但不改冻结key。",
+      "语义数值/内容正确与显示/限定/完整性分别计算；47条值内容正确不等于47条完整成功。",
+      "11条依赖未运行保留在64分母；正确未发布SQL/候选不记为答对。",
+      "全部HTTP200但5条output_truncated不算模型成功；没有观察到unknown transport。",
+      "长行恢复正确，不从现有字段推断未记录的history_loader调用。",
+      "结构槽正确率缺完整独立槽位分母，不能用3条全对业务链替代槽位精度。"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "source_erratum_note_not_a_frozen_answer_change",
+  "question_id": "RD-B01-01",
+  "source_id": "B01",
+  "physical_page": 92,
+  "printed_page": "HT-01 Page 66",
+  "discovered_after_freeze": true,
+  "product_retrieval_consulted": false,
+  "real_model_result": null,
+  "observation": "原件 Example 5 的热量差为 1.0×10^7 Btu/hr，随后写 4007 hp；若 hp 指通常的 550 ft·lbf/s，标准换算约为 3930 hp，原页内部存在换算不一致。",
+  "original_answer_preserved": "专项问题B.json 与 专项答案B.json 均保持冻结字节不变。原参考键按手册记载 4007 hp，不能将其误解释为经标准换算核实后的数值。",
+  "conversion": {
+    "Btu_IT_to_J": 1055.056,
+    "mechanical_hp_to_W": 745.6999,
+    "calculation": "10^7 × 1055.056 / 3600 / 745.6999",
+    "result_hp": 3930.1481884483437
+  },
+  "authority": {
+    "publisher": "NIST",
+    "title": "NIST Guide to the SI Appendix B.9",
+    "url": "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9",
+    "accessed": "2026-10-18"
+  },
+  "recommended_grading_addendum": "保留热量差及稳态能量守恒为必答点。若回答忠实标明“手册给出 4007 hp”，可计来源内容复述正确；若回答给出约 3930 hp 并说明采用机械马力换算及与原件 4007 hp 不一致，应计专业核验正确，不应因不复述错误换算而判错。不得不加说明地将 4007 hp 称为标准换算正确值。由总负责人以独立勘误附录记录评分规则，不能静默修改冻结答案。"
+}

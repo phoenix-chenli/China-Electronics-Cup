@@ -1,0 +1,15 @@
+**/.runtime*/
+**/.venv/
+**/venv/
+**/node_modules/
+**/__pycache__/
+**/.pytest_cache/
+**/.cache/
+**/*.pyc
+**/*.pyo
+**/*.tsbuildinfo
+**/.DS_Store
+**/.env
+**/.env.*
+**/model.json
+**/本机配置_不提交/

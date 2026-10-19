@@ -1,0 +1,111 @@
+{
+  "suite_id": "real_engineering_A24_v1",
+  "created_at": "2026-10-18T08:58:34.568368+00:00",
+  "source_manifest_sha256": "6642347d78580283137f276f85e65a87a0b1fd481071cce79f13891edcc63d83",
+  "purpose": "自建真实工程复杂文档专项验证，不是官方测试软件得分，不并入固定20题客观分",
+  "language": "zh-CN",
+  "questions": [
+    {
+      "id": "工程A01-Q1",
+      "question": "依据 FHWA NHI-06-088《Soils and Foundations》卷一的 point load test 说明，若岩石的尺寸修正点荷载强度指数 Is(50)=2 MPa，按手册常用换算式估计的单轴抗压强度是多少？为什么不能把该换算系数视为所有岩石都适用的常数？",
+      "source_ids": [
+        "工程A01"
+      ],
+      "category": "公式与适用边界",
+      "capabilities": [
+        "formula",
+        "conditional",
+        "cross_language",
+        "long_document"
+      ]
+    },
+    {
+      "id": "工程A01-Q2",
+      "question": "按《Soils and Foundations》卷一第6.9节，路堤自身材料可靠但地基过弱时，ground improvement 与 RSS 加筋分别针对什么问题？手册给出的 RSS 坡角上限相对水平面是多少？",
+      "source_ids": [
+        "工程A01"
+      ],
+      "category": "条件区分与深页定位",
+      "capabilities": [
+        "formula",
+        "conditional",
+        "cross_language",
+        "long_document"
+      ]
+    },
+    {
+      "id": "工程A02-Q1",
+      "question": "按 GEC 4《Ground Anchors and Anchored Systems》第7.4.5.2节，某生产锚杆 performance/proof test 的1至10分钟位移为1.2 mm，随后按要求延长持荷，6至60分钟位移为1.8 mm。就 creep 指标而言如何判断？请说明两段时间窗口和限值。",
+      "source_ids": [
+        "工程A02"
+      ],
+      "category": "深层章节与条件判定",
+      "capabilities": [
+        "deep_hierarchy",
+        "formula",
+        "conditional",
+        "cross_language",
+        "long_document"
+      ]
+    },
+    {
+      "id": "工程A02-Q2",
+      "question": "在 GEC 4 附录B的 Wang–Reese 无黏性土公式中，β与排水摩擦角φ′是什么关系？密砂与松砂对应的α分别如何取值？",
+      "source_ids": [
+        "工程A02"
+      ],
+      "category": "公式符号与土类条件",
+      "capabilities": [
+        "deep_hierarchy",
+        "formula",
+        "conditional",
+        "cross_language",
+        "long_document"
+      ]
+    },
+    {
+      "id": "工程A03-Q1",
+      "question": "根据 GEC 6《Shallow Foundations》附录B示例B3的 sliding 检查，沿每米桥台墙计算的滑动作用力、可用抗滑力和安全系数各是多少？该示例的最小安全系数要求是多少，结论如何？",
+      "source_ids": [
+        "工程A03"
+      ],
+      "category": "示例计算与单位核验",
+      "capabilities": [
+        "numerical_check",
+        "diagram",
+        "role_mapping",
+        "cross_language",
+        "long_document"
+      ]
+    },
+    {
+      "id": "工程A03-Q2",
+      "question": "读取 GEC 6 附录C的 Figure C-1 桥梁浅基础 LRFD 流程图：整体稳定检查由GT还是ST负责、采用何种荷载？最后完成基础结构设计由谁负责、采用何种荷载？",
+      "source_ids": [
+        "工程A03"
+      ],
+      "category": "流程图与角色对应",
+      "capabilities": [
+        "numerical_check",
+        "diagram",
+        "role_mapping",
+        "cross_language",
+        "long_document"
+      ]
+    }
+  ],
+  "scope_adjustment": {
+    "reason": "user_requested_completed_sources_only",
+    "parent_file_sha256": "ae60b8480edb8f1a5232d156e921a377b6557b367d17ab7a9299084c2a3385de",
+    "selected_case_ids": [
+      "工程A01-Q1",
+      "工程A01-Q2",
+      "工程A02-Q1",
+      "工程A02-Q2",
+      "工程A03-Q1",
+      "工程A03-Q2"
+    ],
+    "case_contents_changed": false,
+    "not_selected_by_retrieval_results": true
+  }
+}

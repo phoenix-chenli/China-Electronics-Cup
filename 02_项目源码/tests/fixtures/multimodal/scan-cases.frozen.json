@@ -1,0 +1,20 @@
+{
+  "schema": "zhiheng-stage4-frozen-v1",
+  "synthetic": false,
+  "cases": [
+    {
+      "id": "real_scan_two_sections",
+      "files": [
+        "2024生态环境公报_原页7_47_101_137_扫描摘录.pdf"
+      ],
+      "question": "请分别查找并报告2024年全国生态环境质量指数EQI和全国一次能源生产总量（含单位），核对扫描原页后回答，说明对应的原公报页码。扫描摘录页1、2、3、4分别对应原页7、47、101、137；不要根据OCR置信度声称结果准确率。",
+      "expected_status": "completed",
+      "required_text": [
+        "59.95",
+        "49.8"
+      ],
+      "min_evidence_pages": 2,
+      "requires_visual_review": true
+    }
+  ]
+}

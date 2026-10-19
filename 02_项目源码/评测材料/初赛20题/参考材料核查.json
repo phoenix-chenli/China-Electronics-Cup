@@ -1,0 +1,3058 @@
+{
+  "title": "固定20题离线核查与评委说明数据",
+  "verified_date": "2026-10-18",
+  "model_calls": 0,
+  "suite_name": "paired20-common-capability-v1",
+  "suite_sha256": "389eb82dd8ae93168d2e153b040455faca5767de23c5306cffc6c75659a58a07",
+  "answer_key_sha256": "09abbf0ea546549dea47c3f95ec8c369278357910324aae1a6072c6527f3bf26",
+  "selection_sha256": "8a68de808e25af9e069f92abe81b413d13c3658cea693550179a76c1c188057c",
+  "split": "development",
+  "selection_basis": "固定覆盖：计数/聚合/NULL/单位/粒度/连接；精确原文/尾部/限定/版本/身份不可推断。未读取模型结果。",
+  "selection_before_model_results": true,
+  "sources": [
+    {
+      "id": "chinook",
+      "file": "chinook.sqlite",
+      "sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "origin": "https://raw.githubusercontent.com/lerocha/chinook-database/7f67772503d71ba90f19283c38e93923addb43fa/ChinookDatabase/DataSources/Chinook_Sqlite.sqlite",
+      "license": "MIT-style permission notice (upstream LICENSE.md; GitHub SPDX NOASSERTION)",
+      "cluster": "chinook",
+      "kind": "public_teaching",
+      "actual_name": "Chinook_公开测试数据库.sqlite",
+      "project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "bytes": 1007616,
+      "sha256_verified": true,
+      "type": "SQLite",
+      "measurements": {
+        "tables": [
+          {
+            "name": "Album",
+            "rows": 347,
+            "columns_count": 3,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "AlbumId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "Title",
+                "declared_type": "NVARCHAR(160)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 2,
+                "name": "ArtistId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "Artist",
+                "source_column": "ArtistId",
+                "target_column": "ArtistId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          },
+          {
+            "name": "Artist",
+            "rows": 275,
+            "columns_count": 2,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "ArtistId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "Name",
+                "declared_type": "NVARCHAR(120)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": []
+          },
+          {
+            "name": "Customer",
+            "rows": 59,
+            "columns_count": 13,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "CustomerId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "FirstName",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 2,
+                "name": "LastName",
+                "declared_type": "NVARCHAR(20)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 3,
+                "name": "Company",
+                "declared_type": "NVARCHAR(80)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 4,
+                "name": "Address",
+                "declared_type": "NVARCHAR(70)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 5,
+                "name": "City",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 6,
+                "name": "State",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 7,
+                "name": "Country",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 8,
+                "name": "PostalCode",
+                "declared_type": "NVARCHAR(10)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 9,
+                "name": "Phone",
+                "declared_type": "NVARCHAR(24)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 10,
+                "name": "Fax",
+                "declared_type": "NVARCHAR(24)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 11,
+                "name": "Email",
+                "declared_type": "NVARCHAR(60)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 12,
+                "name": "SupportRepId",
+                "declared_type": "INTEGER",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "Employee",
+                "source_column": "SupportRepId",
+                "target_column": "EmployeeId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          },
+          {
+            "name": "Employee",
+            "rows": 8,
+            "columns_count": 15,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "EmployeeId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "LastName",
+                "declared_type": "NVARCHAR(20)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 2,
+                "name": "FirstName",
+                "declared_type": "NVARCHAR(20)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 3,
+                "name": "Title",
+                "declared_type": "NVARCHAR(30)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 4,
+                "name": "ReportsTo",
+                "declared_type": "INTEGER",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 5,
+                "name": "BirthDate",
+                "declared_type": "DATETIME",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 6,
+                "name": "HireDate",
+                "declared_type": "DATETIME",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 7,
+                "name": "Address",
+                "declared_type": "NVARCHAR(70)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 8,
+                "name": "City",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 9,
+                "name": "State",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 10,
+                "name": "Country",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 11,
+                "name": "PostalCode",
+                "declared_type": "NVARCHAR(10)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 12,
+                "name": "Phone",
+                "declared_type": "NVARCHAR(24)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 13,
+                "name": "Fax",
+                "declared_type": "NVARCHAR(24)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 14,
+                "name": "Email",
+                "declared_type": "NVARCHAR(60)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "Employee",
+                "source_column": "ReportsTo",
+                "target_column": "EmployeeId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          },
+          {
+            "name": "Genre",
+            "rows": 25,
+            "columns_count": 2,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "GenreId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "Name",
+                "declared_type": "NVARCHAR(120)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": []
+          },
+          {
+            "name": "Invoice",
+            "rows": 412,
+            "columns_count": 9,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "InvoiceId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "CustomerId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 2,
+                "name": "InvoiceDate",
+                "declared_type": "DATETIME",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 3,
+                "name": "BillingAddress",
+                "declared_type": "NVARCHAR(70)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 4,
+                "name": "BillingCity",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 5,
+                "name": "BillingState",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 6,
+                "name": "BillingCountry",
+                "declared_type": "NVARCHAR(40)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 7,
+                "name": "BillingPostalCode",
+                "declared_type": "NVARCHAR(10)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 8,
+                "name": "Total",
+                "declared_type": "NUMERIC(10,2)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "Customer",
+                "source_column": "CustomerId",
+                "target_column": "CustomerId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          },
+          {
+            "name": "InvoiceLine",
+            "rows": 2240,
+            "columns_count": 5,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "InvoiceLineId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "InvoiceId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 2,
+                "name": "TrackId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 3,
+                "name": "UnitPrice",
+                "declared_type": "NUMERIC(10,2)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 4,
+                "name": "Quantity",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "Track",
+                "source_column": "TrackId",
+                "target_column": "TrackId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              },
+              {
+                "id": 1,
+                "sequence": 0,
+                "target_table": "Invoice",
+                "source_column": "InvoiceId",
+                "target_column": "InvoiceId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          },
+          {
+            "name": "MediaType",
+            "rows": 5,
+            "columns_count": 2,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "MediaTypeId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "Name",
+                "declared_type": "NVARCHAR(120)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": []
+          },
+          {
+            "name": "Playlist",
+            "rows": 18,
+            "columns_count": 2,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "PlaylistId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "Name",
+                "declared_type": "NVARCHAR(120)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": []
+          },
+          {
+            "name": "PlaylistTrack",
+            "rows": 8715,
+            "columns_count": 2,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "PlaylistId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "TrackId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 2
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "Track",
+                "source_column": "TrackId",
+                "target_column": "TrackId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              },
+              {
+                "id": 1,
+                "sequence": 0,
+                "target_table": "Playlist",
+                "source_column": "PlaylistId",
+                "target_column": "PlaylistId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          },
+          {
+            "name": "Track",
+            "rows": 3503,
+            "columns_count": 9,
+            "columns": [
+              {
+                "cid": 0,
+                "name": "TrackId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 1
+              },
+              {
+                "cid": 1,
+                "name": "Name",
+                "declared_type": "NVARCHAR(200)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 2,
+                "name": "AlbumId",
+                "declared_type": "INTEGER",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 3,
+                "name": "MediaTypeId",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 4,
+                "name": "GenreId",
+                "declared_type": "INTEGER",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 5,
+                "name": "Composer",
+                "declared_type": "NVARCHAR(220)",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 6,
+                "name": "Milliseconds",
+                "declared_type": "INTEGER",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 7,
+                "name": "Bytes",
+                "declared_type": "INTEGER",
+                "notnull": 0,
+                "default": null,
+                "pk_position": 0
+              },
+              {
+                "cid": 8,
+                "name": "UnitPrice",
+                "declared_type": "NUMERIC(10,2)",
+                "notnull": 1,
+                "default": null,
+                "pk_position": 0
+              }
+            ],
+            "foreign_keys": [
+              {
+                "id": 0,
+                "sequence": 0,
+                "target_table": "MediaType",
+                "source_column": "MediaTypeId",
+                "target_column": "MediaTypeId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              },
+              {
+                "id": 1,
+                "sequence": 0,
+                "target_table": "Genre",
+                "source_column": "GenreId",
+                "target_column": "GenreId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              },
+              {
+                "id": 2,
+                "sequence": 0,
+                "target_table": "Album",
+                "source_column": "AlbumId",
+                "target_column": "AlbumId",
+                "on_update": "NO ACTION",
+                "on_delete": "NO ACTION",
+                "match": "NONE"
+              }
+            ]
+          }
+        ],
+        "table_count": 11,
+        "total_rows": 15607,
+        "total_columns": 64,
+        "foreign_key_relationships": 11,
+        "declared_types": [
+          "DATETIME",
+          "INTEGER",
+          "NUMERIC(10,2)",
+          "NVARCHAR(10)",
+          "NVARCHAR(120)",
+          "NVARCHAR(160)",
+          "NVARCHAR(20)",
+          "NVARCHAR(200)",
+          "NVARCHAR(220)",
+          "NVARCHAR(24)",
+          "NVARCHAR(30)",
+          "NVARCHAR(40)",
+          "NVARCHAR(60)",
+          "NVARCHAR(70)",
+          "NVARCHAR(80)"
+        ],
+        "note": "各表记录数之和仅表示存储规模，不能视为独立业务实体数；中间表含多对多关系。",
+        "read_only": true,
+        "sqlite_version": "3.53.1",
+        "foreign_key_check": []
+      }
+    },
+    {
+      "id": "harbor",
+      "file": "harbor.docx",
+      "sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "license": "CC0-1.0; newly authored evaluation fixture",
+      "cluster": "harbor-v1",
+      "kind": "controlled_synthetic",
+      "actual_name": "港区运行规程.docx",
+      "project_path": "samples/精选演示/港区运行规程.docx",
+      "bytes": 37461,
+      "sha256_verified": true,
+      "type": "DOCX",
+      "measurements": {
+        "paragraphs": 18,
+        "nonempty_paragraphs": 18,
+        "heading_1": 4,
+        "tables": 0,
+        "inline_shapes": 0,
+        "extracted_characters": 474,
+        "physical_pages": null,
+        "page_note": "DOCX无稳定物理分页；按章节和段落定位，不使用旧key解析索引冒充页码。"
+      }
+    },
+    {
+      "id": "river",
+      "file": "river.pdf",
+      "sha256": "bd190bfe54d0b0b9bca488545a1355171aadf7f2e08fe72d4556ad3cfc46d55e",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "license": "CC0-1.0; newly authored evaluation fixture",
+      "cluster": "river-v1",
+      "kind": "controlled_synthetic",
+      "actual_name": "河道复核记录.pdf",
+      "project_path": "知识库样本/文档样本/河道复核记录.pdf",
+      "bytes": 6371,
+      "sha256_verified": true,
+      "type": "PDF",
+      "measurements": {
+        "physical_pages": 5,
+        "extracted_characters": 692,
+        "embedded_images": 0,
+        "text_lines": 31,
+        "content_note": "逐页可抽取文字；本固定集两份PDF不用于验证图表或扫描OCR能力。"
+      }
+    },
+    {
+      "id": "equipment",
+      "file": "equipment.txt",
+      "sha256": "1b017e32153f1a71dbae9a1645de9a7a883e4e85d887fbbfc427c700ba78a280",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "license": "CC0-1.0; newly authored evaluation fixture",
+      "cluster": "equipment-v1",
+      "kind": "controlled_synthetic",
+      "actual_name": "设备维护记录.txt",
+      "project_path": "知识库样本/文档样本/设备维护记录.txt",
+      "bytes": 13364,
+      "sha256_verified": true,
+      "type": "TXT",
+      "measurements": {
+        "lines": 249,
+        "nonempty_lines": 169,
+        "characters_including_newlines": 5420,
+        "nonempty_text_blocks": 81,
+        "physical_pages": null,
+        "page_note": "纯文本/Markdown按行和标题定位，不定义物理页码。",
+        "numbered_equipment_sections": 80
+      }
+    },
+    {
+      "id": "sample",
+      "file": "sample.md",
+      "sha256": "6a73a71c369c1601ebcf6cf5b5a394e866971c9a8085434375ca20c0a93404b7",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "license": "CC0-1.0; newly authored evaluation fixture",
+      "cluster": "sampling-v1",
+      "kind": "controlled_synthetic",
+      "actual_name": "采样方法说明.md",
+      "project_path": "知识库样本/文档样本/采样方法说明.md",
+      "bytes": 1008,
+      "sha256_verified": true,
+      "type": "MD",
+      "measurements": {
+        "lines": 29,
+        "nonempty_lines": 15,
+        "characters_including_newlines": 390,
+        "nonempty_text_blocks": 15,
+        "physical_pages": null,
+        "page_note": "纯文本/Markdown按行和标题定位，不定义物理页码。",
+        "level2_headings": 4
+      }
+    },
+    {
+      "id": "draft",
+      "file": "draft.docx",
+      "sha256": "09f913425009033b9bd9ca41b2d15d8ec63c314c03a2beccf0b50b8ce1643c63",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "license": "CC0-1.0; newly authored evaluation fixture",
+      "cluster": "harbor-policy-v1",
+      "kind": "controlled_synthetic",
+      "actual_name": "港区政策征求意见稿_合成.docx",
+      "project_path": "知识库样本/文档样本/港区政策征求意见稿_合成.docx",
+      "bytes": 37192,
+      "sha256_verified": true,
+      "type": "DOCX",
+      "measurements": {
+        "paragraphs": 13,
+        "nonempty_paragraphs": 13,
+        "heading_1": 3,
+        "tables": 0,
+        "inline_shapes": 0,
+        "extracted_characters": 298,
+        "physical_pages": null,
+        "page_note": "DOCX无稳定物理分页；按章节和段落定位，不使用旧key解析索引冒充页码。"
+      }
+    },
+    {
+      "id": "revision",
+      "file": "revision.pdf",
+      "sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+      "origin": "Created locally for Zhiheng evaluation before model runs; fictional data; no external business claim.",
+      "license": "CC0-1.0; newly authored evaluation fixture",
+      "cluster": "harbor-energy-v1",
+      "kind": "controlled_synthetic",
+      "actual_name": "能耗修订说明.pdf",
+      "project_path": "samples/精选演示/能耗修订说明.pdf",
+      "bytes": 3903,
+      "sha256_verified": true,
+      "type": "PDF",
+      "measurements": {
+        "physical_pages": 2,
+        "extracted_characters": 371,
+        "embedded_images": 0,
+        "text_lines": 15,
+        "content_note": "逐页可抽取文字；本固定集两份PDF不用于验证图表或扫描OCR能力。"
+      }
+    }
+  ],
+  "database": {
+    "tables": [
+      {
+        "name": "Album",
+        "rows": 347,
+        "columns_count": 3,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "AlbumId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "Title",
+            "declared_type": "NVARCHAR(160)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 2,
+            "name": "ArtistId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "Artist",
+            "source_column": "ArtistId",
+            "target_column": "ArtistId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      },
+      {
+        "name": "Artist",
+        "rows": 275,
+        "columns_count": 2,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "ArtistId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "Name",
+            "declared_type": "NVARCHAR(120)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": []
+      },
+      {
+        "name": "Customer",
+        "rows": 59,
+        "columns_count": 13,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "CustomerId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "FirstName",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 2,
+            "name": "LastName",
+            "declared_type": "NVARCHAR(20)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 3,
+            "name": "Company",
+            "declared_type": "NVARCHAR(80)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 4,
+            "name": "Address",
+            "declared_type": "NVARCHAR(70)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 5,
+            "name": "City",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 6,
+            "name": "State",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 7,
+            "name": "Country",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 8,
+            "name": "PostalCode",
+            "declared_type": "NVARCHAR(10)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 9,
+            "name": "Phone",
+            "declared_type": "NVARCHAR(24)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 10,
+            "name": "Fax",
+            "declared_type": "NVARCHAR(24)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 11,
+            "name": "Email",
+            "declared_type": "NVARCHAR(60)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 12,
+            "name": "SupportRepId",
+            "declared_type": "INTEGER",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "Employee",
+            "source_column": "SupportRepId",
+            "target_column": "EmployeeId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      },
+      {
+        "name": "Employee",
+        "rows": 8,
+        "columns_count": 15,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "EmployeeId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "LastName",
+            "declared_type": "NVARCHAR(20)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 2,
+            "name": "FirstName",
+            "declared_type": "NVARCHAR(20)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 3,
+            "name": "Title",
+            "declared_type": "NVARCHAR(30)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 4,
+            "name": "ReportsTo",
+            "declared_type": "INTEGER",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 5,
+            "name": "BirthDate",
+            "declared_type": "DATETIME",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 6,
+            "name": "HireDate",
+            "declared_type": "DATETIME",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 7,
+            "name": "Address",
+            "declared_type": "NVARCHAR(70)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 8,
+            "name": "City",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 9,
+            "name": "State",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 10,
+            "name": "Country",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 11,
+            "name": "PostalCode",
+            "declared_type": "NVARCHAR(10)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 12,
+            "name": "Phone",
+            "declared_type": "NVARCHAR(24)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 13,
+            "name": "Fax",
+            "declared_type": "NVARCHAR(24)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 14,
+            "name": "Email",
+            "declared_type": "NVARCHAR(60)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "Employee",
+            "source_column": "ReportsTo",
+            "target_column": "EmployeeId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      },
+      {
+        "name": "Genre",
+        "rows": 25,
+        "columns_count": 2,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "GenreId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "Name",
+            "declared_type": "NVARCHAR(120)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": []
+      },
+      {
+        "name": "Invoice",
+        "rows": 412,
+        "columns_count": 9,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "InvoiceId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "CustomerId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 2,
+            "name": "InvoiceDate",
+            "declared_type": "DATETIME",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 3,
+            "name": "BillingAddress",
+            "declared_type": "NVARCHAR(70)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 4,
+            "name": "BillingCity",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 5,
+            "name": "BillingState",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 6,
+            "name": "BillingCountry",
+            "declared_type": "NVARCHAR(40)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 7,
+            "name": "BillingPostalCode",
+            "declared_type": "NVARCHAR(10)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 8,
+            "name": "Total",
+            "declared_type": "NUMERIC(10,2)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "Customer",
+            "source_column": "CustomerId",
+            "target_column": "CustomerId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      },
+      {
+        "name": "InvoiceLine",
+        "rows": 2240,
+        "columns_count": 5,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "InvoiceLineId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "InvoiceId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 2,
+            "name": "TrackId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 3,
+            "name": "UnitPrice",
+            "declared_type": "NUMERIC(10,2)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 4,
+            "name": "Quantity",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "Track",
+            "source_column": "TrackId",
+            "target_column": "TrackId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          },
+          {
+            "id": 1,
+            "sequence": 0,
+            "target_table": "Invoice",
+            "source_column": "InvoiceId",
+            "target_column": "InvoiceId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      },
+      {
+        "name": "MediaType",
+        "rows": 5,
+        "columns_count": 2,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "MediaTypeId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "Name",
+            "declared_type": "NVARCHAR(120)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": []
+      },
+      {
+        "name": "Playlist",
+        "rows": 18,
+        "columns_count": 2,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "PlaylistId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "Name",
+            "declared_type": "NVARCHAR(120)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": []
+      },
+      {
+        "name": "PlaylistTrack",
+        "rows": 8715,
+        "columns_count": 2,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "PlaylistId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "TrackId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 2
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "Track",
+            "source_column": "TrackId",
+            "target_column": "TrackId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          },
+          {
+            "id": 1,
+            "sequence": 0,
+            "target_table": "Playlist",
+            "source_column": "PlaylistId",
+            "target_column": "PlaylistId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      },
+      {
+        "name": "Track",
+        "rows": 3503,
+        "columns_count": 9,
+        "columns": [
+          {
+            "cid": 0,
+            "name": "TrackId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 1
+          },
+          {
+            "cid": 1,
+            "name": "Name",
+            "declared_type": "NVARCHAR(200)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 2,
+            "name": "AlbumId",
+            "declared_type": "INTEGER",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 3,
+            "name": "MediaTypeId",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 4,
+            "name": "GenreId",
+            "declared_type": "INTEGER",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 5,
+            "name": "Composer",
+            "declared_type": "NVARCHAR(220)",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 6,
+            "name": "Milliseconds",
+            "declared_type": "INTEGER",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 7,
+            "name": "Bytes",
+            "declared_type": "INTEGER",
+            "notnull": 0,
+            "default": null,
+            "pk_position": 0
+          },
+          {
+            "cid": 8,
+            "name": "UnitPrice",
+            "declared_type": "NUMERIC(10,2)",
+            "notnull": 1,
+            "default": null,
+            "pk_position": 0
+          }
+        ],
+        "foreign_keys": [
+          {
+            "id": 0,
+            "sequence": 0,
+            "target_table": "MediaType",
+            "source_column": "MediaTypeId",
+            "target_column": "MediaTypeId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          },
+          {
+            "id": 1,
+            "sequence": 0,
+            "target_table": "Genre",
+            "source_column": "GenreId",
+            "target_column": "GenreId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          },
+          {
+            "id": 2,
+            "sequence": 0,
+            "target_table": "Album",
+            "source_column": "AlbumId",
+            "target_column": "AlbumId",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION",
+            "match": "NONE"
+          }
+        ]
+      }
+    ],
+    "table_count": 11,
+    "total_rows": 15607,
+    "total_columns": 64,
+    "foreign_key_relationships": 11,
+    "declared_types": [
+      "DATETIME",
+      "INTEGER",
+      "NUMERIC(10,2)",
+      "NVARCHAR(10)",
+      "NVARCHAR(120)",
+      "NVARCHAR(160)",
+      "NVARCHAR(20)",
+      "NVARCHAR(200)",
+      "NVARCHAR(220)",
+      "NVARCHAR(24)",
+      "NVARCHAR(30)",
+      "NVARCHAR(40)",
+      "NVARCHAR(60)",
+      "NVARCHAR(70)",
+      "NVARCHAR(80)"
+    ],
+    "note": "各表记录数之和仅表示存储规模，不能视为独立业务实体数；中间表含多对多关系。",
+    "read_only": true,
+    "sqlite_version": "3.53.1",
+    "foreign_key_check": []
+  },
+  "cases": [
+    {
+      "original_order": 1,
+      "original_id": "sql-001",
+      "question": "曲目表一共有多少条记录？只返回数量。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "count",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S01",
+      "title": "记录总数",
+      "tables": [
+        "Track"
+      ],
+      "pitfalls": [
+        "按Track行计数，不能COUNT(Composer)漏掉NULL行。"
+      ],
+      "reference_sql": "SELECT COUNT(*) FROM Track",
+      "reference_parameters": [],
+      "expected_columns": [
+        "COUNT(*)"
+      ],
+      "expected_rows": [
+        [
+          3503
+        ]
+      ],
+      "expected_row_count": 1,
+      "expected_column_count": 1,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 2,
+      "original_id": "rag-003",
+      "question": "紧急撤离和普通到岗提示的鸣笛信号分别是什么？",
+      "mode": "document",
+      "source_ids": [
+        "harbor"
+      ],
+      "source_name": "港区运行规程.docx",
+      "source_project_path": "samples/精选演示/港区运行规程.docx",
+      "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R01",
+      "title": "两类鸣笛信号",
+      "location": "《青湾港试验站运行手册》“一 值班和授权”，第6段",
+      "paragraphs": [
+        6
+      ],
+      "facts": [
+        "紧急撤离：连续三次短鸣。",
+        "普通到岗：一次长鸣。"
+      ],
+      "answer": "紧急撤离为连续三次短鸣；普通到岗提示为一次长鸣。",
+      "pitfalls": [
+        "不能对调长鸣/短鸣或次数；两个信号均须回答。"
+      ],
+      "source_excerpts": [
+        {
+          "paragraph": 6,
+          "style": "Normal",
+          "text": "紧急撤离信号为连续三次短鸣，普通到岗提示是一次长鸣。"
+        }
+      ],
+      "frozen_key_facts": [
+        "撤离为连续三次短鸣",
+        "到岗为一次长鸣"
+      ],
+      "frozen_key_source_pages": {
+        "harbor": [
+          2
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "评审说明采用原文章节/段落/行号；原key.source_pages保留为旧解析索引，不写成物理页。"
+    },
+    {
+      "original_order": 3,
+      "original_id": "sql-004",
+      "question": "所有账单Total合计是多少？保留两位小数，只返回金额。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "sum",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S02",
+      "title": "金额合计及小数位",
+      "tables": [
+        "Invoice"
+      ],
+      "pitfalls": [
+        "直接合计Invoice.Total；不能与InvoiceLine连接后重复累计账单。",
+        "参考值2328.60，保留两位小数；数据库未提供币种时不得自行标注人民币或美元。"
+      ],
+      "reference_sql": "SELECT ROUND(SUM(Total),2) FROM Invoice",
+      "reference_parameters": [],
+      "expected_columns": [
+        "ROUND(SUM(Total),2)"
+      ],
+      "expected_rows": [
+        [
+          2328.6
+        ]
+      ],
+      "expected_row_count": 1,
+      "expected_column_count": 1,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 4,
+      "original_id": "rag-008",
+      "question": "手册中的成功启动与失败启动次数各是多少，成功率分母怎样定义？",
+      "mode": "document",
+      "source_ids": [
+        "harbor"
+      ],
+      "source_name": "港区运行规程.docx",
+      "source_project_path": "samples/精选演示/港区运行规程.docx",
+      "source_sha256": "ad26e25ef319f3f4c50468b744dae57868f5f754008fefaedb3fa28c3f2fb477",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R02",
+      "title": "启动统计及成功率分母",
+      "location": "《青湾港试验站运行手册》“三 统计与例外”，第13段",
+      "paragraphs": [
+        13
+      ],
+      "facts": [
+        "成功启动18次。",
+        "失败启动2次。",
+        "成功率分母为全部启动次数，即18+2=20次。"
+      ],
+      "answer": "成功启动18次，失败启动2次；分母为全部启动次数20次。若补充成功率，应标注为18÷20=90%的派生值。",
+      "pitfalls": [
+        "不能把分母取成功次数18；90%是可选推导，不是问题要求的替代答案。"
+      ],
+      "source_excerpts": [
+        {
+          "paragraph": 13,
+          "style": "Normal",
+          "text": "成功启动为18次，失败启动为2次；本手册把成功率定义为成功次数除以全部启动次数。"
+        }
+      ],
+      "frozen_key_facts": [
+        "成功18次，失败2次",
+        "分母为全部启动次数"
+      ],
+      "frozen_key_source_pages": {
+        "harbor": [
+          4
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "评审说明采用原文章节/段落/行号；原key.source_pages保留为旧解析索引，不写成物理页。"
+    },
+    {
+      "original_order": 5,
+      "original_id": "sql-006",
+      "question": "按客户国家统计客户数量，输出国家和数量，按国家名升序。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "group_count",
+        "ordering",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S03",
+      "title": "按国家分组计数",
+      "tables": [
+        "Customer"
+      ],
+      "pitfalls": [
+        "应输出全部24个国家和客户数量，按Country升序；不得与账单连接后按交易次数计数。"
+      ],
+      "reference_sql": "SELECT Country,COUNT(*) FROM Customer GROUP BY Country ORDER BY Country",
+      "reference_parameters": [],
+      "expected_columns": [
+        "Country",
+        "COUNT(*)"
+      ],
+      "expected_rows": [
+        [
+          "Argentina",
+          1
+        ],
+        [
+          "Australia",
+          1
+        ],
+        [
+          "Austria",
+          1
+        ],
+        [
+          "Belgium",
+          1
+        ],
+        [
+          "Brazil",
+          5
+        ],
+        [
+          "Canada",
+          8
+        ],
+        [
+          "Chile",
+          1
+        ],
+        [
+          "Czech Republic",
+          2
+        ],
+        [
+          "Denmark",
+          1
+        ],
+        [
+          "Finland",
+          1
+        ],
+        [
+          "France",
+          5
+        ],
+        [
+          "Germany",
+          4
+        ],
+        [
+          "Hungary",
+          1
+        ],
+        [
+          "India",
+          2
+        ],
+        [
+          "Ireland",
+          1
+        ],
+        [
+          "Italy",
+          1
+        ],
+        [
+          "Netherlands",
+          1
+        ],
+        [
+          "Norway",
+          1
+        ],
+        [
+          "Poland",
+          1
+        ],
+        [
+          "Portugal",
+          2
+        ],
+        [
+          "Spain",
+          1
+        ],
+        [
+          "Sweden",
+          1
+        ],
+        [
+          "USA",
+          13
+        ],
+        [
+          "United Kingdom",
+          3
+        ]
+      ],
+      "expected_row_count": 24,
+      "expected_column_count": 2,
+      "ordered": true,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "逐行比较题目规定顺序。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 6,
+      "original_id": "rag-012",
+      "question": "每个断面有几个独立水样？实验室复测会增加这个数量吗？",
+      "mode": "document",
+      "source_ids": [
+        "river"
+      ],
+      "source_name": "河道复核记录.pdf",
+      "source_project_path": "知识库样本/文档样本/河道复核记录.pdf",
+      "source_sha256": "bd190bfe54d0b0b9bca488545a1355171aadf7f2e08fe72d4556ad3cfc46d55e",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R03",
+      "title": "独立水样与实验室复测",
+      "location": "《清河监测方案与原始记录》PDF第1页“采样日期…”；第2页“采样与检验口径”",
+      "physical_pages": [
+        1,
+        2
+      ],
+      "facts": [
+        "每个断面3个独立水样。",
+        "同一水样的实验室复测不增加独立水样数。"
+      ],
+      "answer": "每个断面取3个独立水样。实验室复测属于同一水样的重复测定，不增加独立水样数量。",
+      "pitfalls": [
+        "问题问每个断面，不能只答两个断面合计6个；必须同时保留复测口径。"
+      ],
+      "source_excerpts": [
+        {
+          "physical_page": 1,
+          "text": "受控合成验收资料 机构地点人物均属虚构 不代表实际业务统计\n清河监测方案与原始记录\n本站记录2025年春季清河样段监测。断面上游为U1，下游为D1。\n采样日期为2025年4月8日，时间统一采用北京时间。每个断面取3个独立水样。\n本次采样仅覆盖晴天；不能据此估计雨天峰值。\n原始物理页 1\n"
+        },
+        {
+          "physical_page": 2,
+          "text": "受控合成验收资料 机构地点人物均属虚构 不代表实际业务统计\n采样与检验口径\n总磷采用mg/L，浊度采用NTU，两者不是同一指标。\n低于检出限的总磷记为<0.01，不填写0；未检测记为ND。\n重复测定属于同一水样的实验室复测，不增加独立水样数。\n原始物理页 2\n"
+        }
+      ],
+      "frozen_key_facts": [
+        "每断面3个独立水样",
+        "复测不增加独立水样数"
+      ],
+      "frozen_key_source_pages": {
+        "river": [
+          1,
+          2
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "物理页码已经逐页读取确认。"
+    },
+    {
+      "original_order": 7,
+      "original_id": "sql-009",
+      "question": "有多少首曲目的Composer为NULL？只返回数量，不把空字符串当NULL。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "null",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S04",
+      "title": "NULL与空字符串",
+      "tables": [
+        "Track"
+      ],
+      "pitfalls": [
+        "Composer IS NULL；空字符串不得算作NULL，COUNT(Composer)也不是NULL数。"
+      ],
+      "reference_sql": "SELECT COUNT(*) FROM Track WHERE Composer IS NULL",
+      "reference_parameters": [],
+      "expected_columns": [
+        "COUNT(*)"
+      ],
+      "expected_rows": [
+        [
+          977
+        ]
+      ],
+      "expected_row_count": 1,
+      "expected_column_count": 1,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 8,
+      "original_id": "rag-020",
+      "question": "复查必须保留哪三项标识？",
+      "mode": "document",
+      "source_ids": [
+        "river"
+      ],
+      "source_name": "河道复核记录.pdf",
+      "source_project_path": "知识库样本/文档样本/河道复核记录.pdf",
+      "source_sha256": "bd190bfe54d0b0b9bca488545a1355171aadf7f2e08fe72d4556ad3cfc46d55e",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R04",
+      "title": "复查标识完整提取",
+      "location": "《清河监测方案与原始记录》PDF第5页“结论边界与附录”，附录B",
+      "physical_pages": [
+        5
+      ],
+      "facts": [
+        "断面编号。",
+        "采样时间。",
+        "仪器批次。"
+      ],
+      "answer": "必须保留断面编号、采样时间和仪器批次。",
+      "pitfalls": [
+        "三项全部命中才算完整；仪器名称或联系人不能代替仪器批次。"
+      ],
+      "source_excerpts": [
+        {
+          "physical_page": 5,
+          "text": "受控合成验收资料 机构地点人物均属虚构 不代表实际业务统计\n结论边界与附录\n本次下游三份样本均高于上游对应编号样本；文件未分析原因。\n附录A的授权联系人为周岸，电话未提供。\n附录B规定复查时必须保留断面编号、采样时间和仪器批次。\n原始物理页 5\n"
+        }
+      ],
+      "frozen_key_facts": [
+        "断面编号、采样时间、仪器批次"
+      ],
+      "frozen_key_source_pages": {
+        "river": [
+          5
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "物理页码已经逐页读取确认。"
+    },
+    {
+      "original_order": 9,
+      "original_id": "sql-014",
+      "question": "时长严格超过10分钟的曲目有多少首？请用Milliseconds正确换算。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "unit_conversion",
+        "strict_range",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S05",
+      "title": "单位换算及严格区间",
+      "tables": [
+        "Track"
+      ],
+      "pitfalls": [
+        "10分钟=600000毫秒；条件必须严格大于，不能写>=，也不能按秒或分钟原值过滤。"
+      ],
+      "reference_sql": "SELECT COUNT(*) FROM Track WHERE Milliseconds>600000",
+      "reference_parameters": [],
+      "expected_columns": [
+        "COUNT(*)"
+      ],
+      "expected_rows": [
+        [
+          260
+        ]
+      ],
+      "expected_row_count": 1,
+      "expected_column_count": 1,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 10,
+      "original_id": "rag-023",
+      "question": "M-028的温升与室温分别是多少？",
+      "mode": "document",
+      "source_ids": [
+        "equipment"
+      ],
+      "source_name": "设备维护记录.txt",
+      "source_project_path": "知识库样本/文档样本/设备维护记录.txt",
+      "source_sha256": "1b017e32153f1a71dbae9a1645de9a7a883e4e85d887fbbfc427c700ba78a280",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R05",
+      "title": "温升与室温辨别",
+      "location": "《设备维护记录.txt》第28节“设备检视 M-028”，第88行",
+      "lines": [
+        88
+      ],
+      "facts": [
+        "M-028温升为7.5摄氏度。",
+        "室温为22摄氏度。"
+      ],
+      "answer": "M-028本次温升为7.5℃，室温为22℃。温升是相对于基准的温度变化，不应写成设备绝对温度。",
+      "pitfalls": [
+        "不能将7.5℃称为绝对温度；不要求推算29.5℃，更不能将推算伪装成原文读数。"
+      ],
+      "source_excerpts": [
+        {
+          "line": 88,
+          "text": "M-028本次温升为7.5摄氏度；室温为22摄氏度，两者不得混作温度绝对值。"
+        }
+      ],
+      "frozen_key_facts": [
+        "温升7.5摄氏度，室温22摄氏度"
+      ],
+      "frozen_key_source_pages": {
+        "equipment": [
+          1
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "评审说明采用原文章节/段落/行号；原key.source_pages保留为旧解析索引，不写成物理页。"
+    },
+    {
+      "original_order": 11,
+      "original_id": "sql-017",
+      "question": "客户表Company已填写、即不是NULL的客户有多少人？",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "not_null",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S06",
+      "title": "非空值条件",
+      "tables": [
+        "Customer"
+      ],
+      "pitfalls": [
+        "按题中“即不是NULL”执行Company IS NOT NULL；不要自行另加非空字符串或非空白过滤。"
+      ],
+      "reference_sql": "SELECT COUNT(*) FROM Customer WHERE Company IS NOT NULL",
+      "reference_parameters": [],
+      "expected_columns": [
+        "COUNT(*)"
+      ],
+      "expected_rows": [
+        [
+          10
+        ]
+      ],
+      "expected_row_count": 1,
+      "expected_column_count": 1,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 12,
+      "original_id": "rag-028",
+      "question": "在日志尾部找到M-080备用继电器型号、保管柜和附件复核暗号。",
+      "mode": "document",
+      "source_ids": [
+        "equipment"
+      ],
+      "source_name": "设备维护记录.txt",
+      "source_project_path": "知识库样本/文档样本/设备维护记录.txt",
+      "source_sha256": "1b017e32153f1a71dbae9a1645de9a7a883e4e85d887fbbfc427c700ba78a280",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R06",
+      "title": "长文本尾部三要素定位",
+      "location": "《设备维护记录.txt》第80节“设备检视 M-080”，最后第249行",
+      "lines": [
+        249
+      ],
+      "facts": [
+        "备用继电器型号：RX-9B。",
+        "保管柜：C12。",
+        "附件复核暗号：青石。"
+      ],
+      "answer": "M-080备用继电器型号为RX-9B，保管柜为C12，附件复核暗号为“青石”。",
+      "pitfalls": [
+        "必须同时回答型号、柜号、暗号；保留字母数字及连字符，不能用相近值替代。"
+      ],
+      "source_excerpts": [
+        {
+          "line": 249,
+          "text": "M-080尾部追加记录：备用继电器型号为RX-9B，保管柜为C12。附件复核暗号为“青石”。"
+        }
+      ],
+      "frozen_key_facts": [
+        "RX-9B、C12、青石"
+      ],
+      "frozen_key_source_pages": {
+        "equipment": [
+          1
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "评审说明采用原文章节/段落/行号；原key.source_pages保留为旧解析索引，不写成物理页。"
+    },
+    {
+      "original_order": 13,
+      "original_id": "sql-020",
+      "question": "BillingState为NULL和非NULL的发票各多少张？按NULL数量、非NULL数量输出。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_basic",
+        "conditional_count",
+        "null",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S07",
+      "title": "互补条件计数",
+      "tables": [
+        "Invoice"
+      ],
+      "pitfalls": [
+        "两列按NULL、非NULL顺序输出202和210，总数为412；不把BillingState NULL误认为BillingCountry缺失。"
+      ],
+      "reference_sql": "SELECT SUM(CASE WHEN BillingState IS NULL THEN 1 ELSE 0 END),COUNT(BillingState) FROM Invoice",
+      "reference_parameters": [],
+      "expected_columns": [
+        "SUM(CASE WHEN BillingState IS NULL THEN 1 ELSE 0 END)",
+        "COUNT(BillingState)"
+      ],
+      "expected_rows": [
+        [
+          202,
+          210
+        ]
+      ],
+      "expected_row_count": 1,
+      "expected_column_count": 2,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 14,
+      "original_id": "rag-032",
+      "question": "通勤时长是否包含接送子女绕行时间？",
+      "mode": "document",
+      "source_ids": [
+        "sample"
+      ],
+      "source_name": "采样方法说明.md",
+      "source_project_path": "知识库样本/文档样本/采样方法说明.md",
+      "source_sha256": "6a73a71c369c1601ebcf6cf5b5a394e866971c9a8085434375ca20c0a93404b7",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R07",
+      "title": "通勤指标边界",
+      "location": "《双岸社区出行抽样说明》Markdown“指标定义”，第15行",
+      "lines": [
+        15
+      ],
+      "facts": [
+        "不包含接送子女绕行时间。",
+        "通勤定义为单程从常住地到主要工作地点。"
+      ],
+      "answer": "不包含。这里的通勤是单程从常住地到主要工作地点的时长。",
+      "pitfalls": [
+        "不能计为往返，也不能把绕行时间纳入。"
+      ],
+      "source_excerpts": [
+        {
+          "line": 15,
+          "text": "通勤指单程从常住地到主要工作地点，不含接送子女绕行时间。"
+        }
+      ],
+      "frozen_key_facts": [
+        "不含；单程常住地到主要工作地点"
+      ],
+      "frozen_key_source_pages": {
+        "sample": [
+          1
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "评审说明采用原文章节/段落/行号；原key.source_pages保留为旧解析索引，不写成物理页。"
+    },
+    {
+      "original_order": 15,
+      "original_id": "sql-041",
+      "question": "按账单国家统计总销售额，金额保留两位小数，取最高的5个国家，输出国家和销售额。金额相同按国家名升序。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_complex",
+        "aggregate",
+        "ranking",
+        "legacy_development_reference",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S08",
+      "title": "销售额Top 5",
+      "tables": [
+        "Invoice"
+      ],
+      "pitfalls": [
+        "按BillingCountry聚合Invoice.Total，不按Customer.Country；金额降序、并列国家名升序、仅5行。"
+      ],
+      "reference_sql": "SELECT BillingCountry, ROUND(SUM(Total),2) AS revenue FROM Invoice GROUP BY BillingCountry ORDER BY revenue DESC,BillingCountry LIMIT 5",
+      "reference_parameters": [],
+      "expected_columns": [
+        "BillingCountry",
+        "revenue"
+      ],
+      "expected_rows": [
+        [
+          "USA",
+          523.06
+        ],
+        [
+          "Canada",
+          303.96
+        ],
+        [
+          "France",
+          195.1
+        ],
+        [
+          "Brazil",
+          190.1
+        ],
+        [
+          "Germany",
+          156.48
+        ]
+      ],
+      "expected_row_count": 5,
+      "expected_column_count": 2,
+      "ordered": true,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "逐行比较题目规定顺序。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 16,
+      "original_id": "rag-038",
+      "question": "拟议补助对象是否包括尚未开工项目？",
+      "mode": "document",
+      "source_ids": [
+        "draft"
+      ],
+      "source_name": "港区政策征求意见稿_合成.docx",
+      "source_project_path": "知识库样本/文档样本/港区政策征求意见稿_合成.docx",
+      "source_sha256": "09f913425009033b9bd9ca41b2d15d8ec63c314c03a2beccf0b50b8ce1643c63",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R08",
+      "title": "征求意见稿的对象与效力",
+      "location": "《青湾港绿色改造方案征求意见稿》“一 文件性质”，第4—5段；“三 适用限制”，第11段",
+      "paragraphs": [
+        4,
+        5,
+        11
+      ],
+      "facts": [
+        "拟议对象仅为完成验收的小型岸电项目。",
+        "不包括尚未开工项目。",
+        "应保留拟议/征求意见稿语义，不表述为已正式实施或已拨款。"
+      ],
+      "answer": "不包括。征求意见稿拟将完成验收的小型岸电项目列为补助对象；该文件尚不能证明方案已正式施行。",
+      "pitfalls": [
+        "不能省略完成验收或小型岸电范围；不能将拟议补助写成现行政策或既成拨款。"
+      ],
+      "source_excerpts": [
+        {
+          "paragraph": 4,
+          "style": "Normal",
+          "text": "青湾港绿色改造方案为2025年6月10日公开征求意见稿，意见反馈截止6月30日。"
+        },
+        {
+          "paragraph": 5,
+          "style": "Normal",
+          "text": "拟议补助对象为完成验收的小型岸电项目，不包括尚未开工项目。"
+        },
+        {
+          "paragraph": 11,
+          "style": "Normal",
+          "text": "截至本稿日期，尚不能据此认定方案已经正式施行或任何项目已经获得补助。"
+        }
+      ],
+      "frozen_key_facts": [
+        "不包括；仅完成验收的小型岸电项目"
+      ],
+      "frozen_key_source_pages": {
+        "draft": [
+          2
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "评审说明采用原文章节/段落/行号；原key.source_pages保留为旧解析索引，不写成物理页。"
+    },
+    {
+      "original_order": 17,
+      "original_id": "sql-051",
+      "question": "只看至少卖出过一首曲目的艺术家，他们名下总曲目数超过50的有哪些？输出艺术家编号、名字、总曲目数。总曲目数包括未售出的曲目。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_complex",
+        "nested",
+        "correlated",
+        "having",
+        "grain",
+        "legacy_development_reference",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S09",
+      "title": "售出资格与总曲目粒度分离",
+      "tables": [
+        "Artist",
+        "Album",
+        "Track",
+        "InvoiceLine"
+      ],
+      "pitfalls": [
+        "“至少售出1首”只决定艺术家是否入选，曲目总数仍包含未售出的曲目。",
+        "不能把InvoiceLine连接后的行数当总曲目数；总曲目数严格>50；不要求结果行排序。"
+      ],
+      "reference_sql": "SELECT ar.ArtistId,ar.Name,COUNT(DISTINCT t.TrackId) FROM Artist ar JOIN Album a ON a.ArtistId=ar.ArtistId JOIN Track t ON t.AlbumId=a.AlbumId GROUP BY ar.ArtistId,ar.Name HAVING COUNT(DISTINCT t.TrackId)>50 AND EXISTS(SELECT 1 FROM Album a2 JOIN Track t2 ON t2.AlbumId=a2.AlbumId JOIN InvoiceLine il ON il.TrackId=t2.TrackId WHERE a2.ArtistId=ar.ArtistId)",
+      "reference_parameters": [],
+      "expected_columns": [
+        "ArtistId",
+        "Name",
+        "COUNT(DISTINCT t.TrackId)"
+      ],
+      "expected_rows": [
+        [
+          21,
+          "Various Artists",
+          56
+        ],
+        [
+          22,
+          "Led Zeppelin",
+          114
+        ],
+        [
+          50,
+          "Metallica",
+          112
+        ],
+        [
+          58,
+          "Deep Purple",
+          92
+        ],
+        [
+          82,
+          "Faith No More",
+          52
+        ],
+        [
+          90,
+          "Iron Maiden",
+          213
+        ],
+        [
+          100,
+          "Lenny Kravitz",
+          57
+        ],
+        [
+          118,
+          "Pearl Jam",
+          67
+        ],
+        [
+          149,
+          "Lost",
+          92
+        ],
+        [
+          150,
+          "U2",
+          135
+        ],
+        [
+          152,
+          "Van Halen",
+          52
+        ],
+        [
+          156,
+          "The Office",
+          53
+        ]
+      ],
+      "expected_row_count": 12,
+      "expected_column_count": 3,
+      "ordered": false,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "不要求行顺序，按保留重复次数的多重集比较。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 18,
+      "original_id": "rag-044",
+      "question": "用电更正通知哪天签发，涉及哪天日报？",
+      "mode": "document",
+      "source_ids": [
+        "revision"
+      ],
+      "source_name": "能耗修订说明.pdf",
+      "source_project_path": "samples/精选演示/能耗修订说明.pdf",
+      "source_sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R09",
+      "title": "签发日期与日报日期",
+      "location": "《计量更正通知》PDF第1页，“本通知签发于2025年7月3日”所在段",
+      "physical_pages": [
+        1
+      ],
+      "facts": [
+        "通知签发日期为2025年7月3日。",
+        "引用的原始日报日期为2025年7月1日。"
+      ],
+      "answer": "通知于2025年7月3日签发，涉及2025年7月1日的原始日报。",
+      "pitfalls": [
+        "不得把签发日期当数据日期；题目没有要求7月2日报表。"
+      ],
+      "source_excerpts": [
+        {
+          "physical_page": 1,
+          "text": "受控合成验收资料 机构地点人物均属虚构 不代表实际业务统计\n计量更正通知\n本通知签发于2025年7月3日，引用的原始日报日期为2025年7月1日。\n青湾港7月1日用电日报初始记为2160kWh，经电表原始底数复核后更正为2610kW\nh。\n更正只涉及7月1日，不涉及7月2日。旧值为转录错误，须保留更正链但不作当前值。\n7月2日已确认用电量为2400kWh。两日日报均为全站用电，不是单台泵用电。\n原始物理页 1\n"
+        }
+      ],
+      "frozen_key_facts": [
+        "2025年7月3日签发",
+        "涉及7月1日日报"
+      ],
+      "frozen_key_source_pages": {
+        "revision": [
+          1
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "物理页码已经逐页读取确认。"
+    },
+    {
+      "original_order": 19,
+      "original_id": "sql-074",
+      "question": "各播放列表有多少不同专辑？包括没有曲目的列表，输出列表编号、名称、专辑数，按编号升序。",
+      "mode": "database",
+      "source_ids": [
+        "chinook"
+      ],
+      "source_name": "Chinook_公开测试数据库.sqlite",
+      "source_project_path": "samples/测试资料/Chinook_公开测试数据库.sqlite",
+      "source_sha256": "7651ba378ac2fcd0dfc3c66fb101f7a7eed3ba39a612ec642b96e20702061f15",
+      "tags": [
+        "sql_complex",
+        "left_join",
+        "many_to_many",
+        "distinct",
+        "public_teaching"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "S10",
+      "title": "空列表保留及专辑去重",
+      "tables": [
+        "Playlist",
+        "PlaylistTrack",
+        "Track"
+      ],
+      "pitfalls": [
+        "需要LEFT JOIN保留4个空列表；COUNT(DISTINCT AlbumId)不是曲目数。",
+        "共18行按PlaylistId升序；同名不同编号列表不能合并。"
+      ],
+      "reference_sql": "SELECT p.PlaylistId,p.Name,COUNT(DISTINCT t.AlbumId) FROM Playlist p LEFT JOIN PlaylistTrack pt ON pt.PlaylistId=p.PlaylistId LEFT JOIN Track t ON t.TrackId=pt.TrackId GROUP BY p.PlaylistId,p.Name ORDER BY p.PlaylistId",
+      "reference_parameters": [],
+      "expected_columns": [
+        "PlaylistId",
+        "Name",
+        "COUNT(DISTINCT t.AlbumId)"
+      ],
+      "expected_rows": [
+        [
+          1,
+          "Music",
+          335
+        ],
+        [
+          2,
+          "Movies",
+          0
+        ],
+        [
+          3,
+          "TV Shows",
+          12
+        ],
+        [
+          4,
+          "Audiobooks",
+          0
+        ],
+        [
+          5,
+          "90’s Music",
+          151
+        ],
+        [
+          6,
+          "Audiobooks",
+          0
+        ],
+        [
+          7,
+          "Movies",
+          0
+        ],
+        [
+          8,
+          "Music",
+          335
+        ],
+        [
+          9,
+          "Music Videos",
+          1
+        ],
+        [
+          10,
+          "TV Shows",
+          12
+        ],
+        [
+          11,
+          "Brazilian Music",
+          14
+        ],
+        [
+          12,
+          "Classical",
+          73
+        ],
+        [
+          13,
+          "Classical 101 - Deep Cuts",
+          25
+        ],
+        [
+          14,
+          "Classical 101 - Next Steps",
+          25
+        ],
+        [
+          15,
+          "Classical 101 - The Basics",
+          25
+        ],
+        [
+          16,
+          "Grunge",
+          7
+        ],
+        [
+          17,
+          "Heavy Metal Classic",
+          19
+        ],
+        [
+          18,
+          "On-The-Go 1",
+          1
+        ]
+      ],
+      "expected_row_count": 18,
+      "expected_column_count": 3,
+      "ordered": true,
+      "numeric_absolute_tolerance": 0.005,
+      "null_rule": "NULL只匹配NULL；不将NULL、空字符串与0互换。",
+      "duplicate_rule": "重复行出现次数必须一致，不能按集合去重比较。",
+      "column_rule": "列顺序与含义须一致；SQL别名可不同。",
+      "sort_rule": "逐行比较题目规定顺序。",
+      "offline_reference_execution": {
+        "passed": true,
+        "method": "SQLite只读执行冻结参考SQL，并与原答案键逐单元格比对。",
+        "is_model_test": false
+      },
+      "grading": "须同时满足真实执行结果匹配、执行轨迹存在、来源正确、回答事实/完整性/依据独立复核通过；相同数值不自动等于整题通过。"
+    },
+    {
+      "original_order": 20,
+      "original_id": "rag-049",
+      "question": "审核人和复核人分别是谁，能据此判断设备操作员吗？",
+      "mode": "document",
+      "source_ids": [
+        "revision"
+      ],
+      "source_name": "能耗修订说明.pdf",
+      "source_project_path": "samples/精选演示/能耗修订说明.pdf",
+      "source_sha256": "a7c4a9be793c3cab74ee829fbca6a8c716acbfdb2b1587b81210f34972afeb21",
+      "tags": [
+        "controlled_synthetic",
+        "rag",
+        "source_anchored",
+        "scope_and_units"
+      ],
+      "final_model_result": null,
+      "final_model_status": "待API恢复后真实运行并独立复核",
+      "expected_key_status_is_not_observed_run": true,
+      "case_number": "R10",
+      "title": "审核职责与不可推断身份",
+      "location": "《计量更正通知》PDF第2页“版本和遗漏”",
+      "physical_pages": [
+        2
+      ],
+      "facts": [
+        "审核人：唐溪。",
+        "复核人：顾衡。",
+        "两人的职责不等同于设备操作员，不能据此判断操作员。"
+      ],
+      "answer": "审核人为唐溪，复核人为顾衡。文件明确这两项职责不等同于设备操作员，因此不能据此认定设备操作员身份。",
+      "pitfalls": [
+        "不得对调审核/复核；不得将任一人推定为操作员。"
+      ],
+      "source_excerpts": [
+        {
+          "physical_page": 2,
+          "text": "受控合成验收资料 机构地点人物均属虚构 不代表实际业务统计\n版本和遗漏\n当前生效计量修订号为REV-03；REV-02标记为撤回。\n审核人为唐溪，复核人为顾衡。两人职责不等同于设备操作员。\n本文件没有提供电价和含税电费，不能根据用电量单独算出费用。\n附表注明日界线为当地时间00:00到24:00，非交班周期。\n原始物理页 2\n"
+        }
+      ],
+      "frozen_key_facts": [
+        "唐溪、顾衡",
+        "不能由审核复核职责推断操作员"
+      ],
+      "frozen_key_source_pages": {
+        "revision": [
+          2
+        ]
+      },
+      "grading": "逐项核对必需事实、限定条件、来源位置；事实正确、回答完整、证据支持三项全部满足才算通过。只检测关键词、只到completed或只显示引用不算通过。",
+      "location_note": "物理页码已经逐页读取确认。"
+    }
+  ],
+  "summary": {
+    "total": 20,
+    "sql": 10,
+    "rag": 10,
+    "source_files": 7,
+    "database_files": 1,
+    "document_files": 6,
+    "document_formats": {
+      "DOCX": 2,
+      "PDF": 2,
+      "TXT": 1,
+      "MD": 1
+    },
+    "verified_sql_reference_queries": 10,
+    "verified_rag_source_locations": 10,
+    "reference_key_changed": false
+  },
+  "grading_protocol": {
+    "source": "02_项目源码/evaluation/core.py",
+    "source_sha256": "c4816aa8f71d2ab8f4ce61383dfbed255efe1f77436bc38a7360af0de00bfdcd",
+    "denominators": {
+      "sql": 10,
+      "rag": 10,
+      "all": 20
+    },
+    "binary_case_pass": true,
+    "review_dimensions": [
+      "correct:事实及业务口径正确",
+      "complete:所有请求要点完整",
+      "grounded:由所选原件支持"
+    ],
+    "required_review_binding": [
+      "reviewer",
+      "record_sha256",
+      "run_sha256（独立评审文件）"
+    ],
+    "must_keep_failures": true,
+    "missing_result": "待测/未运行；不得填0或100%冒充实际测试结果",
+    "availability_failures": "真实运行出现API失败须单列，仍保留在固定分母；可另报告可用题条件正确率，但不得替代端到端成功率。",
+    "official_score": false,
+    "score_note": "本地固定开发覆盖集的通过率，不等同主办方官方20分评分；不虚构评分软件运行。",
+    "numeric_comparison": "原SQL答案键统一允许绝对误差≤0.005；计数、编号应呈现整数，语义/格式独立复核。浮点容差不允许用近似计数代替准确记录数。"
+  },
+  "limitations": [
+    "20题为事先固定的开发覆盖集，非盲测；不能据此宣称对未知数据的泛化能力。",
+    "固定RAG题均为单资料独立文本问答；未包含扫描OCR、图表、复杂表格、公式、跨源联合、澄清、多轮上下文。上述能力应由其他专项测试支撑。",
+    "6份文档为团队自编受控合成材料；Chinook为公开教学数据。都不代表真实企业部署成效。",
+    "DOCX、TXT、MD没有稳定物理分页；已提供原文可复核位置，原解析索引不当页码。",
+    "离线执行参考SQL和原文核对只是答案键校核；不属于模型真实问答或新版实测成绩。",
+    "最终API结果、正确率、延迟与费用均待恢复后另行补齐。"
+  ],
+  "corrections": [],
+  "clarifications": [
+    "原答案键事实与只读查询结果均未发现矛盾，未改题库。",
+    "rag-038说明补充“征求意见稿/拟议”限定，来自原件与原题措辞；不是增加题目或依模型输出修改答案。",
+    "rag-008中20次分母为18+2的显式计算，90%只作可选派生示例。",
+    "SQL金额未指定币种，评委说明不自行补人民币或美元。"
+  ]
+}

@@ -1,0 +1,627 @@
+{
+  "suite_id": "real_engineering_A24_v1",
+  "question_sha256": "311d54130ffacea9bd9409241c8421859d7d5540af66c15cbc8c7c91dfcd3159",
+  "separation": "本答案文件禁止入业务知识库；只能在独立评测端使用。原文完整页缓存也不作为新增业务资料。",
+  "rubric_note": "1分/题仅为团队内部通过率计数，不冒充官方赛题分值。引用、回答准确率、检索命中需分别统计。",
+  "answers": [
+    {
+      "id": "工程A01-Q1",
+      "source_ids": [
+        "工程A01"
+      ],
+      "category": "公式与适用边界",
+      "expected_answer_points": [
+        "常用关系为σc=24×Is(50)，代入2 MPa得到48 MPa。",
+        "该关系只是经验估计；不同岩石的σc/Is(50)比值可约为15至50，各向异性岩石尤其可能偏离。",
+        "可靠结果应结合一组单轴标定试验，不能把24说成普适材料常数。"
+      ],
+      "numeric_expectations": [
+        {
+          "field": "σc",
+          "value": 48,
+          "unit": "MPa",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "field": "ratio_range",
+          "min": 15,
+          "max": 50,
+          "unit": "dimensionless"
+        }
+      ],
+      "conditions": [
+        "题设2 MPa为测试用假设输入，不是报告实测值。",
+        "引用2006年手册该经验关系，不能宣称当前工程通用设计定值。"
+      ],
+      "common_misjudgments": [
+        "把未修正Is与Is(50)混用。",
+        "回答48但省略经验适用边界。"
+      ],
+      "source_filename": "土与基础手册_卷一_FHWA_NHI06088_2006.pdf",
+      "source_sha256": "f970902490ea97b07225f0eea51402dfe4c4988229aab8a0f0336429357340b4",
+      "physical_pages": [
+        340
+      ],
+      "logical_location": "第5章 Laboratory Tests，印刷页5-90，式5-28及其后说明",
+      "exact_quote": "σc = 24 Is(50)",
+      "evidence_verification": "PDF原页已渲染目视核验",
+      "visual_reference": "A01_公式340.png",
+      "answer_status": "reference_annotated_not_model_tested",
+      "rubric": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "evidence": [
+        {
+          "source_id": "工程A01",
+          "physical_page": 340,
+          "exact_quote": "σc = 24 Is(50)",
+          "quote_matching": "whitespace_normalized_exact",
+          "evidence_type": "original_pdf_visual_annotation",
+          "logical_location": "第5章 Laboratory Tests，印刷页5-90，式5-28及其后说明",
+          "visual_annotation": {
+            "image": "A01_公式340.png",
+            "checked": true,
+            "meaning": "已目视确认图形/公式/勾选/表格对应关系；不以线性文本顺序替代原页关系"
+          }
+        }
+      ],
+      "expected_points": [
+        "常用关系为σc=24×Is(50)，代入2 MPa得到48 MPa。",
+        "该关系只是经验估计；不同岩石的σc/Is(50)比值可约为15至50，各向异性岩石尤其可能偏离。",
+        "可靠结果应结合一组单轴标定试验，不能把24说成普适材料常数。"
+      ],
+      "numeric_constraints": [
+        {
+          "field": "σc",
+          "value": 48,
+          "unit": "MPa",
+          "absolute_tolerance": 0.01
+        },
+        {
+          "field": "ratio_range",
+          "min": 15,
+          "max": 50,
+          "unit": "dimensionless"
+        }
+      ],
+      "grading_requirements": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "real_model_result": null,
+      "retrieval_grading": {
+        "target": "列出的证据物理页/等价完整章节应在候选结果中可定位",
+        "note": "检索命中和回答正确分别记录；图中信息未被解析即使页命中，也不能据此算图理解通过。"
+      }
+    },
+    {
+      "id": "工程A01-Q2",
+      "source_ids": [
+        "工程A01"
+      ],
+      "category": "条件区分与深页定位",
+      "expected_answer_points": [
+        "地基改良针对路堤内部稳定本身不是问题、下卧地基较弱的情形，以增强地基内潜在滑面的抗力。",
+        "RSS加筋可针对地基足够可靠、当地路堤填料不足以支持目标坡角的情形，增强路堤土体。",
+        "手册所述RSS坡角可达相对水平面69°，仍需验证各破坏模式及短长期安全系数。"
+      ],
+      "numeric_expectations": [
+        {
+          "field": "RSS_slope_angle",
+          "value": 69,
+          "unit": "degree from horizontal",
+          "absolute_tolerance": 0
+        }
+      ],
+      "conditions": [
+        "区分基础土加固和路堤土体加筋，不把两个条件颠倒。"
+      ],
+      "common_misjudgments": [
+        "把69°写成相对竖直面。",
+        "声称采用RSS就无需稳定分析。"
+      ],
+      "source_filename": "土与基础手册_卷一_FHWA_NHI06088_2006.pdf",
+      "source_sha256": "f970902490ea97b07225f0eea51402dfe4c4988229aab8a0f0336429357340b4",
+      "physical_pages": [
+        400
+      ],
+      "logical_location": "第6章6.9、6.9.1，印刷页6-50",
+      "exact_quote": "angles up to 69-degrees from horizontal",
+      "evidence_verification": "原件逐页文本与上下文核对",
+      "visual_reference": null,
+      "answer_status": "reference_annotated_not_model_tested",
+      "rubric": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "evidence": [
+        {
+          "source_id": "工程A01",
+          "physical_page": 400,
+          "exact_quote": "angles up to 69-degrees from horizontal",
+          "quote_matching": "whitespace_normalized_exact",
+          "evidence_type": "original_pdf_text",
+          "logical_location": "第6章6.9、6.9.1，印刷页6-50"
+        }
+      ],
+      "expected_points": [
+        "地基改良针对路堤内部稳定本身不是问题、下卧地基较弱的情形，以增强地基内潜在滑面的抗力。",
+        "RSS加筋可针对地基足够可靠、当地路堤填料不足以支持目标坡角的情形，增强路堤土体。",
+        "手册所述RSS坡角可达相对水平面69°，仍需验证各破坏模式及短长期安全系数。"
+      ],
+      "numeric_constraints": [
+        {
+          "field": "RSS_slope_angle",
+          "value": 69,
+          "unit": "degree from horizontal",
+          "absolute_tolerance": 0
+        }
+      ],
+      "grading_requirements": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "real_model_result": null,
+      "retrieval_grading": {
+        "target": "列出的证据物理页/等价完整章节应在候选结果中可定位",
+        "note": "检索命中和回答正确分别记录；图中信息未被解析即使页命中，也不能据此算图理解通过。"
+      }
+    },
+    {
+      "id": "工程A02-Q1",
+      "source_ids": [
+        "工程A02"
+      ],
+      "category": "深层章节与条件判定",
+      "expected_answer_points": [
+        "第一次1至10分钟限值为1 mm；1.2 mm不满足初始判据，需要额外持荷50分钟。",
+        "延长后的判据是6至60分钟总位移不超过2 mm；1.8 mm满足该项。",
+        "因此仅就creep指标可接受，不能据此断言所有锚杆验收指标都已通过。"
+      ],
+      "numeric_expectations": [
+        {
+          "field": "initial_window",
+          "value": [
+            1,
+            10
+          ],
+          "unit": "minute"
+        },
+        {
+          "field": "initial_limit",
+          "value": 1,
+          "unit": "mm"
+        },
+        {
+          "field": "extended_window",
+          "value": [
+            6,
+            60
+          ],
+          "unit": "minute"
+        },
+        {
+          "field": "extended_limit",
+          "value": 2,
+          "unit": "mm"
+        },
+        {
+          "field": "additional_hold",
+          "value": 50,
+          "unit": "minute"
+        }
+      ],
+      "conditions": [
+        "限于performance/proof test，不套用extended creep test的对数时间周期准则。",
+        "题设位移是测试输入。"
+      ],
+      "common_misjudgments": [
+        "把6至60分钟误写为10至60分钟。",
+        "把creep满足误写为整体验收合格。"
+      ],
+      "source_filename": "地锚与锚固系统_GEC04_1999.pdf",
+      "source_sha256": "2501e171a90a1d169d1f3eba581551ebbe5279775a915bb9fd05fa3b95a1a5f2",
+      "physical_pages": [
+        171
+      ],
+      "logical_location": "7.4.5.2 Creep，印刷页150",
+      "exact_quote": "does not exceed 2 mm between 6 and 60 minutes",
+      "evidence_verification": "原件逐页文本与上下文核对",
+      "visual_reference": null,
+      "answer_status": "reference_annotated_not_model_tested",
+      "rubric": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "evidence": [
+        {
+          "source_id": "工程A02",
+          "physical_page": 171,
+          "exact_quote": "does not exceed 2 mm between 6 and 60 minutes",
+          "quote_matching": "whitespace_normalized_exact",
+          "evidence_type": "original_pdf_text",
+          "logical_location": "7.4.5.2 Creep，印刷页150"
+        }
+      ],
+      "expected_points": [
+        "第一次1至10分钟限值为1 mm；1.2 mm不满足初始判据，需要额外持荷50分钟。",
+        "延长后的判据是6至60分钟总位移不超过2 mm；1.8 mm满足该项。",
+        "因此仅就creep指标可接受，不能据此断言所有锚杆验收指标都已通过。"
+      ],
+      "numeric_constraints": [
+        {
+          "field": "initial_window",
+          "value": [
+            1,
+            10
+          ],
+          "unit": "minute"
+        },
+        {
+          "field": "initial_limit",
+          "value": 1,
+          "unit": "mm"
+        },
+        {
+          "field": "extended_window",
+          "value": [
+            6,
+            60
+          ],
+          "unit": "minute"
+        },
+        {
+          "field": "extended_limit",
+          "value": 2,
+          "unit": "mm"
+        },
+        {
+          "field": "additional_hold",
+          "value": 50,
+          "unit": "minute"
+        }
+      ],
+      "grading_requirements": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "real_model_result": null,
+      "retrieval_grading": {
+        "target": "列出的证据物理页/等价完整章节应在候选结果中可定位",
+        "note": "检索命中和回答正确分别记录；图中信息未被解析即使页命中，也不能据此算图理解通过。"
+      }
+    },
+    {
+      "id": "工程A02-Q2",
+      "source_ids": [
+        "工程A02"
+      ],
+      "category": "公式符号与土类条件",
+      "expected_answer_points": [
+        "β=45°+φ′/2。",
+        "密砂取α=φ′。",
+        "松砂取α在φ′/3至φ′/2之间。",
+        "φ′是土的排水摩擦角，必须保留密砂/松砂区别。"
+      ],
+      "numeric_expectations": [
+        {
+          "field": "beta_formula",
+          "expression": "45 degrees + phi_prime/2"
+        },
+        {
+          "field": "alpha_dense",
+          "expression": "phi_prime"
+        },
+        {
+          "field": "alpha_loose",
+          "expression": "[phi_prime/3, phi_prime/2]"
+        }
+      ],
+      "conditions": [
+        "本题只核对该附录的变量定义，不将其外推为任意土类。"
+      ],
+      "common_misjudgments": [
+        "漏写角度基准45°。",
+        "把密砂与松砂的α对调。"
+      ],
+      "source_filename": "地锚与锚固系统_GEC04_1999.pdf",
+      "source_sha256": "2501e171a90a1d169d1f3eba581551ebbe5279775a915bb9fd05fa3b95a1a5f2",
+      "physical_pages": [
+        241
+      ],
+      "logical_location": "Appendix B，Cohesionless Soils，式B-1变量说明，印刷页B-1",
+      "exact_quote": "β = 45+φ’/2",
+      "evidence_verification": "PDF原页已渲染目视核验",
+      "visual_reference": "A02_公式241.png",
+      "answer_status": "reference_annotated_not_model_tested",
+      "rubric": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "evidence": [
+        {
+          "source_id": "工程A02",
+          "physical_page": 241,
+          "exact_quote": "β = 45+φ’/2",
+          "quote_matching": "whitespace_normalized_exact",
+          "evidence_type": "original_pdf_visual_annotation",
+          "logical_location": "Appendix B，Cohesionless Soils，式B-1变量说明，印刷页B-1",
+          "visual_annotation": {
+            "image": "A02_公式241.png",
+            "checked": true,
+            "meaning": "已目视确认图形/公式/勾选/表格对应关系；不以线性文本顺序替代原页关系"
+          }
+        }
+      ],
+      "expected_points": [
+        "β=45°+φ′/2。",
+        "密砂取α=φ′。",
+        "松砂取α在φ′/3至φ′/2之间。",
+        "φ′是土的排水摩擦角，必须保留密砂/松砂区别。"
+      ],
+      "numeric_constraints": [
+        {
+          "field": "beta_formula",
+          "expression": "45 degrees + phi_prime/2"
+        },
+        {
+          "field": "alpha_dense",
+          "expression": "phi_prime"
+        },
+        {
+          "field": "alpha_loose",
+          "expression": "[phi_prime/3, phi_prime/2]"
+        }
+      ],
+      "grading_requirements": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "real_model_result": null,
+      "retrieval_grading": {
+        "target": "列出的证据物理页/等价完整章节应在候选结果中可定位",
+        "note": "检索命中和回答正确分别记录；图中信息未被解析即使页命中，也不能据此算图理解通过。"
+      }
+    },
+    {
+      "id": "工程A03-Q1",
+      "source_ids": [
+        "工程A03"
+      ],
+      "category": "示例计算与单位核验",
+      "expected_answer_points": [
+        "滑动作用力约127.9 kN/m。",
+        "可用抗滑力约342.3 kN/m。",
+        "FS=342.3/127.9，约2.68，文中取2.7。",
+        "最小要求FS≥1.5，故该滑动检查满足要求。"
+      ],
+      "numeric_expectations": [
+        {
+          "field": "sliding_force",
+          "value": 127.9,
+          "unit": "kN/m",
+          "absolute_tolerance": 0.1
+        },
+        {
+          "field": "resisting_force",
+          "value": 342.3,
+          "unit": "kN/m",
+          "absolute_tolerance": 0.1
+        },
+        {
+          "field": "factor_of_safety",
+          "value": 2.7,
+          "unit": "dimensionless",
+          "absolute_tolerance": 0.03
+        },
+        {
+          "field": "required_FS",
+          "value": 1.5,
+          "unit": "dimensionless",
+          "comparison": ">="
+        }
+      ],
+      "conditions": [
+        "指示例Step 11a，不混入下一步full loading结果。",
+        "抗滑竖向荷载不计live load和wearing surface重量。"
+      ],
+      "common_misjudgments": [
+        "把kN/m写成kPa。",
+        "将2.7误当所需最小值。"
+      ],
+      "source_filename": "浅基础_GEC06_2002.pdf",
+      "source_sha256": "9a46ef8b0c67875685f101a0f5d45ccb45f4e824985f1bd312455833fa474af1",
+      "physical_pages": [
+        215
+      ],
+      "logical_location": "附录B示例B3，印刷页B-56至B-57，Step 11a及Eqn.5-40",
+      "exact_quote": "The live load",
+      "evidence_verification": "原件逐页文本与上下文核对",
+      "visual_reference": null,
+      "answer_status": "reference_annotated_not_model_tested",
+      "rubric": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "evidence": [
+        {
+          "source_id": "工程A03",
+          "physical_page": 215,
+          "exact_quote": "The live load",
+          "quote_matching": "whitespace_normalized_exact",
+          "evidence_type": "original_pdf_text",
+          "logical_location": "附录B示例B3，印刷页B-56至B-57，Step 11a及Eqn.5-40"
+        }
+      ],
+      "expected_points": [
+        "滑动作用力约127.9 kN/m。",
+        "可用抗滑力约342.3 kN/m。",
+        "FS=342.3/127.9，约2.68，文中取2.7。",
+        "最小要求FS≥1.5，故该滑动检查满足要求。"
+      ],
+      "numeric_constraints": [
+        {
+          "field": "sliding_force",
+          "value": 127.9,
+          "unit": "kN/m",
+          "absolute_tolerance": 0.1
+        },
+        {
+          "field": "resisting_force",
+          "value": 342.3,
+          "unit": "kN/m",
+          "absolute_tolerance": 0.1
+        },
+        {
+          "field": "factor_of_safety",
+          "value": 2.7,
+          "unit": "dimensionless",
+          "absolute_tolerance": 0.03
+        },
+        {
+          "field": "required_FS",
+          "value": 1.5,
+          "unit": "dimensionless",
+          "comparison": ">="
+        }
+      ],
+      "grading_requirements": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "real_model_result": null,
+      "retrieval_grading": {
+        "target": "列出的证据物理页/等价完整章节应在候选结果中可定位",
+        "note": "检索命中和回答正确分别记录；图中信息未被解析即使页命中，也不能据此算图理解通过。"
+      }
+    },
+    {
+      "id": "工程A03-Q2",
+      "source_ids": [
+        "工程A03"
+      ],
+      "category": "流程图与角色对应",
+      "expected_answer_points": [
+        "步骤10的整体/全局稳定检查由GT（Geotechnical，岩土专业）负责，使用service/unfactored荷载。",
+        "步骤14的基础结构设计由ST（Structural，结构专业）负责，使用factored荷载。",
+        "两项职责和荷载类型必须一一对应。"
+      ],
+      "numeric_expectations": [],
+      "conditions": [
+        "依据图中具体步骤，不把Strength、Service两个限态混用。"
+      ],
+      "common_misjudgments": [
+        "把GT/ST的职责交换。",
+        "将整体稳定检查也说成factored荷载。"
+      ],
+      "source_filename": "浅基础_GEC06_2002.pdf",
+      "source_sha256": "9a46ef8b0c67875685f101a0f5d45ccb45f4e824985f1bd312455833fa474af1",
+      "physical_pages": [
+        260
+      ],
+      "logical_location": "Appendix C，Figure C-1，步骤10与14，印刷页C-12",
+      "exact_quote": "using service (unfactored) loads",
+      "evidence_verification": "PDF原页已渲染目视核验",
+      "visual_reference": "A03_流程图260.png",
+      "answer_status": "reference_annotated_not_model_tested",
+      "rubric": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "evidence": [
+        {
+          "source_id": "工程A03",
+          "physical_page": 260,
+          "exact_quote": "using service (unfactored) loads",
+          "quote_matching": "whitespace_normalized_exact",
+          "evidence_type": "original_pdf_visual_annotation",
+          "logical_location": "Appendix C，Figure C-1，步骤10与14，印刷页C-12",
+          "visual_annotation": {
+            "image": "A03_流程图260.png",
+            "checked": true,
+            "meaning": "已目视确认图形/公式/勾选/表格对应关系；不以线性文本顺序替代原页关系"
+          }
+        }
+      ],
+      "expected_points": [
+        "步骤10的整体/全局稳定检查由GT（Geotechnical，岩土专业）负责，使用service/unfactored荷载。",
+        "步骤14的基础结构设计由ST（Structural，结构专业）负责，使用factored荷载。",
+        "两项职责和荷载类型必须一一对应。"
+      ],
+      "numeric_constraints": [],
+      "grading_requirements": {
+        "max_score": 1,
+        "pass": "所有必需要点均正确；数值/单位/方向/条件不出现实质错误；引用可定位到给定原件和正确内容。",
+        "partial": "缺少条件、单位或一个事实点时仅记诊断性部分正确，不计整题通过。",
+        "fail": "关键值、行列/勾选、方向、时间窗口或适用条件错误，或给出与原件冲突的肯定判断。",
+        "citation_check": "来源ID正确不等于证据正确；需核查具体物理页/对应图表或条款。",
+        "allowed_equivalence": "接受专业中文同义表达和正确单位换算；数字按每项容差，未列容差的枚举/阈值应精确。"
+      },
+      "real_model_result": null,
+      "retrieval_grading": {
+        "target": "列出的证据物理页/等价完整章节应在候选结果中可定位",
+        "note": "检索命中和回答正确分别记录；图中信息未被解析即使页命中，也不能据此算图理解通过。"
+      }
+    }
+  ],
+  "scope_adjustment": {
+    "reason": "user_requested_completed_sources_only",
+    "parent_file_sha256": "5e278fc3f60957162a4276074f60bfcd148ef6aa8da743a5087afd62d8ed67d6",
+    "selected_case_ids": [
+      "工程A01-Q1",
+      "工程A01-Q2",
+      "工程A02-Q1",
+      "工程A02-Q2",
+      "工程A03-Q1",
+      "工程A03-Q2"
+    ],
+    "case_contents_changed": false,
+    "not_selected_by_retrieval_results": true
+  },
+  "original_question_sha256": "ae60b8480edb8f1a5232d156e921a377b6557b367d17ab7a9299084c2a3385de"
+}

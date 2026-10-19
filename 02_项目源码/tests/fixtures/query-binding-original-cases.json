@@ -1,0 +1,1706 @@
+{
+  "schema_version": "query-binding-fixed-receipts-v1",
+  "new_model_calls": 0,
+  "source": {
+    "run_relative_path": "final-repair-probes-v1/runs/cross-formula12-final-r5.json",
+    "run_snapshot_sha256": "d7aa8448c6b07e308dff16c071dbb707770bd058f5d6bbfcd70f3a6faad4f5b7",
+    "run_status_at_capture": "running",
+    "code_sha256": "dc58a960a8318c611861f660b7a597c58f58f8a5db9ff431fb9e8d7c4f28c7c2",
+    "original_capture_sha256": "d2cf098308ff4e2be869baff4e53bcdc700d886916c56d466915a741c8db57bd",
+    "hash_serialization": "utf8 json ensure_ascii_false sort_keys_true compact_separators"
+  },
+  "derivations": [
+    {
+      "id": "cross-005",
+      "original_terminal_case_sha256": "bf3c3ace8de7a49608317aeb35484eac0e71e652612791d8b165abf482c599e8",
+      "original_record_sha256": "d673453ade9e754eeb1a71bda14cceb6e7c06ca3f2f079e336cca8afc7723e29",
+      "original_candidate_projections": [
+        {
+          "attempt_id": "A2",
+          "sha256": "d4db6bc73f25859413c8158347609678ff8a85b1a47ef52cae11e8c9eaf738e7"
+        },
+        {
+          "attempt_id": "A3",
+          "sha256": "fae2f6a71d488eafa52ddf90f3d378f22087a6c32f23437d68c2b40b9ee4bb03"
+        },
+        {
+          "attempt_id": "A4",
+          "sha256": "2b88894f2c08762f30f2b2637ba4c4eaf4da785c69a1981c2f035cd9e6f13c29"
+        }
+      ],
+      "derived_case_sha256": "0f157aaffa835e4e8753a2631b1333bb79de9cae4dde7c49014d04ec94519b49",
+      "derivation": "仅删除运行元数据、非查询依据和无关审计字段；保留所需claims/query_bindings原字段与查询结果/版本上下文，不重写值或句子"
+    },
+    {
+      "id": "cross-008",
+      "original_terminal_case_sha256": "62b53c9d8ebc64d3f9b63b425cca16427329afea2a2114856b06a4ca3e445f8a",
+      "original_record_sha256": "76bf75437b77ccfcc29a3930e7e6e5410c96dba8b39ba60685e7d704f8305b42",
+      "original_candidate_projections": [
+        {
+          "attempt_id": "A2",
+          "sha256": "dde0f512bf0d4eeb6aedfd5141ee427249da77fbe5f4eb06cad2dae4d19a3e3a"
+        },
+        {
+          "attempt_id": "A3",
+          "sha256": "8b00fb5d94f0f5a3a3a98a5fb722d986e48b0a15f45bb3e7f497ee66163e88c7"
+        },
+        {
+          "attempt_id": "A4",
+          "sha256": "18850f07c8e72008abce7c14ebb797589f343fe8b13c2943fe562b1074f22b88"
+        }
+      ],
+      "derived_case_sha256": "057383caaf300d5f480700e41ccde734b3d832f2e855e3f783b8f042c2c71c2f",
+      "derivation": "仅删除运行元数据、非查询依据和无关审计字段；保留所需claims/query_bindings原字段与查询结果/版本上下文，不重写值或句子"
+    },
+    {
+      "id": "cross-009",
+      "original_terminal_case_sha256": "21f0dfdac0dc13110f6c78e7f07eb396d1a1ec70cc3c78081f25657b53f53646",
+      "original_record_sha256": "234d65772e3639c28e8fada4645cc0718b2f3f25abd06515acda15f8fcc62255",
+      "original_candidate_projections": [
+        {
+          "attempt_id": "A2",
+          "sha256": "ecd64196d6ed1defe9176bb2811560ab0fbe99a04082839ca060e172e9980e61"
+        },
+        {
+          "attempt_id": "A3",
+          "sha256": "a168c47efc2617a3deff70f9b1064116aad2ee5245a2b4e076527d700296885c"
+        },
+        {
+          "attempt_id": "A4",
+          "sha256": "3e34501545ed35c041278724f6cf858be3c6208232255dcec84319212f5b69a7"
+        }
+      ],
+      "derived_case_sha256": "6eddf1ffb8965453feede8fffb18f50a281c6a3bdf615032e1cb4098eb75f3aa",
+      "derivation": "仅删除运行元数据、非查询依据和无关审计字段；保留所需claims/query_bindings原字段与查询结果/版本上下文，不重写值或句子"
+    }
+  ],
+  "cases": [
+    {
+      "id": "cross-005",
+      "record": {
+        "question": "7月1日全站2610kWh能直接当泵P-17用电量吗？",
+        "result": {
+          "evidence": [
+            {
+              "id": "E3",
+              "kind": "table",
+              "source_id": "a46cfed5e2134288b49ba3a09f298893",
+              "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "stale": false,
+              "semantic_revision": "3a9059aa083d6611dff38da4131ed1df9fb3fc660b345d9533946a1a5d0764d3",
+              "query_result": {
+                "columns": [
+                  "时段",
+                  "对象",
+                  "用电量",
+                  "电价",
+                  "计量单位",
+                  "价格单位",
+                  "适用范围"
+                ],
+                "rows": [
+                  [
+                    "2025-07-01",
+                    "全站",
+                    "2610",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ],
+                  [
+                    "2025-07-02",
+                    "全站",
+                    "2400",
+                    "0.70",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ],
+                  [
+                    "2025-07-01",
+                    "泵P-17",
+                    "180",
+                    "0.65",
+                    "kWh",
+                    "元/kWh",
+                    "不含税"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"时段\", \"对象\", \"用电量\", \"电价\", \"计量单位\", \"价格单位\", \"适用范围\" FROM \"数据表\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "时段": "数据表.时段",
+                "对象": "数据表.对象",
+                "用电量": "数据表.用电量",
+                "电价": "数据表.电价",
+                "计量单位": "数据表.计量单位",
+                "价格单位": "数据表.价格单位",
+                "适用范围": "数据表.适用范围"
+              },
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "89e842d1deebb42ea20ee33be1a5954cf25137604d1d9bef10acdf6964141075",
+                "query_fingerprint": "8756c577971d20f94f91a4b9c03e5566c64db2d9132d00aab738eff2bfdd2e41",
+                "source": {
+                  "source_id": "a46cfed5e2134288b49ba3a09f298893",
+                  "sha256": "0adc871f4943841922011804466c7c5901aafc3f2d2f7d3dec87d26c4d01fd99",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "3a9059aa083d6611dff38da4131ed1df9fb3fc660b345d9533946a1a5d0764d3"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "时段"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "对象"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "用电量"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "电价"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "计量单位"
+                  },
+                  {
+                    "column_index": 5,
+                    "label": "价格单位"
+                  },
+                  {
+                    "column_index": 6,
+                    "label": "适用范围"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-01"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "全站"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2610"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.65"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R1C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-02"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "全站"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2400"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.70"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R2C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C1",
+                        "column_index": 0,
+                        "column_label": "时段",
+                        "value": "2025-07-01"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C2",
+                        "column_index": 1,
+                        "column_label": "对象",
+                        "value": "泵P-17"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C3",
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "180"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C4",
+                        "column_index": 3,
+                        "column_label": "电价",
+                        "value": "0.65"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C5",
+                        "column_index": 4,
+                        "column_label": "计量单位",
+                        "value": "kWh"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C6",
+                        "column_index": 5,
+                        "column_label": "价格单位",
+                        "value": "元/kWh"
+                      },
+                      {
+                        "cell_id": "Q89e842d1deeb:R3C7",
+                        "column_index": 6,
+                        "column_label": "适用范围",
+                        "value": "不含税"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            }
+          ],
+          "diagnostics": {
+            "candidate_attempts": [
+              {
+                "attempt_id": "A2",
+                "round": 2,
+                "truncated": false,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "7月1日全站2610kWh不能直接当泵P-17用电量。根据计量更正通知，两日日报均为全站用电，不是单台泵用电（E1）；数据表中2025-07-01对象为“全站”的用电量为2610kWh（E3），而同一时段对象为“泵P-17”的用电量为180kWh（E3），两者计量对象不同、数值不同，不可混用。",
+                    "evidence_ids": [
+                      "E1",
+                      "E3"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [
+                      {
+                        "binding_index": 1,
+                        "cell_id": "Q89e842d1deeb:R1C3",
+                        "value": "2610",
+                        "statement": "数据表中2025-07-01对象为“全站”的用电量为2610kWh",
+                        "column_label": "用电量",
+                        "evidence_id": "E3"
+                      },
+                      {
+                        "binding_index": 2,
+                        "cell_id": "Q89e842d1deeb:R3C3",
+                        "value": "180",
+                        "statement": "同一时段对象为“泵P-17”的用电量为180kWh",
+                        "column_label": "用电量",
+                        "evidence_id": "E3"
+                      }
+                    ],
+                    "omitted_bindings": 0
+                  }
+                ]
+              },
+              {
+                "attempt_id": "A3",
+                "round": 3,
+                "truncated": false,
+                "claims": [
+                  {
+                    "candidate_index": 2,
+                    "text": "数据表中2025-07-01对象为全站的用电量为2610kWh，而同一时段对象为泵P-17的用电量为180kWh，两者计量对象不同、数值不同，不可混用。",
+                    "evidence_ids": [
+                      "E3"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "89e842d1deebb42ea20ee33be1a5954cf25137604d1d9bef10acdf6964141075",
+                        "cell_id": "Q89e842d1deeb:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2610",
+                        "statement": "数据表中2025-07-01对象为全站的用电量为2610kWh",
+                        "entity_cells": [
+                          "Q89e842d1deeb:R1C1",
+                          "Q89e842d1deeb:R1C2"
+                        ],
+                        "evidence_id": "E3"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "89e842d1deebb42ea20ee33be1a5954cf25137604d1d9bef10acdf6964141075",
+                        "cell_id": "Q89e842d1deeb:R3C3",
+                        "row_index": 2,
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "180",
+                        "statement": "同一时段对象为泵P-17的用电量为180kWh",
+                        "entity_cells": [
+                          "Q89e842d1deeb:R3C1",
+                          "Q89e842d1deeb:R3C2"
+                        ],
+                        "evidence_id": "E3"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 1,
+                    "text": "7月1日全站2610kWh不能直接当泵P-17用电量。根据计量更正通知，两日日报均为全站用电，不是单台泵用电。",
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [],
+                    "omitted_bindings": 0
+                  }
+                ]
+              },
+              {
+                "attempt_id": "A4",
+                "round": 4,
+                "truncated": false,
+                "claims": [
+                  {
+                    "candidate_index": 2,
+                    "text": "数据表中2025-07-01对象为全站的用电量为2610kWh，而同一时段对象为泵P-17的用电量为180kWh，两者计量对象不同、数值不同，不可混用。",
+                    "evidence_ids": [
+                      "E3"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "89e842d1deebb42ea20ee33be1a5954cf25137604d1d9bef10acdf6964141075",
+                        "cell_id": "Q89e842d1deeb:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "2610",
+                        "statement": "数据表中2025-07-01对象为全站的用电量为2610kWh",
+                        "entity_cells": [
+                          "Q89e842d1deeb:R1C1",
+                          "Q89e842d1deeb:R1C2"
+                        ],
+                        "evidence_id": "E3"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "89e842d1deebb42ea20ee33be1a5954cf25137604d1d9bef10acdf6964141075",
+                        "cell_id": "Q89e842d1deeb:R3C3",
+                        "row_index": 2,
+                        "column_index": 2,
+                        "column_label": "用电量",
+                        "value": "180",
+                        "statement": "同一时段对象为泵P-17的用电量为180kWh",
+                        "entity_cells": [
+                          "Q89e842d1deeb:R3C1",
+                          "Q89e842d1deeb:R3C2"
+                        ],
+                        "evidence_id": "E3"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 1,
+                    "text": "7月1日全站2610kWh不能直接当泵P-17用电量。根据计量更正通知，两日日报均为全站用电，不是单台泵用电。",
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [],
+                    "omitted_bindings": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-008",
+      "record": {
+        "question": "东岸同名站和西岸同名站2025年2月巡检各多少？说明如何避免同名误连。",
+        "result": {
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "stale": false,
+              "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444",
+              "query_result": {
+                "columns": [
+                  "station_id",
+                  "name",
+                  "bank"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "同名站",
+                    "东岸"
+                  ],
+                  [
+                    "B01",
+                    "同名站",
+                    "西岸"
+                  ],
+                  [
+                    "C01",
+                    "青湾港",
+                    "南岸"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"station_id\", \"name\", \"bank\" FROM \"stations\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "station_id": "stations.station_id",
+                "name": "stations.name",
+                "bank": "stations.bank"
+              },
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                "query_fingerprint": "bd503b9efe88baf66342abe65c20c0e93315c5e4145b2739022568f5e4dc0801",
+                "source": {
+                  "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "station_id"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "name"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "bank"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R1C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "同名站"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R1C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "东岸"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q3111bae1284d:R2C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R2C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "同名站"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R2C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "西岸"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q3111bae1284d:R3C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R3C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "青湾港"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R3C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "南岸"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "stale": false,
+              "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444",
+              "query_result": {
+                "columns": [
+                  "station_id",
+                  "period",
+                  "checks",
+                  "rechecks",
+                  "unit"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "2025-02",
+                    30,
+                    2,
+                    "次"
+                  ],
+                  [
+                    "B01",
+                    "2025-02",
+                    45,
+                    4,
+                    "次"
+                  ],
+                  [
+                    "C01",
+                    "2025-02",
+                    42,
+                    3,
+                    "次"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"station_id\", \"period\", \"checks\", \"rechecks\", \"unit\" FROM \"inspections\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "station_id": "inspections.station_id",
+                "period": "inspections.period",
+                "checks": "inspections.checks",
+                "rechecks": "inspections.rechecks",
+                "unit": "inspections.unit"
+              },
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "3470b075ad1c5e0c2bcfab3e1947a3d09ee27211f9b8907cdb8eb26c1d021444",
+                "query_fingerprint": "b9dad8e3730ba66070a0d0abdf4210347aafee9a3e127627ff08574a625b9cc7",
+                "source": {
+                  "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "station_id"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "period"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "checks"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "rechecks"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "unit"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 30
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 2
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 45
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 4
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 42
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 3
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            }
+          ],
+          "diagnostics": {
+            "candidate_attempts": [
+              {
+                "attempt_id": "A2",
+                "round": 2,
+                "truncated": false,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "东岸同名站（station_id为A01）2025年2月巡检30次。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [
+                      {
+                        "binding_index": 1,
+                        "table_name": "inspections",
+                        "cell_id": "Q3470b075ad1c:R1C3",
+                        "value": 30,
+                        "statement": "东岸同名站（station_id为A01）2025年2月巡检30次",
+                        "column_label": "checks",
+                        "row_label": "A01",
+                        "unit": "次",
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_bindings": 0
+                  },
+                  {
+                    "candidate_index": 2,
+                    "text": "西岸同名站（station_id为B01）2025年2月巡检45次。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [
+                      {
+                        "binding_index": 1,
+                        "table_name": "inspections",
+                        "cell_id": "Q3470b075ad1c:R2C3",
+                        "value": 45,
+                        "statement": "西岸同名站（station_id为B01）2025年2月巡检45次",
+                        "column_label": "checks",
+                        "row_label": "B01",
+                        "unit": "次",
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_bindings": 0
+                  },
+                  {
+                    "candidate_index": 3,
+                    "text": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [],
+                    "omitted_bindings": 0
+                  }
+                ]
+              },
+              {
+                "attempt_id": "A3",
+                "round": 3,
+                "truncated": false,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "东岸同名站（station_id为A01）2025年2月巡检30次。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3470b075ad1c5e0c2bcfab3e1947a3d09ee27211f9b8907cdb8eb26c1d021444",
+                        "cell_id": "Q3470b075ad1c:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 30,
+                        "statement": "东岸同名站（station_id为A01）2025年2月巡检30次。",
+                        "entity_cells": [
+                          "Q3470b075ad1c:R1C1"
+                        ],
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 2,
+                    "text": "西岸同名站（station_id为B01）2025年2月巡检45次。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3470b075ad1c5e0c2bcfab3e1947a3d09ee27211f9b8907cdb8eb26c1d021444",
+                        "cell_id": "Q3470b075ad1c:R2C3",
+                        "row_index": 1,
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 45,
+                        "statement": "西岸同名站（station_id为B01）2025年2月巡检45次。",
+                        "entity_cells": [
+                          "Q3470b075ad1c:R2C1"
+                        ],
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 3,
+                    "text": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "row_index": 0,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01",
+                        "statement": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                        "entity_cells": [],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R2C1",
+                        "row_index": 1,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01",
+                        "statement": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                        "entity_cells": [],
+                        "evidence_id": "E1"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  }
+                ]
+              },
+              {
+                "attempt_id": "A4",
+                "round": 4,
+                "truncated": false,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "东岸同名站（station_id为A01）2025年2月巡检30次。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3470b075ad1c5e0c2bcfab3e1947a3d09ee27211f9b8907cdb8eb26c1d021444",
+                        "cell_id": "Q3470b075ad1c:R1C3",
+                        "row_index": 0,
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 30,
+                        "statement": "东岸同名站（station_id为A01）2025年2月巡检30次。",
+                        "entity_cells": [
+                          "Q3470b075ad1c:R1C1",
+                          "Q3470b075ad1c:R1C2",
+                          "Q3470b075ad1c:R1C5"
+                        ],
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 2,
+                    "text": "西岸同名站（station_id为B01）2025年2月巡检45次。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3470b075ad1c5e0c2bcfab3e1947a3d09ee27211f9b8907cdb8eb26c1d021444",
+                        "cell_id": "Q3470b075ad1c:R2C3",
+                        "row_index": 1,
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 45,
+                        "statement": "西岸同名站（station_id为B01）2025年2月巡检45次。",
+                        "entity_cells": [
+                          "Q3470b075ad1c:R2C1",
+                          "Q3470b075ad1c:R2C2",
+                          "Q3470b075ad1c:R2C5"
+                        ],
+                        "evidence_id": "E2"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  },
+                  {
+                    "candidate_index": 3,
+                    "text": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                    "evidence_ids": [
+                      "E1"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "row_index": 0,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01",
+                        "statement": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                        "entity_cells": [],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R2C1",
+                        "row_index": 1,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01",
+                        "statement": "避免同名误连的方法：两表均使用唯一主键station_id（如A01、B01）进行关联，而不是使用可能重复的name字段；stations表中bank字段可进一步区分同名站所属岸别。",
+                        "entity_cells": [],
+                        "evidence_id": "E1"
+                      }
+                    ],
+                    "omitted_query_bindings": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-009",
+      "record": {
+        "question": "青湾港42次巡检和东岸同名站30次是否属于同一个站？",
+        "result": {
+          "evidence": [
+            {
+              "id": "E1",
+              "kind": "table",
+              "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "stale": false,
+              "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444",
+              "query_result": {
+                "columns": [
+                  "station_id",
+                  "name",
+                  "bank"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "同名站",
+                    "东岸"
+                  ],
+                  [
+                    "B01",
+                    "同名站",
+                    "西岸"
+                  ],
+                  [
+                    "C01",
+                    "青湾港",
+                    "南岸"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"station_id\", \"name\", \"bank\" FROM \"stations\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "station_id": "stations.station_id",
+                "name": "stations.name",
+                "bank": "stations.bank"
+              },
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                "query_fingerprint": "bd503b9efe88baf66342abe65c20c0e93315c5e4145b2739022568f5e4dc0801",
+                "source": {
+                  "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "station_id"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "name"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "bank"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R1C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "同名站"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R1C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "东岸"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q3111bae1284d:R2C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R2C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "同名站"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R2C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "西岸"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q3111bae1284d:R3C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R3C2",
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "青湾港"
+                      },
+                      {
+                        "cell_id": "Q3111bae1284d:R3C3",
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "南岸"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            },
+            {
+              "id": "E2",
+              "kind": "table",
+              "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+              "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+              "parser_version": "zhiheng-multimodal-3.1",
+              "stale": false,
+              "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444",
+              "query_result": {
+                "columns": [
+                  "station_id",
+                  "period",
+                  "checks",
+                  "rechecks",
+                  "unit"
+                ],
+                "rows": [
+                  [
+                    "A01",
+                    "2025-02",
+                    30,
+                    2,
+                    "次"
+                  ],
+                  [
+                    "B01",
+                    "2025-02",
+                    45,
+                    4,
+                    "次"
+                  ],
+                  [
+                    "C01",
+                    "2025-02",
+                    42,
+                    3,
+                    "次"
+                  ]
+                ],
+                "truncated": false,
+                "selection_required_for_scalar": true
+              },
+              "query": {
+                "sql": "SELECT \"station_id\", \"period\", \"checks\", \"rechecks\", \"unit\" FROM \"inspections\"",
+                "parameters": []
+              },
+              "column_units": {},
+              "direct_columns": {
+                "station_id": "inspections.station_id",
+                "period": "inspections.period",
+                "checks": "inspections.checks",
+                "rechecks": "inspections.rechecks",
+                "unit": "inspections.unit"
+              },
+              "query_result_context": {
+                "schema_version": "query-result-context-v1",
+                "kind": "query_result",
+                "usable": true,
+                "context_id": "3470b075ad1c5e0c2bcfab3e1947a3d09ee27211f9b8907cdb8eb26c1d021444",
+                "query_fingerprint": "b9dad8e3730ba66070a0d0abdf4210347aafee9a3e127627ff08574a625b9cc7",
+                "source": {
+                  "source_id": "71ae1f577f6d4226b3f299e3265ccafc",
+                  "sha256": "da097e1987c8bfdd1673397b7d5fed6059f84c8ea1479c91d127709056dd0046",
+                  "parser_version": "zhiheng-multimodal-3.1",
+                  "semantic_revision": "891c195d8dbbaa60573b89e7ba5df610cd4de8809e52e33c2e3e921f340eb444"
+                },
+                "localization_scope": "query_output_not_original_cell",
+                "columns": [
+                  {
+                    "column_index": 0,
+                    "label": "station_id"
+                  },
+                  {
+                    "column_index": 1,
+                    "label": "period"
+                  },
+                  {
+                    "column_index": 2,
+                    "label": "checks"
+                  },
+                  {
+                    "column_index": 3,
+                    "label": "rechecks"
+                  },
+                  {
+                    "column_index": 4,
+                    "label": "unit"
+                  }
+                ],
+                "rows": [
+                  {
+                    "row_index": 0,
+                    "cells": [
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 30
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 2
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R1C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 1,
+                    "cells": [
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "B01"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 45
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 4
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R2C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  },
+                  {
+                    "row_index": 2,
+                    "cells": [
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C1",
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C2",
+                        "column_index": 1,
+                        "column_label": "period",
+                        "value": "2025-02"
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C3",
+                        "column_index": 2,
+                        "column_label": "checks",
+                        "value": 42
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C4",
+                        "column_index": 3,
+                        "column_label": "rechecks",
+                        "value": 3
+                      },
+                      {
+                        "cell_id": "Q3470b075ad1c:R3C5",
+                        "column_index": 4,
+                        "column_label": "unit",
+                        "value": "次"
+                      }
+                    ]
+                  }
+                ],
+                "row_count": 3,
+                "query_result_truncated": false,
+                "projection_truncated": false,
+                "omitted_rows": 0,
+                "notice": "仅实际执行SQL的输出格；原查询范围见同一evidence.query，非原表单元格或聚合贡献行。"
+              }
+            }
+          ],
+          "diagnostics": {
+            "candidate_attempts": [
+              {
+                "attempt_id": "A2",
+                "round": 2,
+                "truncated": true,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "青湾港42次巡检和东岸同名站30次不属于同一个站。根据station_register.sqlite的stations表，青湾港站的station_id为C01，位于南岸；东岸同名站的station_id为A01，名称为",
+                    "evidence_ids": [
+                      "E1",
+                      "E2",
+                      "E5"
+                    ],
+                    "calculation_ids": [],
+                    "table_bindings": [
+                      {
+                        "binding_index": 1,
+                        "table_name": "stations",
+                        "cell_id": "Q3111bae1284d:R3C1",
+                        "value": "C01",
+                        "statement": "青湾港站的station_id为C01",
+                        "column_label": "station_id",
+                        "row_label": "青湾港",
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 2,
+                        "table_name": "stations",
+                        "cell_id": "Q3111bae1284d:R3C2",
+                        "value": "青湾港",
+                        "statement": "青湾港站的名称为青湾港",
+                        "column_label": "name",
+                        "row_label": "青湾港",
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 3,
+                        "table_name": "stations",
+                        "cell_id": "Q3111bae1284d:R3C3",
+                        "value": "南岸",
+                        "statement": "青湾港站位于南岸",
+                        "column_label": "bank",
+                        "row_label": "青湾港",
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 4,
+                        "table_name": "stations",
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "value": "A01",
+                        "statement": "东岸同名站的station_id为A01",
+                        "column_label": "station_id",
+                        "row_label": "同名站",
+                        "evidence_id": "E1"
+                      }
+                    ],
+                    "omitted_bindings": 4
+                  }
+                ]
+              },
+              {
+                "attempt_id": "A3",
+                "round": 3,
+                "truncated": true,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "青湾港42次巡检和东岸同名站30次不属于同一个站。根据stations表查询结果，station_id为C01的站名称为青湾港、位于南岸；station_id为A01的站名称为同名站、位于东岸，两者station_id不同。根据inspections表查询结果，2025-02期间C01站巡检（checks）为42次，A01站巡检（checks）为30次。harbor_operations.docx记载2025年2月试验站完成42次巡检，且该手册只适用于青湾港试验站。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2",
+                      "E5",
+                      "E6"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R3C1",
+                        "row_index": 2,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01",
+                        "statement": "station_id为C01的站名称为青湾港",
+                        "entity_cells": [
+                          "Q3111bae1284d:R3C2"
+                        ],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R3C2",
+                        "row_index": 2,
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "青湾港",
+                        "statement": "station_id为C01的站名称为青湾港",
+                        "entity_cells": [
+                          "Q3111bae1284d:R3C1"
+                        ],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 3,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R3C3",
+                        "row_index": 2,
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "南岸",
+                        "statement": "station_id为C01的站位于南岸",
+                        "entity_cells": [
+                          "Q3111bae1284d:R3C1"
+                        ],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 4,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "row_index": 0,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01",
+                        "statement": "station_id为A01的站名称为同名站",
+                        "entity_cells": [
+                          "Q3111bae1284d:R1C2"
+                        ],
+                        "evidence_id": "E1"
+                      }
+                    ],
+                    "omitted_query_bindings": 4
+                  }
+                ]
+              },
+              {
+                "attempt_id": "A4",
+                "round": 4,
+                "truncated": true,
+                "claims": [
+                  {
+                    "candidate_index": 1,
+                    "text": "青湾港42次巡检和东岸同名站30次不属于同一个站。根据stations表查询结果，station_id为C01的站名称为青湾港、位于南岸；station_id为A01的站名称为同名站、位于东岸，两者station_id不同。根据inspections表查询结果，2025-02期间C01站巡检（checks）为42次，A01站巡检（checks）为30次。harbor_operations.docx记载2025年2月试验站完成42次巡检，且该手册只适用于青湾港试验站。",
+                    "evidence_ids": [
+                      "E1",
+                      "E2",
+                      "E5",
+                      "E6"
+                    ],
+                    "calculation_ids": [],
+                    "query_bindings": [
+                      {
+                        "binding_index": 1,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R3C1",
+                        "row_index": 2,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "C01",
+                        "statement": "station_id为C01的站名称为青湾港、位于南岸",
+                        "entity_cells": [
+                          "Q3111bae1284d:R3C2",
+                          "Q3111bae1284d:R3C3"
+                        ],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 2,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R3C2",
+                        "row_index": 2,
+                        "column_index": 1,
+                        "column_label": "name",
+                        "value": "青湾港",
+                        "statement": "station_id为C01的站名称为青湾港、位于南岸",
+                        "entity_cells": [
+                          "Q3111bae1284d:R3C1",
+                          "Q3111bae1284d:R3C3"
+                        ],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 3,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R3C3",
+                        "row_index": 2,
+                        "column_index": 2,
+                        "column_label": "bank",
+                        "value": "南岸",
+                        "statement": "station_id为C01的站名称为青湾港、位于南岸",
+                        "entity_cells": [
+                          "Q3111bae1284d:R3C1",
+                          "Q3111bae1284d:R3C2"
+                        ],
+                        "evidence_id": "E1"
+                      },
+                      {
+                        "binding_index": 4,
+                        "context_id": "3111bae1284d69c6fd35bf7f853aa410c0833446bdd96a05f54af46739bda5a0",
+                        "cell_id": "Q3111bae1284d:R1C1",
+                        "row_index": 0,
+                        "column_index": 0,
+                        "column_label": "station_id",
+                        "value": "A01",
+                        "statement": "station_id为A01的站名称为同名站、位于东岸",
+                        "entity_cells": [
+                          "Q3111bae1284d:R1C2",
+                          "Q3111bae1284d:R1C3"
+                        ],
+                        "evidence_id": "E1"
+                      }
+                    ],
+                    "omitted_query_bindings": 8
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
